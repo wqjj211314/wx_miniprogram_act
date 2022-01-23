@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="static/socket.io.js"></script>
+</head>
+<body>
+<h2 id="t">aaaaaaaaaa</h2>
+<script type="text/javascript">
+        var socket = io.connect("http://192.168.8.130:8090");
+        socket.on('testss', function() {
+            console.log("aaa");
+            socket.emit('my event', {data: 'I\'m connected!'});
+        });
+
+        socket.on('server_response', function(res) {
+            console.log("bbb");
+            var t = res.chatmsg;
+            $("#t").text(t);
+        });
+        socket.emit('testss', {data: 'I\'m connected!'});
+</script>
+</body>
+</html>
