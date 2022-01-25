@@ -1,0 +1,31 @@
+<!--pages/activityadd/activityadd.wxml-->
+<block wx:for="{{activity_create_list}}" wx:key="id">
+<view class="cu-timeline">
+  <view class="cu-time">{{item.activity_date}}</view>
+  <view class="cu-item text-blue">
+    <view class="cu-card article" style="padding:0px;">
+      <view class="cu-item shadow" style="margin:0px;padding-left:15px;padding-right:8px;background-color: var(--ghostWhite);color: var(--black);">
+
+        <view class="title" style="padding:0px;">
+          <view class="text-cut">{{item.title}}</view>
+        </view>
+
+        <view class="content" style="padding:0px;">
+          <image src="{{hosturl}}static/{{item.id}}.jpg" mode="aspectFill" style="height:5.8em;"></image>
+          <view class="desc" style="">
+            <view class="text-content" style="color:black;font-size:13px;height:5em;">{{item.detail}}</view>
+
+            <view>
+              <view class="cu-tag bg-red light sm round">{{item.begintime}} - {{item.endtime}}</view>
+              
+            </view>
+
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+</block>
+<!--pages/activityadd/activityadd.wxml-->
+  

@@ -1,0 +1,129 @@
+
+
+<view class="cu-list menu card-menu margin-top shadow-warp">
+<form>
+    <view class="cu-form-group text-bold text-center">
+      <input placeholder="活动标题" bindinput='titleInput' style="color:black;"></input>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="title">活动日期</view>
+      <picker mode="date" value="{{date}}" start="{nowdate}" end="2025-01-01" bindchange="DateChange">
+        <view class="picker">
+          {{date}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="cu-form-group">
+        <view class="title">开始时间</view>
+        <picker mode="time" value="{{begintime}}" start="09:01" end="21:01" bindchange="TimeChange_begintime">
+          <view class="picker">
+            {{begintime}}
+          </view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">结束时间</view>
+        <picker mode="time" value="{{endtime}}" start="09:01" end="21:01" bindchange="TimeChange_endtime">
+          <view class="picker">
+            {{endtime}}
+          </view>
+        </picker>
+      </view>
+      <view class="cu-form-group">
+        <view class="title">截止时间</view>
+        <picker mode="time" value="{{addendtime}}" start="09:01" end="21:01" bindchange="TimeChange_addendtime">
+          <view class="picker">
+            {{addendtime}}
+          </view>
+        </picker>
+      </view>
+
+    <view class="cu-form-group">
+      <textarea placeholder="活动详情" auto-height maxlength="-1" bindinput='detailInput' style="max-height:10em;"></textarea>
+    </view>
+
+</form>
+</view>
+
+
+
+<view class="cu-list menu card-menu margin-top shadow-warp" bindtap="chooseposition">
+
+  <view class="cu-form-group">
+      <view class="title" style="width:22%;"><text class="cuIcon-locationfill text-green"></text>位置</view>
+      <view class="te" style="max-width:78%;">
+        <view class="locationstyle" style="white-space:normal;">
+        {{activityaddress}}
+        </view>
+      </view>
+  </view>
+
+</view>
+  
+
+
+<view class="padding" style="padding-top:0px;margin-top:0px;">
+  <view class="radius shadow-warp bg-white margin-top">
+              <view class='pagecenter1' style="padding-top:20rpx;">
+                <view class="cu-form-group">
+                    <view class="grid col-4 grid-square flex-sub">
+                      <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+                        <image src='{{imgList[index]}}' mode='aspectFill'></image>
+                        <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+                          <text class="cuIcon-close"></text>
+                        </view>
+                      </view>
+                      <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
+                        <text class="cuIcon-cameraadd"></text>
+                      </view>
+                    </view>
+                </view>
+              </view>
+  </view>
+</view>
+
+<view class="bg-white radius cu-form-group" style="padding:10rpx;padding-left:30rpx;margin-left:30rpx;margin-right:30rpx;">
+  <text>点击选择报名信息：{{partinfo}}</text>
+</view>
+<view class="grid col-5 padding-sm">
+  
+  <view class="margin-tb-sm text-center">
+    <button class="cu-btn round bg-{{name}} shadow" bindtap="choose" data-value="name">姓名</button>
+  </view>
+  <view class="margin-tb-sm text-center">
+    <button class="cu-btn round bg-{{company}} shadow" bindtap="choose" data-value="company">公司</button>
+  </view>
+  <view class="margin-tb-sm text-center">
+    <button class="cu-btn round bg-{{job}} shadow" bindtap="choose" data-value="job">职业</button>
+  </view>
+  <view class="margin-tb-sm text-center">
+    <button class="cu-btn round bg-{{sex}} shadow" bindtap="choose" data-value="sex">性别</button>
+  </view>
+  <view class="margin-tb-sm text-center">
+    <button class="cu-btn round bg-{{age}} shadow" bindtap="choose" data-value="age">年龄</button>
+  </view>
+ 
+</view>
+
+
+
+
+<view class="padding flex flex-direction">
+  <button class="cu-btn bg-red margin-tb-sm lg" bindtap='getUserProfile'>创建活动</button>
+</view>
+
+<view class="cu-modal {{modalName=='modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">活动信息</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{modalcontent}}
+    </view>
+  </view>
+</view>
