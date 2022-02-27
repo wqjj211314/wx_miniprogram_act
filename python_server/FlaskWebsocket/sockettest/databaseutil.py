@@ -68,15 +68,16 @@ def new_chatmsg(activity_id, msg):
         db.session.rollback()
 
 def get_ten_chatmsg(activity_id):
-
-    msgs = Activitychatmsg.query.filter_by(activity_id=activity_id).order_by(Activitychatmsg.msgtime.desc()).limit(5)#.order_by(Activitychatmsg.msgtime.asc())
+    #order_by(Activitychatmsg.msgtime.asc())；order_by(Activitychatmsg.msgtime.desc())
+    msgs = Activitychatmsg.query.filter_by(activity_id=activity_id).order_by(Activitychatmsg.msgtime.desc()).limit(10)#.order_by(Activitychatmsg.msgtime.asc())
     list = []
     for item in msgs:
         print(item.to_json())
         list.append(item.to_json())
     print("获取最新的10条聊天信息")
     print(list)
-    return json.dumps(list)
+    #list.append("测试消息")
+    return list
 
 def get_user(user_id):
     user_oj = user.query.filter_by(user_id=user_id).first()

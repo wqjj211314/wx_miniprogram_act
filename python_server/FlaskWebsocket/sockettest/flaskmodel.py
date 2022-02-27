@@ -12,6 +12,7 @@ import json
 import requests
 import time, base64
 
+from PrintLog import logd
 
 """
 flask app路由的函数
@@ -21,20 +22,20 @@ flask app路由的函数
 @app.route('/getopenid')
 def getopenid():
     code = request.values.get("code")
-    print(code)
+    logd(code)
     secret = "7fa0d0b779feeeb9769445cdaddb4957"
     api = "https://api.weixin.qq.com/sns/jscode2session?appid=wx341d0dd2e062358e&secret=" + secret + "&js_code=" + code + "&grant_type=authorization_code";
 
     r = requests.get(api)
     str = r.json()
-    print(r.json())
+    logd(r.json())
     # return str["openid"]
     return str
 
 @app.route('/create_activity')
 def create_activity():
     # result = createinfo.query.first()
-    # print(result)
+    # logd(result)
 
     return "create_activity"
 
@@ -44,7 +45,7 @@ def index():
 
 @app.route("/upload", methods=["POST"])
 def uploadFile():
-    print("上传文件中... ")
+    logd("上传文件中... ")
     try:
         f = request.files['file']
         activity_id = request.values.get("activity_id")
@@ -52,8 +53,8 @@ def uploadFile():
         act_bg_img = 'static/' + activity_id + '.jpg'
         f.save(act_bg_img_tmp)
         img_size = os.path.getsize(act_bg_img_tmp)/1024
-        print("上传文件大小：")
-        print(img_size)
+        logd("上传文件大小：")
+        logd(img_size)
         quality = 80
         step = 10
         while img_size > 200:
@@ -68,14 +69,14 @@ def uploadFile():
             # 删除文件，可使用以下两种方法。
             os.remove(act_bg_img_tmp)
         value = request.values.get("user")  # formData里面携带的参数
-        print(value)
+        logd(value)
     except Exception as e:
-        print(e)
+        logd(e)
     return "OK"
 
 @app.route("/sendMsgtest")
 def sendMsgtest():
-    print("测试发送")
+    logd("测试发送")
     #MTYxNjI0NjMyNi42MzM1NTQyoyhbt4nFpV-VgIi3zscNdwByooPw
     join_room("MTYxNjI0NjMyNi42MzM1NTQyoyhbt4nFpV-VgIi3zscNdwByooPw")
     socket_io.emit('server_response', {'chatmsg': "inputmsg"},room="MTYxNjI0NjMyNi42MzM1NTQyoyhbt4nFpV-VgIi3zscNdwByooPw")
@@ -85,9 +86,9 @@ def sendMsgtest():
 def sendMsg():
     inputmsg = request.values.get("msg")
     activity_id = request.values.get("activity_id")
-    print("发送消息")
-    print(inputmsg)
-    print(activity_id)
+    logd("发送消息")
+    logd(inputmsg)
+    logd(activity_id)
     #socket_io.emit('server_response', {'chatmsg': inputmsg},room="roomtest")
     return "OK"
 
@@ -120,14 +121,14 @@ def createactivity():
 
 
     b = str(time.time())
-    print("时间：" + b)
+    logd("时间：" + b)
     a = bytes(str(time.time()), encoding="utf8")
     #c = base64.b64encode(bytes(str(time.time()), encoding="utf8"))
     #d = str(time.time(), encoding="utf-8")
     d = str(time.time())
 
     activity_id = d + openid
-    print("活动" + activity_id)
+    logd("活动" + activity_id)
 
     new_activity(openid, activity_id, title, detail,
                  activity_date, begintime, endtime,
@@ -158,50 +159,53 @@ def get_activity_list():
     act_date = time.strftime("%Y-%m-%d", time.localtime())
 
     if id != "" and id != None:
-        print("查询活动列表" + id)
+        logd("查询活动列表" + id)
         act = Createinfo.query.filter_by(activity_id=id).all()
         if len(act) != 0:
             act_date = act[0].activity_date
             first = act[0].to_json()
             first["createuser"] = act[0].createuser.to_json()
+            #first["init_chat_msg"] = get_ten_chatmsg(act[0].activity_id)
             list.append(first)
             act_list = Createinfo.query.filter(Createinfo.activity_date >= act_date,Createinfo.activity_id != id).\
                 order_by(Createinfo.activity_date.desc()).all()
-            print(act_list)
+            logd(act_list)
             for item in act_list:
-                print("if活动创建用户信息：")
-                print(item.createuser)
+                logd("if活动创建用户信息：")
+                logd(item.createuser)
 
-                print(item.to_json())
+                logd(item.to_json())
                 itemjson = item.to_json()
                 itemjson["createuser"] = item.createuser.to_json()
+                #itemjson["init_chat_msg"] = get_ten_chatmsg(item.id)
                 list.append(itemjson)
     else:
         act_list = Createinfo.query.filter(Createinfo.activity_id != id).\
             order_by(Createinfo.activity_date.desc()).all()
-        print(act_list)
+        logd(act_list)
         for item in act_list:
-            print("else活动创建用户信息：")
-            print(item.createuser)
+            logd("else活动创建用户信息：")
+            logd(item.createuser)
 
-            print(item.to_json())
+            logd(item.to_json())
             itemjson = item.to_json()
             itemjson["createuser"] = item.createuser.to_json()
+            #itemjson["init_chat_msg"] = get_ten_chatmsg(item.activity_id)
             """
             itemjson["create_user_id"] = item.createuser.user_id
             itemjson["create_nickName"] = item.createuser.user_name
             itemjson["create_avatarUrl"] = item.createuser.user_faceid
             """
             list.append(itemjson)
-    print("打印列表")
-    print(list)
+    logd("打印列表")
+    logd(list)
     #return list
     return json.dumps(list)
 
 @app.route("/show_activity")
 def show_activity():
     id = request.values.get("activity_id")
-    print("show_activity = "+id)
+    logd("show_activity = "+id)
     if id != "":
         act = Createinfo.query.filter_by(activity_id=id).all()
         if len(act)!=0:
@@ -212,13 +216,13 @@ def show_activity():
 @app.route("/get_init_msg")
 def get_init_msg():
     activity_id = request.values.get("activity_id")
-    print("获取消息,id= "+activity_id)
+    logd("获取消息,id= "+activity_id)
     #activity_id = "MTYxNjI0NjMyNi42MzM1NTQyoyhbt4nFpV-VgIi3zscNdwByooPw"
     if activity_id!= "" and activity_id != None and activity_id != "undefined":
-        print("获取消息中....")
+        logd("获取消息中....")
         list = get_ten_chatmsg(activity_id)
 
-        return list
+        return json.dumps(list)
     return "fail"
 
 
@@ -227,9 +231,9 @@ def getuser():
     user_id = request.values.get("user_id")
 
     if user_id !=None:
-        print("获取用户,id= " + user_id)
+        logd("获取用户,id= " + user_id)
         u = get_user(user_id)
-        print(u)
+        logd(u)
         if u != None:
             return u.to_json()
     return "fail"
@@ -243,14 +247,14 @@ def get_create_actlist():
         actlist = Createinfo.query.filter(Createinfo.user_id == user_id).order_by(
             Createinfo.activity_date.desc()).all()
         for item in actlist:
-            print(item.to_json())
+            logd(item.to_json())
             list.append(item.to_json())
     return json.dumps(list)
 
 
 @app.route("/get_memberlist")
 def get_memberlist():
-    print("参与的成员")
+    logd("参与的成员")
     activity_id = request.values.get("activity_id")
     #最终要传给前台
     #1.头像url集合
@@ -292,8 +296,8 @@ def get_memberlist():
                 parinfo_value.append(dt)
                 partinfo_values.append(parinfo_value)
 
-            #print("获取get_memberlist")
-            #print(user_dict)
+            #logd("获取get_memberlist")
+            #logd(user_dict)
             """
             {'user_id': 'o2QXs5XL_7sbn0-XYrEhdV0DR3UA', 'nickName': '王强',
              'avatarUrl': 'https://thirdwx.qlogo.cn/mmopen/vi_32/HDZF5RIPAgmQzVxvhwYY1RYLKCjPia5v5tXq7dotwu4qxicRxsO77baUhJ9LzSSt3ibEt1UQ1cGXRLEs5g4kjSN3A/132', 
@@ -308,19 +312,19 @@ def get_memberlist():
     list["avatarUrl_list"] = avatarUrl_list
     list["partinfo_keys"] = partinfo_keys
     list["partinfo_values"] = partinfo_values
-    print(list)
+    logd(list)
 
     return json.dumps(list)
 
 @app.route("/get_partactlist")
 def get_partactlist():
-    print("参与的活动")
+    logd("参与的活动")
     user_id = request.values.get("user_id")
     list = []
     if user_id != None and user_id != "":
         users = db.session.query(Activitymember).filter(Activitymember.user_id == user_id).order_by(Activitymember.parttime.desc())
         for user in users:
-            print(user.to_json())
+            logd(user.to_json())
             act = user.partact
             list.append(act.to_json())
     return json.dumps(list)
