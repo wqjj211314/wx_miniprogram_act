@@ -125,6 +125,13 @@
   z-index: -1;
   background-color:black;
 }
+.background2 {
+  width: 100%;
+  height: 100%;
+  position:fixed; 
+  z-index: -1;
+  background-color:rgba(0, 0, 0, 0);
+}
 
 .bgcolor {
   background-color: rgba(144, 167, 179, 0.8);

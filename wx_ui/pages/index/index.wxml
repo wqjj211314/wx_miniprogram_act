@@ -1,8 +1,8 @@
 <swiper vertical="{{vertical}}"  bindchange="slide" style="height:100vh;">
   <block wx:for="{{activity_list}}" wx:key="id">
     <swiper-item item-id="{{item.id}}">
-
-			<image class='background' src="{{hosturl}}static/{{activity_id}}.jpg" mode="aspectFit"></image>
+      <image class='background' src="{{hosturl}}static/blur_{{activity_id}}.jpg" mode="scaleToFill"></image>
+			<image class='background2' src="{{hosturl}}static/{{activity_id}}.jpg" mode="aspectFit"></image>
 			<!--弹幕格式-->
 			<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
 					<block wx:for="{{activityinfo}}">
@@ -17,7 +17,7 @@
 					</block>
 			</scroll-view>
 
-			<view class="bottomPos">
+			<view class="bottomPos">     
 				<view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:15rpx;">
 					<view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
 						<view class="title" style="line-height:0px;padding-left:5rpx;">

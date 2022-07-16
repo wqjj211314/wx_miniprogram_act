@@ -1,7 +1,8 @@
 {
-  "description": "项目配置文件",
+  "description": "项目配置文件，详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
   "setting": {
     "urlCheck": true,
@@ -37,37 +38,19 @@
     "disableUseStrict": false,
     "showES6CompileOption": false,
     "useCompilerPlugins": false,
-    "minifyWXML": true
+    "minifyWXML": true,
+    "lazyloadPlaceholderEnable": false,
+    "useStaticServer": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.16.1",
   "appid": "wx341d0dd2e062358e",
   "projectname": "one",
-  "debugOptions": {
-    "hidedInDevtools": []
-  },
-  "scripts": {},
-  "isGameTourist": false,
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "condition": {
-    "search": {
-      "list": []
-    },
-    "conversation": {
-      "list": []
-    },
-    "game": {
-      "list": []
-    },
-    "plugin": {
-      "list": []
-    },
-    "gamePlugin": {
-      "list": []
-    },
-    "miniprogram": {
-      "list": []
-    }
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
   }
 }
