@@ -2,12 +2,15 @@
   "usingComponents": {},
   "pages": [
     "pages/index/index",
+    "pages/chat/chat",
+    "pages/friend/friend",
+  
     "pages/activity/activity",
     "pages/user/user",
     "pages/activityshowinfo/activityshowinfo",
     "pages/activitycreate/activitycreate",
     "pages/activityadd/activityadd",
-    "pages/logs/logs"
+    "pages/logs/logs" 
   ],
   "window": {
     "backgroundTextStyle": "light",

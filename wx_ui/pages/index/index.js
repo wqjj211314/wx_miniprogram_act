@@ -48,7 +48,7 @@ Page({
     console.log(this.data.inputMsg);
     var send = this.data.inputMsg;
     var id = app.globalData.current_activity_id;
-    onSockettest.emit('pushmsg', {chatmsg:send,activity_id:id});
+    onSockettest.emit('pushmsg', {new_chat_msg:send,activity_id:id});
 
     this.setData({
       inputMsg: ""
@@ -99,11 +99,13 @@ Page({
     onSockettest.on('connect', function (res) { // 监听socket 是否连接成功
       console.log("监听成功");
     });
-    onSockettest.on('server_response', (res) => {
-      console.log(res.chatmsg);
+    
+    //房间聊天消息，还未添加用户头像等信息，待添加
+    onSockettest.on('new_chat_msg', (res) => {
+      console.log(res.new_chat_msg);
       console.log(this.data.doommData);
-      doommList.push(res.chatmsg);
-      var top = doommList.length * 100;
+      doommList.push(res.new_chat_msg);
+      var top = doommList.length * 100; 
       this.setData({
         doommData: doommList,
         scrollTop:top
@@ -111,10 +113,10 @@ Page({
       console.log(this.data.doommData);
     
     });
-    onSockettest.on('newmember', (res) => {
-      console.log(res.newmember);
+    onSockettest.on('new_member', (res) => {
+      console.log(res.new_total_member_num);
       this.setData({
-        member: res.newmember
+        member: res.new_total_member_num
      });
     
     });
@@ -250,14 +252,14 @@ Page({
       }
     });
   },
-  /** 
-   * 这个是创建活动的用户信息，暂时不做专门的用户信息展示
+  
+  // 这个是创建活动的用户信息，暂时不做专门的用户信息展示
   show_activityuser_info(){
     let userinfo = encodeURIComponent(JSON.stringify(app.globalData.activity_user_info));
     wx.navigateTo({
-      url: '../user/user?userinfo='+userinfo,
+      url: '../chat/chat?userinfo='+userinfo,
     });
-  },*/
+  },
   navigateToactivityinfo(){
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
@@ -273,6 +275,11 @@ Page({
       //url: '../user/user'
     //})
   },
+  navigateToChat(){
+    //wx.navigateTo({
+      //url: '../user/user'
+    //})
+  },  
   bindGetUserInfo: function(res) {
         if (res.detail.userInfo) {
           //用户按了允许授权按钮
