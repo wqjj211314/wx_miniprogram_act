@@ -1,8 +1,10 @@
 <swiper vertical="{{vertical}}"  bindchange="slide" style="height:100vh;">
   <block wx:for="{{activity_list}}" wx:key="id">
     <swiper-item item-id="{{item.id}}">
-      <image class='background' src="{{hosturl}}static/blur_{{activity_id}}.jpg" mode="scaleToFill"></image>
-			<image class='background2' src="{{hosturl}}static/{{activity_id}}.jpg" mode="aspectFit"></image>
+      <image class='background' src="{{hosturl}}static/blur_{{activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}"></image>
+			<image class='background2' src="{{hosturl}}static/{{activity_id}}.jpg" mode="aspectFit" wx:if="{{item.bg_img_exist}}"></image>
+      <!--默认的背景图片显示-->
+      <image class='background2' src="default_index_bg.png" mode="aspectFill" wx:else></image>
 			<!--弹幕格式-->
 			<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
 					<block wx:for="{{activityinfo}}">
@@ -42,7 +44,7 @@
 				</view>
 
 				<!--隐藏的输入框{{isFocus}} hidden="{{isdisplay}}"-->
-				<view class="cu-bar input" wx:if="{{!isdisplay}}">
+				<view class="cu-bar input" wx:if="{{!isdisplay}}" style="margin-bottom: 2rpx;">
 					<view class="action">
 						<text class="cuIcon-write text-grey"></text>
 					</view>

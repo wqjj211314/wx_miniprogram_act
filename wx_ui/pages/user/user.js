@@ -79,6 +79,11 @@ Page({
       url: '../index/index'
     })
   },
+  navigateToFriendList(){
+    wx.navigateTo({
+      url: '../friend/friend'
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

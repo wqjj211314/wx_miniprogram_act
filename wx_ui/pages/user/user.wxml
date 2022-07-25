@@ -15,7 +15,7 @@
           <text class="text-black">{{userinfo.nickName}}</text>
         </view>
         <view bindtap="showModal-none" data-target="DialogModal-tag">
-          <view class="cu-tag bg-red light sm round" style="margin-top:10rpx;"><!--class="rightarrowred"--> 嗨 一起玩</view>
+          <view class="cu-tag bg-red light sm round" style="margin-top:10rpx;"><!--class="rightarrowred"-->小队出发啦</view>
         </view>
       </view>
 
@@ -30,9 +30,9 @@
       <text>创建活动</text>
     </view>
 	 <view class="cu-item">
-      <view class="cuIcon-addressbook text-gray">
+      <view class="cuIcon-comment text-green">
       </view>
-      <text>好友</text>
+      <text>消息</text>
     </view>
 	 <view class="cu-item">
       <view class="cuIcon-settings text-gray">
@@ -55,7 +55,7 @@
     </view>
 	    <view class="cu-item arrow" bindtap="navigateToActivityadd">
       <view class="content">
-        <text class="cuIcon-circlefill text-blue"></text>
+        <text class="cuIcon-likefill text-red"></text>
         <text class="text-grey">参加的活动</text>
       </view>
     </view>
@@ -74,7 +74,7 @@
     </view>
 	  <view class="cu-item arrow" bindtap="showModal" data-target="DialogModal-suggest">
       <view class="content">
-        <text class="cuIcon-writefill text-red" style="font-size:40rpx;"></text>
+        <text class="cuIcon-write text-red" style="font-size:40rpx;"></text>
         <text class="text-grey">我有意见</text>
       </view>
     </view>
