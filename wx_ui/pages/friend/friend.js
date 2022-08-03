@@ -124,5 +124,19 @@ Page({
       }
     });
   },
+  navigateToChat(e){
+    var index = e.currentTarget.dataset.index;
+    console.log(index);
+    var friend_item = this.data.session_list[index];
+    let friend_user_info = {};
+    if(friend_item["user_id_1"]["user_id"] == app.globalData.login_userInfo["user_id"]){
+      friend_user_info = encodeURIComponent(JSON.stringify(friend_item["user_id_2"]));
+    }else{
+      friend_user_info = encodeURIComponent(JSON.stringify(friend_item["user_id_1"]));
+    }
+    wx.navigateTo({
+      url: '../chat/chat?friend_user_info=' + friend_user_info,
+    });
+  },
 
 })

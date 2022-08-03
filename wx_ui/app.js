@@ -35,6 +35,10 @@ App({
               console.log("appjs用户openid");
               console.log(res.data.openid);
               that.globalData.openid = res.data.openid;
+              that.globalData.login_userInfo["user_id"] = res.data.openid;
+              try {
+                wx.setStorageSync('openid', res.data.openid);
+              } catch (e) { }
             }
           })
         } else {

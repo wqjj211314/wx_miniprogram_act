@@ -29,7 +29,7 @@
       </view>
       <text>创建活动</text>
     </view>
-	 <view class="cu-item">
+	 <view class="cu-item" bindtap="navigateToFriendList">
       <view class="cuIcon-comment text-green">
       </view>
       <text>消息</text>

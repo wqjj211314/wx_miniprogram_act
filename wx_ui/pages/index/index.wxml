@@ -8,12 +8,12 @@
 			<!--弹幕格式-->
 			<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
 					<block wx:for="{{activityinfo}}">
-							<view class="flext-item customer-msg-cu-btn bg-touming" style="align-self:center;color:white">
+							<view class="flext-item customer-msg-cu-btn bg-touming" style="align-self:center;color:white;">
 									{{item}}
 							</view>
 					</block>
 					<block wx:for="{{doommData}}">
-							<view class="flext-item customer-msg-cu-btn bg-touming">
+							<view class="flext-item customer-msg-cu-btn bg-touming" style="">
 									{{item}}
 							</view>
 					</block>
@@ -49,7 +49,7 @@
 						<text class="cuIcon-write text-grey"></text>
 					</view>
 					<!--focus改成auto?!-->
-					<input class="solid-bottom" focus="{{isFocus}}" value="{{inputMsg}}" maxlength="300" cursor-spacing="0" bindblur="onblurkey" bindinput="inputMsg"></input>
+					<input class="solid-bottom" focus="{{isFocus}}" value="{{inputMsg}}" maxlength="300" cursor-spacing="0" bindblur="onblurkey" bindinput="inputMsg" style="margin-bottom: 15rpx;"></input>
 					<button class="cu-btn bg-green shadow-blur" bindtap="sendMsg">发送</button>
 				</view>
 
@@ -65,8 +65,11 @@
 						<view class="cu-tag badge" style="top:-5rpx;right:-5rpx;">{{member}}人</view>
 						<text class="text-white" style="font-size:25rpx;margin-top:-10rpx;">报名</text>
 					</view>
-					<button class="cu-avatar round lg" style="background-image:url({{login_userInfo.avatarUrl}});" bindtap='getUserProfile'>
+					<button class="cu-avatar round lg" style="background-image:url({{login_userInfo.avatarUrl}});" bindtap='getUserProfile' wx:if="{{hasUserInfo}}">
 						
+					</button>
+          <button class="cu-avatar round lg" bindtap='getUserProfile' wx:else>
+						<text class="cuIcon-profile text-white" style="font-size: 75rpx;"></text>
 					</button>
 				
 				</view>

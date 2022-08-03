@@ -1,6 +1,6 @@
 <!--pages/friend/friend.wxml-->
 <block wx:for="{{session_list}}">
-  <view class="flex p-xs bg-white padding-sm align-center">
+  <view class="flex p-xs bg-white padding-sm align-center" bindtap="navigateToChat" data-index="{{index}}">
     <view class="flex-sub bg-white radius">
       <view class="cu-avatar xl radius" style="background-image:url({{item.friend_avatarUrl}});">
 

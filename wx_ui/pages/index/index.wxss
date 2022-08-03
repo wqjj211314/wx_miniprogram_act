@@ -70,12 +70,12 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 2rpx 15rpx;
+  padding: 15rpx 20rpx;
   font-size: 30rpx;
   line-height: 160%;
   text-decoration: none;
   overflow: visible;
-  border-radius: 20rpx;
+  border-radius: 25rpx;
   margin:10px 10px;
   max-width: 500rpx;
 }

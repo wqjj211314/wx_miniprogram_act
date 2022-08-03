@@ -113,10 +113,30 @@ chooseposition(){
     latitude: this.data.latitude,
     longitude: this.data.longitude
   }); 
-  
+  /*
   wx.navigateTo({
     url: `plugin://chooseLocation/index?key=${key}&referer=${referer}&location=${location}`
   });
+  */
+ var _this = this;
+    wx.chooseLocation({
+      success: function (res) {
+        var name = res.name
+        var address = res.address
+        var latitude = res.latitude
+        var longitude = res.longitude
+        _this.setData({
+          activityaddress: name,
+          //activityaddress: address,
+          latitude: latitude,
+          longitude: longitude
+        })
+      },
+      complete(r){
+        console.log(r)
+        console.log(222)
+      }
+    })
 },
 choose(event){
   var value = event.target.dataset.value;
@@ -322,8 +342,16 @@ hideModal(e) {
   },
   getLocation(){
     var _this =this;
+    wx.authorize({
+      scope: 'scope.userLocation',
+      success () {
+        // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+        //wx.startRecord()    
+      }
+    });
+    /*
     wx.getLocation({
-      type: 'wgs84',
+      type: 'wgs84',   
       success(res) {
         _this.data.latitude = res.latitude;
         _this.data.longitude = res.longitude;
@@ -345,6 +373,7 @@ hideModal(e) {
         });
       }
     });
+    */
   },
   again_getLocation:function(){
     let that = this;
@@ -412,6 +441,8 @@ hideModal(e) {
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    /*
+    //腾讯的位置地点选择插件，微信小程序有专门的函数代替了
     const location = chooseLocation.getLocation(); // 如果点击确认选点按钮，则返回选点结果对象，否则返回null
     if(location !=null){
       console.log("进到onshow")
@@ -425,6 +456,7 @@ hideModal(e) {
         //addressshort:location.name.substr(-16,16)
       })
     }
+    */
   },
 
   /**

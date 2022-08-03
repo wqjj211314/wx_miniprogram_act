@@ -29,5 +29,8 @@
     "scope.userLocation": {
       "desc": "你的位置信息将用于活动位置选择"
     }
-  }
+  },
+  "requiredPrivateInfos":[
+    "chooseLocation"
+  ]
 }
