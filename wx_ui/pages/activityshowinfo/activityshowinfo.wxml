@@ -7,8 +7,10 @@
 <view class="cu-list menu card-menu margin-top" style="margin-top:10vh;">
 
 
-  <view class="cu-item text-center">
-    <view style="text-align:center;"><text>{{activity_info.title}}</text></view>
+  <view class="cu-item" style="text-align: center;">
+    
+      <text style="width: 100%;" class="text-bold text-black">{{activity_info.title}}</text>
+    
   </view>
 
   <view class="cu-item">
@@ -45,7 +47,7 @@
 
     <view class="cu-item arrow" style="" bindtap="showModal" data-target="DialogModal-partinfo">
       <view class="content" style="width:30%;">
-        <text class="cuIcon-emojiflashfill text-green"></text>
+        <text class="cuIcon-roundaddfill text-green"></text>
         <text class="text-grey">参与{{activity_info.member}}人</text>
       </view>
       <view class="action" style="max-width:70%;">
@@ -68,7 +70,7 @@
 <view class="cu-list menu card-menu margin-top" >
   <view class="cu-item">
       <view class="content">
-        <text class="cuIcon-timefill text-green"></text>
+        <text class="cuIcon-newsfill text-green"></text>
         <text class="text-grey">报名信息</text>
       </view>
       <view class="action" style="max-width:70%;">
@@ -95,24 +97,35 @@
   <button class="cu-btn bg-red margin-tb-sm lg" bindtap="part_activity">{{partbuttonmsg}}</button>
 </view>
 
-<view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}">
+<view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class="content">我有意见</view>
+      <view class="content">报名人员信息</view>
       <view class="action" bindtap="hideModal">
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
     <view class="">
       <view class="su-table-box">
-        <view class="su-table">
+        <view class="su-table" >
           <!-- 表格标题 -->
           <view class="su-tr">
-            <view class="su-th" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
+            <view class="su-th text-bold" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
+            
           </view>
           <!-- 表格内容 -->
           <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item">
-	          <view class="su-td" wx:for="{{item}}" wx:for-item="info">{{info}}</view>
+	          <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
+              <block wx:if="{{index==0}}">
+                <view class="cu-avatar round sm" style="background-image:url({{info}});">
+
+                </view>
+              </block>
+              <block wx:else>
+                {{info}}
+              </block>
+              
+            </view>
 	        </view>
 
           

@@ -263,6 +263,8 @@ Page({
 
   // 这个是创建活动的用户信息，暂时不做专门的用户信息展示
   show_activityuser_info() {
+    if(this.data.activity_user_info["user_id"] == app.globalData.login_userInfo["user_id"])
+      return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     
     wx.navigateTo({

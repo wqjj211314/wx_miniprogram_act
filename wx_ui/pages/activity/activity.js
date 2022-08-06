@@ -78,13 +78,22 @@ DateChange(e) {
   })
 },
 ChooseImage() {
-  wx.chooseImage({
+  wx.chooseMedia({
     count: 1, //默认9
-    sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+    mediaType:["image"],
+    sourceType:["album"],
+    sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
     sourceType: ['album'], //从相册选择
     success: (res) => {
+        console.log("选择图片结果");
+        console.log(res.tempFiles);
+        var temp = res.tempFiles;
+        var path = temp[0].tempFilePath;
+        var imgpaths = [];
+        imgpaths.push(path);
+        console.log(imgpaths);
         this.setData({
-          imgList: res.tempFilePaths
+          imgList: imgpaths
         })
         
     }

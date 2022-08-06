@@ -17,7 +17,8 @@ Page({
     modalName:"",
     avatarUrl_list:[],
     partinfo_keys:[],
-    partinfo_values:[]
+    partinfo_values:[],
+    user_id_list:[]
 
 
 
@@ -26,6 +27,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
     console.log(activity_info);
@@ -52,29 +54,21 @@ Page({
         console.log(result["avatarUrl_list"]);
         console.log(result["partinfo_keys"]);
         console.log(result["partinfo_values"]);
-        var activity_member_info_list = res.data;
-        var partinfo_list = [];
+        var user_id_list = result["user_id_list"];
+        
         var avatarUrl_list = result["avatarUrl_list"];
         var partinfo_keys = result["partinfo_keys"];
         var partinfo_values = result["partinfo_values"];
         that.setData({
           avatarUrl_list:avatarUrl_list,
           partinfo_keys:partinfo_keys,
-          partinfo_values:partinfo_values
+          partinfo_values:partinfo_values,
+          user_id_list:user_id_list
         });
 
-        /** 
-        for(var item in activity_member_info_list){
-          var partinfo = JSON.parse(item["partinfo"]);
-          partinfo_list.push(partinfo);
-        }
-        that.setData({
-          memberlist:res.data,
-          partinfo_list:partinfo_list
-        });
-       
-        that.data.memberlist.forEach(element => {
-          if(element.user_id == app.globalData.openid){
+      
+        that.data.user_id_list.forEach(item => {
+          if(item == app.globalData.login_userInfo["user_id"]){
             console.log("");
             that.setData({
               ispart:true,
@@ -82,7 +76,7 @@ Page({
             });
           }
         });
-        */
+      
       }
     });
   },

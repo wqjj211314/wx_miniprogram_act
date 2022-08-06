@@ -59,12 +59,12 @@
 
 	.su-table-box {
 		height: 100%;
-		margin: 0rpx 30rpx;
+		margin: 0rpx 0rpx;
 		overflow-x: auto;
-		padding-bottom: 40rpx;
+		padding-bottom: 0rpx;
   }
 		.su-table {
-			margin-top: 50rpx;
+			margin-top: 0rpx;
 			display: table;
 			border-collapse: collapse; 
 			overflow-x: auto;
@@ -84,10 +84,10 @@
 			height: 60rpx;
 			line-height: 60rpx;
 			text-align: center;
-			border: 1rpx solid #DDDDDD;
+			border: 1rpx solid #969292;
 			border-right: none;
 			border-bottom: none;
-			background-color: #FFDAB9;
+			
 			color: #070707;
 		}
  
@@ -97,7 +97,7 @@
 			height: 60rpx;
 			line-height: 60rpx;
 			text-align: center;
-			border: 1rpx solid #DDDDDD;
+			border: 1rpx solid #969292;
 			border-right: none;
 		}
 	

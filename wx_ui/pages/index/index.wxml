@@ -32,9 +32,9 @@
 						</view>
 						<view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
 							<view class="desc">
-								<view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:4.8em;margin-bottom:10rpx;">{{item.detail}}
+								<view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:4.8em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;">{{item.detail}}
 								</view>	
-								<view>
+								<view style="margin-left:10rpx;">
 									<view class="cu-tag bg-red light sm round">{{item.activity_date}}</view>
 									<view class="cu-tag bg-red light sm round">{{item.begintime}}-{{item.endtime}}</view>
 								</view>
