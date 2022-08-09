@@ -8,7 +8,7 @@ Page({
    */
   data: {
     ismask:'block',
-    faceid:"",
+    checking_flag:false,
     userinfo:{},
     t_length:0
 
@@ -74,6 +74,11 @@ Page({
       }
     });
   },
+  navigateToActivitychecking(){
+    wx.navigateTo({
+      url: '../activitycheck/activitycheck'
+    })
+  },  
   navigateToindex(){
     wx.navigateTo({
       url: '../index/index'
@@ -91,9 +96,13 @@ Page({
     let user_info = JSON.parse(decodeURIComponent(options.userinfo))
     //console.log("创建的活动"+options);
     this.setData({
-      userinfo:user_info
+      userinfo:user_info,
     });
-   
+    if(app.globalData.login_userInfo["user_id"] == "o2QXs5XL_7sbn0-XYrEhdV0DR3UA"){
+      this.setData({
+        checking_flag:true,
+      });
+    }
   },
   bindText: function (e) {
     var t_text = e.detail.value.length;

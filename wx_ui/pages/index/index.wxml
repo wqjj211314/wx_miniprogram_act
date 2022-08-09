@@ -4,7 +4,7 @@
       <image class='background' src="{{hosturl}}static/blur_{{activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}"></image>
 			<image class='background2' src="{{hosturl}}static/{{activity_id}}.jpg" mode="aspectFit" wx:if="{{item.bg_img_exist}}"></image>
       <!--默认的背景图片显示-->
-      <image class='background2' src="default_index_bg.png" mode="aspectFill" wx:else></image>
+      <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>
 			<!--弹幕格式-->
 			<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
 					<block wx:for="{{activityinfo}}">

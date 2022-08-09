@@ -9,6 +9,7 @@
     "pages/user/user",
     "pages/activityshowinfo/activityshowinfo",
     "pages/activitycreate/activitycreate",
+    "pages/activitycheck/activitycheck",
     "pages/activityadd/activityadd",
     "pages/logs/logs" 
   ],
