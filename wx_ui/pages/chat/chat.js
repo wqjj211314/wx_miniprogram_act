@@ -24,7 +24,7 @@ Page({
    */
   onLoad(options) {
     console.log("聊天onLoad");
-    
+    var that = this;
     let friend_user_info = JSON.parse(decodeURIComponent(options.friend_user_info));
     console.log("好友信息"+friend_user_info);
     console.log(friend_user_info);
@@ -46,12 +46,20 @@ Page({
       },
       success (res) {
         console.log(res);
-        console.log(res.init_friend_chat_msgs);
-        var top = res.init_friend_chat_msgs.length * 100; 
-        this.setData({
-          init_friend_chat_msgs: res.init_friend_chat_msgs,
-          scrollTop:top
+        console.log(res.data.init_friend_chat_msgs);
+        that.setData({
+          init_friend_chat_msgs: res.data.init_friend_chat_msgs
         });
+        //滚动底部
+        wx.createSelectorQuery().select('#chatid').boundingClientRect(function (rect) {
+            wx.pageScrollTo({
+              scrollTop: rect.height,
+              duration: 300 // 滑动速度
+            })
+            that.setData({
+              scrollTop: rect.height - that.data.scrollTop
+            });
+        }).exec();
       }
     });
     
@@ -60,13 +68,21 @@ Page({
     
       app.globalData.onSockettest.on('new_friend_chat_msg', (res) => {
         console.log(res.new_friend_chat_msg);
-        var chat_msg_list = this.data.init_friend_chat_msgs;
+        var chat_msg_list = that.data.init_friend_chat_msgs;
         chat_msg_list.push(res.new_friend_chat_msg);
-        var top = chat_msg_list.length * 100;
-        this.setData({
-          init_friend_chat_msgs: chat_msg_list,
-          scrollTop:top
+        that.setData({
+          init_friend_chat_msgs: chat_msg_list
         });
+        //滚动底部
+        wx.createSelectorQuery().select('#chatid').boundingClientRect(function (rect) {
+          wx.pageScrollTo({
+            scrollTop: rect.height,
+            duration: 300 // 滑动速度
+          })
+          that.setData({
+            scrollTop: rect.height - that.data.scrollTop
+          });
+        }).exec();        
       });   
     } 
     //加入房间app.globalData.openid this.data.friend_openid

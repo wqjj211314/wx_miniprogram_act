@@ -1,5 +1,5 @@
 
-<view class="cu-chat">
+<view class="cu-chat" id="chatid">
   <block wx:for="{{init_friend_chat_msgs}}">
   <view class="cu-item self" wx:if="{{item.user_id_1 != friend_openid}}">
     <view class="main">
