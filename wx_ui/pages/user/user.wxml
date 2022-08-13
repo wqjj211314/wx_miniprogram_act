@@ -34,7 +34,7 @@
       </view>
       <text>消息</text>
     </view>
-	 <view class="cu-item">
+	 <view class="cu-item" bindtap="click_setting">
       <view class="cuIcon-settings text-gray">
       </view>
       <text>设置</text>

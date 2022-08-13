@@ -287,6 +287,7 @@ Page({
     });    
   },
   check_user_profile_cache(){
+    var that = this;
     if(app.globalData.hasUserInfo){
       wx.getStorage({
         key: 'openid',
@@ -297,11 +298,23 @@ Page({
             
             var avatarUrl = wx.getStorageSync('avatarUrl');
             console.log(avatarUrl);
-            if(avatarUrl == ""||avatarUrl == undefined) return false;
+            if(avatarUrl == ""||avatarUrl == undefined){
+              that.setData({
+                hasUserInfo:false
+              });
+              app.globalData.hasUserInfo = false;
+              return false;
+            }
             
             var nickName = wx.getStorageSync('nickName');
             console.log(nickName);
-            if(nickName == ""||nickName == undefined) return false;
+            if(nickName == ""||nickName == undefined){
+              that.setData({
+                hasUserInfo:false
+              });
+              app.globalData.hasUserInfo = false;
+              return false;
+            }
             console.log(nickName);
             var gender = 0;
             //gender = wx.getStorageSync('gender');

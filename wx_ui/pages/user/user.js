@@ -63,6 +63,13 @@ Page({
       url: '../chat/chat?friend_user_info=' + friend_user_info,
     });
   },
+  click_setting(){
+    wx.showToast({
+      title: '功能未开放',
+      icon:"none",
+      duration:2000
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */

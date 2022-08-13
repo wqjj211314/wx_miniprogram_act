@@ -361,17 +361,27 @@ hideModal(e) {
   },
   getUserProfile: function(res) {
     var that =this;
-    if(!app.globalData.hasUserInfo){
+    if(!this.check_user_profile_cache()){
       wx.getUserProfile({
         desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
         success: (res) => {
-          console.log("按钮获取用户信息 "+res.userInfo.nickName)
-          app.globalData.login_userInfo = res.userInfo;
-          app.globalData.hasUserInfo = true;
-          this.setData({
-            login_userInfo: res.userInfo
-          });
-          that.create_activity(res.userInfo.nickName,res.userInfo.avatarUrl,res.userInfo.gender);
+          console.log("按钮获取用户信息 " + res.userInfo.nickName);
+        console.log(res.userInfo);
+        app.globalData.login_userInfo["avatarUrl"] = res.userInfo["avatarUrl"];
+        app.globalData.login_userInfo["nickName"] = res.userInfo["nickName"];
+        app.globalData.login_userInfo["gender"] = res.userInfo["gender"];
+        app.globalData.hasUserInfo = true;
+        console.log(app.globalData.login_userInfo);
+        this.setData({
+          login_userInfo: app.globalData.login_userInfo,
+          hasUserInfo:true
+        });
+        //本地缓存用户数据，避免频繁登录
+        try {
+          wx.setStorageSync('nickName', app.globalData.login_userInfo.nickName);
+          wx.setStorageSync('avatarUrl', app.globalData.login_userInfo.avatarUrl);
+        } catch (e) { }
+        that.create_activity(res.userInfo.nickName,res.userInfo.avatarUrl,res.userInfo.gender);
         }
       });
     }else{
@@ -382,7 +392,52 @@ hideModal(e) {
     }
         
   },
- 
+
+  check_user_profile_cache(){
+    if(app.globalData.hasUserInfo){
+      wx.getStorage({
+        key: 'openid',
+        success(res) {
+          console.log("获取本地缓存数据，检查openid数据");
+          console.log(res.data);
+          try {
+            
+            var avatarUrl = wx.getStorageSync('avatarUrl');
+            console.log(avatarUrl);
+            if(avatarUrl == ""||avatarUrl == undefined) return false;
+            
+            var nickName = wx.getStorageSync('nickName');
+            console.log(nickName);
+            if(nickName == ""||nickName == undefined) return false;
+            console.log(nickName);
+            var gender = 0;
+            //gender = wx.getStorageSync('gender');
+            var login_userInfo = {
+              "user_id": res.data,
+              "nickName": nickName,
+              "avatarUrl": avatarUrl,
+              "gender":gender
+            };
+            that.setData({
+              login_userInfo: login_userInfo,
+              hasUserInfo:true
+            });
+            app.globalData.login_userInfo = login_userInfo;
+            app.globalData.hasUserInfo = true;
+          } catch (e) {
+            // Do something when catch error
+          }
+        },
+        fail(res){
+          return false;
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+
+  },  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
