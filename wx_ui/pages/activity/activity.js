@@ -44,7 +44,9 @@ Page({
     modalcontent:"",
     time: '12:01',
     nowdate:year+"-"+month+"-"+day,
-    date: year+"-"+month+"-"+day
+    date: year+"-"+month+"-"+(day+1),
+    loadModal:false,
+    disabled_flag:false
   },
 
 titleInput(e){
@@ -135,7 +137,7 @@ chooseposition(){
         var latitude = res.latitude
         var longitude = res.longitude
         _this.setData({
-          activityaddress: name,
+          activityaddress: name+"--"+address,
           //activityaddress: address,
           latitude: latitude,
           longitude: longitude
@@ -184,14 +186,11 @@ create_activity(nickname,url,gender){
     console.log(nickname);
     console.log(url);
     console.log(gender);
-    if(this.data.imgList.length == 0){
-      this.setData({
-        modalName: "modal",
-        modalcontent:"请选择图片"
-      })
-      return;
-    }
-    else if(this.data.title == ""){
+    this.setData({
+      disabled_flag:true
+    });
+
+    if(this.data.title == ""){
       this.setData({
         modalName: "modal",
         modalcontent:"请填写活动标题"
@@ -205,7 +204,16 @@ create_activity(nickname,url,gender){
       })
       return;
     }
-  
+    else if(this.data.imgList.length == 0){
+      this.setData({
+        modalName: "modal",
+        modalcontent:"请选择图片"
+      })
+      return;
+    }
+  this.setData({
+    loadModal:true
+  });
   //活动标题、活动详情、活动开始时间、结束时间、报名截止时间、位置、图片、
   //报名信息
   //限制人数
@@ -241,9 +249,25 @@ create_activity(nickname,url,gender){
       'content-type': 'application/json' // 默认值
     },
     success (res) {
-      console.log("创建活动："+res.data);
+      console.log("成功创建活动："+res.data);
       var response_activity_id = res.data;
-      let activity_id = JSON.stringify({"activity_id":res.data});
+      let activity_id = res.data;
+      if(activity_id["activity_id"] == ""){
+        that.setData({
+          loadModal:false,
+        });
+        wx.showToast({
+          title: activity_id["result"],
+          icon:"none",
+          duration:4000
+          
+        });
+      }
+
+      if(activity_id["activity_id"] == ""){
+        console.log("创建失败");
+        return;
+      }
       //app.globalData.activity_id = response_activity_id;
        //上传图片
       wx.uploadFile({
@@ -252,22 +276,41 @@ create_activity(nickname,url,gender){
         name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
         formData: {
           'user': 'test',
-          'activity_id':res.data
+          'activity_id':activity_id["activity_id"]
         },
         success: function (res) {
+          //wx.navigateTo({
+            //url: '../index/index?activity_id='+encodeURIComponent(activity_id)
+          //})
+          that.setData({
+            loadModal:false,
+          });   
+          wx.showToast({
+            title: res.data,
+            icon:"none",
+            duration:3000
+          });   
           wx.navigateTo({
-            url: '../index/index?activity_id='+encodeURIComponent(activity_id)
-          })
+            url: '../activitycreate/activitycreate'
+          })          
         },
         fail: function (error) {
           console.log(error);
           this.setData({
+            loadModal:false,
             modalName: "modal",
-            modalcontent:"图片无法上传"
+            modalcontent:"背景图上传失败"
           })
         }
       });
       
+    },
+    fail:function(error){
+      wx.showToast({
+        title: '创建失败',
+        icon: 'error',
+        duration: 3000
+      })
     }
   });
 

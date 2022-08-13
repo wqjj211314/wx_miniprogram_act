@@ -34,6 +34,7 @@ App({
             success:(res)=>{
               console.log("appjs用户openid");
               console.log(res.data.openid);
+              console.log(that.globalData.login_userInfo);
               that.globalData.openid = res.data.openid;
               that.globalData.login_userInfo["user_id"] = res.data.openid;
               try {
@@ -59,7 +60,8 @@ App({
     userInfo: null,
     onSockettest:null,
     openid:"",
-    partinfo:""
+    partinfo:"",
+    appversion:"2.0.2"
   },
   user_login(){
 

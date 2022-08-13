@@ -2,13 +2,13 @@
   "usingComponents": {},
   "pages": [
     "pages/index/index",
+    "pages/activity/activity",
     "pages/chat/chat",
     "pages/friend/friend",
-  
-    "pages/activity/activity",
     "pages/user/user",
     "pages/activityshowinfo/activityshowinfo",
     "pages/activitycreate/activitycreate",
+    "pages/activitypart/activitypart",
     "pages/activitycheck/activitycheck",
     "pages/activityadd/activityadd",
     "pages/logs/logs" 

@@ -1,4 +1,4 @@
-<!--这个创建活动页面基本完整，UI上正常-->
+ <!--这个创建活动页面基本完整，UI上正常-->
 <view class="img">
     <image class='img' src="/2.jpg" mode="widthFix"></image>
 </view>
@@ -77,7 +77,15 @@
         <text class="text-grey text-sm">{{activity_info.partinfo}}</text>
       </view>
   </view>
-
+  <view class="cu-item">
+      <view class="content">
+        <text class="cuIcon-timefill text-green"></text>
+        <text class="text-grey">报名截止时间</text>
+      </view>
+      <view class="action" style="max-width:70%;">
+        <text class="text-grey text-sm">{{activity_info.activity_date}} {{activity_info.addendtime}}</text>
+      </view>
+    </view>
   <form>
     <block wx:for="{{partinfo}}">
       <view class="cu-form-group">
@@ -94,7 +102,7 @@
 
 
 <view class="padding flex flex-direction">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap="part_activity">{{partbuttonmsg}}</button>
+  <button class="cu-btn bg-red margin-tb-sm lg" bindtap="part_activity" disabled="{{}}">{{partbuttonmsg}}</button>
 </view>
 
 <view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">

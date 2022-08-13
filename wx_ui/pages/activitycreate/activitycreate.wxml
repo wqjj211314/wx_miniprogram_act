@@ -1,29 +1,35 @@
 <!--pages/activityadd/activityadd.wxml-->
 <view style="width:100vw;height:100vh;background-color: white;">
-<block wx:for="{{activity_create_list}}" wx:key="id">
+<block wx:for="{{activity_create_list}}" wx:key="id" wx:for-index="index">
 <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
-  <view class="cu-time">{{item.activity_date}}</view>
+  <view class="cu-time" style="width: fit-content;">{{item.activity_date}}</view>
   <view class="cu-item text-blue">
     <view class="cu-card article" style="">
-      <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;background-color: var(--ghostWhite);color: var(--black);">
+      <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
 
-        <view class="title" style="padding:0px;">
+        <view class="title" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
           <view class="text-cut">{{item.title}}<view class="cu-tag bg-red light sm round">{{item.activity_status_comment}}</view></view>
         </view>
 
-        <view class="content" style="padding:0px;">
+        <view class="content" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
         
           <image wx:if="{{item.bg_img_exist}}" src="{{hosturl}}static/{{item.id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
           <image wx:else src="/default_showlist_bg.png" mode="aspectFill" style="width:40%;height:200rpx;"></image>
           <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
-            <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.detail}}</view>
+            <view class="text-content" style="width:90%;color:black;font-size:13px;height:4em;">{{item.detail}}</view>
 
             <view>
               <view class="cu-tag bg-red light sm round">{{item.begintime}} - {{item.endtime}}</view>
-              
             </view>
 
+            
+
           </view>
+        </view>
+        <view class="" style="margin-top: 30rpx;">
+
+          <button class="cu-btn bg-red" style="width: 100%;" bindtap="delete_activity" data-index="{{index}}">删除活动</button>
+              
         </view>
       </view>
     </view>

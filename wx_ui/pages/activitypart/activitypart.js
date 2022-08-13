@@ -14,12 +14,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.navigateToActivitycreate();
+    this.navigateToActivityadd();
   },
-  navigateToActivitycreate(){
+  navigateToActivityadd(){
     var that = this;
     wx.request({
-      url: app.globalData.hosturl+'get_create_actlist', //仅为示例，并非真实的接口地址
+      url: app.globalData.hosturl+'get_partactlist', //仅为示例，并非真实的接口地址
       data: {
         "user_id":app.globalData.openid
       },
@@ -28,15 +28,15 @@ Page({
       },
       success (res) {
         if(res.data.length>=0){
-          console.log("创建的活动")
+          console.log("参与的活动")
           console.log(JSON.stringify(res.data))
           //JSON.stringify(this.data.activity_info);
           that.setData({
             activity_create_list:res.data
-          });
+          })
           if(res.data.length == 0){
             wx.showToast({
-              title: '还没创建活动哦',
+              title: '还没有参与活动',
               icon:"success",
               duration:2500
             })
@@ -45,7 +45,6 @@ Page({
         
       }
     });
-   
   },
   navigateToActivityIndex(e){
     var index = parseInt(e.currentTarget.dataset.index);
@@ -53,41 +52,12 @@ Page({
     console.log(this.data.activity_create_list.length);
     var index_activity = this.data.activity_create_list[index];
     var activity_id = index_activity["id"];
-    if(index_activity["activity_status"] == -1){
-      wx.showToast({
-        title: '审核中，无法查看',
-        icon:"none",
-        mask:true
-      })
-      return;
-    }
     let id = JSON.stringify({"activity_id":activity_id});
     wx.navigateTo({
       url: '../index/index?activity_id='+encodeURIComponent(id)
     })
   },
-  delete_activity(e){
-    var that = this;
-    var index = parseInt(e.currentTarget.dataset.index);
-    console.log(typeof index);
-    console.log(this.data.activity_create_list.length);
-    var index_activity = this.data.activity_create_list[index];
-    var activity_id = index_activity["id"];
-    wx.request({
-      url: app.globalData.hosturl+'delete_activity', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id":activity_id
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success (res) {
-        console.log("成功删除活动");
-        that.navigateToActivitycreate();
-      }
-    });
-    
-  },
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

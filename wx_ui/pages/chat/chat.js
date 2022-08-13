@@ -3,7 +3,9 @@ Page({
   data: {
     InputBottom: 0,
     friend_user_info:{},
-    friend_openid:"androidtesterid",
+    friend_avatar:"",
+    login_avatar:"",
+    friend_openid:"",
     init_friend_chat_msgs:[],
     scrollTop:0
   },
@@ -26,6 +28,9 @@ Page({
     console.log(friend_user_info);
     this.setData({
       friend_user_info:friend_user_info,
+      friend_openid:friend_user_info["user_id"],
+      login_avatar:app.globalData.login_userInfo["avatarUrl"],
+      friend_avatar:friend_user_info["avatarUrl"]
     });
     //this.init_friend_chat_list();
     //监听房间消息

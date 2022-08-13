@@ -15,7 +15,7 @@
           <text class="text-black">{{userinfo.nickName}}</text>
         </view>
         <view bindtap="showModal-none" data-target="DialogModal-tag">
-          <view class="cu-tag bg-red light sm round" style="margin-top:10rpx;"><!--class="rightarrowred"-->小队出发啦</view>
+          <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;"><!--class="rightarrowred"-->小队出发啦</view>
         </view>
       </view>
 
@@ -79,10 +79,10 @@
         <text class="text-grey text-sm">growthwang@163.com</text>
       </view>
     </view>
-	  <view class="cu-item arrow" bindtap="showModal" data-target="DialogModal-suggest">
+	  <view class="cu-item arrow" bindtap="chat_with_dev">
       <view class="content">
-        <text class="cuIcon-write text-red" style="font-size:40rpx;"></text>
-        <text class="text-grey">我有意见</text>
+        <text class="cuIcon-write text-green" style="font-size:40rpx;"></text>
+        <text class="text-grey">客服建议</text>
       </view>
     </view>
 
@@ -139,7 +139,7 @@
 <view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class="content">我有意见</view>
+      <view class="content">我有建议</view>
       <view class="action" bindtap="hideModal">
         <text class="cuIcon-close text-red"></text>
       </view>

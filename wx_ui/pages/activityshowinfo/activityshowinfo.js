@@ -18,7 +18,9 @@ Page({
     avatarUrl_list:[],
     partinfo_keys:[],
     partinfo_values:[],
-    user_id_list:[]
+    user_id_list:[],
+    addendtime:"",
+    disable_flag:false
 
 
 
@@ -31,12 +33,23 @@ Page({
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
     console.log(activity_info);
-    console.log(activity_user_info)
+    console.log(activity_user_info);
+    var addendtime = activity_info["activity_date"] + " " + activity_info["addendtime"];
     this.setData({
       activity_info:activity_info,
+      addendtime:addendtime,
       activity_user_info:activity_user_info,
       partinfo:activity_info.partinfo.split(",")
     });
+    console.log(new Date(addendtime).getTime());
+    console.log(new Date().getTime());
+    if(new Date(addendtime).getTime() < new Date().getTime()){
+      this.setData({
+        ispart:true,
+        partbuttonmsg:"报名截止返回首页"
+      });
+    }
+
 
 
     var that = this;

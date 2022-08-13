@@ -119,7 +119,14 @@ Page({
         });
         _this.setData({
           session_list:list
-        })
+        });
+        if(res.data.length == 0){
+          wx.showToast({
+            title: '没有消息哦',
+            icon:"success",
+            duration:3000
+          })
+        }
         
       }
     });

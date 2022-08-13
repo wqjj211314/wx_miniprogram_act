@@ -30,49 +30,15 @@ Page({
     })
   },
   navigateToActivitycreate(){
-    wx.request({
-      url: app.globalData.hosturl+'get_create_actlist', //仅为示例，并非真实的接口地址
-      data: {
-        "user_id":app.globalData.openid
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success (res) {
-        if(res.data.length>=0){
-          console.log("创建的活动")
-          console.log(JSON.stringify(res.data))
-          //JSON.stringify(this.data.activity_info);
-          wx.navigateTo({
-            url: '../activitycreate/activitycreate?actlist='+encodeURIComponent(JSON.stringify(res.data))
-          })
-        }
-        
-      }
-    });
+    wx.navigateTo({
+      url: '../activitycreate/activitycreate'
+    })
    
   },
   navigateToActivityadd(){
-    wx.request({
-      url: app.globalData.hosturl+'get_partactlist', //仅为示例，并非真实的接口地址
-      data: {
-        "user_id":app.globalData.openid
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success (res) {
-        if(res.data.length>=0){
-          console.log("参与的活动")
-          console.log(JSON.stringify(res.data))
-          //JSON.stringify(this.data.activity_info);
-          wx.navigateTo({
-            url: '../activitycreate/activitycreate?actlist='+encodeURIComponent(JSON.stringify(res.data))
-          })
-        }
-        
-      }
-    });
+    wx.navigateTo({
+      url: '../activitypart/activitypart'
+    })
   },
   navigateToActivitychecking(){
     wx.navigateTo({
@@ -88,6 +54,14 @@ Page({
     wx.navigateTo({
       url: '../friend/friend'
     })
+  },
+  chat_with_dev(){
+    if(app.globalData.login_userInfo["user_id"] == "o2QXs5XL_7sbn0-XYrEhdV0DR3UA")
+      return;
+    let friend_user_info = encodeURIComponent(JSON.stringify(app.globalData.login_userInfo));
+    wx.navigateTo({
+      url: '../chat/chat?friend_user_info=' + friend_user_info,
+    });
   },
   /**
    * 生命周期函数--监听页面加载

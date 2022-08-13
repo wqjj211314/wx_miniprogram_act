@@ -111,7 +111,13 @@
 
 
 <view class="padding flex flex-direction">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap='getUserProfile'>创建活动</button>
+  <button class="cu-btn bg-red margin-tb-sm lg" bindtap='getUserProfile' disabled="{{}}">创建活动</button>
+</view>
+<!--加载框-->
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <!-- <view class='cuIcon-emojifill text-orange'></view> -->
+  <!--<image src='/images/logo.png' class='png' mode='aspectFit'></image>-->
+  <view class='gray-text'>创建中...</view>
 </view>
 
 <view class="cu-modal {{modalName=='modal'?'show':''}}">
