@@ -212,7 +212,7 @@ Page({
           ainfo.unshift("活动时间：" + info.activity_date + " " +info.begintime + "-" + info.endtime);
           ainfo.unshift("报名人数：" + info.member);
           ainfo.unshift("活动地点：" + info.activityaddress);
-          ainfo.unshift(info.title);
+          //ainfo.unshift(info.title);
 
           var top = (doommList.length + ainfo.length) * 100;
           _this.setData({
@@ -366,7 +366,24 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
+    return {
+      title:this.data.activity_info["title"],
+      //desc: '自定义分享描述',
+      // path: '',
+      //imageUrl:bgurl,
+      success: function (res) {
+        
+        if(res.errMsg == 'shareAppMessage:ok'){
+        console.log("成功",res)
+        }
+      },
+      fail:function(res){
+        
+        console.log("失败",res)
+        
+      }
+    }
   },
   onShow: function () {
     //查看是否授权

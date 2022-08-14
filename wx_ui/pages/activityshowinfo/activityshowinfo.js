@@ -20,7 +20,8 @@ Page({
     partinfo_values:[],
     user_id_list:[],
     addendtime:"",
-    disable_flag:false
+    disable_flag:false,
+    hosturl: app.globalData.hosturl
 
 
 
@@ -141,7 +142,24 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    
+    return {
+      title:this.data.activity_info["title"],
+      //desc: '自定义分享描述',
+      // path: '',
+      //imageUrl:bgurl,
+      success: function (res) {
+        
+        if(res.errMsg == 'shareAppMessage:ok'){
+        console.log("成功",res)
+        }
+      },
+      fail:function(res){
+        
+        console.log("失败",res)
+        
+      }
+    }
   },
   partinfoInput(event){
     var partinfokey = event.target.dataset.value

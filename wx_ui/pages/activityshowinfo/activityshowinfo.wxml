@@ -1,6 +1,6 @@
  <!--这个创建活动页面基本完整，UI上正常-->
 <view class="img">
-    <image class='img' src="/2.jpg" mode="widthFix"></image>
+    <image class='img' src="{{hosturl}}static/{{activity_info.id}}.jpg" mode="widthFix"></image>
 </view>
 
 
