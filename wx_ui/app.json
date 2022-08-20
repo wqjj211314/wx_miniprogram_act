@@ -10,7 +10,6 @@
     "pages/activitycreate/activitycreate",
     "pages/activitypart/activitypart",
     "pages/activitycheck/activitycheck",
-    "pages/activityadd/activityadd",
     "pages/logs/logs" 
   ],
   "window": {

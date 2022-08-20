@@ -69,7 +69,7 @@
 						
 					</button>
           <button class="cu-avatar round lg" bindtap='getUserProfile' wx:else>
-						<text class="cuIcon-profile text-white" style="font-size: 75rpx;"></text>
+						<text class="cuIcon-profile text-white" style="font-size: 75rpx;margin-bottom: 10rpx;margin-left: 5rpx;"></text>
 					</button>
 				
 				</view>

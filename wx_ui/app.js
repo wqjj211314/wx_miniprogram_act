@@ -16,10 +16,7 @@ App({
         }
       }
     })
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+
     var that = this;
     
     wx.login({
@@ -33,9 +30,11 @@ App({
             },
             success:(res)=>{
               console.log("appjs用户openid");
+              console.log(res.data);
               console.log(res.data.openid);
               console.log(that.globalData.login_userInfo);
               that.globalData.openid = res.data.openid;
+              that.globalData.checking_flag = res.data.checking_flag;
               that.globalData.login_userInfo["user_id"] = res.data.openid;
               try {
                 wx.setStorageSync('openid', res.data.openid);
@@ -61,7 +60,8 @@ App({
     onSockettest:null,
     openid:"",
     partinfo:"",
-    appversion:"2.0.2"
+    appversion:"2.0.2",
+    checking_flag:false
   },
   user_login(){
 

@@ -70,6 +70,7 @@ Page({
 
   },
   socketinit() {
+    var that = this;
     if (onSockettest != "") {
       onSockettest.close();//关闭连接
     }
@@ -93,8 +94,9 @@ Page({
 
     });
     onSockettest.on('new_member', (res) => {
+      console.log("收到成员人数更新");
       console.log(res.new_total_member_num);
-      this.setData({
+      that.setData({
         member: res.new_total_member_num
       });
 
@@ -129,6 +131,7 @@ Page({
         var first = _this.data.activity_list;
 
         console.log("活动创建人" + first[0].createuser);
+        console.log("更新参与人数"+first[0].member);
         _this.setData({
           activity_id: first[0].id,
           member: first[0].member
@@ -164,6 +167,7 @@ Page({
         console.log("获取用户信息：" + element.user_id);
         console.log("获取活动创建人用户信息：" + element.createuser.user_id);
         //提取保存活动信息
+        console.log("更新参与人数"+element.member);
         that.setData({
           activity_info: element,
           member: element.member
@@ -210,11 +214,12 @@ Page({
           var ainfo = [];
           ainfo.unshift("活动详情：" + info.detail);
           ainfo.unshift("活动时间：" + info.activity_date + " " +info.begintime + "-" + info.endtime);
-          ainfo.unshift("报名人数：" + info.member);
+          //ainfo.unshift("报名人数：" + info.member);
           ainfo.unshift("活动地点：" + info.activityaddress);
           //ainfo.unshift(info.title);
 
           var top = (doommList.length + ainfo.length) * 100;
+          
           _this.setData({
             doommData: doommList,
             activityinfo: ainfo,
@@ -236,6 +241,7 @@ Page({
     });
   },
   navigateToactivityinfo() {
+    this.data.activity_info["member"] = this.data.member;
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
 
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
@@ -288,60 +294,58 @@ Page({
   },
   check_user_profile_cache(){
     var that = this;
-    if(app.globalData.hasUserInfo){
-      wx.getStorage({
-        key: 'openid',
-        success(res) {
-          console.log("获取本地缓存数据，检查openid数据");
-          console.log(res.data);
-          try {
-            
-            var avatarUrl = wx.getStorageSync('avatarUrl');
-            console.log(avatarUrl);
-            if(avatarUrl == ""||avatarUrl == undefined){
-              that.setData({
-                hasUserInfo:false
-              });
-              app.globalData.hasUserInfo = false;
-              return false;
-            }
-            
-            var nickName = wx.getStorageSync('nickName');
-            console.log(nickName);
-            if(nickName == ""||nickName == undefined){
-              that.setData({
-                hasUserInfo:false
-              });
-              app.globalData.hasUserInfo = false;
-              return false;
-            }
-            console.log(nickName);
-            var gender = 0;
-            //gender = wx.getStorageSync('gender');
-            var login_userInfo = {
-              "user_id": res.data,
-              "nickName": nickName,
-              "avatarUrl": avatarUrl,
-              "gender":gender
-            };
+
+    wx.getStorage({
+      key: 'openid',
+      success(res) {
+        console.log("获取本地缓存数据，检查openid数据");
+        console.log(res.data);
+        try {
+
+          var avatarUrl = wx.getStorageSync('avatarUrl');
+          console.log(avatarUrl);
+          if (avatarUrl == "" || avatarUrl == undefined) {
             that.setData({
-              login_userInfo: login_userInfo,
-              hasUserInfo:true
+              hasUserInfo: false
             });
-            app.globalData.login_userInfo = login_userInfo;
-            app.globalData.hasUserInfo = true;
-          } catch (e) {
-            // Do something when catch error
+            app.globalData.hasUserInfo = false;
+            return false;
           }
-        },
-        fail(res){
-          return false;
+
+          var nickName = wx.getStorageSync('nickName');
+          console.log(nickName);
+          if (nickName == "" || nickName == undefined) {
+            that.setData({
+              hasUserInfo: false
+            });
+            app.globalData.hasUserInfo = false;
+            return false;
+          }
+          console.log(nickName);
+          var gender = 0;
+          //gender = wx.getStorageSync('gender');
+          var login_userInfo = {
+            "user_id": res.data,
+            "nickName": nickName,
+            "avatarUrl": avatarUrl,
+            "gender": gender
+          };
+          that.setData({
+            login_userInfo: login_userInfo,
+            hasUserInfo: true
+          });
+          app.globalData.login_userInfo = login_userInfo;
+          app.globalData.hasUserInfo = true;
+        } catch (e) {
+          // Do something when catch error
         }
-      });
-      return true;
-    }else{
-      return false;
-    }
+      },
+      fail(res) {
+        return false;
+      }
+    });
+    return true;
+    
 
   },
   newuser(nickname, avatarUrl, gender) {
@@ -385,39 +389,31 @@ Page({
       }
     }
   },
-  onShow: function () {
-    //查看是否授权
+  get_activity_info(){
     var that = this;
-    wx.getStorage({
-      key: 'openid',
+    wx.request({
+      url: app.globalData.hosturl + 'get_activity_info', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": this.data.activity_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
       success(res) {
-        console.log("获取本地缓存数据，检查openid数据");
-        console.log(res.data);
-        try {
-          var avatarUrl = "";
-          avatarUrl = wx.getStorageSync('avatarUrl');
-          console.log(avatarUrl);
-          var nickName = "未命名";
-          nickName = wx.getStorageSync('nickName');
-          console.log(nickName);
-          var gender = 0;
-          var login_userInfo = {
-            "user_id": res.data,
-            "nickName": nickName,
-            "avatarUrl": avatarUrl,
-            "gender":gender
-          };
+        if (res.data.hasOwnProperty("activity_id")) {
+          console.log("更新参与人数"+res.data["member"]);
           that.setData({
-            login_userInfo: login_userInfo,
-            hasUserInfo:true
+            member:res.data["member"]
           });
-          app.globalData.login_userInfo = login_userInfo;
-          app.globalData.hasUserInfo = true;
-        } catch (e) {
-          // Do something when catch error
         }
       }
     });
+  },
+  onShow: function () {
+    console.log("首页onShow");
+    //查看是否授权
+    var that = this;
+    this.check_user_profile_cache();
     console.log("onshow 函数"+this.data.activity_id);
     if(this.data.activity_id != ""){
       this.get_init_msg(this.data.activity_id);

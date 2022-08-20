@@ -78,12 +78,8 @@ Page({
     //console.log("创建的活动"+options);
     this.setData({
       userinfo:user_info,
+      checking_flag:app.globalData.checking_flag
     });
-    if(app.globalData.login_userInfo["user_id"] == "o2QXs5XL_7sbn0-XYrEhdV0DR3UA"){
-      this.setData({
-        checking_flag:true,
-      });
-    }
   },
   bindText: function (e) {
     var t_text = e.detail.value.length;
