@@ -5,7 +5,7 @@
   <view class="cu-time" style="width: fit-content;">{{item.activity_date}}</view>
   <view class="cu-item text-blue">
     <view class="cu-card article" style="">
-      <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;background-color: var(--ghostWhite);color: var(--black);">
+      <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
 
         <view class="title" style="padding:0px;">
           <view class="text-cut">{{item.title}}</view>
@@ -23,6 +23,12 @@
             </view>
 
           </view>
+          
+        </view>
+        <view class="" style="margin-top: 30rpx;">
+
+          <button class="cu-btn bg-red" style="width: 100%;" bindtap="update_activity_invalid" data-id="{{item.id}}">活动违规</button>
+            
         </view>
       </view>
     </view>

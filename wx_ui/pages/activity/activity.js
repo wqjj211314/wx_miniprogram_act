@@ -35,11 +35,11 @@ Page({
     sex:"gray",
     age:"gray",
     partinfo:[],
-    name_cn:"姓名",
-    company_cn:"公司",
-    job_cn:"职业",
-    sex_cn:"性别",
-    age_cn:"年龄",
+    partinfo_select:[],
+    partinfo_all_options:["姓名","性别","年龄","籍贯","公司","职业","学校","专业","年级"],
+    partinfo_all_options_bg:["bg-grey","bg-grey","bg-grey","bg-grey","bg-grey","bg-grey","bg-grey","bg-grey","bg-grey"],
+    sel_index:-1,
+    
     modalName:"",
     modalcontent:"",
     time: '12:01',
@@ -150,36 +150,41 @@ chooseposition(){
     })
 },
 choose(event){
-  var value = event.target.dataset.value;
-  console.log(value);
-  //console.log(this.data[value]);
+  var index = event.target.dataset.index;
+  console.log(index);
+  var bgs = this.data.partinfo_all_options_bg;
+  console.log(this.data.partinfo.length);
+  if(this.data.partinfo_all_options_bg[index] != "bg-green"){
+    if(this.data.partinfo.length==3){
+      wx.showToast({
+        title: '报名信息最多三项',
+        icon:"none",
+        duration:3000,
+      })
+      return;
+    }
+    this.data.partinfo_all_options_bg[index] = "bg-green";
+  }else{
+    this.data.partinfo_all_options_bg[index] = "bg-grey";
+  }
+  
   this.setData({
-    [value]:this.data[value]=="gray"?"green":"gray"
+    partinfo_all_options_bg:bgs
   });
-
+  
   this.setData({
     partinfo:this.getpartinfo()
   });
 },
 getpartinfo(){
+  var that = this;
   var info = [];
-  if(this.data.name=="green"){
-    info.push(this.data.name_cn)
-  }
-  if(this.data.company=="green"){
-    console.log(this.data.company_cn);
-    info.push(this.data.company_cn);
-    console.log(info);
-  }
-  if(this.data.job=="green"){
-    info.push(this.data.job_cn)
-  }
-  if(this.data.sex=="green"){
-    info.push(this.data.sex_cn)
-  }
-  if(this.data.age=="green"){
-    info.push(this.data.age_cn)
-  }
+  this.data.partinfo_all_options_bg.forEach(function(item,index,self){
+    if(item == "bg-green"){
+      info.push(that.data.partinfo_all_options[index])
+    }
+  });
+  
   return info;
 },
 create_activity(nickname,url,gender){
@@ -456,31 +461,7 @@ hideModal(e) {
         //wx.startRecord()    
       }
     });
-    /*
-    wx.getLocation({
-      type: 'wgs84',   
-      success(res) {
-        _this.data.latitude = res.latitude;
-        _this.data.longitude = res.longitude;
-        console.log(_this.data.latitude);
-        console.log(_this.data.longitude);
-      },
-      fail(){
-        console.log("不同意位置授权");
-        wx.getSetting({
-          success: (res) => {
-            console.log(res)
-            if (res.authSetting['scope.userLocation'] != true) {
-              //最后就是返回上一个页面。
-              wx.navigateBack({
-                delta: 1  // 返回上一级页面。
-              })
-            }
-          }
-        });
-      }
-    });
-    */
+    
   },
   again_getLocation:function(){
     let that = this;
@@ -548,22 +529,30 @@ hideModal(e) {
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    /*
-    //腾讯的位置地点选择插件，微信小程序有专门的函数代替了
-    const location = chooseLocation.getLocation(); // 如果点击确认选点按钮，则返回选点结果对象，否则返回null
-    if(location !=null){
-      console.log("进到onshow")
-      console.log(location);//latitude: 22.520739, longitude: 114.055252
-      console.log(location.name);
-      //console.log(location.name.substr(-16,16));
-      this.setData({
-        activityaddress: location.name,
-        latitude:location.latitude,
-        longitude:location.longitude
-        //addressshort:location.name.substr(-16,16)
-      })
-    }
-    */
+    var _this = this;
+    wx.request({
+      url: app.globalData.hosturl+'get_partinfo_all_options', //仅为示例，并非真实的接口地址
+      data: {
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        
+        
+        console.log("获取list");
+        console.log(res.data);
+        console.log(typeof res.data);
+        var partinfo_all_options_bg = new Array(res.data.length).fill("bg-grey");
+        _this.setData({
+          partinfo_all_options:res.data,
+          partinfo_all_options_bg:partinfo_all_options_bg,
+          partinfo_select:[]
+        });
+        
+        
+      }
+    });
   },
 
   /**

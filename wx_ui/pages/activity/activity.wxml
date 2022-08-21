@@ -1,5 +1,4 @@
 
-
 <view class="cu-list menu card-menu margin-top shadow-warp">
 <form>
     <view class="cu-form-group text-bold text-center">
@@ -89,22 +88,10 @@
 </view>
 <view class="grid col-5 padding-sm">
   
-  <view class="margin-tb-sm text-center">
-    <button class="cu-btn round bg-{{name}} shadow" bindtap="choose" data-value="name">姓名</button>
+  <view class="margin-tb-sm text-center"  wx:for="{{partinfo_all_options}}">
+    <button class="cu-btn round {{partinfo_all_options_bg[index]}} shadow" bindtap="choose" data-index="{{index}}">{{item}}</button>
   </view>
-  <view class="margin-tb-sm text-center">
-    <button class="cu-btn round bg-{{company}} shadow" bindtap="choose" data-value="company">公司</button>
-  </view>
-  <view class="margin-tb-sm text-center">
-    <button class="cu-btn round bg-{{job}} shadow" bindtap="choose" data-value="job">职业</button>
-  </view>
-  <view class="margin-tb-sm text-center">
-    <button class="cu-btn round bg-{{sex}} shadow" bindtap="choose" data-value="sex">性别</button>
-  </view>
-  <view class="margin-tb-sm text-center">
-    <button class="cu-btn round bg-{{age}} shadow" bindtap="choose" data-value="age">年龄</button>
-  </view>
- 
+  
 </view>
 
 

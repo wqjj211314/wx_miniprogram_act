@@ -8,7 +8,7 @@
 			<!--弹幕格式-->
 			<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
 					<block wx:for="{{activityinfo}}">
-							<view class="flext-item customer-msg-cu-btn bg-touming" style="align-self:center;color:white;padding:8rpx;margin: 10rpx;border-radius: 10rpx;">
+							<view class="customer-msg-cu-btn2">
 									{{item}}
 							</view>
 					</block>

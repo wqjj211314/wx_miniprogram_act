@@ -79,6 +79,23 @@
   margin:10px 10px;
   max-width: 500rpx;
 }
+.customer-msg-cu-btn2 {
+  display: inline-flex;
+  box-sizing: border-box;
+  font-size: 30rpx;
+  line-height: 160%;
+  text-decoration: none;
+  overflow: visible;
+  align-self:center;
+  color:black;
+  padding:15rpx;
+  margin: 10rpx;
+  border-radius: 10rpx;
+  background-color: white;
+  max-width:70%;
+  width: 100%;
+  text-align:left;
+}
 
 .bg-touming{
   background-color: rgba(51,51,51,0.3);

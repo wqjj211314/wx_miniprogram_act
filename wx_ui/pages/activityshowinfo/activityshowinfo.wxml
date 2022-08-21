@@ -90,7 +90,7 @@
     <block wx:for="{{partinfo}}">
       <view class="cu-form-group">
         <view class="title">{{item}}</view>
-        <input placeholder="报名需要..." bindinput='partinfoInput' data-value="{{item}}"></input>
+        <input maxlength="10" placeholder="报名需要..." bindinput='partinfoInput' data-value="{{item}}"></input>
       </view>
     </block>
     

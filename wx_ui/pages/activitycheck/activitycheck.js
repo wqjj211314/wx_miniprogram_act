@@ -56,6 +56,11 @@ Page({
     this.update_activity_status(activity_id,1,"已审核，正常");
     this.get_checking_activity_list();
   },
+  update_activity_invalid(e){
+    var activity_id = e.currentTarget.dataset.id;
+    this.update_activity_status(activity_id,-2,"活动违规");
+    this.get_checking_activity_list();
+  },
   update_activity_status(activity_id,activity_status,activity_status_comment){
     wx.request({
       url: app.globalData.hosturl+'update_activity_status', //仅为示例，并非真实的接口地址
