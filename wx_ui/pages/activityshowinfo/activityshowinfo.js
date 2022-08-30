@@ -49,12 +49,7 @@ Page({
     });
     console.log(new Date(addendtime).getTime());
     console.log(new Date().getTime());
-    if (new Date(addendtime).getTime() < new Date().getTime()) {
-      this.setData({
-        isend: true,
-        partbuttonmsg: "报名截止返回首页"
-      });
-    }
+    
 
 
 
@@ -75,13 +70,28 @@ Page({
     console.log("是否登录");
     console.log(app.globalData.hasUserInfo);
   },
+  update_part_status(){
+    
+    if (new Date(this.data.addendtime).getTime() < new Date().getTime()) {
+      this.setData({
+        isend: true,
+        partbuttonmsg: "报名截止返回首页"
+      });
+    }
+    this.data.user_id_list.forEach(item => {
+      if (item == app.globalData.login_userInfo["user_id"]) {
+        console.log("");
+        that.setData({
+          ispart: true,
+          partbuttonmsg: "已报名返回首页"
+        });
+      }
+    });
+
+  },
   update_part_info(that,res) {
     
-    that.setData({
-      modalName: null,
-      ispart: false,
-      partbuttonmsg: "我要报名"
-    })
+    that.update_part_status();
     console.log("成员信息" + res.data);
 
     var result = res.data;
@@ -104,17 +114,6 @@ Page({
       partinfo_values: partinfo_values,
       user_id_list: user_id_list,
       activity_info:info
-    });
-
-
-    that.data.user_id_list.forEach(item => {
-      if (item == app.globalData.login_userInfo["user_id"]) {
-        console.log("");
-        that.setData({
-          ispart: true,
-          partbuttonmsg: "已报名返回首页"
-        });
-      }
     });
   },
   /**
@@ -219,15 +218,12 @@ Page({
       // path: '',
       //imageUrl:bgurl,
       success: function (res) {
-
         if (res.errMsg == 'shareAppMessage:ok') {
           console.log("成功", res)
         }
       },
       fail: function (res) {
-
         console.log("失败", res)
-
       }
     }
   },
@@ -248,7 +244,7 @@ Page({
       wx.navigateBack({
         delta: 1  // 返回上一级页面。
       })
-      return
+      return;
     }
     if (Object.keys(this.data.partinfoinput).length != this.data.partinfo.length) {
       wx.showToast({
@@ -267,6 +263,7 @@ Page({
             app.globalData.hasUserInfo = true;
             console.log("报名的用户id" + app.globalData.openid);
             app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput) });
+            app.store_userInfo();
             //最后就是返回上一个页面。
             wx.navigateBack({
               delta: 1  // 返回上一级页面。

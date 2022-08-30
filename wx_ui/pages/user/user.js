@@ -7,10 +7,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    ismask:'block',
-    checking_flag:false,
-    userinfo:{},
-    t_length:0
+    ismask: 'block',
+    checking_flag: false,
+    userinfo: {},
+    t_length: 0
 
   },
   showModal(e) {
@@ -24,51 +24,64 @@ Page({
       modalName: null
     })
   },
-  navigateToActivity(){
+  navigateToActivity() {
     wx.navigateTo({
       url: '../activity/activity'
     })
   },
-  navigateToActivitycreate(){
+  navigateToActivitycreate() {
     wx.navigateTo({
       url: '../activitycreate/activitycreate'
     })
-   
+
   },
-  navigateToActivityadd(){
+  navigateToActivityadd() {
     wx.navigateTo({
       url: '../activitypart/activitypart'
     })
   },
-  navigateToActivitychecking(){
+  navigateToActivitychecking() {
     wx.navigateTo({
       url: '../activitycheck/activitycheck'
     })
-  },  
-  navigateToindex(){
+  },
+  navigateToindex() {
     wx.navigateTo({
       url: '../index/index'
     })
   },
-  navigateToFriendList(){
+  navigateToFriendList() {
     wx.navigateTo({
       url: '../friend/friend'
     })
   },
-  chat_with_dev(){
-    if(app.globalData.login_userInfo["user_id"] == "o2QXs5XL_7sbn0-XYrEhdV0DR3UA")
+  chat_with_dev() {
+    if (app.globalData.login_userInfo["user_id"] == "o2QXs5XL_7sbn0-XYrEhdV0DR3UA")
       return;
-    let friend_user_info = encodeURIComponent(JSON.stringify(app.globalData.login_userInfo));
-    wx.navigateTo({
-      url: '../chat/chat?friend_user_info=' + friend_user_info,
+    wx.request({
+      url: app.globalData.hosturl + 'get_customer_service',
+      data: {
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        let customer_service = encodeURIComponent(JSON.stringify(res.data));
+        console.log(customer_service);
+        wx.navigateTo({
+          url: '../chat/chat?friend_user_info=' + customer_service,
+        });
+      }
     });
+
   },
-  click_setting(){
+  click_setting() {
     wx.showToast({
-      title: '功能未开放',
-      icon:"none",
-      duration:2000
-    })
+      title: '暂未开放',
+      icon: "none",
+      duration: 2000
+    });
+
   },
   /**
    * 生命周期函数--监听页面加载
@@ -77,8 +90,8 @@ Page({
     let user_info = JSON.parse(decodeURIComponent(options.userinfo))
     //console.log("创建的活动"+options);
     this.setData({
-      userinfo:user_info,
-      checking_flag:app.globalData.checking_flag
+      userinfo: user_info,
+      checking_flag: app.globalData.checking_flag
     });
   },
   bindText: function (e) {
@@ -86,7 +99,7 @@ Page({
     // console.log(t_text)
     this.setData({
       t_length: t_text
-    }) 
+    })
   },
 
   /**

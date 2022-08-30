@@ -55,7 +55,7 @@ Page({
     });
   },
   onLoad: function (options) {
-
+   
     console.log("onload函数");
 
     if (options.hasOwnProperty("activity_id")) {
@@ -102,10 +102,13 @@ Page({
 
     });
     //这个是为了将socket加入房间，不然其他人发送消息，无法更新，收不到
-    onSockettest.emit("connect_first", { activity_id: this.data.activity_id});
+    onSockettest.emit("connect_first", { activity_id: this.data.activity_id });
   },
 
   get_activity_list() {
+    wx.showLoading({
+      title: '',
+    });
     var _this = this;
     wx.request({
       url: app.globalData.hosturl + 'get_activity_list', //仅为示例，并非真实的接口地址
@@ -116,6 +119,9 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success(res) {
+        wx.hideLoading({
+          success: (res) => {},
+        })
         //console.log(res.data)
         var list = _this.data.activity_list;
         console.log("获取list");
@@ -131,7 +137,7 @@ Page({
         var first = _this.data.activity_list;
 
         console.log("活动创建人" + first[0].createuser);
-        console.log("更新参与人数"+first[0].member);
+        console.log("更新参与人数" + first[0].member);
         _this.setData({
           activity_id: first[0].id,
           member: first[0].member
@@ -141,6 +147,17 @@ Page({
         //这里应该将活动信息和用户信息都提取保存起来
         _this.getstore_activity_user_info(first[0].id);
         _this.get_init_msg(first[0].id);
+      },
+      fail(res){
+        wx.hideLoading({
+          success: (res) => {},
+        });
+        wx.showToast({
+          title: '网络可能异常...',
+          icon:"error",
+          duration:3000
+        })
+
       }
     });
 
@@ -167,7 +184,7 @@ Page({
         console.log("获取用户信息：" + element.user_id);
         console.log("获取活动创建人用户信息：" + element.createuser.user_id);
         //提取保存活动信息
-        console.log("更新参与人数"+element.member);
+        console.log("更新参与人数" + element.member);
         that.setData({
           activity_info: element,
           member: element.member
@@ -213,17 +230,17 @@ Page({
           console.log(info);
           var ainfo = [];
           ainfo.unshift("活动详情：" + info.detail);
-          ainfo.unshift("活动时间：" + info.activity_date + " " +info.begintime + "-" + info.endtime);
+          ainfo.unshift("活动时间：" + info.activity_date + " " + info.begintime + "-" + info.endtime);
           //ainfo.unshift("报名人数：" + info.member);
           ainfo.unshift("活动地点：" + info.activityaddress);
           //ainfo.unshift(info.title);
 
-          var top = (doommList.length + ainfo.length) * 100;
-          
+          //var top = (doommList.length + ainfo.length) * 100;
+
           _this.setData({
             doommData: doommList,
             activityinfo: ainfo,
-            scrollTop: top
+            scrollTop: 0
           });
         }
       }
@@ -232,10 +249,10 @@ Page({
 
   // 这个是创建活动的用户信息，暂时不做专门的用户信息展示
   show_activityuser_info() {
-    if(this.data.activity_user_info["user_id"] == app.globalData.login_userInfo["user_id"])
+    if (this.data.activity_user_info["user_id"] == app.globalData.login_userInfo["user_id"])
       return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
-    
+
     wx.navigateTo({
       url: '../chat/chat?friend_user_info=' + friend_user_info,
     });
@@ -256,15 +273,17 @@ Page({
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认
     // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
     if (!this.check_user_profile_cache()) {
+      console.log("没有登录");
       this.wxgetUserProfile();
     } else {
+      console.log("已经登录");
       //登录的情况下，点击跳转用户页
       wx.navigateTo({
         url: '../user/user?userinfo=' + encodeURIComponent(JSON.stringify(app.globalData.login_userInfo))
       })
     }
   },
-  wxgetUserProfile(){
+  wxgetUserProfile() {
     wx.getUserProfile({
       desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
@@ -277,75 +296,74 @@ Page({
         console.log(app.globalData.login_userInfo);
         this.setData({
           login_userInfo: app.globalData.login_userInfo,
-          hasUserInfo:true
+          hasUserInfo: true
         });
         //本地缓存用户数据，避免频繁登录
-        try {
-          wx.setStorageSync('nickName', app.globalData.login_userInfo.nickName);
-          wx.setStorageSync('avatarUrl', app.globalData.login_userInfo.avatarUrl);
-        } catch (e) { }
+        app.store_userInfo();
         //未登录的情况下，点击只是登录，不跳转用户页
         //wx.navigateTo({
         //url: '../user/user?userinfo='+encodeURIComponent(JSON.stringify(res.userInfo))
         //});
         this.newuser(app.globalData.login_userInfo.nickName, app.globalData.login_userInfo.avatarUrl, app.globalData.login_userInfo.gender);
       }
-    });    
+    });
   },
-  check_user_profile_cache(){
+  check_user_profile_cache() {
+    console.log("检查是否登录");
     var that = this;
-
-    wx.getStorage({
-      key: 'openid',
-      success(res) {
-        console.log("获取本地缓存数据，检查openid数据");
-        console.log(res.data);
-        try {
-
-          var avatarUrl = wx.getStorageSync('avatarUrl');
-          console.log(avatarUrl);
-          if (avatarUrl == "" || avatarUrl == undefined) {
-            that.setData({
-              hasUserInfo: false
-            });
-            app.globalData.hasUserInfo = false;
-            return false;
-          }
-
-          var nickName = wx.getStorageSync('nickName');
-          console.log(nickName);
-          if (nickName == "" || nickName == undefined) {
-            that.setData({
-              hasUserInfo: false
-            });
-            app.globalData.hasUserInfo = false;
-            return false;
-          }
-          console.log(nickName);
-          var gender = 0;
-          //gender = wx.getStorageSync('gender');
-          var login_userInfo = {
-            "user_id": res.data,
-            "nickName": nickName,
-            "avatarUrl": avatarUrl,
-            "gender": gender
-          };
-          that.setData({
-            login_userInfo: login_userInfo,
-            hasUserInfo: true
-          });
-          app.globalData.login_userInfo = login_userInfo;
-          app.globalData.hasUserInfo = true;
-        } catch (e) {
-          // Do something when catch error
-        }
-      },
-      fail(res) {
+    try {
+      var openid = wx.getStorageSync('openid');
+      if (openid == "" || openid == undefined) {
+        that.setData({
+          hasUserInfo: false
+        });
+        app.globalData.hasUserInfo = false;
         return false;
       }
-    });
+      var avatarUrl = wx.getStorageSync('avatarUrl');
+      console.log(avatarUrl);
+      if (avatarUrl == "" || avatarUrl == undefined) {
+        that.setData({
+          hasUserInfo: false
+        });
+        app.globalData.hasUserInfo = false;
+        return false;
+      }
+
+      var nickName = wx.getStorageSync('nickName');
+      console.log(nickName);
+      if (nickName == "" || nickName == undefined) {
+        that.setData({
+          hasUserInfo: false
+        });
+        app.globalData.hasUserInfo = false;
+        return false;
+      }
+      console.log(nickName);
+      var gender = 0;
+      //gender = wx.getStorageSync('gender');
+      var userInfo = {
+        "user_id": openid,
+        "nickName": nickName,
+        "avatarUrl": avatarUrl,
+        "gender": gender
+      };
+      console.log(this.data.login_userInfo);
+      that.setData({
+        login_userInfo: userInfo,
+        hasUserInfo: true
+      });
+      console.log(this.data.login_userInfo);
+      app.globalData.login_userInfo = userInfo;
+      app.globalData.hasUserInfo = true;
+    } catch (e) {
+      console.log("持久化登录信息获取失败");
+      console.log(e);
+    }
+
     return true;
-    
+
+
 
   },
   newuser(nickname, avatarUrl, gender) {
@@ -372,24 +390,24 @@ Page({
   onShareAppMessage: function () {
     var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
     return {
-      title:this.data.activity_info["title"],
+      title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
       // path: '',
       //imageUrl:bgurl,
       success: function (res) {
-        
-        if(res.errMsg == 'shareAppMessage:ok'){
-        console.log("成功",res)
+
+        if (res.errMsg == 'shareAppMessage:ok') {
+          console.log("成功", res)
         }
       },
-      fail:function(res){
-        
-        console.log("失败",res)
-        
+      fail: function (res) {
+
+        console.log("失败", res)
+
       }
     }
   },
-  get_activity_info(){
+  get_activity_info() {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_activity_info', //仅为示例，并非真实的接口地址
@@ -401,26 +419,30 @@ Page({
       },
       success(res) {
         if (res.data.hasOwnProperty("activity_id")) {
-          console.log("更新参与人数"+res.data["member"]);
+          console.log("更新参与人数" + res.data["member"]);
           that.setData({
-            member:res.data["member"]
+            member: res.data["member"]
           });
         }
       }
     });
+  },
+  refresh(){
+    this.get_activity_list();
   },
   onShow: function () {
     console.log("首页onShow");
     //查看是否授权
     var that = this;
     this.check_user_profile_cache();
-    console.log("onshow 函数"+this.data.activity_id);
-    if(this.data.activity_id != ""){
+    console.log("onshow 函数" + this.data.activity_id);
+    if (this.data.activity_id != "") {
       this.get_init_msg(this.data.activity_id);
     }
-    
+
     this.setData({
       login_userInfo: app.globalData.login_userInfo
     });
+
   }
 })

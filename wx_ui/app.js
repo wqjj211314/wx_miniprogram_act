@@ -65,5 +65,11 @@ App({
   },
   user_login(){
 
+  },
+  store_userInfo:function(){
+    try {
+      wx.setStorageSync('nickName', this.globalData.login_userInfo.nickName);
+      wx.setStorageSync('avatarUrl', this.globalData.login_userInfo.avatarUrl);
+    } catch (e) { }
   }
 })

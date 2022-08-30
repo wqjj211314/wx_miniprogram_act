@@ -121,6 +121,9 @@
         <view class="su-table" >
           <!-- 表格标题 -->
           <view class="su-tr">
+            <view class="su-th text-bold">
+                  序号
+                </view>
             <block wx:if="{{checking_flag}}">
                 <view class="su-th text-bold">
                   审核
@@ -131,6 +134,9 @@
           </view>
           <!-- 表格内容 -->
           <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item" wx:for-index="index1">
+            <view class="su-td">
+            {{index1+1}}
+            </view>
             <view class="su-td" wx:if="{{checking_flag}}">
                 <button class="cu-btn line-red sm" bindtap="delete_member" data-index="{{index1}}">
                   移除

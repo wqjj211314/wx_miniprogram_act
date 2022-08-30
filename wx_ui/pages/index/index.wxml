@@ -1,4 +1,8 @@
-<swiper vertical="{{vertical}}"  bindchange="slide" style="height:100vh;">
+<view wx:if="{{activity_list.length==0}}" class="flex solid-bottom justify-center" style="height:100vh;width: 100wh;">
+  <image class='background2' src="/default_index_bg.png" mode="aspectFill"></image>
+  <button class="cu-btn lines-white margin-tb-sm padding lg" style = "margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">重新加载</button>
+</view>
+<swiper wx:else vertical="{{vertical}}"  bindchange="slide" style="height:100vh;">
   <block wx:for="{{activity_list}}" wx:key="id">
     <swiper-item item-id="{{item.id}}">
       <image class='background' src="{{hosturl}}static/blur_{{activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}"></image>
