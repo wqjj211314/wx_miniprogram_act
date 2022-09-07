@@ -2,17 +2,24 @@
   <image class='background2' src="/default_index_bg.png" mode="aspectFill"></image>
   <button class="cu-btn lines-white margin-tb-sm padding lg" style = "margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">重新加载</button>
 </view>
-<swiper wx:else vertical="{{vertical}}"  bindchange="slide" style="height:100vh;">
-  <block wx:for="{{activity_list}}" wx:key="id">
-    <swiper-item item-id="{{item.id}}">
-      <image class='background' src="{{hosturl}}static/blur_{{activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}"></image>
-			<image class='background2' src="{{hosturl}}static/{{activity_id}}.jpg" mode="aspectFit" wx:if="{{item.bg_img_exist}}"></image>
+<swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}"  bindchange="slide" style="height:100vh;">
+  <block wx:for="{{recyler_list}}" wx:key="id" wx:for-index="idx">
+    <swiper-item>
+      <image class='background' src="{{hosturl}}static/blur_{{item.id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
+			<image class='background2' src="{{hosturl}}static/{{item.id}}.jpg" mode="aspectFit" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
       <!--默认的背景图片显示-->
       <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>
+      <!--侧边栏，暂时不用
+      <view class="flex bg-touming"  style="position:fixed;top:40vh;right:40rpx;flex-direction:column;justify-content:center;align-items:center;">
+      
+        <text class="cuIcon-refresh lg text-white" style="font-size: 50rpx;"></text>
+        <text class="lg text-white" style="font-size: 30rpx;">首页</text>
+      </view>
+      -->
 			<!--弹幕格式-->
 			<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
 					<block wx:for="{{activityinfo}}">
-							<view class="customer-msg-cu-btn2">
+							<view class="customer-msg-cu-btn2" >
 									{{item}}
 							</view>
 					</block>
@@ -22,7 +29,6 @@
 							</view>
 					</block>
 			</scroll-view>
-
 			<view class="bottomPos">     
 				<view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:15rpx;">
 					<view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
@@ -36,11 +42,11 @@
 						</view>
 						<view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
 							<view class="desc">
-								<view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:4.8em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;">{{item.detail}}
+								<view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;"><text>{{item.activityaddress + "\n" + item.detail}}</text>
 								</view>	
 								<view style="margin-left:10rpx;">
-									<view class="cu-tag bg-red light sm round">{{item.activity_date}}</view>
-									<view class="cu-tag bg-red light sm round">{{item.begintime}}-{{item.endtime}}</view>
+									<view class="cu-tag bg-touming light lg round" >{{item.activity_date}}</view>
+									<view class="cu-tag bg-touming light lg round" >{{item.begintime}}-{{item.endtime}}</view>
 								</view>
 							</view>
 						</view>
@@ -62,7 +68,11 @@
 					<button class="bg-touming chatbutton cu-btn round" bindtap="openKey" style="height:96rpx;font-size:35rpx;border-style: solid;border-width: 1px;">
 					说点什么...
 					</button>
-
+					<view class="cu-avatar round bg-blue lg" style="display:flex;flex-flow:column;" bindtap="refresh">
+						<text class="cuIcon-refresh xl text-white"></text>
+						
+						<text class="text-white" style="font-size:25rpx;margin-top:-10rpx;">首页</text>
+					</view>
 					
 					<view class="cu-avatar round bg-green lg" style="display:flex;flex-flow:column;" bindtap="navigateToactivityinfo">
 						<text class="cuIcon-group xl text-white"></text>
@@ -81,5 +91,7 @@
 			</view>
 
 		</swiper-item>
+    
   </block>
+  
 </swiper>

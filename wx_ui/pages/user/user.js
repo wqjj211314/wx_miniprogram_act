@@ -56,8 +56,6 @@ Page({
     })
   },
   chat_with_dev() {
-    if (app.globalData.login_userInfo["user_id"] == "o2QXs5XL_7sbn0-XYrEhdV0DR3UA")
-      return;
     wx.request({
       url: app.globalData.hosturl + 'get_customer_service',
       data: {

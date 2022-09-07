@@ -1,91 +1,101 @@
- <!--这个创建活动页面基本完整，UI上正常-->
+<!--这个创建活动页面基本完整，UI上正常-->
 <view class="img">
-    <image class='img' src="{{hosturl}}static/{{activity_info.id}}.jpg" mode="scaleToFill"></image>
+  <image class='img' src="{{hosturl}}static/{{activity_info.id}}.jpg" mode="scaleToFill"></image>
 </view>
 
 
 <view class="cu-list menu card-menu margin-top" style="margin-top:6vh;">
 
 
-  <view class="cu-item" style="text-align: center;">
-    
-      <text style="width: 100%;" class="text-bold text-black">{{activity_info.title}}</text>
-    
+  <view class="cu-item" style="padding: 10rpx;">
+    <view class="flex justify-center align-center" style="width: 100%;padding: 10rpx;">
+      <view class="basis-xl flex justify-center">
+        <text class="text-bold text-black">{{activity_info.title}}</text>
+      </view>
+      <button wx:if="{{checking_flag}}" class="cu-btn lines-red text-xs" style="margin:0px;padding:10rpx;height: fit-content;width: fit-content;" bindtap="show_info_modal" data-target="Modal_update_activity_info">发布公告</button>
+    </view>
   </view>
 
   <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-peoplefill text-green"></text>
-        <text class="text-grey">发起人</text>
-      </view>
-      <view class="action" style="max-width:70%;">
-        <text class="text-grey text-sm">{{activity_user_info.nickName}}</text>
-      </view>
+    <view class="content">
+      <text class="cuIcon-peoplefill text-green"></text>
+      <text class="text-grey">发起人</text>
     </view>
- 
-
-    <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-timefill text-green"></text>
-        <text class="text-grey">活动时间</text>
-      </view>
-      <view class="action" style="max-width:70%;">
-        <text class="text-grey text-sm">{{activity_info.activity_date}} {{activity_info.begintime}}-{{activity_info.endtime}}</text>
-      </view>
+    <view class="action" style="max-width:70%;">
+      <text class="text-blue text-sm">{{activity_user_info.nickName}}</text>
     </view>
-
-    <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-locationfill text-green"></text>
-        <text class="text-grey">活动位置</text>
-      </view>
-      <view class="action" style="max-width:66%;">
-        <text class="text-grey text-sm">{{activity_info.activityaddress}}</text>
-      </view>
-    </view>
-
-
-    <view class="cu-item arrow" style="" bindtap="showModal" data-target="DialogModal-partinfo">
-      <view class="content" style="width:30%;">
-        <text class="cuIcon-roundaddfill text-green"></text>
-        <text class="text-grey">参与{{activity_info.member}}人</text>
-      </view>
-      <view class="action" style="max-width:70%;">
-        <view class="cu-avatar-group">
-          <block wx:for="{{avatarUrl_list}}" wx:key="user_id">
-            <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
-          </block>
-          
-        </view>
-      </view>
-    </view>
-    <view class="cu-item">
-      <view class="content">
-        <view style="text-grey text-sm">{{activity_info.detail}}</view>
-      </view>
   </view>
+  
+
+
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-timefill text-green"></text>
+      <text class="text-grey">活动时间</text>
+    </view>
+    <view class="action" style="max-width:70%;">
+      <text class="text-blue text-sm">{{activity_info.activity_date}} {{activity_info.begintime}}-{{activity_info.endtime}}</text>
+    </view>
+  </view>
+
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-locationfill text-green"></text>
+      <text class="text-grey">活动位置</text>
+    </view>
+    <view class="action" style="max-width:66%;">
+      <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
+    </view>
+  </view>
+
+
+  <view class="cu-item arrow" style="" bindtap="showModal" data-target="DialogModal-partinfo">
+    <view class="content" style="width:30%;">
+      <text class="cuIcon-roundaddfill text-green"></text>
+      <text class="text-grey">参与{{activity_info.member}}人</text>
+    </view>
+    <view class="action" style="max-width:70%;">
+      <view class="cu-avatar-group">
+        <block wx:for="{{avatarUrl_list}}" wx:key="user_id">
+          <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
+        </block>
+
+      </view>
+    </view>
+  </view>
+  <view class="cu-item">
+    <view class="content">
+      <view class="text-blue text-sm" style="">
+        <text>活动详情：\n{{activity_info.detail}}
+        <text style="color: red;">最新公告：{{new_announcement==""?"无":"\n"+new_announcement}}
+        </text>
+        </text>
+      </view>
+    </view>
+  </view>
+
 </view>
 
 
-<view class="cu-list menu card-menu margin-top" >
+<view class="cu-list menu card-menu margin-top">
   <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-newsfill text-green"></text>
-        <text class="text-grey">报名信息</text>
-      </view>
-      <view class="action" style="max-width:70%;">
-        <text class="text-grey text-sm">{{activity_info.partinfo}}</text>
-      </view>
+    <view class="content">
+      <text class="cuIcon-newsfill text-green"></text>
+      <text class="text-grey">报名信息</text>
+    </view>
+    <view class="action" style="max-width:70%;">
+      <text class="text-blue text-sm">{{activity_info.partinfo}}</text>
+    </view>
   </view>
   <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-timefill text-green"></text>
-        <text class="text-grey">报名截止时间</text>
-      </view>
-      <view class="action" style="max-width:70%;">
-        <text class="text-grey text-sm">{{activity_info.activity_date}} {{activity_info.addendtime}}</text>
-      </view>
+    <view class="content">
+      <text class="cuIcon-timefill text-green"></text>
+      <text class="text-grey">报名截止时间</text>
     </view>
+    <view class="action" style="max-width:70%;">
+      <text class="text-blue text-sm">{{activity_info.activity_date}}{{activity_info.addendtime}}</text>
+    </view>
+  </view>
   <form>
     <block wx:for="{{partinfo}}">
       <view class="cu-form-group">
@@ -93,14 +103,14 @@
         <input maxlength="10" placeholder="报名需要..." bindinput='partinfoInput' data-value="{{item}}"></input>
       </view>
     </block>
-    
+
   </form>
 
 </view>
 
 
 <view class="padding flex flex-direction" wx:if="{{ispart}}" style="margin-bottom: 0px;padding-bottom: 0px;">
-  <button class="cu-btn bg-red margin-tb-sm lg"  style="margin-bottom: 0px;padding-bottom: 0px;" bindtap="cancel_part">取消报名</button>
+  <button class="cu-btn bg-red margin-tb-sm lg" style="margin-bottom: 0px;padding-bottom: 0px;" bindtap="cancel_part">取消报名</button>
 </view>
 
 <view class="padding flex flex-direction">
@@ -111,38 +121,38 @@
 <view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class="content">报名人员信息</view>
+      <view class="content text-bold" style="font-size: 30rpx;color: #070707;">报名人员(限{{activity_info.max_part_number}}名)</view>
       <view class="action" bindtap="hideModal">
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
     <view class="">
       <view class="su-table-box">
-        <view class="su-table" >
+        <view class="su-table">
           <!-- 表格标题 -->
           <view class="su-tr">
             <view class="su-th text-bold">
-                  序号
-                </view>
+              序号
+            </view>
             <block wx:if="{{checking_flag}}">
-                <view class="su-th text-bold">
-                  审核
-                </view>
-              </block>
+              <view class="su-th text-bold">
+                审核
+              </view>
+            </block>
             <view class="su-th text-bold" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
-            
+
           </view>
           <!-- 表格内容 -->
           <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item" wx:for-index="index1">
             <view class="su-td">
-            {{index1+1}}
+              {{index1+1>activity_info.max_part_number?"排队中":index1+1}}
             </view>
             <view class="su-td" wx:if="{{checking_flag}}">
-                <button class="cu-btn line-red sm" bindtap="delete_member" data-index="{{index1}}">
-                  移除
-                </button>
+              <button class="cu-btn line-red sm" bindtap="delete_member" data-index="{{index1}}">
+                移除
+              </button>
             </view>
-	          <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
+            <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
 
               <block wx:if="{{index==0}}">
                 <view class="cu-avatar round sm" style="background-image:url({{info}});">
@@ -152,14 +162,36 @@
               <block wx:else>
                 {{info}}
               </block>
-              
-            </view>
-	        </view>
 
-          
+            </view>
+          </view>
+
+
         </view>
       </view>
     </view>
-    
+
+  </view>
+</view>
+<view class="cu-modal {{modalName=='Modal_update_activity_info'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">发布公告</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="">
+      <view class="cu-form-group solid" style="margin: 10rpx;">
+        <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
+      </view>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+
+        <button class="cu-btn bg-green margin-left" bindtap="update_activity_announcement">发布</button>
+
+      </view>
+    </view>
   </view>
 </view>

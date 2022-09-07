@@ -24,7 +24,9 @@ Page({
     member: 0,
     disable_flag: false,
     hosturl: app.globalData.hosturl,
-    checking_flag: false
+    checking_flag: false,
+    announcement:"",
+    new_announcement:""
 
 
 
@@ -34,14 +36,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
+   
     console.log(activity_info);
     console.log(activity_user_info);
     var addendtime = activity_info["activity_date"] + " " + activity_info["addendtime"];
     this.setData({
       activity_info: activity_info,
+      new_announcement:activity_info["announcement"],
       member: activity_info["member"],
       addendtime: addendtime,
       activity_user_info: activity_user_info,
@@ -65,23 +68,34 @@ Page({
       success(res) {
         that.update_part_info(that,res);
 
+      },
+      fail(res){
+        wx.showToast({
+          title: "活动异常",
+          icon:"error"
+        })
       }
     });
     console.log("是否登录");
     console.log(app.globalData.hasUserInfo);
   },
   update_part_status(){
-    
+    console.log("更新update_part_status");
+    console.log(this.data.addendtime);
+    console.log(new Date(this.data.addendtime).getTime());
+    console.log(new Date().getTime());
     if (new Date(this.data.addendtime).getTime() < new Date().getTime()) {
+      console.log("报名截止返回首页");
       this.setData({
         isend: true,
         partbuttonmsg: "报名截止返回首页"
       });
     }
     this.data.user_id_list.forEach(item => {
+      console.log(item);
       if (item == app.globalData.login_userInfo["user_id"]) {
-        console.log("");
-        that.setData({
+        console.log("已报名返回首页");
+        this.setData({
           ispart: true,
           partbuttonmsg: "已报名返回首页"
         });
@@ -91,7 +105,7 @@ Page({
   },
   update_part_info(that,res) {
     
-    that.update_part_status();
+    
     console.log("成员信息" + res.data);
 
     var result = res.data;
@@ -115,6 +129,7 @@ Page({
       user_id_list: user_id_list,
       activity_info:info
     });
+    that.update_part_status();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -211,11 +226,13 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
 
+    let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     return {
       title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      // path: '',
+      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info,
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
@@ -295,9 +312,51 @@ Page({
       modalName: e.currentTarget.dataset.target
     })
   },
+  show_info_modal(e) {
+    
+    this.setData({
+      modalName: e.currentTarget.dataset.target
+    })
+  },
   hideModal(e) {
     this.setData({
       modalName: null
+    })
+  },
+  update_activity_announcement(){
+    var that = this;
+    this.setData({
+      modalName: null
+    })
+    wx.request({
+      url: app.globalData.hosturl + 'update_activity_announcement', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": this.data.activity_info.id,
+        "announcement":this.data.announcement
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        //that.update_part_info(that,res);
+        console.log(res.data.announcement);
+        that.setData({
+          new_announcement:res.data.announcement
+        });
+
+      },
+      fail(res){
+        wx.showToast({
+          title: "网路异常",
+          icon:"error"
+        })
+      }
+    });
+
+  },
+  detailInput(e) {
+    this.setData({
+      announcement: e.detail.value
     })
   },
 

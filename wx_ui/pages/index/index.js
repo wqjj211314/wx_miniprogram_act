@@ -1,4 +1,6 @@
 const socket = require("../../utils/socket.js");
+const swiper = require("swiper.js");
+const server = require("server.js");
 var doommList = [];
 const app = getApp();
 const iotest = require("weapp.socket.io.js");  // 引入 socket.io
@@ -16,57 +18,35 @@ Page({
     vertical: true,
     activity_id: "",
     option_activity_id: "",
-    activity_list: [],
+    first_activity_id: "",
+    activity_list: [],//实际数据
     activity_info: [],
+    announcement:"",
     activity_user_info: [],
     login_userInfo: {},
     member: 0,
-    hosturl: app.globalData.hosturl
-  },
-  openKey(e) {
-    console.log('onClick', e.detail)
-    this.setData({
-      isdisplay: false
-    });
-    this.setData({
-      //isFocus:true,
-    });
-  },
-  onblurkey() {
-    console.log("onblurkey");
-    this.setData({
-      isFocus: false,
-      isdisplay: true
-    })
-  },
-  inputMsg: function (e) {
-    this.setData({
-      inputMsg: e.detail.value
-    });
-  },
-  sendMsg() {
-    console.log(this.data.inputMsg);
-    var send = this.data.inputMsg;
-    var id = this.data.activity_id;
-    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: id, openid: app.globalData.openid });
-
-    this.setData({
-      inputMsg: ""
-    });
+    hosturl: app.globalData.hosturl,
+    current:0,
+    swiper_index:0,
+    recyler_list: [], //展示数据
+    data_current_index: 0, //真实的index
+    swiper_current_index: 0, //swiper当前的index
+    recordCurrent: 0, //swiper上次的index
+    duration: 300 //动画时常
   },
   onLoad: function (options) {
-   
+
     console.log("onload函数");
 
     if (options.hasOwnProperty("activity_id")) {
       var info = JSON.parse(decodeURIComponent(options.activity_id));
       console.log("创建的活动id" + info);
       this.setData({
-        option_activity_id: info.activity_id
-      })
+        activity_id: info.activity_id
+      });
     }
-    this.get_activity_list();
-
+    server.get_activity_list(this, app);
+    
 
   },
   socketinit() {
@@ -84,15 +64,17 @@ Page({
     onSockettest.on('new_chat_msg', (res) => {
       console.log(res.new_chat_msg);
       console.log(this.data.doommData);
-      doommList.push(res.new_chat_msg);
-      var top = doommList.length * 100;
+      var chat_msgs = this.data.doommData;
+      chat_msgs.push(res.new_chat_msg);
+      var top = chat_msgs.length * 100;
       this.setData({
-        doommData: doommList,
+        doommData: chat_msgs,
         scrollTop: top
       });
       console.log(this.data.doommData);
 
     });
+
     onSockettest.on('new_member', (res) => {
       console.log("收到成员人数更新");
       console.log(res.new_total_member_num);
@@ -105,77 +87,9 @@ Page({
     onSockettest.emit("connect_first", { activity_id: this.data.activity_id });
   },
 
-  get_activity_list() {
-    wx.showLoading({
-      title: '',
-    });
-    var _this = this;
-    wx.request({
-      url: app.globalData.hosturl + 'get_activity_list', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": this.data.option_activity_id
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        wx.hideLoading({
-          success: (res) => {},
-        })
-        //console.log(res.data)
-        var list = _this.data.activity_list;
-        console.log("获取list");
-        console.log(res.data);
-        res.data.forEach(element => {
-          console.log(element.activity_id)
-          list.push(element);
-        });
-        _this.setData({
-          activity_list: list
-        })
-        //初始化第一个id
-        var first = _this.data.activity_list;
-
-        console.log("活动创建人" + first[0].createuser);
-        console.log("更新参与人数" + first[0].member);
-        _this.setData({
-          activity_id: first[0].id,
-          member: first[0].member
-        });
-        console.log("初始化第一个activity id = " + first[0].id);
-        _this.socketinit();
-        //这里应该将活动信息和用户信息都提取保存起来
-        _this.getstore_activity_user_info(first[0].id);
-        _this.get_init_msg(first[0].id);
-      },
-      fail(res){
-        wx.hideLoading({
-          success: (res) => {},
-        });
-        wx.showToast({
-          title: '网络可能异常...',
-          icon:"error",
-          duration:3000
-        })
-
-      }
-    });
-
-  },
-  //划动切换
-  slide(e) {
-    console.log("切换");
-    this.setData({
-      activity_id: e.detail.currentItemId,
-    });
-    //这里应该将活动信息和用户信息都提取保存起来
-    this.getstore_activity_user_info(e.detail.currentItemId);
-    this.get_init_msg(e.detail.currentItemId);
-    //this.socketinit();
-  },
 
   getstore_activity_user_info(activity_id) {
-    var aclist = this.data.activity_list;
+    var aclist = this.data.recyler_list;
     //console.log(aclist);
     var that = this;
     aclist.forEach(element => {
@@ -205,46 +119,6 @@ Page({
         activity_user_info: data
       })
     }
-  },
-  get_init_msg(id) {
-    const _this = this;
-    console.log("获取聊天信息：" + id);
-    doommList = [];
-    wx.request({
-      url: app.globalData.hosturl + 'get_init_msg', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": id
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        if (res.data != "fail") {
-          //聊天消息
-          var list = _this.data.activity_list;
-          res.data.forEach(element => {
-            doommList.unshift(element.chatmsg);
-          });
-          //活动信息
-          var info = _this.data.activity_info;
-          console.log(info);
-          var ainfo = [];
-          ainfo.unshift("活动详情：" + info.detail);
-          ainfo.unshift("活动时间：" + info.activity_date + " " + info.begintime + "-" + info.endtime);
-          //ainfo.unshift("报名人数：" + info.member);
-          ainfo.unshift("活动地点：" + info.activityaddress);
-          //ainfo.unshift(info.title);
-
-          //var top = (doommList.length + ainfo.length) * 100;
-
-          _this.setData({
-            doommData: doommList,
-            activityinfo: ainfo,
-            scrollTop: 0
-          });
-        }
-      }
-    });
   },
 
   // 这个是创建活动的用户信息，暂时不做专门的用户信息展示
@@ -304,7 +178,7 @@ Page({
         //wx.navigateTo({
         //url: '../user/user?userinfo='+encodeURIComponent(JSON.stringify(res.userInfo))
         //});
-        this.newuser(app.globalData.login_userInfo.nickName, app.globalData.login_userInfo.avatarUrl, app.globalData.login_userInfo.gender);
+        server.newuser(app, app.globalData.login_userInfo.nickName, app.globalData.login_userInfo.avatarUrl, app.globalData.login_userInfo.gender);
       }
     });
   },
@@ -366,33 +240,18 @@ Page({
 
 
   },
-  newuser(nickname, avatarUrl, gender) {
-    console.log("用户头像" + avatarUrl);
-    wx.request({
-      url: app.globalData.hosturl + 'newuser', //仅为示例，并非真实的接口地址
-      data: {
-        "openid": app.globalData.openid,
-        "nickName": nickname,
-        "avatarUrl": avatarUrl,
-        "gender": gender
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
 
-      }
-    })
-  },
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
     var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
+    console.log("当前活动id:" + this.data.activity_info["id"]);
+    console.log("当前活动id:" + this.data.activity_id);
     return {
       title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      // path: '',
+      path: '/pages/index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_id })),
       //imageUrl:bgurl,
       success: function (res) {
 
@@ -407,12 +266,12 @@ Page({
       }
     }
   },
-  get_activity_info() {
+  get_activity_info(activity_id) {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_activity_info', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id": this.data.activity_id
+        "activity_id": activity_id
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -427,8 +286,11 @@ Page({
       }
     });
   },
-  refresh(){
-    this.get_activity_list();
+  refresh() {
+    this.setData({
+      activity_id: ""
+    });
+    server.get_activity_list(this, app);
   },
   onShow: function () {
     console.log("首页onShow");
@@ -436,13 +298,70 @@ Page({
     var that = this;
     this.check_user_profile_cache();
     console.log("onshow 函数" + this.data.activity_id);
+    console.log("onshow 函数" + this.data.option_activity_id);
     if (this.data.activity_id != "") {
-      this.get_init_msg(this.data.activity_id);
+      //server.get_init_msg(this,app,this.data.activity_id);
     }
 
     this.setData({
       login_userInfo: app.globalData.login_userInfo
     });
 
+  },
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    console.log("下拉刷新");
+
+    //this.get_activity_list();
+    //wx.stopPullDownRefresh();
+  },
+  refresh() {
+    server.get_activity_list(this, app, "refresh");
+  },
+  //划动切换
+  slide(e) {
+    //this.socketinit();
+    console.log("slide切换至" + e.detail.current);
+    swiper.update_swiper(this,e.detail.current,this.data.swiper_current_index,this.data.data_current_index,this.data.activity_list,this.data.recyler_list);
+
+    this.setData({
+      activity_id: this.data.recyler_list[e.detail.current].id,
+      current:e.detail.current
+    });
+    //这里应该将活动信息和用户信息都提取保存起来
+    this.getstore_activity_user_info(this.data.recyler_list[e.detail.current].id);
+    server.get_init_msg(this, app, this.data.recyler_list[e.detail.current].id);
+    
+  },
+  openKey(e) {
+    console.log('onClick', e.detail)
+    this.setData({
+      isdisplay: false
+    });
+
+  },
+  onblurkey() {
+    console.log("onblurkey");
+    this.setData({
+      isFocus: false,
+      isdisplay: true
+    })
+  },
+  inputMsg: function (e) {
+    this.setData({
+      inputMsg: e.detail.value
+    });
+  },
+  sendMsg() {
+    console.log(this.data.inputMsg);
+    var send = this.data.inputMsg;
+    var id = this.data.activity_id;
+    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: id, openid: app.globalData.openid });
+
+    this.setData({
+      inputMsg: ""
+    });
   }
 })

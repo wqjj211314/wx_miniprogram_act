@@ -17,18 +17,41 @@ App({
       }
     })
 
+    try {
+      //var openid = wx.getStorageSync('openid');
+      this.user_login();
+    } catch (e) {
+      console.log("持久化登录信息获取失败");
+      console.log(e);
+      //this.user_login();
+    }
+  },
+
+  globalData: {
+    hosturl: "https://www.2week.club:5000/",
+    current_activity_id: "",
+    activity_user_info: "",
+    login_userInfo: {},
+    hasUserInfo: false,
+    userInfo: null,
+    onSockettest: null,
+    openid: "",
+    partinfo: "",
+    appversion: "2.0.2",
+    checking_flag: false
+  },
+  user_login() {
     var that = this;
-    
     wx.login({
-      success (res) {
+      success(res) {
         if (res.code) {
           //发起网络请求
           wx.request({
-            url: that.globalData.hosturl+'getopenid',
+            url: that.globalData.hosturl + 'getopenid',
             data: {
               code: res.code
             },
-            success:(res)=>{
+            success: (res) => {
               console.log("appjs用户openid");
               console.log(res.data);
               console.log(res.data.openid);
@@ -46,27 +69,8 @@ App({
         }
       }
     });
-    
-
- 
   },
-  globalData: {
-    hosturl:"https://www.2week.club:5000/",
-    current_activity_id:"",
-    activity_user_info:"",
-    login_userInfo:{},
-    hasUserInfo:false,
-    userInfo: null,
-    onSockettest:null,
-    openid:"",
-    partinfo:"",
-    appversion:"2.0.2",
-    checking_flag:false
-  },
-  user_login(){
-
-  },
-  store_userInfo:function(){
+  store_userInfo: function () {
     try {
       wx.setStorageSync('nickName', this.globalData.login_userInfo.nickName);
       wx.setStorageSync('avatarUrl', this.globalData.login_userInfo.avatarUrl);

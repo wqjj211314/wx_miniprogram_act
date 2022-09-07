@@ -29,7 +29,7 @@ Page({
       success (res) {
         if(res.data.length>=0){
           console.log("创建的活动")
-          console.log(JSON.stringify(res.data))
+          //console.log(JSON.stringify(res.data))
           //JSON.stringify(this.data.activity_info);
           that.setData({
             activity_create_list:res.data

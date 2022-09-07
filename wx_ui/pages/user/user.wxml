@@ -85,13 +85,13 @@
         <text class="text-grey">版本</text>
       </view>
       <view class="action" style="max-width:66%;">
-        <text class="text-grey text-sm">v2.0.8</text>
+        <text class="text-grey text-sm">v2.0.11</text>
       </view>
     </view>
 	  <view class="cu-item arrow" bindtap="chat_with_dev">
       <view class="content">
         <text class="cuIcon-service text-green" style="font-size:40rpx;"></text>
-        <text class="text-grey">客服建议</text>
+        <text class="text-grey">客服咨询</text>
       </view>
     </view>
 

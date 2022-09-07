@@ -87,7 +87,7 @@
 			border: 1rpx solid #969292;
 			border-right: none;
 			border-bottom: none;
-			
+			font-size: 30rpx;
 			color: #070707;
 		}
  
@@ -98,6 +98,7 @@
 			line-height: 60rpx;
 			text-align: center;
 			border: 1rpx solid #969292;
-			border-right: none;
+      border-right: none;
+      font-size: 30rpx;
 		}
 	

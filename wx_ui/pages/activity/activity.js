@@ -1,12 +1,19 @@
 // pages/activity.js
-function getDateString(date = new Date) {
-  console.log(date.getMonth());
+function getDateString() {
+  
+  var dateTime=new Date();
+  dateTime=dateTime.setDate(dateTime.getDate()+1);
+  dateTime=new Date(dateTime);
+  dateTime=dateTime.setMonth(dateTime.getMonth()+1);
+  dateTime=new Date(dateTime);
   return {
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate()
+    year: dateTime.getFullYear(),
+    month: dateTime.getMonth(),
+    day: dateTime.getDate()
   }
 }
+
+ 
 
 const { year, month, day } = getDateString()
 const chooseLocation = requirePlugin('chooseLocation');
@@ -23,6 +30,7 @@ Page({
     begintime: "18:00",
     endtime: "22:00",
     addendtime: "18:00",
+    max_part_number:10,
     title: "",
     detail: "",
     imgList: [],
@@ -44,7 +52,7 @@ Page({
     modalcontent: "",
     time: '12:01',
     nowdate: year + "-" + month + "-" + day,
-    date: year + "-" + month + "-" + (day + 1),
+    date: year + "-" + month + "-" + day,
     loadModal: false,
     disabled_flag: false
   },
@@ -57,6 +65,11 @@ Page({
   detailInput(e) {
     this.setData({
       detail: e.detail.value
+    })
+  },
+  numberInput(e) {
+    this.setData({
+      max_part_number: e.detail.value
     })
   },
   TimeChange_begintime(e) {
@@ -249,6 +262,7 @@ Page({
         "detail": this.data.detail,
         "location": location,
         "time": time,
+        "max_part_number":this.data.max_part_number,
         "partinfo": this.data.partinfo.toString()
       },
       header: {

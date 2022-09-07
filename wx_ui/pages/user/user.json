@@ -2,6 +2,5 @@
   "usingComponents": {
 
   },
-  "navigationBarTitleText": "我的",
-  "homeButton":true
+  "navigationBarTitleText": "我的"
 }

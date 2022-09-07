@@ -2,6 +2,7 @@
   "usingComponents": {},
   "pages": [
     "pages/index/index",
+    "pages/recyler3/recyler",
     "pages/activity/activity",
     "pages/chat/chat",
     "pages/friend/friend",
@@ -10,13 +11,14 @@
     "pages/activitycreate/activitycreate",
     "pages/activitypart/activitypart",
     "pages/activitycheck/activitycheck",
-    "pages/logs/logs" 
+    "pages/logs/logs"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true
   },
   "sitemapLocation": "sitemap.json",
   "plugins": {
@@ -30,7 +32,7 @@
       "desc": "你的位置信息将用于活动位置选择"
     }
   },
-  "requiredPrivateInfos":[
+  "requiredPrivateInfos": [
     "chooseLocation"
   ]
 }

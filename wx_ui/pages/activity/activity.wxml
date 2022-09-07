@@ -38,7 +38,10 @@
           </view>
         </picker>
       </view>
-
+      <view class="cu-form-group">
+      <view class="title">限制人数</view>
+        <input placeholder="请输入限制人员数量，默认为10" bindinput='numberInput' type="number" style="color:black;text-align: right"></input>
+    </view>
     <view class="cu-form-group">
       <textarea placeholder="活动详情" auto-height maxlength="-1" bindinput='detailInput' style="max-height:10em;min-height: 2em;"></textarea>
     </view>
