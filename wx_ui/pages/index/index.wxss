@@ -41,7 +41,7 @@
 }
 
 .chatbutton{
-  width:55%;
+  width:85%;
 }
 
 .icon-big{
