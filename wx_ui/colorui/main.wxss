@@ -3448,7 +3448,7 @@ scroll-view.cu-steps .cu-item {
 }
 
 .bg-olive {
-	background-color: var(--olive);
+	background-color: var(--olive); 
 	color: var(--white);
 }
 

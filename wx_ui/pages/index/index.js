@@ -1,4 +1,5 @@
 const socket = require("../../utils/socket.js");
+const util = require("../../utils/util.js");
 const swiper = require("swiper.js");
 const server = require("server.js");
 var doommList = [];
@@ -8,6 +9,7 @@ var onSockettest = ""// 连接 socket
 Page({
   data: {
     doommData: doommList,
+    chat_msgs:[],
     scrollTop: 0,
     inputMsg: '',
     img_l: '',
@@ -31,8 +33,11 @@ Page({
     recyler_list: [], //展示数据
     data_current_index: 0, //真实的index
     swiper_current_index: 0, //swiper当前的index
-    recordCurrent: 0, //swiper上次的index
-    duration: 300 //动画时常
+    duration: 300, //动画时常,
+    server_request_count:0,
+    activity_date:"",
+    share_res_limit:0,
+    share_use_id:""
   },
   onLoad: function (options) {
 
@@ -44,6 +49,15 @@ Page({
       this.setData({
         activity_id: info.activity_id
       });
+    }
+    if (options.hasOwnProperty("share_use_id")){
+      let share_use_id = decodeURIComponent(options.share_use_id);
+      
+        this.setData({
+          share_use_id:share_use_id
+        });
+        
+      
     }
     server.get_activity_list(this, app);
     
@@ -62,16 +76,17 @@ Page({
 
     //房间聊天消息，还未添加用户头像等信息，待添加
     onSockettest.on('new_chat_msg', (res) => {
-      console.log(res.new_chat_msg);
-      console.log(this.data.doommData);
-      var chat_msgs = this.data.doommData;
-      chat_msgs.push(res.new_chat_msg);
+      console.log(res);
+      console.log(this.data.chat_msgs);
+      var chat_msgs = this.data.chat_msgs;
+      //chat_msgs.push(res.new_chat_msg);
+      chat_msgs.push(res);
       var top = chat_msgs.length * 100;
       this.setData({
-        doommData: chat_msgs,
+        chat_msgs: chat_msgs,
         scrollTop: top
       });
-      console.log(this.data.doommData);
+      console.log(this.data.chat_msgs);
 
     });
 
@@ -105,7 +120,14 @@ Page({
         });
         this.setData({
           activity_user_info: element.createuser
-        })
+        });
+        //var activity_date = new Date(element.activity_date);
+        var activity_date = util.convert_date(element.activity_date);
+        that.setData({
+          activity_date:activity_date
+        });
+
+
 
         return;
       }
@@ -140,7 +162,7 @@ Page({
     console.log(activity_info);
     console.log(activity_user_info)
     wx.navigateTo({
-      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
+      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info+"&share_use_id="+this.data.share_use_id
     })
   },
   getUserProfile() {
@@ -248,10 +270,16 @@ Page({
     var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
     console.log("当前活动id:" + this.data.activity_info["id"]);
     console.log("当前活动id:" + this.data.activity_id);
+    var share_use_id = "";
+    if(app.globalData.login_userInfo.hasOwnProperty("user_id")){
+      share_use_id = app.globalData.login_userInfo["user_id"];
+    }else{
+      console.log("用户未登录，无法获取用户信息");
+    }
     return {
       title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      path: '/pages/index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_id })),
+      path: '/pages/index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_id }))+'&share_use_id='+share_use_id,
       //imageUrl:bgurl,
       success: function (res) {
 
@@ -266,6 +294,7 @@ Page({
       }
     }
   },
+
   get_activity_info(activity_id) {
     var that = this;
     wx.request({
@@ -358,7 +387,7 @@ Page({
     console.log(this.data.inputMsg);
     var send = this.data.inputMsg;
     var id = this.data.activity_id;
-    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: id, openid: app.globalData.openid });
+    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: id, user_id: this.data.hasUserInfo?app.globalData.login_userInfo["user_id"]:"",nickName: this.data.hasUserInfo?app.globalData.login_userInfo["nickName"]:"匿名" });
 
     this.setData({
       inputMsg: ""

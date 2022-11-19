@@ -8,10 +8,16 @@ function get_activity_list(that,app,activity_id="") {
     title: '',
   });
   var _that = that;
+  try {
+    var user_id = "";
+    user_id = wx.getStorageSync('openid');
+  } catch (e) { }
   wx.request({
     url: app.globalData.hosturl + 'get_activity_list', //仅为示例，并非真实的接口地址
     data: {
-      "activity_id": id
+      "activity_id": id,
+      "user_id":user_id,
+      "server_request_count":_that.data.server_request_count
     },
     header: {
       'content-type': 'application/json' // 默认值
@@ -38,7 +44,7 @@ function get_activity_list(that,app,activity_id="") {
         first_activity_id: first[0].id,
         activity_id: first[0].id,
         member: first[0].member,
-        //swiper_current_index:0
+        server_request_count:_that.data.server_request_count + 1
       });
       console.log("初始化第一个activity id = " + first[0].id);
       _that.socketinit();
@@ -81,26 +87,28 @@ function get_init_msg(that,app,id) {
       if (res.data != "fail") {
         //聊天消息
         var list = _that.data.activity_list;
+        console.log("聊天消息数量"+res.data.length);
         res.data.forEach(element => {
-          doommList.unshift(element.chatmsg);
+          console.log(element);
+          doommList.unshift(element);
         });
         
         //活动信息
         var info = _that.data.activity_info;
         if(info.announcement != ""){
           
-          doommList.unshift("最新公告："+info.announcement);
+          //doommList.unshift("最新公告："+info.announcement);
         }
         
         console.log(info);
         var ainfo = [];
         ainfo.unshift("活动详情：" + info.detail);
-        ainfo.unshift("活动时间：" + info.activity_date + " " + info.begintime + "-" + info.endtime);
+        ainfo.unshift("活动时间：" + _that.data.activity_date + " " + info.begintime + "-" + info.endtime);
         //ainfo.unshift("报名人数：" + info.member);
         ainfo.unshift("活动地点：" + info.activityaddress);
         //ainfo.unshift(info.title);
         _that.setData({
-          doommData: doommList,
+          chat_msgs: doommList,
           activityinfo: ainfo,
           scrollTop: 0
         });

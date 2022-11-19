@@ -47,14 +47,16 @@ Page({
     partinfo_all_options: ["姓名", "性别", "年龄", "籍贯", "公司", "职业", "学校", "专业", "年级"],
     partinfo_all_options_bg: ["bg-grey", "bg-grey", "bg-grey", "bg-grey", "bg-grey", "bg-grey", "bg-grey", "bg-grey", "bg-grey"],
     sel_index: -1,
-
+    part_limit_picker:["所有人均可参与","通过发起人和成员分享可以参与","通过发起人分享可以参与"],
+    part_limit_index:0,
     modalName: "",
     modalcontent: "",
     time: '12:01',
     nowdate: year + "-" + month + "-" + day,
     date: year + "-" + month + "-" + day,
     loadModal: false,
-    disabled_flag: false
+    disabled_flag: false,
+    add_new_partinfo:""
   },
 
   titleInput(e) {
@@ -90,6 +92,11 @@ Page({
   DateChange(e) {
     this.setData({
       date: e.detail.value
+    })
+  },
+  part_limit_change(e){
+    this.setData({
+      part_limit_index: e.detail.value
     })
   },
   ChooseImage() {
@@ -168,14 +175,7 @@ Page({
     var bgs = this.data.partinfo_all_options_bg;
     console.log(this.data.partinfo.length);
     if (this.data.partinfo_all_options_bg[index] != "bg-green") {
-      if (this.data.partinfo.length == 3) {
-        wx.showToast({
-          title: '报名信息最多三项',
-          icon: "none",
-          duration: 3000,
-        })
-        return;
-      }
+      
       this.data.partinfo_all_options_bg[index] = "bg-green";
     } else {
       this.data.partinfo_all_options_bg[index] = "bg-grey";
@@ -188,6 +188,13 @@ Page({
     this.setData({
       partinfo: this.getpartinfo()
     });
+    if(this.data.partinfo_all_options_bg[index] == "bg-green" && this.data.partinfo_all_options[index]=="段位"){
+      wx.showToast({
+        title: '段位水平：小白->青铜->白银->黄金->钻石',
+        icon: "none",
+        duration: 2000,
+      })
+    }
   },
   getpartinfo() {
     var that = this;
@@ -263,7 +270,8 @@ Page({
         "location": location,
         "time": time,
         "max_part_number":this.data.max_part_number,
-        "partinfo": this.data.partinfo.toString()
+        "partinfo": this.data.partinfo.toString(),
+        "part_limit":this.data.part_limit_index
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -539,6 +547,7 @@ Page({
         console.log(res.data);
         console.log(typeof res.data);
         var partinfo_all_options_bg = new Array(res.data.length).fill("bg-grey");
+        if(res.data.length <= _this.data.partinfo_all_options.length) return;
         _this.setData({
           partinfo_all_options: res.data,
           partinfo_all_options_bg: partinfo_all_options_bg,
@@ -547,6 +556,41 @@ Page({
 
 
       }
+    });
+  },
+  add_partinfo:function(){
+    this.setData({
+      modalName: "partinfo_modal"
+    });
+
+  },
+  add_part_tag:function(){
+    console.log("add_part_tag:"+this.data.add_new_partinfo);
+    var new_tag = this.data.add_new_partinfo.replace(" ","");
+    new_tag = new_tag.replace(",","");
+    new_tag = new_tag.replace("，","");
+    if(new_tag == ""){
+      wx.showToast({
+        title: '无效数据',
+      })
+      return;
+    }
+    console.log("add_part_tag:"+this.data.add_new_partinfo);
+    var partinfo_all_options= this.data.partinfo_all_options;
+    partinfo_all_options.push(new_tag);
+    var partinfo_all_options_bg = this.data.partinfo_all_options_bg;
+    partinfo_all_options_bg.push("bg-grey");
+    console.log("add_part_tag:"+partinfo_all_options);
+    this.setData({
+      partinfo_all_options,
+      partinfo_all_options_bg,
+      modalName: "",
+      add_new_partinfo:""
+    });
+  },
+  inputMsg: function (e) {
+    this.setData({
+      add_new_partinfo: e.detail.value
     });
   },
 

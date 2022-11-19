@@ -23,9 +23,9 @@
 									{{item}}
 							</view>
 					</block>
-					<block wx:for="{{doommData}}">
+					<block wx:for="{{chat_msgs}}">
 							<view class="flext-item customer-msg-cu-btn bg-touming" style="">
-									{{item}}
+                <text class="text-cyan text-bold">{{item.nickName}}：</text>{{item.chatmsg}}
 							</view>
 					</block>
 			</scroll-view>
@@ -42,10 +42,10 @@
 						</view>
 						<view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
 							<view class="desc">
-								<view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;"><text>{{item.activityaddress + "\n" + item.detail}}</text>
+								<view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;"><text>{{item.show_activityaddress==""?"": item.show_activityaddress+ "\n" + item.detail}}</text>
 								</view>	
 								<view style="margin-left:10rpx;">
-									<view class="cu-tag bg-touming light lg round" >{{item.activity_date}}</view>
+									<view class="cu-tag bg-touming light lg round" >{{activity_date}}</view>
 									<view class="cu-tag bg-touming light lg round" >{{item.begintime}}-{{item.endtime}}</view>
 								</view>
 							</view>

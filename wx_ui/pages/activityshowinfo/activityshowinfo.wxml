@@ -34,7 +34,7 @@
       <text class="text-grey">活动时间</text>
     </view>
     <view class="action" style="max-width:70%;">
-      <text class="text-blue text-sm">{{activity_info.activity_date}} {{activity_info.begintime}}-{{activity_info.endtime}}</text>
+      <text class="text-blue text-sm">{{activity_date}} {{activity_info.begintime}}-{{activity_info.endtime}}</text>
     </view>
   </view>
 
@@ -48,11 +48,21 @@
     </view>
   </view>
 
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-locationfill text-green"></text>
+      <text class="text-grey">报名限制</text>
+    </view>
+    <view class="action" style="max-width:66%;">
+      <text class="text-blue text-sm">{{activity_info.part_limit_dec}}</text>
+    </view>
+  </view>
+
 
   <view class="cu-item arrow" style="" bindtap="showModal" data-target="DialogModal-partinfo">
     <view class="content" style="width:30%;">
       <text class="cuIcon-roundaddfill text-green"></text>
-      <text class="text-grey">参与{{activity_info.member}}人</text>
+      <text class="text-grey">参与{{activity_info.member+"/"+activity_info.max_part_number}}</text>
     </view>
     <view class="action" style="max-width:70%;">
       <view class="cu-avatar-group">
@@ -93,16 +103,24 @@
       <text class="text-grey">报名截止时间</text>
     </view>
     <view class="action" style="max-width:70%;">
-      <text class="text-blue text-sm">{{activity_info.activity_date}}{{activity_info.addendtime}}</text>
+      <text class="text-blue text-sm">{{activity_date +" "}}{{activity_info.addendtime}}</text>
     </view>
   </view>
   <form>
     <block wx:for="{{partinfo}}">
       <view class="cu-form-group">
-        <view class="title">{{item}}</view>
-        <input maxlength="10" placeholder="报名需要..." bindinput='partinfoInput' data-value="{{item}}"></input>
+        <view class="title">{{item=="段位"?"段位水平":item}}</view>
+        <input wx:if="{{item != '段位'}}" maxlength="10" placeholder="报名需要..." bindinput='partinfoInput' data-value="{{item}}"></input>
+          <picker wx:if="{{item == '段位'}}" bindchange="PickerChange" value="3" range="{{picker}}">
+        <view class="picker">
+          {{picker_index?picker[picker_index]:'请选择您的技术水平'}}
+        </view>
+      </picker>
       </view>
+
     </block>
+   
+  
 
   </form>
 
@@ -155,7 +173,7 @@
             <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
 
               <block wx:if="{{index==0}}">
-                <view class="cu-avatar round sm" style="background-image:url({{info}});">
+                <view class="cu-avatar round sm" style="background-image:url({{info}});" bindtap="chat_with" data-index="{{index1}}">
 
                 </view>
               </block>
@@ -181,7 +199,7 @@
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
-    <view class="">
+    <view class="{{modalName=='Modal_update_activity_info'?'show':''}}">
       <view class="cu-form-group solid" style="margin: 10rpx;">
         <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
       </view>

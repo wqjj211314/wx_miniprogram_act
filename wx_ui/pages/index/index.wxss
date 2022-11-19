@@ -78,6 +78,7 @@
   border-radius: 25rpx;
   margin:10px 10px;
   max-width: 500rpx;
+  overflow: hidden;
 }
 .customer-msg-cu-btn2 {
   display: inline-flex;
@@ -96,6 +97,8 @@
   max-height: 5em;
   width: 100%;
   text-align:left;
+  overflow: hidden;
+  
 }
 
 .bg-touming{
