@@ -215,7 +215,7 @@ Page({
     var that = this;
 
     var index = e.currentTarget.dataset.index;
-    var user_id = this.data.user_id_list[index];
+    var user_id = this.data.user_info_list[index]["user_id"];
     wx.request({
       url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
       data: {
@@ -227,6 +227,9 @@ Page({
       },
       success(res) {
         that.update_part_info(that,res);
+        that.setData({
+          modalName: null
+        })
 
       }
     });
@@ -289,6 +292,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareAppMessage");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与

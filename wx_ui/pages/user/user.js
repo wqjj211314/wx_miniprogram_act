@@ -10,8 +10,52 @@ Page({
     ismask: 'block',
     checking_flag: false,
     userinfo: {},
-    t_length: 0
+    t_length: 0,
+    new_nickName:""
 
+  },
+  new_nickName:function(){
+    this.setData({
+      modalName: "new_nickName_modal"
+    });
+
+  },
+  submit_new_nickName:function(){
+    var that = this;
+    if(this.data.new_nickName.trim() == "" || this.data.new_nickName.trim() == this.data.userinfo["nickName"]){
+      wx.showToast({
+        title: '请修改昵称，不能为空',
+        icon:"none"
+      });
+      return;
+    }
+    wx.request({
+      url: app.globalData.hosturl + 'update_user_info',
+      data: {
+        "user_id":this.data.userinfo["user_id"],
+        "nickName":this.data.new_nickName,
+        "avatarUrl":"",
+        "gender":-1
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        if(res.data){
+          console.log("成功改了昵称");
+          that.setData({
+            userinfo:res.data,
+            modalName: ""
+          });
+          app.globalData.login_userInfo = res.data;
+        }
+      }
+    });
+  },
+  inputMsg: function (e) {
+    this.setData({
+      new_nickName: e.detail.value
+    });
   },
   showModal(e) {
     this.setData({
@@ -85,10 +129,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let user_info = JSON.parse(decodeURIComponent(options.userinfo))
+    //let user_info = JSON.parse(decodeURIComponent(options.userinfo))
     //console.log("创建的活动"+options);
     this.setData({
-      userinfo: user_info,
+      userinfo: app.globalData.login_userInfo,
       checking_flag: app.globalData.checking_flag
     });
   },
@@ -98,6 +142,30 @@ Page({
     this.setData({
       t_length: t_text
     })
+  },
+  modify_user_info:function(e){
+    console.log(e);
+    var avatarUrl = e.detail.avatarUrl;
+    var userinfo = this.data.userinfo;
+    userinfo["avatarUrl"] = avatarUrl;
+    this.setData({
+      userinfo
+    });
+    wx.uploadFile({
+      url: app.globalData.hosturl + 'upload_avatar_url', //接口
+      filePath: avatarUrl,
+      name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
+      formData: {
+        'user_id': userinfo["user_id"]
+      },
+      success: function (res) {
+        
+      },
+      fail: function (error) {
+        console.log(error);
+      }
+    });
+
   },
 
   /**

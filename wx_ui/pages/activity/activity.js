@@ -2,20 +2,21 @@
 function getDateString() {
   
   var dateTime=new Date();
-  dateTime=dateTime.setDate(dateTime.getDate()+1);
+  dateTime=dateTime.setDate(dateTime.getDate());
   dateTime=new Date(dateTime);
-  dateTime=dateTime.setMonth(dateTime.getMonth()+1);
+  dateTime=dateTime.setMonth(dateTime.getMonth());
   dateTime=new Date(dateTime);
   return {
     year: dateTime.getFullYear(),
-    month: dateTime.getMonth(),
+    month: dateTime.getMonth() + 1,
     day: dateTime.getDate()
   }
+  
 }
 
  
 
-const { year, month, day } = getDateString()
+const { year, month, day } = getDateString();
 const chooseLocation = requirePlugin('chooseLocation');
 //在page页面引入app，同时声明变量，获得所需要的全局变量
 const app = getApp();
@@ -338,6 +339,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("年月日"+ year + month + day);
     var that = this;
     console.log(new Date());
     //查看是否授权
@@ -375,25 +377,11 @@ Page({
   getUserProfile: function (res) {
     var that = this;
     if (!this.check_user_profile_cache()) {
-      wx.getUserProfile({
-        desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-        success: (res) => {
-          console.log("按钮获取用户信息 " + res.userInfo.nickName);
-          console.log(res.userInfo);
-          app.globalData.login_userInfo["avatarUrl"] = res.userInfo["avatarUrl"];
-          app.globalData.login_userInfo["nickName"] = res.userInfo["nickName"];
-          app.globalData.login_userInfo["gender"] = res.userInfo["gender"];
-          app.globalData.hasUserInfo = true;
-          console.log(app.globalData.login_userInfo);
-          this.setData({
-            login_userInfo: app.globalData.login_userInfo,
-            hasUserInfo: true
-          });
-          //本地缓存用户数据，避免频繁登录
-          app.store_userInfo();
-          that.create_activity(res.userInfo.nickName, res.userInfo.avatarUrl, res.userInfo.gender);
-        }
-      });
+      wx.showToast({
+        title: '用户信息异常',
+        icon:"none",
+        duration:2000
+      })
     } else {
       that.setData({
         login_userInfo: app.globalData.login_userInfo
@@ -414,27 +402,7 @@ Page({
           app.globalData.hasUserInfo = false;
           return false;
         }
-        var avatarUrl = wx.getStorageSync('avatarUrl');
-        console.log(avatarUrl);
-        if (avatarUrl == "" || avatarUrl == undefined) return false;
-
-        var nickName = wx.getStorageSync('nickName');
-        console.log(nickName);
-        if (nickName == "" || nickName == undefined) return false;
-        console.log(nickName);
-        var gender = 0;
-        //gender = wx.getStorageSync('gender');
-        var login_userInfo = {
-          "user_id": openid,
-          "nickName": nickName,
-          "avatarUrl": avatarUrl,
-          "gender": gender
-        };
-        that.setData({
-          login_userInfo: login_userInfo,
-          hasUserInfo: true
-        });
-        app.globalData.login_userInfo = login_userInfo;
+        
         app.globalData.hasUserInfo = true;
       } catch (e) {
         console.log(e);

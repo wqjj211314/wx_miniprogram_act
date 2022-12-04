@@ -51,6 +51,9 @@
 .main{
   margin-top:12vh;
 }
+.nickname::after{
+	border: none;
+}
 
 .yn{
   box-shadow: rgb(158, 155, 155) 0px 5px 10px;

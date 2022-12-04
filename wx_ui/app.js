@@ -18,7 +18,7 @@ App({
     })
 
     try {
-      //var openid = wx.getStorageSync('openid');
+      console.log("用户APP登录");
       this.user_login();
     } catch (e) {
       console.log("持久化登录信息获取失败");
@@ -59,8 +59,12 @@ App({
               that.globalData.openid = res.data.openid;
               that.globalData.checking_flag = res.data.checking_flag;
               that.globalData.login_userInfo["user_id"] = res.data.openid;
+              that.globalData.login_userInfo["nickName"] = res.data.nickName;
+              that.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
+              that.globalData.login_userInfo["gender"] = res.data.gender;
               try {
                 wx.setStorageSync('openid', res.data.openid);
+                //wx.setStorageSync('nickName', res.data.nickName);
               } catch (e) { }
             }
           })
@@ -72,8 +76,8 @@ App({
   },
   store_userInfo: function () {
     try {
-      wx.setStorageSync('nickName', this.globalData.login_userInfo.nickName);
-      wx.setStorageSync('avatarUrl', this.globalData.login_userInfo.avatarUrl);
+      //wx.setStorageSync('nickName', this.globalData.login_userInfo.nickName);
+      //wx.setStorageSync('avatarUrl', this.globalData.login_userInfo.avatarUrl);
     } catch (e) { }
   }
 })

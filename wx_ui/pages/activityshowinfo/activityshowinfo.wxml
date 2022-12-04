@@ -48,20 +48,9 @@
     </view>
   </view>
 
-  <view class="cu-item">
-    <view class="content">
-      <text class="cuIcon-locationfill text-green"></text>
-      <text class="text-grey">报名限制</text>
-    </view>
-    <view class="action" style="max-width:66%;">
-      <text class="text-blue text-sm">{{activity_info.part_limit_dec}}</text>
-    </view>
-  </view>
-
-
   <view class="cu-item arrow" style="" bindtap="showModal" data-target="DialogModal-partinfo">
     <view class="content" style="width:30%;">
-      <text class="cuIcon-roundaddfill text-green"></text>
+      <text class="cuIcon-circlefill text-green"></text>
       <text class="text-grey">参与{{activity_info.member+"/"+activity_info.max_part_number}}</text>
     </view>
     <view class="action" style="max-width:70%;">
@@ -73,6 +62,19 @@
       </view>
     </view>
   </view>
+
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-infofill text-green"></text>
+      <text class="text-grey">报名限制</text>
+    </view>
+    <view class="action" style="max-width:66%;">
+      <text class="text-blue text-sm">{{activity_info.part_limit_dec}}</text>
+    </view>
+  </view>
+
+
+
   <view class="cu-item">
     <view class="content">
       <view class="text-blue text-sm" style="">

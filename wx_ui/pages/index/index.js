@@ -148,7 +148,7 @@ Page({
     if (this.data.activity_user_info["user_id"] == app.globalData.login_userInfo["user_id"])
       return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
-
+    
     wx.navigateTo({
       url: '../chat/chat?friend_user_info=' + friend_user_info,
     });
@@ -170,40 +170,21 @@ Page({
     // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
     if (!this.check_user_profile_cache()) {
       console.log("没有登录");
-      this.wxgetUserProfile();
+      wx.showToast({
+        title: '请重新进入程序',
+        icon:"none"
+      })
+      //this.wxgetUserProfile();没用了，API废弃，不需要授权了，授权了也获取不到内容
     } else {
       console.log("已经登录");
       //登录的情况下，点击跳转用户页
       wx.navigateTo({
-        url: '../user/user?userinfo=' + encodeURIComponent(JSON.stringify(app.globalData.login_userInfo))
+        url: '../user/user'
+        //url: '../user/user?userinfo=' + encodeURIComponent(JSON.stringify(app.globalData.login_userInfo))
       })
     }
   },
-  wxgetUserProfile() {
-    wx.getUserProfile({
-      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log("按钮获取用户信息 " + res.userInfo.nickName);
-        console.log(res.userInfo);
-        app.globalData.login_userInfo["avatarUrl"] = res.userInfo["avatarUrl"];
-        app.globalData.login_userInfo["nickName"] = res.userInfo["nickName"];
-        app.globalData.login_userInfo["gender"] = res.userInfo["gender"];
-        app.globalData.hasUserInfo = true;
-        console.log(app.globalData.login_userInfo);
-        this.setData({
-          login_userInfo: app.globalData.login_userInfo,
-          hasUserInfo: true
-        });
-        //本地缓存用户数据，避免频繁登录
-        app.store_userInfo();
-        //未登录的情况下，点击只是登录，不跳转用户页
-        //wx.navigateTo({
-        //url: '../user/user?userinfo='+encodeURIComponent(JSON.stringify(res.userInfo))
-        //});
-        server.newuser(app, app.globalData.login_userInfo.nickName, app.globalData.login_userInfo.avatarUrl, app.globalData.login_userInfo.gender);
-      }
-    });
-  },
+
   check_user_profile_cache() {
     console.log("检查是否登录");
     var that = this;
@@ -216,8 +197,10 @@ Page({
         app.globalData.hasUserInfo = false;
         return false;
       }
+      /** 
       var avatarUrl = wx.getStorageSync('avatarUrl');
       console.log(avatarUrl);
+     
       if (avatarUrl == "" || avatarUrl == undefined) {
         that.setData({
           hasUserInfo: false
@@ -250,7 +233,8 @@ Page({
         hasUserInfo: true
       });
       console.log(this.data.login_userInfo);
-      app.globalData.login_userInfo = userInfo;
+      */
+      //app.globalData.login_userInfo = userInfo;
       app.globalData.hasUserInfo = true;
     } catch (e) {
       console.log("持久化登录信息获取失败");
@@ -331,10 +315,43 @@ Page({
     if (this.data.activity_id != "") {
       //server.get_init_msg(this,app,this.data.activity_id);
     }
-
-    this.setData({
-      login_userInfo: app.globalData.login_userInfo
+    var that = this;
+    wx.login({
+      success(res) {
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: app.globalData.hosturl + 'getopenid',
+            data: {
+              code: res.code
+            },
+            success: (res) => {
+              console.log("appjs用户openid");
+              console.log(res.data);
+              console.log(res.data.openid);
+              
+              var login_userInfo = that.data.login_userInfo;
+              login_userInfo["user_id"] = res.data.openid;
+              login_userInfo["nickName"] = res.data.nickName;
+              login_userInfo["avatarUrl"] = res.data.avatarUrl;
+              login_userInfo["gender"] = res.data.gender;
+              that.setData({
+                login_userInfo,
+                hasUserInfo:true
+              });
+              try {
+                wx.setStorageSync('openid', res.data.openid);
+                //wx.setStorageSync('nickName', res.data.nickName);
+              } catch (e) { }
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
     });
+
+
 
   },
   /**
