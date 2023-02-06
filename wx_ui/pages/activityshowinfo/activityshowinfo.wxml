@@ -1,13 +1,14 @@
 <!--这个创建活动页面基本完整，UI上正常-->
-<view class="img">
-  <image class='img' src="{{hosturl}}static/{{activity_info.id}}.jpg" mode="scaleToFill"></image>
+<view class="">
+  <image class='img' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.id}}.jpg" mode="aspectFill"></image>
+  <image class='img' wx:else src="/default_index_bg.png" mode="aspectFill"></image>
 </view>
 
 
-<view class="cu-list menu card-menu margin-top" style="margin-top:6vh;">
+<view class="cu-list menu card-menu margin-top" style="margin-top:25vh;">
 
-
-  <view class="cu-item" style="padding: 10rpx;">
+<!--
+  <view class="cu-item" style="min-height: 80rpx;">
     <view class="flex justify-center align-center" style="width: 100%;padding: 10rpx;">
       <view class="basis-xl flex justify-center">
         <text class="text-bold text-black">{{activity_info.title}}</text>
@@ -15,16 +16,8 @@
       <button wx:if="{{checking_flag}}" class="cu-btn lines-red text-xs" style="margin:0px;padding:10rpx;height: fit-content;width: fit-content;" bindtap="show_info_modal" data-target="Modal_update_activity_info">发布公告</button>
     </view>
   </view>
+-->
 
-  <view class="cu-item">
-    <view class="content">
-      <text class="cuIcon-peoplefill text-green"></text>
-      <text class="text-grey">发起人</text>
-    </view>
-    <view class="action" style="max-width:70%;">
-      <text class="text-blue text-sm">{{activity_user_info.nickName}}</text>
-    </view>
-  </view>
   
 
 
@@ -62,7 +55,17 @@
       </view>
     </view>
   </view>
-
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-peoplefill text-green"></text>
+      <text class="text-grey">发起人</text>
+    </view>
+    <view class="action" style="max-width:70%;">
+      <text class="text-blue text-sm">{{activity_user_info.nickName}}</text>
+    </view>
+    <button wx:if="{{checking_flag}}" class="cu-btn lines-red text-xs" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;" bindtap="show_info_modal" data-target="Modal_update_activity_info">发布公告</button>
+    
+  </view>
   <view class="cu-item">
     <view class="content">
       <text class="cuIcon-infofill text-green"></text>

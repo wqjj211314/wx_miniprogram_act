@@ -308,14 +308,16 @@ Page({
               icon: "none",
               duration: 3000
             });
-            wx.navigateTo({
-              url: '../activitycreate/activitycreate'
-            })
+            
           },
           fail: function (error) {
             console.log(error);
           }
         });
+        //后台上传背景图片，创建活动成功后直接跳转至用户页
+        wx.navigateTo({
+          url: '../user/user'
+        })
 
       },
       fail: function (error) {

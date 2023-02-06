@@ -1339,7 +1339,7 @@ button.icon.lg {
 	position: relative;
 	display: flex;
 	padding: 0 30rpx;
-	min-height: 100rpx;
+	min-height: 80rpx;
 	background-color: var(--white);
 	justify-content: space-between;
 	align-items: center
@@ -2359,7 +2359,7 @@ button.icon.lg {
 	padding: 1rpx 30rpx;
 	display: flex;
 	align-items: center;
-	min-height: 100rpx;
+	min-height: 80rpx;
 	justify-content: space-between;
 }
 
