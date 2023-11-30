@@ -37,7 +37,7 @@ function get_activity_list(that,app,activity_id="") {
       })
       //初始化第一个id
       var first = _that.data.activity_list;
-
+      console.log("活动创建人" + first[0]);
       console.log("活动创建人" + first[0].createuser);
       console.log("更新参与人数" + first[0].member);
       _that.setData({
@@ -116,6 +116,59 @@ function get_init_msg(that,app,id) {
     }
   });
 }
+function get_friend_newest_chat_msg(that,app) {
+  console.log("get_friend_newest_chat_msg");
+  const _that = that;
+  _that.setData({
+    friend_chat_msg_display:app.globalData.friend_chat_msg_display
+  });
+  try {
+    var user_id = "";
+    user_id = wx.getStorageSync('openid');
+  } catch (e) { }
+  wx.request({
+    url: app.globalData.hosturl + 'get_friend_newest_chat_msg', //仅为示例，并非真实的接口地址
+    data: {
+      "user_id": user_id
+    },
+    header: {
+      'content-type': 'application/json' // 默认值
+    },
+    success(res) {
+      console.log("get_friend_newest_chat_msg");
+      console.log(res);
+      console.log(wx.getStorageSync('newest_friend_chat_msg_time'));
+
+      if(res.data != null){
+        var msg_time = res.data.msgtime;
+        var msg_time_date = new Date(msg_time);
+        var last_time_date = new Date("2022-01-01 23:17:51");
+        try {
+            console.log(wx.getStorageSync('newest_friend_chat_msg_time'));
+            if(wx.getStorageSync('newest_friend_chat_msg_time')!=""){
+              last_time_date = new Date(wx.getStorageSync('newest_friend_chat_msg_time'));
+            if(msg_time_date > last_time_date){
+              _that.setData({
+                friend_chat_msg_display:true
+              });
+              wx.setStorageSync('newest_friend_chat_msg_time', msg_time);
+              app.globalData.friend_chat_msg_display = true;
+            }
+          }else{
+            _that.setData({
+              friend_chat_msg_display:true
+            });
+            wx.setStorageSync('newest_friend_chat_msg_time', msg_time);
+            app.globalData.friend_chat_msg_display = true;
+          }
+          
+        } catch (e) { }
+      }
+
+     
+    }
+  });
+}
 function newuser(app,nickname, avatarUrl, gender) {
   console.log("用户头像" + avatarUrl);
   wx.request({
@@ -137,3 +190,4 @@ function newuser(app,nickname, avatarUrl, gender) {
 exports.get_activity_list = get_activity_list
 exports.get_init_msg = get_init_msg
 exports.newuser = newuser
+exports.get_friend_newest_chat_msg = get_friend_newest_chat_msg

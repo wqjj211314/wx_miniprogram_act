@@ -41,7 +41,7 @@
 }
 
 .chatbutton{
-  width:55%;
+  width:85%;
 }
 
 .icon-big{
@@ -58,7 +58,8 @@
   flex-direction: column;
 }
 .fixed-height{
-  height: 70vh;
+  margin-top: 10vh;
+  height: 65vh;
   margin-left: 15rpx;
 }
 .flext-item{
@@ -77,7 +78,8 @@
   overflow: visible;
   border-radius: 25rpx;
   margin:10px 10px;
-  max-width: 500rpx;
+  max-width: 70%;
+  min-width: 0rpx;
   overflow: hidden;
 }
 .customer-msg-cu-btn2 {
@@ -97,7 +99,7 @@
   max-height: 5em;
   width: 100%;
   text-align:left;
-  overflow: hidden;
+  
   
 }
 

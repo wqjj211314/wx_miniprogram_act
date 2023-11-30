@@ -101,7 +101,6 @@ Page({
     })
   },
   navigateToAbility() {
-    console.log(this.data.userinfo);
     wx.navigateTo({
       url: '../userability/ability?user_id='+this.data.userinfo.user_id
     })
@@ -136,10 +135,16 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    //let user_info = JSON.parse(decodeURIComponent(options.userinfo))
+    let userinfo = "";
     console.log("用户页 user onLoad");
+    if(options.hasOwnProperty("userinfo")){
+      userinfo = JSON.parse(decodeURIComponent(options.userinfo));
+    }else{
+      console.log("用户未登录，无法获取用户信息");
+    }
+    console.log(userinfo);
     this.setData({
-      userinfo: app.globalData.login_userInfo,
+      userinfo: userinfo,
       checking_flag: app.globalData.checking_flag,
       friend_chat_msg_display:app.globalData.friend_chat_msg_display
     });
@@ -151,29 +156,14 @@ Page({
       t_length: t_text
     })
   },
-  modify_user_info:function(e){
-    console.log(e);
-    var avatarUrl = e.detail.avatarUrl;
-    var userinfo = this.data.userinfo;
-    userinfo["avatarUrl"] = avatarUrl;
-    this.setData({
-      userinfo
+  chat() {
+    
+    let friend_user_info = encodeURIComponent(JSON.stringify(this.data.userinfo));
+    
+    wx.navigateTo({
+      url: '../chat/chat?friend_user_info=' + friend_user_info,
     });
-    wx.uploadFile({
-      url: app.globalData.hosturl + 'upload_avatar_url', //接口
-      filePath: avatarUrl,
-      name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
-      formData: {
-        'user_id': userinfo["user_id"]
-      },
-      success: function (res) {
-        
-      },
-      fail: function (error) {
-        console.log(error);
-      }
-    });
-
+    
   },
 
   /**
@@ -192,9 +182,6 @@ Page({
       
       friend_chat_msg_display:app.globalData.friend_chat_msg_display
     });
-  },
-  copy_weixin(){
-    
   },
 
   /**

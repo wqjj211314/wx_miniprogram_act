@@ -14,6 +14,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    app.globalData.friend_chat_msg_display = false;
     this.init_friend_chat_list();
   },
 
@@ -28,7 +29,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    app.globalData.friend_chat_msg_display = false;
   },
 
   /**

@@ -2,16 +2,21 @@
   "usingComponents": {},
   "pages": [
     "pages/index/index",
+    "pages/user/user",
+    "pages/user/userinfo",
+    "pages/userability/ability",
+    "pages/hobby/addhobby",
     "pages/recyler3/recyler",
-    "pages/activity/activity",
     "pages/chat/chat",
     "pages/friend/friend",
-    "pages/user/user",
+    "pages/activity/activity",
     "pages/activityshowinfo/activityshowinfo",
+    "pages/activityshowinfo/partuser",
     "pages/activitycreate/activitycreate",
     "pages/activitypart/activitypart",
     "pages/activitycheck/activitycheck",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/hobby/edithobby"  
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -23,7 +28,7 @@
   "sitemapLocation": "sitemap.json",
   "plugins": {
     "chooseLocation": {
-      "version": "1.0.5",
+      "version": "1.0.10",
       "provider": "wx76a9a06e5b4e693e"
     }
   },

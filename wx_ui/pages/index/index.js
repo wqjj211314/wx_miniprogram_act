@@ -37,7 +37,8 @@ Page({
     server_request_count:0,
     activity_date:"",
     share_res_limit:0,
-    share_use_id:""
+    share_use_id:"",
+    friend_chat_msg_display:false
   },
   onLoad: function (options) {
 
@@ -56,10 +57,9 @@ Page({
         this.setData({
           share_use_id:share_use_id
         });
-        
-      
     }
     server.get_activity_list(this, app);
+    server.get_friend_newest_chat_msg(this, app);
     
 
   },
@@ -149,8 +149,11 @@ Page({
       return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     
+    //wx.navigateTo({
+      //url: '../chat/chat?friend_user_info=' + friend_user_info,
+    //});
     wx.navigateTo({
-      url: '../chat/chat?friend_user_info=' + friend_user_info,
+      url: '../user/userinfo?userinfo=' + friend_user_info,
     });
   },
   navigateToactivityinfo() {
@@ -299,14 +302,13 @@ Page({
       }
     });
   },
-  refresh() {
-    this.setData({
-      activity_id: ""
-    });
-    server.get_activity_list(this, app);
-  },
+
   onShow: function () {
     console.log("首页onShow");
+    this.setData({
+      
+      friend_chat_msg_display:app.globalData.friend_chat_msg_display
+    });
     //查看是否授权
     var that = this;
     this.check_user_profile_cache();
@@ -365,6 +367,7 @@ Page({
   },
   refresh() {
     server.get_activity_list(this, app, "refresh");
+    server.get_friend_newest_chat_msg(this, app);
   },
   //划动切换
   slide(e) {
@@ -409,5 +412,15 @@ Page({
     this.setData({
       inputMsg: ""
     });
-  }
+  },
+  navigateToActivity() {
+    wx.navigateTo({
+      url: '../activity/activity'
+    })
+  },
+  navigateToFriendList() {
+    wx.navigateTo({
+      url: '../friend/friend'
+    })
+  },
 })

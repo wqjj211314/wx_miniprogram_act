@@ -38,7 +38,9 @@ App({
     openid: "",
     partinfo: "",
     appversion: "2.0.2",
-    checking_flag: false
+    checking_flag: false,
+    newest_friend_chat_msg_time:"",
+    friend_chat_msg_display:false
   },
   user_login() {
     var that = this;

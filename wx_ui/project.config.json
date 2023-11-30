@@ -1,9 +1,5 @@
 {
   "description": "项目配置文件，详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
-  "packOptions": {
-    "ignore": [],
-    "include": []
-  },
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -23,8 +19,6 @@
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
-    "useApiHook": true,
-    "useApiHostProcess": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -40,17 +34,21 @@
     "useCompilerPlugins": false,
     "minifyWXML": true,
     "lazyloadPlaceholderEnable": false,
-    "useStaticServer": true
+    "useStaticServer": true,
+    "condition": false,
+    "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.16.1",
-  "appid": "wx341d0dd2e062358e",
-  "projectname": "one",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
-  }
+  },
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "appid": "wx341d0dd2e062358e"
 }

@@ -32,13 +32,14 @@
     </view>
 	 <view class="cu-item" bindtap="navigateToFriendList">
       <view class="cuIcon-comment text-green">
+        <view class="cu-tag badge" style="top:-1rpx;left:80rpx;" hidden="{{!friend_chat_msg_display}}"></view>
       </view>
       <text>消息</text>
     </view>
 	 <view class="cu-item" bindtap="click_setting">
-      <view class="cuIcon-settings text-gray">
+      <view class="cuIcon-down text-gray">
       </view>
-      <text>设置</text>
+      <text>下载应用</text>
     </view>
     <view class="cu-item" bindtap="navigateToindex">
       <view class="cuIcon-homefill text-blue">
@@ -63,21 +64,29 @@
     </view>    
 	  <view class="cu-item arrow" bindtap="navigateToActivityadd">
       <view class="content">
-        <text class="cuIcon-likefill text-red"></text>
+        <text class="cuIcon-favorfill text-red"></text>
         <text class="text-grey">参加的活动</text>
       </view>
     </view>
 
+	  <view class="cu-item arrow" bindtap="navigateToAbility">
+      <view class="content">
+        <text class="cuIcon-likefill text-red"></text>
+        <text class="text-grey">兴趣列表</text>
+      </view>
+    </view>
   </view>
 
   <view class="cu-list menu sm-border card-menu margin-top">
     <view class="cu-item">
       <view class="content">
         <text class="cuIcon-phone text-green" style="font-size:40rpx;"></text>
-        <text class="text-grey">联系我们</text>
+        <text class="text-grey">微信联系我们</text>
       </view>
       <view class="action" style="max-width:66%;">
-        <text class="text-grey text-sm">growthwang@163.com</text>
+        
+        <text class="text-green">growthwang30</text>
+       
       </view>
     </view>
     <view class="cu-item">
@@ -86,7 +95,7 @@
         <text class="text-grey">版本</text>
       </view>
       <view class="action" style="max-width:66%;">
-        <text class="text-grey text-sm">v2.0.19</text>
+        <text class="text-grey text-sm">v2.0.21</text>
       </view>
     </view>
 	  <view class="cu-item arrow" bindtap="chat_with_dev">
@@ -134,7 +143,7 @@
       </view>
     </view>
     <view class="padding-xl">
-      联系邮箱：growthwang@163.com
+      联系微信：growthwang30
     </view>
     <view class="cu-bar bg-white justify-end">
       <view class="action">

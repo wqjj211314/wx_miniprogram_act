@@ -1,0 +1,58 @@
+/* pages/activity.wxss */
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+@import "/colorui/iconfont.wxss";
+  page{
+  height:100%;
+  }
+  .background {
+    width: 100%;
+    height: 100%;
+    position:fixed; 
+    background-size:100% 100%;
+    z-index: -1;
+  }
+  .rightarrow{
+    position: fixed;
+    right:0px;
+  }
+  .locationflex{
+    display: flex;
+  }
+
+  .te::after {
+    font-family: "cuIcon";
+    display: block;
+    content: "\e6a3";
+    position: absolute;
+    font-size: 34rpx;
+    color: var(--grey);
+    line-height: 100rpx;
+    width: 60rpx;
+    text-align: center;
+    top: 0rpx;
+    bottom: 0;
+    right: 20rpx;
+    margin: 0rpx;
+    
+}
+
+.locationstyle {
+    line-height: 40rpx;
+    font-size: 28rpx;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width:90%;
+    margin-right: 30px;
+}
+.green{
+  background-color: red;
+}
+.img{
+  width:100vw;
+  
+  z-index: -1;
+  position:absolute; 
+  top:0px;
+}

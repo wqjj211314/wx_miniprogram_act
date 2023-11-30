@@ -1,0 +1,36 @@
+<view class="flex nav justify-between" style="height: fit-content;padding: 10rpx 20rpx;">
+  <view class="cu-item" style="height:fit-content;line-height: normal;padding:0rpx;margin:0rpx;" bindtap="tabSelect" data-id="0">
+    <button class="cu-btn bg-green shadow" style="font-size:20rpx;height:50rpx;padding:15rpx;">取消</button>
+  </view>
+  <view class="cu-item" style="height: fit-content;line-height: normal;padding:0rpx;margin:0rpx;" bindtap="tabSelect" data-id="0">
+    <button class="cu-btn bg-green shadow" style="font-size:20rpx;height:50rpx;padding:15rpx;">保存</button>
+  </view>
+  </view>
+  <!--报名人员页面-->
+    <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+      <view class="cu-list menu-avatar" style="margin:0rpx;">
+        <view class="cu-item">
+          <view style="position: absolute;left: 10rpx;">{{item.member_num}}号</view>
+          <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});"></view>
+          <view class="content" style="left: 170rpx;">
+            <view class="text-grey">{{item.nickName}}</view>
+            <view class="text-black flex" style="font-size: 20rpx;">
+              <view class="text-cut">
+                <view class="flex">
+                  <text class="cuIcon-tagfill text-red  margin-right-xs"></text>
+                  <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">{{key}}:{{value}}<text style="color: red;">|</text>
+                  </block>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="action">
+            <view class="text-grey text-xs">羽毛球积分</view>
+            <view class="cu-tag round bg-grey sm">{{100}}</view>
+          </view>
+          <view class="action" hidden="{{flase}}">
+            <checkbox value="cb" />
+          </view>
+        </view>
+      </view>
+    </block>
