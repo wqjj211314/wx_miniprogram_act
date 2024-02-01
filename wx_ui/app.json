@@ -1,7 +1,10 @@
 {
   "usingComponents": {},
   "pages": [
+    
     "pages/index/index",
+    "pages/activityshowinfo/activityshowinfo",
+    "pages/activityshowinfo/pkpage",
     "pages/user/user",
     "pages/user/userinfo",
     "pages/userability/ability",
@@ -10,13 +13,14 @@
     "pages/chat/chat",
     "pages/friend/friend",
     "pages/activity/activity",
-    "pages/activityshowinfo/activityshowinfo",
     "pages/activityshowinfo/partuser",
     "pages/activitycreate/activitycreate",
     "pages/activitypart/activitypart",
     "pages/activitycheck/activitycheck",
     "pages/logs/logs",
-    "pages/hobby/edithobby"  
+    "pages/hobby/edithobby",
+    "pages/note/note"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",

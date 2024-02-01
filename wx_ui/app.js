@@ -40,7 +40,11 @@ App({
     appversion: "2.0.2",
     checking_flag: false,
     newest_friend_chat_msg_time:"",
-    friend_chat_msg_display:false
+    friend_chat_msg_display:false,
+    group_sel_values:[],
+    edit_group_user:[],
+    edit_index:0,
+    edit_group_tag:""
   },
   user_login() {
     var that = this;

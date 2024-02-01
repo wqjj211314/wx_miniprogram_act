@@ -1,0 +1,11 @@
+<!--
+  嵌套数组嵌套遍历
+  通过属性值访问属性，使用[],users[member_num]
+-->
+<block wx:for="{{[[[0, 1], [2, 3]]]}}" wx:for-item="item">
+  <block wx:for="{{item}}" wx:for-item="item_group">
+    <block wx:for="{{item_group}}" wx:for-item="member_num">
+      <view>{{users[member_num].name}}</view>
+    </block>
+  </block>
+</block>
