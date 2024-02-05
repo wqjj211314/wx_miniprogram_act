@@ -42,7 +42,7 @@ Page({
   onLoad(options) {
     console.log("onLoad加载");
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
-    let group_tag = JSON.parse(decodeURIComponent(options.group_tag));
+    let group_tag = options.group_tag;
     this.setData({
       group_users:group_users,
       group_tag:group_tag

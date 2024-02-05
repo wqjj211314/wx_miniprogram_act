@@ -9,3 +9,18 @@
     </block>
   </block>
 </block>
+
+<!-- //年月日时分秒 -->
+<view>
+  <view style="color: red;">第一种：年月日时分秒</view>
+  <DatetimePicker mode="datetime" value="{{timeDivision}}" bindchange="selectDateSecondChange">
+    <view class="show-date-time-box">请选择时间: {{timeDivision}}</view>
+  </DatetimePicker>
+</view>
+<!-- //年月日时分 -->
+<view>
+  <view style="color: red;">第二种：年月日时分</view>
+  <DatetimePicker mode="dateminute" value="{{hourMinuteSecond}}" bindchange="selectDateMinuteChange">
+    <view class="show-date-time-box">请选择时间: {{hourMinuteSecond}}</view>
+  </DatetimePicker>
+</view>

@@ -1,5 +1,5 @@
 
-
+//日期换算成今天明天昨天
 function convert_date(date){
   var activity_date = new Date(date);
   var now_date = new Date();
@@ -32,5 +32,37 @@ function convert_date(date){
   }
   return date;
 }
+function toweek(datetimestr){
+  //let datestr = '2017-12-30'
+  let datelist = ['周日','周一','周二','周三','周四','周五','周六']
+  datetime1 = datetimestr.split(" ")[0];
+  datetime1_1 = datetimestr.split(" ")[1];
+  var nowyear = new Date();
+  nowyear = nowyear.getFullYear();
+  nowyear = nowyear.toString();
+  datetime1 = datetime1.replace(nowyear,"");//年月日，转换成月日
+  return datelist[new Date(datetime1).getDay()] + "("+datetime1+")";
+}
+function toweek2(datetimestr){
+  //let datestr = '2017-12-30'
+  let datelist = ['周日','周一','周二','周三','周四','周五','周六']
+  var datetime1 = datetimestr.split("~")[0];
+  var datetime2 = datetimestr.split("~")[1];
+  datetime1 = datetime1.split(" ")[0];
+  datetime1_1 = datetime1.split(" ")[1];
+  datetime2 = datetime2.split(" ")[0];
+  datetime2_1 = datetime2.split(" ")[1];
 
-exports.convert_date = convert_date
+  if(datetime1 == datetime2){
+    var res = datelist[new Date(datetime1).getDay()];
+    return res + " " + datetime1_1 + "~" + datetime2_1;
+  }else{
+    var nowyear=new Date().getFullYear().toString();
+    datetimestr = datetimestr.replace(nowyear,"");
+    return datetimestr;
+  }
+  
+}
+exports.convert_date = convert_date;
+exports.toweek = toweek;
+exports.toweek2 = toweek2;

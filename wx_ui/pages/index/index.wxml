@@ -5,8 +5,8 @@
 <swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}" bindchange="slide" style="height:92vh;">
   <block wx:for="{{recyler_list}}" wx:key="id" wx:for-index="idx">
     <swiper-item>
-      <image class='background' src="{{hosturl}}static/blur_{{item.id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
-      <image class='background2' src="{{hosturl}}static/{{item.id}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
+      <image class='background' src="{{hosturl}}static/blur_{{item.activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
+      <image class='background2' src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
       <!--默认的背景图片显示-->
       <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>
       <!--视频媒体播放
@@ -60,8 +60,8 @@
                 <view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;"><text>{{item.show_activityaddress==""?"": item.show_activityaddress+ "\n" + item.detail}}</text>
                 </view>
                 <view style="margin-left:10rpx;">
-                  <view class="cu-tag bg-touming light lg round">{{activity_date}}</view>
-                  <view class="cu-tag bg-touming light lg round">{{item.begintime}}-{{item.endtime}}</view>
+                  
+                  <view class="cu-tag bg-touming light lg round">{{item.activity_live}}</view>
                 </view>
               </view>
             </view>

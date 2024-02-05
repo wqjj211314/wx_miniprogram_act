@@ -1,6 +1,9 @@
 // pages/activity.js
+function formatdate(datestr){
+  var datestr = datestr.toString();
+  return datestr.length==1?"0"+datestr:datestr;
+}
 function getDateString() {
-  
   var dateTime=new Date();
   dateTime=dateTime.setDate(dateTime.getDate());
   dateTime=new Date(dateTime);
@@ -8,10 +11,9 @@ function getDateString() {
   dateTime=new Date(dateTime);
   return {
     year: dateTime.getFullYear(),
-    month: dateTime.getMonth() + 1,
-    day: dateTime.getDate()
+    month: formatdate(dateTime.getMonth() + 1),
+    day:formatdate(dateTime.getDate())
   }
-  
 }
 
  
@@ -28,9 +30,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    begintime: "18:00",
-    endtime: "22:00",
-    addendtime: "18:00",
+    begintime:  year + "-" + month + "-" + day + " 20:00",
+    endtime:  year + "-" + month + "-" + day + " 22:00",
+    addendtime:  year + "-" + month + "-" + day + " 18:00",
+    cancelendtime:  year + "-" + month + "-" + day + " 18:00",
+    hobby_tags:["羽毛球","篮球","乒乓球","台球","跑步","骑行","网球","美食","电影","旅行","摄影","唱歌","乐器","滑雪","击剑"],
+    hobby_tag:"", 
+    hobby_tags_bgs:[],
     max_part_number:10,
     title: "",
     detail: "",
@@ -54,12 +60,33 @@ Page({
     modalcontent: "",
     time: '12:01',
     nowdate: year + "-" + month + "-" + day,
-    date: year + "-" + month + "-" + day,
+    date: year + "-" + month + "-" + day + " 20:00",
     loadModal: false,
     disabled_flag: false,
     add_new_partinfo:""
   },
+  choosetag(event) {
+    var index = event.target.dataset.index;
+    console.log(index);
+    var bgs = this.data.hobby_tags_bgs;
+    
+    var that = this;
+    var tag_value = this.data.hobby_tags[index];
+    this.data.hobby_tags_bgs.forEach(function (item, index1, self) {
+      if (item == "bg-green") {
+        that.data.hobby_tags_bgs[index1] = "bg-grey";
+      }
+    });
+    if (this.data.hobby_tags_bgs[index] != "bg-green") {
+      this.data.hobby_tags_bgs[index] = "bg-green";
+    }
 
+    this.setData({
+      hobby_tags_bgs: bgs,
+      hobby_tag:tag_value 
+    });
+
+  },
   titleInput(e) {
     this.setData({
       title: e.detail.value
@@ -88,6 +115,11 @@ Page({
   TimeChange_addendtime(e) {
     this.setData({
       addendtime: e.detail.value
+    })
+  },
+  TimeChange_cancelendtime(e){
+    this.setData({
+      cancelendtime: e.detail.value
     })
   },
   DateChange(e) {
@@ -223,6 +255,13 @@ Page({
       });
       return;
     }
+    else if(this.data.hobby_tag == ""){
+      this.setData({
+        modalName: "modal",
+        modalcontent: "请选择活动类型"
+      })
+      return;
+    }
     else if (this.data.activityaddress == "请选择活动地点") {
       this.setData({
         modalName: "modal",
@@ -252,10 +291,11 @@ Page({
     });
     //时间信息：活动开始时间、结束时间、报名截止时间
     const time = JSON.stringify({
-      date: this.data.date,
+      //date: this.data.date,
       begintime: this.data.begintime,
       endtime: this.data.endtime,
-      addendtime: this.data.addendtime
+      addendtime: this.data.addendtime,
+      cancelendtime:this.data.cancelendtime
     });
 
     var that = this;
@@ -267,6 +307,7 @@ Page({
         "avatarUrl": url,
         "gender": gender,
         "title": this.data.title,
+        "activity_tag":this.data.hobby_tag,
         "detail": this.data.detail,
         "location": location,
         "time": time,

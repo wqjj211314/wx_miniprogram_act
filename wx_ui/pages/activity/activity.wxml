@@ -3,40 +3,53 @@
     <view class="cu-form-group text-bold text-center">
       <input placeholder="活动标题" bindinput='titleInput' style="color:black;"></input>
     </view>
-
     <view class="cu-form-group">
-      <view class="title">活动日期</view>
-      <picker mode="date" value="{{date}}" start="{nowdate}" end="2025-01-01" bindchange="DateChange">
-        <view class="picker">
-          {{date}}
-        </view>
-      </picker>
+      <view class="title">活动类型</view>
+          <input placeholder="选择或输入" bindinput='tagInput' style="color:black;" value="{{hobby_tag}}"></input>
     </view>
-
+    <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;" hidden="{{false}}">
+    <view class="flex justify-start" style="flex-flow: wrap;">
+      <view class="text-center" wx:for="{{hobby_tags}}">
+        <button class="cu-btn round {{hobby_tags_bgs[index]}} shadow" bindtap="choosetag" data-index="{{index}}" style="padding: 0 10rpx;font-size: 18rpx;height: 40rpx;margin-bottom: 2rpx;margin-right: 2rpx;">{{item}}</button>
+      </view>
+    </view>
+  </view>
     <view class="cu-form-group">
-      <view class="title">开始时间</view>
-      <picker mode="time" value="{{begintime}}" start="09:01" end="21:01" bindchange="TimeChange_begintime">
+      <view class="title">活动开启时间</view>
+      <DatetimePicker mode="dateminute" value="{{begintime}}" bindchange="TimeChange_begintime">
         <view class="picker">
           {{begintime}}
         </view>
-      </picker>
+      </DatetimePicker>
     </view>
+
     <view class="cu-form-group">
-      <view class="title">结束时间</view>
-      <picker mode="time" value="{{endtime}}" start="09:01" end="21:01" bindchange="TimeChange_endtime">
+      <view class="title">活动结束时间</view>
+      <DatetimePicker mode="dateminute" value="{{endtime}}" bindchange="TimeChange_endtime">
         <view class="picker">
           {{endtime}}
         </view>
-      </picker>
+      </DatetimePicker>
     </view>
+
     <view class="cu-form-group">
-      <view class="title">截止时间</view>
-      <picker mode="time" value="{{addendtime}}" start="09:01" end="21:01" bindchange="TimeChange_addendtime">
+      <view class="title">报名截止时间</view>
+      <DatetimePicker mode="dateminute" value="{{addendtime}}" bindchange="TimeChange_addendtime">
         <view class="picker">
           {{addendtime}}
         </view>
-      </picker>
+      </DatetimePicker>
     </view>
+
+    <view class="cu-form-group">
+      <view class="title">取消报名截止时间</view>
+      <DatetimePicker mode="dateminute" value="{{cancelendtime}}" bindchange="TimeChange_cancelendtime">
+        <view class="picker">
+          {{cancelendtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+   
     <view class="cu-form-group">
       <view class="title">限制人数</view>
       <input placeholder="请输入限制人员数量，默认为10" bindinput='numberInput' type="number" style="color:black;text-align: right"></input>
@@ -62,10 +75,9 @@
 
   <view class="cu-form-group">
     <view class="title" style="width:22%;"><text class="cuIcon-locationfill text-green"></text>位置</view>
-    <view class="te" style="max-width:78%;">
-      <view class="locationstyle" style="white-space:normal;">
-        {{activityaddress}}
-      </view>
+    <view class="flex" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;font-size: larger;">
+        {{activityaddress}}<text class="cuIcon-right text-grey" style="font-size: larger;"></text>
+     
     </view>
   </view>
 

@@ -11,7 +11,31 @@ Page({
       1:{"name":"yinyin"},
       2:{"name":"gege"},
       3:{"name":"yang"}
-    }
+    },
+    hourMinuteSecond: '2024-02-04 22:22',//时分，根据需要选择
+    timeDivision: ''//时分秒，根据需要选择
+  },
+  toweek(datestr){
+    //let datestr = '2017-12-30'
+    let datelist = ['周日','周一','周二','周三','周四','周五','周六',]
+    return datelist[new Date(datestr).getDay()];
+  },
+      // 时分的事件方法
+  selectDateMinuteChange(e) {
+    var datetime = e.detail.value;
+    var datestr = datetime.split(" ")[0];
+    var result = this.toweek(datestr);
+    console.log("日期是周几:"+result);
+    this.setData({
+      hourMinuteSecond: e.detail.value
+    })
+
+  },
+  // 时分秒的事件方法
+  selectDateSecondChange(e) {
+    this.setData({
+      timeDivision: e.detail.value
+    })
   },
 
   /**

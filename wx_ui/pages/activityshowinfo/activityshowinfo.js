@@ -60,7 +60,7 @@ Page({
     }
     console.log(activity_info);
     console.log(activity_user_info);
-    var addendtime = activity_info["activity_date"] + " " + activity_info["addendtime"];
+    var addendtime = activity_info["addendtime"];
     this.setData({
       activity_info: activity_info,
       new_announcement: activity_info["announcement"],
@@ -512,10 +512,12 @@ Page({
     var group_name = e.detail.value.trim();
     this.setData({
       group_name: e.detail.value.trim()
-    })
+    });
+    this.update_save_group_button_status();
     
   },
   update_save_group_button_status(){
+    console.log("update_save_group_button_status分组标签："+this.data.group_name);
     if(this.data.group_name == ""){
       this.setData({
         disable_save_group:true
@@ -661,12 +663,12 @@ Page({
   pk_page(e){
     console.log(e.currentTarget.dataset.tag);
     var group_tag = e.currentTarget.dataset.tag;
-    var groups = all_group_tag_dict[group_tag];
+    var groups = this.data.all_group_tag_dict[group_tag];
     //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(groups));
 
     wx.navigateTo({
-      url: 'activityshowinfo/pkpage?group_users=' + group_users+'&&group_tag='+group_tag
+      url: 'pkpage?group_users=' + group_users+'&&group_tag='+group_tag
     })
   },
   swiper_change(event){

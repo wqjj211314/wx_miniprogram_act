@@ -41,17 +41,17 @@ function get_activity_list(that,app,activity_id="") {
       console.log("活动创建人" + first[0].createuser);
       console.log("更新参与人数" + first[0].member);
       _that.setData({
-        first_activity_id: first[0].id,
-        activity_id: first[0].id,
+        first_activity_id: first[0].activity_id,
+        activity_id: first[0].activity_id,
         member: first[0].member,
         server_request_count:_that.data.server_request_count + 1
       });
-      console.log("初始化第一个activity id = " + first[0].id);
+      console.log("初始化第一个activity id = " + first[0].activity_id);
       _that.socketinit();
       swiper.update_swiper(_that,0,0,0,_that.data.activity_list,_that.data.recyler_list);
       //这里应该将活动信息和用户信息都提取保存起来
-      _that.getstore_activity_user_info(first[0].id);
-      get_init_msg(_that,app,first[0].id);
+      _that.getstore_activity_user_info(first[0].activity_id);
+      get_init_msg(_that,app,first[0].activity_id);
       wx.stopPullDownRefresh();
       wx.hideLoading({
         success: (res) => {},
@@ -103,7 +103,7 @@ function get_init_msg(that,app,id) {
         console.log(info);
         var ainfo = [];
         ainfo.unshift("活动详情：" + info.detail);
-        ainfo.unshift("活动时间：" + _that.data.activity_date + " " + info.begintime + "-" + info.endtime);
+        ainfo.unshift("活动时间：" + info.activity_live);
         //ainfo.unshift("报名人数：" + info.member);
         ainfo.unshift("活动地点：" + info.activityaddress);
         //ainfo.unshift(info.title);

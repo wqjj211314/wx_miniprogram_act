@@ -1,19 +1,18 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-x class="bg-green nav text-center" style="height: fit-content;">
   <view class="cu-item {{0==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="0" style="height: fit-content;line-height: normal;">
-    <text class="cuIcon-camerafill"></text> 活动
+    <text class="cuIcon-activityfill"></text> 活动
   </view>
   <view class="cu-item {{0==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="0" style="height: fit-content;line-height: normal;">
-    <text class="cuIcon-camerafill"></text> 报名
+    <text class="cuIcon-friend"></text> 报名
   </view>
   <view class="cu-item {{1==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="1" style="height: fit-content;line-height: normal;">
-    <text class="cuIcon-upstagefill"></text> 分组
+    <text class="cuIcon-circlefill"></text> 分组
   </view>
   <view class="cu-item {{2==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="2" style="height: fit-content;line-height: normal;">
-    <text class="cuIcon-clothesfill"></text> PK
+    <text class="cuIcon-upstage"></text> 排名
   </view>
-  <view class="cu-item {{2==TabCur?'text-white cur':''}}" bindtap="tabSelect" data-id="2" style="height: fit-content;line-height: normal;">
-    <text class="cuIcon-clothesfill"></text> 评分
-  </view>
+ 
 </scroll-view>
 <swiper style="height: 90vh;" current="{{current_swiper_item_index}}" bindchange="swiper_change">
 
@@ -22,7 +21,7 @@
 
     <!--这个创建活动页面基本完整，UI上正常-->
     <view class="">
-      <image class='img' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.id}}.jpg" mode="aspectFill"></image>
+      <image class='img' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill"></image>
       <image class='img' wx:else src="/default_index_bg.png" mode="aspectFill"></image>
     </view>
 
@@ -33,7 +32,7 @@
           <text class="text-grey">活动时间</text>
         </view>
         <view class="action" style="max-width:70%;">
-          <text class="text-blue text-sm">{{activity_date}} {{activity_info.begintime}}-{{activity_info.endtime}}</text>
+          <text class="text-blue text-sm">{{activity_info.activity_live}}</text>
         </view>
       </view>
 
@@ -124,7 +123,7 @@
           <text class="text-grey">报名截止时间</text>
         </view>
         <view class="action" style="max-width:70%;">
-          <text class="text-blue text-sm">{{activity_date +" "}}{{activity_info.addendtime}}</text>
+          <text class="text-blue text-sm">{{activity_info.addendtimeweek}}</text>
         </view>
       </view>
       <form>
@@ -269,12 +268,12 @@
   <swiper-item style="width: 100%;">
     <scroll-view scroll-x="false" scroll-y="true" style="height: 100%;">
       <view wx:if="{{admin_flag}}">
-        <view>分组名称</view>
+        <view style="margin: 10rpx 10rpx;">分组名称</view>
         <view class="cu-form-group">
           <input placeholder="分组标签名称" value="{{group_name}}" bindinput='edit_group_name'></input>
           <button class="cu-btn bg-green shadow" style="font-size:20rpx;height:50rpx;padding:15rpx;" bindtap="save_group" disabled="{{disable_save_group}}">保存</button>
         </view>
-        <view>分组成员</view>
+        <view style="margin: 10rpx 10rpx;">分组成员</view>
 
         <view class="grid padding-sm" style="background-color: white;padding:20rpx;flex-wrap: wrap;padding:0rpx;padding-left:13rpx;padding-top: 30rpx;margin-bottom: 20rpx;">
           <block wx:for="{{current_edit_group}}">
@@ -316,31 +315,28 @@
           <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}">
             <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
           </view>
-        </view>
-      </block>
-    </scroll-view>
-  </swiper-item>
-
-  <!--对阵-->
-  <swiper-item style="width: 100%;">
-    <scroll-view scroll-x="false" scroll-y="true" style="height: 100%;">
-
-      <block wx:for="{{all_group_tag_list}}" wx:for-item="item0">
-        <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;margin-top:10rpx;padding:0rpx;padding-top:10rpx;padding-left:13rpx;border-bottom: 10rpx;">
-          <view style="width: 100%;margin-bottom: 10rpx;">{{item0.group_tag}}（{{item0.group_users.length}}）</view>
-          <block wx:for="{{item0.group_users}}" wx:for-item="item">
-            <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
-              <view class="cu-avatar radius" style="background-image:url({{item.avatarUrl}});">
-                <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{item.member_num}}</view>
-              </view>
-              <view style="font-size: 18rpx;height: fit-content;">{{item.nickName}}</view>
-            </view>
-          </block>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag}}">
-            <text class="cuIcon-edit" style="font-size: 45rpx;color: grey;"></text>
+          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}">
+            <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
           </view>
         </view>
       </block>
+
+
+      <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;margin-top:10rpx;padding:0rpx;padding-top:10rpx;padding-left:13rpx;border-bottom: 10rpx;">
+        <view style="width: 100%;margin-bottom: 10rpx;">未分组（{{ungroup_partinfo_list.length}}）</view>
+        <block wx:for="{{ungroup_partinfo_list}}" wx:for-item="user">
+          <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+            <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
+
+              <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{user.member_num}}</view>
+            </view>
+            <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
+          </view>
+        </block>
+
+
+      </view>
+
     </scroll-view>
   </swiper-item>
 

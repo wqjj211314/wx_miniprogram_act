@@ -109,7 +109,7 @@ Page({
     var that = this;
     aclist.forEach(element => {
       //console.log(element.activity_id);
-      if (element.id == activity_id) {
+      if (element.activity_id == activity_id) {
         console.log("获取用户信息：" + element.user_id);
         console.log("获取活动创建人用户信息：" + element.createuser.user_id);
         //提取保存活动信息
@@ -254,9 +254,9 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-    var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
-    console.log("当前活动id:" + this.data.activity_info["id"]);
-    console.log("当前活动id:" + this.data.activity_id);
+    var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["activity_id"] + ".jpg";
+    console.log("当前活动activity_id:" + this.data.activity_info["activity_id"]);
+    console.log("当前活动activity_id:" + this.data.activity_id);
     var share_use_id = "";
     if(app.globalData.login_userInfo.hasOwnProperty("user_id")){
       share_use_id = app.globalData.login_userInfo["user_id"];
@@ -376,12 +376,12 @@ Page({
     swiper.update_swiper(this,e.detail.current,this.data.swiper_current_index,this.data.data_current_index,this.data.activity_list,this.data.recyler_list);
 
     this.setData({
-      activity_id: this.data.recyler_list[e.detail.current].id,
+      activity_id: this.data.recyler_list[e.detail.current].activity_id,
       current:e.detail.current
     });
     //这里应该将活动信息和用户信息都提取保存起来
-    this.getstore_activity_user_info(this.data.recyler_list[e.detail.current].id);
-    server.get_init_msg(this, app, this.data.recyler_list[e.detail.current].id);
+    this.getstore_activity_user_info(this.data.recyler_list[e.detail.current].activity_id);
+    server.get_init_msg(this, app, this.data.recyler_list[e.detail.current].activity_id);
     
   },
   openKey(e) {
@@ -406,8 +406,8 @@ Page({
   sendMsg() {
     console.log(this.data.inputMsg);
     var send = this.data.inputMsg;
-    var id = this.data.activity_id;
-    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: id, user_id: this.data.hasUserInfo?app.globalData.login_userInfo["user_id"]:"",nickName: this.data.hasUserInfo?app.globalData.login_userInfo["nickName"]:"匿名" });
+    var activity_id = this.data.activity_id;
+    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: activity_id, user_id: this.data.hasUserInfo?app.globalData.login_userInfo["user_id"]:"",nickName: this.data.hasUserInfo?app.globalData.login_userInfo["nickName"]:"匿名" });
 
     this.setData({
       inputMsg: ""
