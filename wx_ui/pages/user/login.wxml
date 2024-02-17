@@ -1,0 +1,19 @@
+<!--pages/user/login.wxml-->
+<view class="flex" style="flex-direction: column;justify-content: center;align-items: center;height: 70vh;">
+  <text style="font-size: 40rpx;margin-bottom: 60rpx;">填写个人信息</text>
+  <view class="" style="margin-bottom: 40rpx;">
+    <button class="cu-avatar round lg yn" style="background-image:url({{userinfo.avatarUrl}});" bindchooseavatar="modify_user_info" open-type="chooseAvatar" style="width: 200rpx;height: 200rpx;">
+      <text style="font-size: 40rpx;">设置头像</text>
+    </button>
+
+  </view>
+  <view class="cu-form-group" style="width: 100%;height: 100rpx;">
+    <view class="title" style="font-size: 40rpx;">昵称</view>
+    <input placeholder="输入昵称" bindinput="inputMsg" value="{{new_nickName}}"></input>
+  </view>
+
+  <view class="flex flex-direction" style="width: 100%;margin-top: 40rpx;">
+  <button class="cu-btn bg-green lg" bind:tap="submit_new_nickName">玄灰</button>
+  
+</view>
+</view>

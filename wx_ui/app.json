@@ -1,6 +1,7 @@
 {
   "usingComponents": {},
   "pages": [
+    "pages/user/login",
     "pages/index/index",
     "pages/note/note",
     "pages/activityshowinfo/activityshowinfo",
