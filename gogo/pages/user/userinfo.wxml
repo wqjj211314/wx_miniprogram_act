@@ -1,0 +1,53 @@
+<!--pages/user/user.wxml-->
+<view class="img">
+  <image class='img' src="/logo.png" mode="aspectFill"></image>
+</view>
+
+<view class="main">
+  <view class="flex userinfo" style="margin:0rpx;border-radius: 0cm;">
+    <view class="">
+      <button class="cu-avatar round lg yn" style="background-image:url({{userinfo.avatarUrl}});">
+      </button>
+    </view>
+
+
+    <view class="column-sidebar">
+      
+        <!--class="rightarrow"-->
+        <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}
+        </text>
+     
+      <view bindtap="showModal-none" data-target="DialogModal-tag">
+        <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">
+          <!--class="rightarrowred"-->小队出发啦
+        </view>
+      </view>
+    </view>
+
+    <view class="cuIcon-mark text-green" style="margin-left: auto;font-size:60rpx;margin-top: 10rpx;" bindtap="chat">
+    </view>
+  </view>
+  <view class="cu-list menu sm-border card-menu margin-top" style="margin:0rpx;border-radius: 0cm;margin-top: 25rpx;">
+    <view class="cu-item arrow" bindtap="navigateToActivitycreate">
+      <view class="content">
+        <text class="cuIcon-circle text-red"></text>
+        <text class="text-grey">TA创建的活动</text>
+      </view>
+    </view>
+
+    <view class="cu-item arrow" bindtap="navigateToActivityadd">
+      <view class="content">
+        <text class="cuIcon-favorfill text-red"></text>
+        <text class="text-grey">TA参加的活动</text>
+      </view>
+    </view>
+
+    <view class="cu-item arrow" bindtap="navigateToAbility">
+      <view class="content">
+        <text class="cuIcon-likefill text-red"></text>
+        <text class="text-grey">TA的兴趣列表</text>
+      </view>
+    </view>
+  </view>
+
+</view>

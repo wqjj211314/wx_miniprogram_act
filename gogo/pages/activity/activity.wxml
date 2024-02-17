@@ -1,0 +1,169 @@
+<view class="cu-list menu card-menu margin-top shadow-warp">
+  <form>
+    <view class="cu-form-group text-bold text-center">
+      <input placeholder="活动标题" bindinput='titleInput' style="color:black;"></input>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">活动类型</view>
+          <input placeholder="选择或输入" bindinput='tagInput' style="color:black;" value="{{hobby_tag}}"></input>
+    </view>
+    <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;" hidden="{{false}}">
+    <view class="flex justify-start" style="flex-flow: wrap;">
+      <view class="text-center" wx:for="{{hobby_tags}}">
+        <button class="cu-btn round {{hobby_tags_bgs[index]}} shadow" bindtap="choosetag" data-index="{{index}}" style="padding: 0 10rpx;font-size: 18rpx;height: 40rpx;margin-bottom: 2rpx;margin-right: 2rpx;">{{item}}</button>
+      </view>
+    </view>
+  </view>
+    <view class="cu-form-group">
+      <view class="title">活动开启时间</view>
+      <DatetimePicker mode="dateminute" value="{{begintime}}" bindchange="TimeChange_begintime">
+        <view class="picker">
+          {{begintime}}
+        </view>
+      </DatetimePicker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="title">活动结束时间</view>
+      <DatetimePicker mode="dateminute" value="{{endtime}}" bindchange="TimeChange_endtime">
+        <view class="picker">
+          {{endtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="title">报名截止时间</view>
+      <DatetimePicker mode="dateminute" value="{{addendtime}}" bindchange="TimeChange_addendtime">
+        <view class="picker">
+          {{addendtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="title">取消报名截止时间</view>
+      <DatetimePicker mode="dateminute" value="{{cancelendtime}}" bindchange="TimeChange_cancelendtime">
+        <view class="picker">
+          {{cancelendtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+   
+    <view class="cu-form-group">
+      <view class="title">限制人数</view>
+      <input placeholder="请输入限制人员数量，默认为10" bindinput='numberInput' type="number" style="color:black;text-align: right"></input>
+    </view>
+    <view class="cu-form-group">
+      <view class="title">分享参与限制</view>
+      <picker mode="selector" bindchange="part_limit_change" value="{{part_limit_index}}" range="{{part_limit_picker}}">
+        <view class="picker">
+          {{part_limit_picker[part_limit_index]}}
+        </view>
+      </picker>
+    </view>
+    <view class="cu-form-group">
+      <textarea placeholder="活动详情：如活动费用，活动场地，也可在创建活动后发布公告" auto-height maxlength="-1" bindinput='detailInput' style="max-height:10em;min-height: 3em;"></textarea>
+    </view>
+
+  </form>
+</view>
+
+
+
+<view class="cu-list menu card-menu margin-top shadow-warp" bindtap="chooseposition">
+
+  <view class="cu-form-group">
+    <view class="title" style="width:22%;"><text class="cuIcon-locationfill text-green"></text>位置</view>
+    <view class="flex" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;font-size: larger;">
+        {{activityaddress}}<text class="cuIcon-right text-grey" style="font-size: larger;"></text>
+     
+    </view>
+  </view>
+
+</view>
+
+
+
+<view class="padding" style="padding-top:0px;margin-top:0px;">
+  <view class="radius shadow-warp bg-white margin-top">
+    <view class='pagecenter1' style="padding-top:20rpx;">
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
+            <text class="cuIcon-cameraadd"></text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="bg-white radius cu-form-group" style="padding:10rpx;padding-left:30rpx;margin-left:30rpx;margin-right:30rpx;">
+  <text>报名信息(点击选取)：{{partinfo}}</text>
+</view>
+<view class="padding-sm flex justify-start" style="flex-flow: wrap;">
+
+  <view class="margin-sm text-center" wx:for="{{partinfo_all_options}}">
+    <button class="cu-btn round {{partinfo_all_options_bg[index]}} shadow" bindtap="choose" data-index="{{index}}" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;">{{item}}</button>
+  </view>
+  <view class="margin-sm text-center">
+    <button class="cu-btn sm round bg-yellow shadow" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;" bindtap="add_partinfo">自定义报名信息</button>
+  </view>
+
+</view>
+
+<view class="padding flex flex-direction">
+  <button class="cu-btn bg-red margin-tb-sm lg" bindtap='getUserProfile' disabled="{{}}">创建活动</button>
+</view>
+<!--加载框-->
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <!-- <view class='cuIcon-emojifill text-orange'></view> -->
+  <!--<image src='/images/logo.png' class='png' mode='aspectFit'></image>-->
+  <view class='gray-text'>创建中...</view>
+</view>
+
+<view class="cu-modal {{modalName=='modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">活动信息</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{modalcontent}}
+    </view>
+  </view>
+</view>
+
+<view class="cu-modal {{modalName=='partinfo_modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">自定义报名信息</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="">
+      <view class="cu-form-group " style="border-top: 1rpx solid #eee;border-bottom: 1rpx solid #eee;">
+        <view class="title text-bold">报名信息:</view>
+        <input placeholder="自定义数据，比如姓名" class="text-left" maxlength="10" bindinput="inputMsg" value="{{add_new_partinfo}}"></input>
+
+      </view>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+        <button class="cu-btn bg-green margin-left" bindtap="add_part_tag">确定</button>
+
+      </view>
+    </view>
+  </view>
+</view>

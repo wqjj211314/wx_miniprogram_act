@@ -1,0 +1,8 @@
+
+<swiper id="swiperq" circular duration="{{duration}}" vertical="{{true}}"  bindchange="slide" style="height:100vh;width: 100vw;">
+  
+    <swiper-item wx:for="{{displayList}}" wx:key="id">
+      <image class='background' src="{{hosturl}}static/blur_{{item.id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
+			<image class='background2' src="{{hosturl}}static/{{item.id}}.jpg" mode="aspectFit" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
+		</swiper-item>
+</swiper>

@@ -1,0 +1,27 @@
+//#1=>1,去除#字符
+var show_member_num = function (member_num_str) {
+  member_num_str = ""+member_num_str;
+  return member_num_str.replace("#","");
+}
+var show_vs_scores = function(scores){
+  var flag = true;
+  //console.log(scores);
+  for(var i=0;i<scores.length;i++){
+    if(scores[i]!=0){
+      flag = false;
+      break;
+    }
+  }
+  if(flag){
+    return "未开赛";
+  }else {
+    return scores.join(" : ");
+  }
+}
+
+
+module.exports = {
+  show_member_num: show_member_num,
+  show_vs_scores:show_vs_scores,
+};
+module.exports.msg = "some msg";

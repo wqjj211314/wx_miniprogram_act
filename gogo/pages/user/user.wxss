@@ -1,0 +1,61 @@
+/* pages/user/user.wxss */
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+@import "/colorui/iconfont.wxss";
+.rightarrow::after{
+  color: black;
+  content: "\e6a3";
+  text-align: center;
+  font-family: "cuIcon";
+}
+.rightarrowred::after{
+  color: red;
+  content: "\e6a3";
+  text-align: center;
+  font-family: "cuIcon";
+}
+.userinfo{
+  display: block;
+  background-color: white;
+  margin-right: 30rpx;
+  margin-left: 30rpx;
+  border-radius: 20rpx;
+  padding: 10px;
+}
+
+.flex {
+  display: flex;
+  z-index: 1;
+}
+
+.column-sidebar {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  justify-content:space-around;
+}
+.name{
+  flex: 1;
+}
+
+.back{
+  height: 50vh;
+}
+.img{
+  width:100vw;
+  height: 50vh;
+  z-index: -1;
+  position:absolute; 
+  top:0px;
+}
+
+.main{
+  margin-top:12vh;
+}
+.nickname::after{
+	border: none;
+}
+
+.yn{
+  box-shadow: rgb(158, 155, 155) 0px 5px 10px;
+}

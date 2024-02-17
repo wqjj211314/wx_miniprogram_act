@@ -1,0 +1,32 @@
+<view class="cu-chat" id="chatid">
+  <block wx:for="{{init_friend_chat_msgs}}" wx:key="indexid">
+  <view class="cu-item self" wx:if="{{item.user_id_1 != friend_openid}}">
+    <view class="main">
+      <view class="content bg-green shadow">
+        <text>{{item.chatmsg}}</text>
+      </view>
+    </view>
+    <view class="cu-avatar radius" style="background-image:url({{login_avatar}});"></view>
+    <view class="date">{{item.msgtime}}</view>
+  </view>
+
+  <view class="cu-item" wx:else>
+    <view class="cu-avatar radius" style="background-image:url({{friend_avatar}});"></view>
+    <view class="main">
+      <view class="content shadow">
+        <text>{{item.chatmsg}}</text>
+      </view>
+    </view>
+    <view class="date">{{item.msgtime}}</view>
+  </view>
+  </block>
+</view>
+
+<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
+  <view class="action">
+    <text class="cuIcon-write text-grey"></text>
+  </view>
+  <input class="solid-bottom" bindinput="inputMsg" value="{{inputMsg}}" maxlength="300"></input>
+ 
+  <button class="cu-btn bg-green shadow" bindtap="sendMsg">发送</button>
+</view>
