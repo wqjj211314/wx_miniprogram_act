@@ -1,19 +1,24 @@
 // pages/friend.js
 const app = getApp();
+const util = require("../../utils/util.js");
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    session_list:[]
-
+    session_list:[],
+    url:"pages/friend/friend"
   },
   
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    console.log("用户页 user onLoad");
+    var url = util.getCurrentPageUrl();
+    console.log(url);
+    this.setData({url})
     app.globalData.friend_chat_msg_display = false;
     this.init_friend_chat_list();
   },

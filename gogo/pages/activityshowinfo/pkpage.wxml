@@ -2,7 +2,7 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-x="false" scroll-y="true" style="height: 90vh;">
   <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;margin-top:10rpx;padding:0rpx;padding-top:10rpx;padding-left:13rpx;border-bottom: 10rpx;">
-    <view style="width: 100%;margin-bottom: 10rpx;">{{group_tag}}（{{group_users.length}}）</view>
+    <view style="width: 100%;margin-bottom: 10rpx;">{{group_tag==""?"未分组":group_tag}}（{{group_users.length}}）</view>
     <block wx:for="{{group_users}}" wx:for-item="user">
       <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
         <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
@@ -158,7 +158,7 @@
       <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bind:tap="get1v1">1V1对阵9局</button>
       <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="show_modal" data-target="customerPKModal">自定义对阵</button>
     </view>
-    <view class="cu-bar bg-grey" style="justify-content:center;font-size: 40rpx;height: fit-content;min-height: fit-content;" bindtap="hideModal">
+    <view class="cu-bar bg-grey" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 30rpx;" bindtap="hideModal">
       取消
     </view>
   </view>

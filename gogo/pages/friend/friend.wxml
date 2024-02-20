@@ -18,3 +18,19 @@
     </view>
   </view>
 </block>
+<view class="cu-bar tabbar bg-white" style="position: absolute;bottom: 0rpx;width: 100%;">
+  <view class="action {{url=='pages/index/index'?'text-blue':'text-black'}}" bindtap="refresh">
+    <view class="cuIcon-homefill"></view> 首页
+  </view>
+  <view class="action {{url=='pages/activity/activity'?'text-red':'text-black'}}" bindtap="navigateToActivity">
+    <view class="cuIcon-roundaddfill"></view> 创建
+  </view>
+  <view class="action {{url=='pages/friend/friend'?'text-green':'text-black'}}" style="font-size: 30rpx;" bindtap="navigateToFriendList">
+    <view class="cuIcon-weixin"></view>
+    <view class="cu-tag badge" hidden="{{!friend_chat_msg_display}}"></view>
+    消息
+  </view>
+  <view class="action {{url=='pages/user/user'?'text-blue':'text-black'}}" bindtap='getUserProfile'>
+    <view class="cuIcon-myfill"></view> 我的
+  </view>
+</view>

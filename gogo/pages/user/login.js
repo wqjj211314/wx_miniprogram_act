@@ -66,22 +66,16 @@ Page({
       hasUserInfo: nickName && gender!=-1 && avatarUrl && avatarUrl !== defaultAvatarUrl,
     });
   },
-  submit_new_nickName:function(){
+  submit_userinfo:function(){
     var that = this;
-    if(this.data.new_nickName.trim() == "" || this.data.new_nickName.trim() == this.data.userinfo["nickName"]){
-      wx.showToast({
-        title: '请修改昵称，填写信息有误！',
-        icon:"none"
-      });
-      return;
-    }
+
     wx.request({
       url: app.globalData.hosturl + 'update_user_info',
       data: {
-        "user_id":this.data.userinfo["user_id"],
-        "nickName":this.data.userinfo["nickName"],
-        "avatarUrl":this.data.userinfo["avatarUrl"],
-        "gender":this.data.userinfo["gender"]
+        "user_id":that.data.userInfo["user_id"],
+        "nickName":that.data.userInfo["nickName"],
+        "avatarUrl":that.data.userInfo["avatarUrl"],
+        "gender":that.data.userInfo["gender"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -90,10 +84,13 @@ Page({
         if(res.data){
           console.log("成功改了昵称");
           that.setData({
-            userinfo:res.data,
+            userInfo:res.data,
             modalName: ""
           });
           app.globalData.login_userInfo = res.data;
+          wx.navigateTo({
+            url: '../user/user'
+          })
         }
       }
     });
@@ -102,7 +99,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    let userInfo = JSON.parse(decodeURIComponent(options.userInfo))
+    if(userInfo.avatarUrl == ""){
+      userInfo.avatarUrl = defaultAvatarUrl;
+    }
+    this.setData({userInfo:userInfo})
   },
 
   /**

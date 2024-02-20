@@ -10,20 +10,8 @@ Page({
     group_tag:"",
     modalName: "",
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
-    group_users: [{ avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#1", nickName: "王强" },
-    { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#2", nickName: "王强" },
-    { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#3", nickName: "王强" },
-    { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#4", nickName: "王强" },
-    { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#5", nickName: "王强" },
-    { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#6", nickName: "王强" }],//这是当前分组的成员，数组形式
-    member_users: {
-      "#1": { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#1", nickName: "王强" },
-      "#2": { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#2", nickName: "王强" },
-      "#3": { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#3", nickName: "王强" },
-      "#4": { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#4", nickName: "王强" },
-      "#5": { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#5", nickName: "王强" },
-      "#6": { avatarUrl: "https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg", member_num: "#6", nickName: "王强" }
-    },
+    group_users: [],//这是当前分组的成员，数组形式
+    member_users: {},
     pk_groups: [],
     custom_pk_group: [],
     edit_pk_group_index: 0,

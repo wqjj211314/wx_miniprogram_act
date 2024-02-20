@@ -25,6 +25,24 @@ App({
       console.log(e);
       //this.user_login();
     }
+    wx.authorize({
+      scope: 'scope.userFuzzyLocation',
+      success(res) {
+          console.log(res)
+          if(res.errMsg == 'authorize:ok'){
+              wx.getFuzzyLocation({
+                  type: 'wgs84',
+                  success(res) {
+                    console.log("获取模糊地址")
+                      console.log(res)  //此时里面有经纬度
+                  }
+              })
+          }
+      },
+      fail(err) {
+          console.log(err)   
+      }                    
+  })
   },
 
   globalData: {

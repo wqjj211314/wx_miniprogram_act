@@ -2,7 +2,7 @@
   <image class='background2' src="/default_index_bg.png" mode="aspectFill"></image>
   <button class="cu-btn lines-white margin-tb-sm padding lg" style="margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">重新加载</button>
 </view>
-<swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}" bindchange="slide" style="height:92vh;">
+<swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}" bindchange="slide" style="height:92.5vh;">
   <block wx:for="{{recyler_list}}" wx:key="id" wx:for-index="idx">
     <swiper-item>
       <image class='background' src="{{hosturl}}static/blur_{{item.activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
@@ -30,12 +30,13 @@
       -->
       <!--弹幕格式-->
       <scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
+      <!--活动本身信息不在首页展示
         <block wx:for="{{activityinfo}}">
-
           <view class="customer-msg-cu-btn2">
             {{item}}
           </view>
         </block>
+        -->
         <block wx:for="{{chat_msgs}}">
           <view>
             <view class="customer-msg-cu-btn bg-touming">
@@ -60,7 +61,7 @@
                 <view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;"><text>{{item.show_activityaddress==""?"": item.show_activityaddress+ "\n" + item.detail}}</text>
                 </view>
                 <view style="margin-left:10rpx;">
-                  
+
                   <view class="cu-tag bg-touming light lg round">{{item.activity_live}}</view>
                 </view>
               </view>
@@ -114,21 +115,19 @@
 
 </swiper>
 
-<view class="cu-bar tabbar margin-bottom-ls bg-black" style="padding:0rpx;height: fit-content;">
-  <view class="action text-orange" bindtap="refresh" style="font-size: 30rpx;">
-    首页
+<view class="cu-bar tabbar bg-white">
+  <view class="action {{url=='pages/index/index'?'text-blue':'text-black'}}" bindtap="refresh">
+    <view class="cuIcon-homefill"></view> 首页
   </view>
-  <view class="action text-gray" style="font-size: 30rpx;">
-    广场
+  <view class="action {{url=='pages/activity/activity'?'text-red':'text-black'}}" bindtap="navigateToActivity">
+    <view class="cuIcon-roundaddfill"></view> 创建
   </view>
-  <view class="action text-gray" bindtap="navigateToActivity">
-    <view class="cuIcon-roundadd" style="font-size: 80rpx;margin-top: 10rpx;"></view>
-  </view>
-  <view class="action text-gray" style="font-size: 30rpx;" bindtap="navigateToFriendList">
+  <view class="action {{url=='pages/friend/friend'?'text-green':'text-black'}}" style="font-size: 30rpx;" bindtap="navigateToFriendList">
+    <view class="cuIcon-weixin"></view>
     <view class="cu-tag badge" hidden="{{!friend_chat_msg_display}}"></view>
     消息
   </view>
-  <view class="action text-gray" bindtap='getUserProfile' style="font-size: 30rpx;">
-    我的
+  <view class="action {{url=='pages/user/user'?'text-blue':'text-black'}}" bindtap='getUserProfile'>
+    <view class="cuIcon-myfill"></view> 我的
   </view>
 </view>

@@ -1,6 +1,7 @@
 // pages/user/user.js
 //在page页面引入app，同时声明变量，获得所需要的全局变量
 const app = getApp();
+const util = require("../../utils/util.js");
 Page({
 
   /**
@@ -12,14 +13,62 @@ Page({
     userinfo: {},
     t_length: 0,
     new_nickName:"",
-    friend_chat_msg_display:false
+    friend_chat_msg_display:false,
+    url:"pages/user/user"
+
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    //let user_info = JSON.parse(decodeURIComponent(options.userinfo))
+    console.log("用户页 user onLoad");
+    var url = util.getCurrentPageUrl();
+    console.log(url);
+    
+    this.setData({
+      url:url,
+      userinfo: app.globalData.login_userInfo,
+      checking_flag: app.globalData.checking_flag,
+      friend_chat_msg_display:app.globalData.friend_chat_msg_display
+    });
+  },
+  bindText: function (e) {
+    var t_text = e.detail.value.length;
+    // console.log(t_text)
+    this.setData({
+      t_length: t_text
+    })
+  },
+  modify_user_info:function(e){
+    console.log(e);
+    var avatarUrl = e.detail.avatarUrl;
+    var userinfo = this.data.userinfo;
+    userinfo["avatarUrl"] = avatarUrl;
+    this.setData({
+      userinfo
+    });
+    wx.uploadFile({
+      url: app.globalData.hosturl + 'upload_avatar_url', //接口
+      filePath: avatarUrl,
+      name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
+      formData: {
+        'user_id': userinfo["user_id"]
+      },
+      success: function (res) {
+        
+      },
+      fail: function (error) {
+        console.log(error);
+      }
+    });
 
   },
   new_nickName:function(){
     this.setData({
       modalName: "new_nickName_modal"
     });
-
   },
   submit_new_nickName:function(){
     var that = this;
@@ -132,50 +181,6 @@ Page({
     });
 
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    //let user_info = JSON.parse(decodeURIComponent(options.userinfo))
-    console.log("用户页 user onLoad");
-    this.setData({
-      userinfo: app.globalData.login_userInfo,
-      checking_flag: app.globalData.checking_flag,
-      friend_chat_msg_display:app.globalData.friend_chat_msg_display
-    });
-  },
-  bindText: function (e) {
-    var t_text = e.detail.value.length;
-    // console.log(t_text)
-    this.setData({
-      t_length: t_text
-    })
-  },
-  modify_user_info:function(e){
-    console.log(e);
-    var avatarUrl = e.detail.avatarUrl;
-    var userinfo = this.data.userinfo;
-    userinfo["avatarUrl"] = avatarUrl;
-    this.setData({
-      userinfo
-    });
-    wx.uploadFile({
-      url: app.globalData.hosturl + 'upload_avatar_url', //接口
-      filePath: avatarUrl,
-      name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
-      formData: {
-        'user_id': userinfo["user_id"]
-      },
-      success: function (res) {
-        
-      },
-      fail: function (error) {
-        console.log(error);
-      }
-    });
-
-  },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

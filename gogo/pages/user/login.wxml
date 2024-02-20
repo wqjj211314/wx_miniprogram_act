@@ -8,16 +8,16 @@
         <view style="margin-bottom: 40rpx;color: black;">
           <radio-group bindchange="listenRadioChange">
             <label class="radio" style="margin-right: 20rpx;">
-              <radio value="1" /> 男
+              <radio value="1" checked="{{userInfo.gender==1}}"/> 男
             </label>
             <label class="radio">
-              <radio value="0" /> 女
+              <radio value="0" checked="{{userInfo.gender==0}}"/> 女
             </label>
           </radio-group>
         </view>
         <view class="nickname-wrapper">
           <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
+          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" value="{{userInfo.nickName}}"/>
         </view>
       </block>
 
@@ -30,7 +30,7 @@
       </block>
     </view>
     <view class="usermotto" wx:if="{{hasUserInfo}}">
-      <button class="cu-btn bg-green lg" bind:tap="submit_new_nickName" style="background-color: #07c160;width: 200rpx;">提交</button>
+      <button class="cu-btn bg-green lg" bind:tap="submit_userinfo" style="background-color: #07c160;width: 200rpx;">提交</button>
     </view>
   </view>
 </scroll-view>

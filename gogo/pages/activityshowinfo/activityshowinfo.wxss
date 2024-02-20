@@ -3,6 +3,7 @@
 @import "/colorui/icon.wxss";
   page{
   height:100%;
+  padding:0;
   }
   .img{
     width:100vw;
@@ -109,5 +110,9 @@
     height: 20rpx;
     width: 20rpx;
     background-color: rgba(0, 0, 0, 0.5);
+    }
+    .border-swiper{
+      border-bottom: solid;
+      border-width: 6rpx;
     }
 	

@@ -13,7 +13,7 @@ var show_vs_scores = function(scores){
     }
   }
   if(flag){
-    return "未开赛";
+    return "未开始";
   }else {
     return scores.join(" : ");
   }

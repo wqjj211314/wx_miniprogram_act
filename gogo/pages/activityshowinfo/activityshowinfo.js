@@ -84,7 +84,7 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id": activity_info.id
+        "activity_id": activity_info.activity_id
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -103,6 +103,19 @@ Page({
     });
     console.log("是否登录");
     console.log(app.globalData.hasUserInfo);
+  },
+  show_user_detail(e){
+    var all_group_tag_list = this.data.all_group_tag_list;
+    var group_tag = e.currentTarget.dataset.tag;
+    console.log(group_tag);
+    all_group_tag_list.forEach(item=>{
+      if(item["group_tag"] == group_tag ){
+        item["show_flag"] = !(item.show_flag);
+      }
+    })
+    this.setData({all_group_tag_list})
+    //console.log();
+
   },
   update_part_status() {
     console.log("更新update_part_status");
@@ -173,7 +186,7 @@ Page({
     })
     var all_group_tag_list = [];
     for (var group_tag in all_group_tag_dict) {
-      all_group_tag_list.push({ "group_tag": group_tag, "group_users": all_group_tag_dict[group_tag] });
+      all_group_tag_list.push({ "group_tag": group_tag, "group_users": all_group_tag_dict[group_tag],"show_flag":false });
     }
     console.log("分组信息");
     console.log(all_group_tag_dict);
@@ -398,7 +411,7 @@ Page({
             app.globalData.hasUserInfo = true;
             console.log("报名的用户id" + app.globalData.openid);
             console.log(this.data.activity_info);
-            app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude });
+            app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude,"activity_tag":this.data.activity_info.activity_tag });
             app.store_userInfo();
             //返回首页的活动页。
             wx.navigateTo({
@@ -409,7 +422,7 @@ Page({
       } else {
         console.log("报名的用户id" + app.globalData.openid);
         console.log(this.data.activity_info);
-        app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude });
+        app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude,"activity_tag":this.data.activity_info.activity_tag });
         //return;
         //返回首页的活动页。
         wx.navigateTo({
@@ -628,7 +641,7 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'edit_part_user_group', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id": this.data.activity_info.id,
+        "activity_id": that.data.activity_info.activity_id,
         "group_users": JSON.stringify(params),
       },
       header: {
@@ -663,7 +676,12 @@ Page({
   pk_page(e){
     console.log(e.currentTarget.dataset.tag);
     var group_tag = e.currentTarget.dataset.tag;
-    var groups = this.data.all_group_tag_dict[group_tag];
+    var groups = "";
+    if(group_tag == ""){
+      groups = this.data.ungroup_partinfo_list;
+    }else{
+      groups = this.data.all_group_tag_dict[group_tag];
+    }
     //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(groups));
 
@@ -672,7 +690,11 @@ Page({
     })
   },
   swiper_change(event){
+    console.log("swiper_change")
     console.log(event);
+    this.setData({
+      current_swiper_item_index:event.detail.current
+    })
 
   }
 

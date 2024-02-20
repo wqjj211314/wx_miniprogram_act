@@ -1,13 +1,13 @@
 <!--pages/user/user.wxml-->
+<scroll-view>
 <view class="img">
     <image class='img' src="/2.jpg" mode="widthFix"></image>
 </view>
-
 <view class="main">
     <view class="flex userinfo">
-        <view class="">
-          <button class="cu-avatar round lg yn" style="background-image:url({{userinfo.avatarUrl}});" bindchooseavatar="modify_user_info" open-type="chooseAvatar">
-          </button>
+      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;">
+          <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+          </view>
         </view>
 
 
@@ -131,9 +131,6 @@
     </view>
   </view>
 </view>
-
-
-
 <view class="cu-modal {{modalName=='DialogModal-tag'?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
@@ -154,9 +151,6 @@
     </view>
   </view>
 </view>
-
-
-
 <view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
@@ -198,5 +192,22 @@
 
       </view>
     </view>
+  </view>
+</view>
+</scroll-view>
+<view class="cu-bar tabbar bg-white" style="position: absolute;bottom: 0rpx;width: 100%;">
+  <view class="action {{url=='pages/index/index'?'text-blue':'text-black'}}" bindtap="navigateToindex">
+    <view class="cuIcon-homefill"></view> 首页
+  </view>
+  <view class="action {{url=='pages/activity/activity'?'text-red':'text-black'}}" bindtap="navigateToActivity">
+    <view class="cuIcon-roundaddfill"></view> 创建
+  </view>
+  <view class="action {{url=='pages/friend/friend'?'text-green':'text-black'}}" style="font-size: 30rpx;" bindtap="navigateToFriendList">
+    <view class="cuIcon-weixin"></view>
+    <view class="cu-tag badge" hidden="{{!friend_chat_msg_display}}"></view>
+    消息
+  </view>
+  <view class="action {{url=='pages/user/user'?'text-blue':'text-black'}}">
+    <view class="cuIcon-myfill"></view> 我的
   </view>
 </view>

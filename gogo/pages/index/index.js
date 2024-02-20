@@ -38,12 +38,15 @@ Page({
     activity_date:"",
     share_res_limit:0,
     share_use_id:"",
-    friend_chat_msg_display:false
+    friend_chat_msg_display:false,
+    url:"pages/index/index"
   },
   onLoad: function (options) {
 
     console.log("onload函数");
-
+    var url = util.getCurrentPageUrl();
+    console.log(url);
+    this.setData({url});
     if (options.hasOwnProperty("activity_id")) {
       var info = JSON.parse(decodeURIComponent(options.activity_id));
       console.log("创建的活动id" + info);
@@ -53,7 +56,6 @@ Page({
     }
     if (options.hasOwnProperty("share_use_id")){
       let share_use_id = decodeURIComponent(options.share_use_id);
-      
         this.setData({
           share_use_id:share_use_id
         });
@@ -177,14 +179,20 @@ Page({
         title: '请重新进入程序',
         icon:"none"
       })
-      //this.wxgetUserProfile();没用了，API废弃，不需要授权了，授权了也获取不到内容
     } else {
       console.log("已经登录");
+      var userInfo = app.globalData.login_userInfo;
+      if(userInfo.avatarUrl==""||userInfo.gender==-1||userInfo.nickName==""){
+        wx.navigateTo({
+          url: '../user/login?userInfo='+encodeURIComponent(JSON.stringify(userInfo))
+        })
+      }else{
       //登录的情况下，点击跳转用户页
       wx.navigateTo({
         url: '../user/user'
-        //url: '../user/user?userinfo=' + encodeURIComponent(JSON.stringify(app.globalData.login_userInfo))
+        
       })
+    }
     }
   },
 
