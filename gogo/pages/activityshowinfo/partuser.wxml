@@ -1,11 +1,11 @@
 <!--报名人员页面-->
-
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-x="false" scroll-y="true" style="height: 95vh;">
 <checkbox-group bindchange="listenCheckboxChange">
   <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
     <view class="cu-list menu-avatar" style="margin:0rpx;">
       <view class="cu-item">
-        <view style="position: absolute;left: 10rpx;">{{item.member_num}}号</view>
+        <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
         <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});"></view>
         <view class="content" style="left: 170rpx;">
           <view class="text-grey">{{item.nickName}}</view>

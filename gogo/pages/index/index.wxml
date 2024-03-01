@@ -70,7 +70,7 @@
         </view>
 
         <!--隐藏的输入框{{isFocus}} hidden="{{isdisplay}}"-->
-        <view class="cu-bar input" wx:if="{{!isdisplay}}" style="margin-bottom: 2rpx;">
+        <view class="cu-bar input" wx:if="{{!isdisplay}}" style="margin-bottom: 0rpx;">
           <view class="action">
             <text class="cuIcon-write text-grey"></text>
           </view>
@@ -80,7 +80,7 @@
         </view>
 
         <!--底部导航-->
-        <view class="padding-left-xs padding-right-xs flex solid-bottom justify-between" wx:if="{{isdisplay}}">
+        <view class="padding-left-xs padding-right-xs flex solid-bottom justify-between" wx:if="{{isdisplay}}" style="padding-bottom: 5rpx;">
           <button class="bg-touming chatbutton cu-btn round" bindtap="openKey" style="height:96rpx;font-size:35rpx;border-style: solid;border-width: 1px;">
             说点什么...
           </button>
@@ -104,15 +104,10 @@
             <text class="cuIcon-profile text-white" style="font-size: 75rpx;margin-bottom: 10rpx;margin-left: 5rpx;"></text>
           </button>
           -->
-
         </view>
-
       </view>
-
     </swiper-item>
-
   </block>
-
 </swiper>
 
 <view class="cu-bar tabbar bg-white">

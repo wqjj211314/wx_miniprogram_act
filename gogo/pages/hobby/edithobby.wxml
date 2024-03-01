@@ -1,58 +1,66 @@
+<scroll-view scroll-y="true" style="height: 100%;">
+<view class="" style="width:100vw;height:30vh;z-index:-1;position:absolute;top:0px;">
+  <image class='img' style="height:30vh" wx:if="{{hobby_info.bg_img_exist}}" src="{{hosturl}}static/{{hobby_info.user_id+hobby_info.hobby_tag}}.jpg" mode="aspectFill"></image>
+  <image class='img' style="height:30vh" wx:else src="/default_index_bg.png" mode="aspectFill"></image>
+</view>
+<view class="cu-list menu" style="margin-top:350rpx;">
+  <view class="cu-form-group">
+    <view class="title">介绍</view>
+    <input placeholder="选择或输入" bindinput='titleInput' style="color:black;" maxlength="100" value="{{hobby_title}}" cursor=""></input>
+  </view>
 
-<view class="cu-list menu margin-top">
   <view class="cu-form-group" style="justify-content: start;">
     <view class="title">兴趣标签</view>
-    <view class="cu-tag radius bg-yellow" style="border-radius: 18rpx;margin-left:50rpx;">{{hobby_info.hobby_tag}}</view>
-    
+    <view class="cu-tag radius bg-yellow" style="border-radius: 18rpx;margin-left:0rpx;">{{hobby_info.hobby_tag}}</view>
   </view>
 
   <view class="cu-form-group">
-    <view class="title">自我兴趣介绍</view>
-    <input placeholder="选择或输入" bindinput='titleInput' style="color:black;" maxlength="40" value="{{hobby_info.hobby_title}}" cursor=""></input>
+    <view class="title">介绍</view>
+    <input placeholder="选择或输入" bindinput='titleInput' style="color:black;" maxlength="100" value="{{hobby_title}}" cursor=""></input>
   </view>
   <!--
   <view class="cu-form-group">
       <textarea placeholder="详细说明" auto-height maxlength="-1" bindinput='detailInput' style="max-height:10em;min-height: 3em;"></textarea>
     </view>
--->    
-    <!--
+-->
+  <!--
     第一组运动项目图标
   -->
-<view class="flex justify-between text-yellow" style="padding:6rpx;color:#fdb927;">
-  <text class="iconfont icon-yumaoqiu1"></text>
-  <text class="iconfont icon-pingpangqiu"></text>
-  <text class="iconfont icon-lanqiu"></text>
-  <text class="iconfont icon-taiqiu"></text>
-  <text class="iconfont icon-qihang"></text>
-  <text class="iconfont icon-dengshan"></text>
-  <text class="iconfont icon-dianyingpiao"></text>
-  <text class="iconfont icon-majiangfa"></text>
-  <text class="iconfont icon-jianshen"></text>
-  <text class="iconfont icon-Diamond-AceCard"></text>
-  <text class="iconfont icon-wangqiu1"></text>
-  <text class="iconfont icon-youyong"></text>
+  <view class="flex justify-between text-yellow" style="padding:6rpx;color:#fdb927;">
+    <text class="iconfont icon-yumaoqiu1"></text>
+    <text class="iconfont icon-pingpangqiu"></text>
+    <text class="iconfont icon-lanqiu"></text>
+    <text class="iconfont icon-taiqiu"></text>
+    <text class="iconfont icon-qihang"></text>
+    <text class="iconfont icon-dengshan"></text>
+    <text class="iconfont icon-dianyingpiao"></text>
+    <text class="iconfont icon-majiangfa"></text>
+    <text class="iconfont icon-jianshen"></text>
+    <text class="iconfont icon-Diamond-AceCard"></text>
+    <text class="iconfont icon-wangqiu1"></text>
+    <text class="iconfont icon-youyong"></text>
 
-  <text class="iconfont icon-jita-danse"></text>
-  <text class="iconfont icon-zuqiu"></text>
-  <text class="iconfont icon-bowuguan"></text>
-</view>
+    <text class="iconfont icon-jita-danse"></text>
+    <text class="iconfont icon-zuqiu"></text>
+    <text class="iconfont icon-bowuguan"></text>
+  </view>
 
   <view class="cu-item" style="">
     <view class="content">
-      <text class="cuIcon-circlefill text-grey"></text>
-      <text class="text-grey">兴趣热爱年限</text>
+      <text class="cuIcon-timefill text-green"></text>
+      <text class="">兴趣热爱年限</text>
     </view>
     <view class="action">
-      <text class="text-grey">{{hobby_time}}</text>
+      <text class="">{{hobby_time}}</text>
     </view>
   </view>
 
-  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding-bottom: 10rpx;padding-top: 10rpx;" hidden="{{false}}">
-    <view class="flex justify-center" style="flex-flow: wrap;" >
-      <radio-group class="flex" role="radiogroup" bindchange="change_hobby_time">
+  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding:0;padding-bottom: 10rpx;padding-top: 10rpx;">
+    <view class="" style="width: 100%;padding-left:60rpx;padding-right: 20rpx;">
+      <radio-group class="flex justify-between" style="flex-flow: wrap;width: 100%;" role="radiogroup" bindchange="change_hobby_time">
         <view class="text-center" wx:for="{{hobby_time_tags}}">
           <label class="radio" style="margin-right: 5rpx;transform:scale(0.5);">
-            <radio value="{{index}}" checked="{{hobby_time_index==index?true:false}}" style="transform:scale(0.6);vertical-align: 4rpx;"/>{{item}}
+            <radio value="{{index}}" checked="{{hobby_time_index==index?true:false}}" style="transform:scale(0.6);vertical-align: 4rpx;" />{{item}}
           </label>
         </view>
       </radio-group>
@@ -61,40 +69,40 @@
 
   <view class="cu-item">
     <view class="content">
-      <text class="iconfont icon-huatong text-grey"></text>
-      <text class="text-grey">兴趣热度频次</text>
+      <text class="iconfont icon-paobu text-green" style="width: 1.5em;margin-right: 10rpx;text-align: center;margin-left: 10rpx;"></text>
+      <text class="">兴趣热度频次</text>
     </view>
     <view class="action">
-      <text class="text-grey">{{hobby_freq}}</text>
+      <text class="">{{hobby_freq}}</text>
     </view>
   </view>
-  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding-bottom: 10rpx;padding-top: 10rpx;" hidden="{{false}}">
-    <view class="flex justify-center" style="flex-flow: wrap;">
-      <radio-group class="flex justify-center" role="radiogroup" bindchange="change_hobby_freq">
+  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding:0;padding-bottom: 10rpx;padding-top: 10rpx;">
+    <view class="" style="width: 100%;padding-left:60rpx;padding-right: 20rpx;">
+      <radio-group class="flex justify-between" style="flex-flow: wrap;width: 100%;" role="radiogroup" bindchange="change_hobby_freq">
         <view class="text-center" wx:for="{{hobby_freq_tags}}">
           <label class="radio" style="margin-right:5rpx;">
-            <radio value="{{index}}" checked="{{hobby_freq_index==index?true:false}}" style="transform:scale(0.6);vertical-align: 4rpx;"/>{{item}}
+            <radio value="{{index}}" checked="{{hobby_freq_index==index?true:false}}" style="transform:scale(0.6);vertical-align: 4rpx;" />{{item}}
           </label>
         </view>
       </radio-group>
     </view>
-    
+
   </view>
   <view class="cu-item">
     <view class="content">
-      <text class="cuIcon-circlefill text-grey"></text>
-      <text class="text-grey">实战表现</text>
+      <text class="iconfont icon-vsrili text-green" style="width: 1.5em;margin-right: 10rpx;text-align: center;margin-left: 10rpx;"></text>
+      <text class="">实战表现</text>
     </view>
     <view class="action">
-      <text class="text-grey">{{hobby_live}}</text>
+      <text class="">{{hobby_live}}</text>
     </view>
   </view>
-  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding-bottom: 10rpx;padding-top: 10rpx;" hidden="{{false}}">
-    <view class="flex justify-center" style="flex-flow: wrap;">
-      <radio-group class="flex" role="radiogroup" bindchange="change_hobby_live">
+  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding:0;padding-bottom: 10rpx;padding-top: 10rpx;">
+    <view class="" style="width: 100%;padding-left:60rpx;padding-right: 20rpx;">
+      <radio-group class="flex justify-between" style="flex-flow: wrap;width: 100%;" role="radiogroup" bindchange="change_hobby_live">
         <view class="text-center" wx:for="{{hobby_live_tags}}">
           <label class="radio" style="margin-right: 5rpx;">
-            <radio value="{{index}}" checked="{{hobby_live_index==index?true:false}}" style="transform:scale(0.6);font-size: 8rpx;vertical-align: 8rpx;"/>{{item}}
+            <radio value="{{index}}" checked="{{hobby_live_index==index?true:false}}" style="transform:scale(0.6);font-size: 8rpx;vertical-align: 8rpx;" />{{item}}
           </label>
         </view>
       </radio-group>
@@ -104,38 +112,34 @@
     第二组运动项目图标
   -->
   <view class="flex justify-between text-blue" style="padding:6rpx;color:#0f4b90;">
-  <text class="iconfont icon-lvyou"></text>
-  <text class="iconfont icon-HorsebackRiding"></text>
-  <text class="iconfont icon-shaozikuaizi"></text>
-  <text class="iconfont icon-huatong"></text>
-  <text class="iconfont icon-paobu"></text>
-  <text class="iconfont icon-shejian"></text>
-  <text class="iconfont icon-quanji"></text>
-  <text class="iconfont icon-huaban1"></text>
-  <text class="iconfont icon-huaxue2"></text>
-  <text class="iconfont icon-yueyeche2"></text>
-  <text class="iconfont icon-jianzi"></text>
-  <text class="iconfont icon-diaoyu"></text>
+    <text class="iconfont icon-lvyou"></text>
+    <text class="iconfont icon-HorsebackRiding"></text>
+    <text class="iconfont icon-shaozikuaizi"></text>
+    <text class="iconfont icon-huatong"></text>
+    <text class="iconfont icon-paobu"></text>
+    <text class="iconfont icon-shejian"></text>
+    <text class="iconfont icon-quanji"></text>
+    <text class="iconfont icon-huaban1"></text>
+    <text class="iconfont icon-huaxue2"></text>
+    <text class="iconfont icon-yueyeche2"></text>
+    <text class="iconfont icon-jianzi"></text>
+    <text class="iconfont icon-diaoyu"></text>
 
-  <text class="iconfont icon-shu"></text>
-  <text class="iconfont icon-Dancing"></text>
-  <text class="iconfont icon-motuoche1"></text>
-</view>
+    <text class="iconfont icon-shu"></text>
+    <text class="iconfont icon-Dancing"></text>
+    <text class="iconfont icon-motuoche1"></text>
+  </view>
   <view class="cu-item">
     <view class="content">
-      <text class="cuIcon-circlefill text-grey"></text>
-      <text class="text-grey">初始能力积分</text>
+      <text class="cuIcon-upstagefill text-green"></text>
+      <text class="">初始能力积分</text>
     </view>
     <view class="action">
 
-      <text class="text-grey">{{hobby_point}}</text>
+      <text class="">{{hobby_point}}</text>
     </view>
 
   </view>
-
-
-
-
 
   <view class="padding" style="padding:0px;margin-top:0px;">
     <view class="radius shadow-warp bg-white margin-top">
@@ -157,6 +161,14 @@
     </view>
   </view>
 </view>
-<view class="padding flex flex-direction" hidden="{{!edit_flag && !img_change}}">
-  <button class="cu-btn bg-red margin-tb-sm lg" bindtap='edit_hobby'>提交修改</button>
+
+
+<!--空白站位，保证以上内容能全部显示-->
+<view style="height: 150rpx;">
+</view>
+</scroll-view>
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;">
+  <view class="" style="width: 100%;">
+    <button class="cu-btn bg-green round" bind:tap="edit_hobby" style="width: 100%;" disabled="{{!(edit_flag||img_change)}}">提交更新</button>
+  </view>
 </view>

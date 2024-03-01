@@ -24,7 +24,7 @@
       </view>
     </view>
 
-<view class="cu-list grid col-4 sm-border card-menu margin-top">
+<view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}">
     <view class="cu-item" bindtap="navigateToActivity">
       <view class="cuIcon-activity text-red">
       </view>
@@ -69,7 +69,7 @@
       </view>
     </view>
 
-	  <view class="cu-item arrow" bindtap="navigateToAbility">
+	  <view class="cu-item arrow" bindtap="navigateTohobbylist">
       <view class="content">
         <text class="cuIcon-likefill text-red"></text>
         <text class="text-grey">兴趣列表</text>
@@ -95,7 +95,7 @@
         <text class="text-grey">版本</text>
       </view>
       <view class="action" style="max-width:66%;">
-        <text class="text-grey text-sm">v2.0.21</text>
+        <text class="text-grey text-sm">v1.0.0</text>
       </view>
     </view>
 	  <view class="cu-item arrow" bindtap="chat_with_dev">

@@ -35,8 +35,30 @@ Page({
    */
   onShow() {
     app.globalData.friend_chat_msg_display = false;
+    if(!util.check_login(app)){
+      return;
+    }
   },
+  navigateToActivity() {
+    wx.navigateTo({
+      url: '../activity/activity'
+    })
+  },
+  navigateToindex() {
+    wx.navigateTo({
+      url: '../index/index'
+    })
+  },
+  navigateTouser() {
+    if(!util.check_login(app)){
+      return;
+    }else{
+      wx.navigateTo({
+        url: '../user/user'
+      })
+    }
 
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

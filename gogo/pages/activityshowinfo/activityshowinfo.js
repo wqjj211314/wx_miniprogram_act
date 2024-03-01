@@ -1,6 +1,7 @@
 //const chooseLocation = requirePlugin('chooseLocation');
 const app = getApp();
 const util = require("../../utils/util.js");
+const score = require("score.js");
 Page({
   /**
    * 页面的初始数据
@@ -13,6 +14,9 @@ Page({
     partinfoinput: {},
     memberlist: {},
     ispart: false,
+    part_flag: false,//是否参与
+    part_member_num: "",//当前用户参与的编号
+    like_flag: false,
     isend: false,
     partbuttonmsg: "我要报名",
     modalName: "",
@@ -22,9 +26,8 @@ Page({
     user_info_list: [],
     addendtime: "",
     member: 0,
-    disable_flag: false,
     hosturl: app.globalData.hosturl,
-    admin_flag: false,
+    admin_flag: false,//是否是发布者，超级权限：编辑活动，删除成员
     announcement: "",
     new_announcement: "",
     picker_index: 0,
@@ -36,12 +39,23 @@ Page({
     group_name: "",
     hidden_del_tag: true,
     ungroup_partinfo_list: [],
-    pre_edit_group:[],//老的分组成员
+    pre_edit_group: [],//老的分组成员
     current_edit_group: [],//当前分组成员
     all_group_tag_dict: {},
     all_group_tag_list: [],
-    disable_save_group:true,
-    current_swiper_item_index:0,
+    disable_save_group: true,
+    current_swiper_item_index: 0,
+    sort_users_score: {},
+    sort_users_score_empty_flag: true,
+    member_users: {},
+    login_user_part_list: [],
+    cancel_part_members: [],
+    confirm_cancel_part: false,
+    like_dict: {},
+    group_tag: "",//编辑分组
+    group_room: "",//编辑分组
+    group_limit: "",//编辑分组
+    edit_group_tag_dict: {},//编辑分组
   },
 
   /**
@@ -67,7 +81,7 @@ Page({
       member: activity_info["member"],
       addendtime: addendtime,
       activity_user_info: activity_user_info,
-      partinfo: activity_info.partinfo.split(","),
+      partinfo: activity_info.partinfo == "" ? [] : activity_info.partinfo.split(","),
       share_res_limit: activity_info["part_limit"]
     });
     console.log(new Date(addendtime).getTime());
@@ -92,7 +106,6 @@ Page({
       success(res) {
         that.update_part_info(that, res);
         that.set_part_limit();
-
       },
       fail(res) {
         wx.showToast({
@@ -103,17 +116,19 @@ Page({
     });
     console.log("是否登录");
     console.log(app.globalData.hasUserInfo);
+    score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id)
+    score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
   },
-  show_user_detail(e){
+  show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
     var group_tag = e.currentTarget.dataset.tag;
     console.log(group_tag);
-    all_group_tag_list.forEach(item=>{
-      if(item["group_tag"] == group_tag ){
+    all_group_tag_list.forEach(item => {
+      if (item["group_tag"] == group_tag) {
         item["show_flag"] = !(item.show_flag);
       }
     })
-    this.setData({all_group_tag_list})
+    this.setData({ all_group_tag_list })
     //console.log();
 
   },
@@ -133,18 +148,7 @@ Page({
         partbuttonmsg: "报名截止返回首页"
       });
     }
-    this.data.user_info_list.forEach(item => {
-      console.log(item);
-      if (item["user_id"] == app.globalData.login_userInfo["user_id"]) {
-        console.log("已报名返回首页");
-        //可以重复代为报名
-        this.setData({
 
-          //ispart: true,
-          //partbuttonmsg: "已报名返回首页"
-        });
-      }
-    });
   },
   update_part_info(that, res) {
     console.log("成员信息" + res.data);
@@ -168,6 +172,9 @@ Page({
     var info = result["user_info_part_info_list"];
     var all_group_tag_dict = {};
     var ungroup_partinfo_list = [];
+    var member_users = {};
+    var part_member_num = that.data.part_member_num;
+    var login_user_part_list = [];
     console.log(info);
     //提取分组信息
     info.forEach(item => {
@@ -180,13 +187,30 @@ Page({
           all_group_tag_dict[tag] = [item];
         }
         console.log(all_group_tag_dict);
-      }else{
+      } else {
         ungroup_partinfo_list.push(item);
       }
+      if (item["user_id"] == app.globalData.login_userInfo["user_id"]) {
+        login_user_part_list.push(item)
+      }
+      //初始化成员的字典形式数据，方便wxml获取
+      var member_num = item.member_num;
+      member_users[member_num] = item;
+      //对于重复报名的人，选择第一个member_num作为其member_num,当然首先会保证报名按照member_num或者报名时间升序排列
+      //都能保证重复的报名时靠后的
+      console.log("找到当前参加的编号")
+      if (item["user_id"] == app.globalData.login_userInfo["user_id"] && part_member_num == "") {
+        part_member_num = item["member_num"];
+        that.setData({
+          part_flag: true,
+          part_member_num: item["member_num"]
+        })
+      }
+
     })
     var all_group_tag_list = [];
     for (var group_tag in all_group_tag_dict) {
-      all_group_tag_list.push({ "group_tag": group_tag, "group_users": all_group_tag_dict[group_tag],"show_flag":false });
+      all_group_tag_list.push({ "group_tag": group_tag, "group_users": all_group_tag_dict[group_tag], "show_flag": false });
     }
     console.log("分组信息");
     console.log(all_group_tag_dict);
@@ -205,7 +229,9 @@ Page({
       ungroup_partinfo_list: ungroup_partinfo_list,
       entire_part_info: info,
       all_group_tag_list: all_group_tag_list,
-      all_group_tag_dict: all_group_tag_dict
+      all_group_tag_dict: all_group_tag_dict,
+      member_users: member_users,
+      login_user_part_list: login_user_part_list
     });
     that.update_part_status();
   },
@@ -236,27 +262,53 @@ Page({
       partinfoinput: info
     });
   },
-  cancel_part() {
-    console.log("取消报名");
+  listenCheckboxChange(e) {
+    console.log('当checkbox-group中的checkbox选中或者取消是我被调用');
+    //打印对象包含的详细信息
+    console.log(e.detail.value);//数组
+    var cancel_part_members = e.detail.value;
+    this.setData({
+      cancel_part_members: cancel_part_members
+    })
+
+  },
+  confirm_cancel_part() {
     var that = this;
-    that.setData({
-      ispart: false
+    wx.showLoading({
+      title: '取消报名...',
     })
     wx.request({
       url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id": that.data.activity_info.id,
-        "user_id": app.globalData.login_userInfo["user_id"]
+        "activity_id": that.data.activity_info.activity_id,
+        "cancel_part_members": that.data.cancel_part_members
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-
         that.update_part_info(that, res);
-
+        wx.hideLoading();
       }
     });
+    this.setData({
+      modalName: "",
+      cancel_part_members: []
+    })
+  },
+  cancel_part() {
+    console.log("取消报名");
+    if (this.data.login_user_part_list.length > 1) {
+      this.setData({
+        modalName: "Modal_cancel_part"
+      })
+      return
+    } else {
+      var cancel_part_members = this.data.cancel_part_members;
+      cancel_part_members.push(this.data.login_user_part_list[0]["member_num"])
+      this.setData({ cancel_part_members });
+      this.confirm_cancel_part()
+    }
   },
   /**
    * 生命周期函数--监听页面显示
@@ -274,20 +326,20 @@ Page({
     var new_ungroup_partinfo_list = [];
     console.log(edit_group_user);
     console.log(current_edit_group);
-    console.log(typeof(edit_group_user));
+    console.log(typeof (edit_group_user));
     ungroup_partinfo_list.forEach(item => {
       console.log(item);
-      console.log([1,2].includes(1));
-      if(edit_group_user.includes(item["member_num"].toString())){
+      console.log([1, 2].includes(1));
+      if (edit_group_user.includes(item["member_num"].toString())) {
         current_edit_group.push(item);
-      }else{
+      } else {
         new_ungroup_partinfo_list.push(item);
       }
     });
     this.setData({
       current_edit_group: current_edit_group,
-      hidden_del_tag:true,
-      ungroup_partinfo_list:new_ungroup_partinfo_list
+      hidden_del_tag: true,
+      ungroup_partinfo_list: new_ungroup_partinfo_list
     });
     console.log(current_edit_group);
     app.globalData.edit_group_user = [];//app只短暂存储编辑选择的分组成员
@@ -378,14 +430,15 @@ Page({
     });
     console.log(info);
   },
+  navigateToIndex() {
+    //返回首页的活动页。
+    wx.navigateTo({
+      url: '../index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_info.activity_id }))
+    })
+  },
   part_activity() {
-    if (this.data.isend || this.data.ispart) {
-      //返回首页的活动页。
-      wx.navigateTo({
-        url: '../index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_info.id }))
-      })
-      return;
-    }
+
+    //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
     if (this.data.part_limit != 0 && this.data.activity_user_info["user_id"] != app.globalData.login_userInfo["user_id"]) {
       wx.showToast({
         title: '请通过分享报名',
@@ -409,9 +462,8 @@ Page({
             console.log("按钮获取用户信息 " + res.userInfo.nickName)
             app.globalData.login_userInfo = res.userInfo;
             app.globalData.hasUserInfo = true;
-            console.log("报名的用户id" + app.globalData.openid);
-            console.log(this.data.activity_info);
-            app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude,"activity_tag":this.data.activity_info.activity_tag });
+
+            app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag });
             app.store_userInfo();
             //返回首页的活动页。
             wx.navigateTo({
@@ -422,7 +474,7 @@ Page({
       } else {
         console.log("报名的用户id" + app.globalData.openid);
         console.log(this.data.activity_info);
-        app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude,"activity_tag":this.data.activity_info.activity_tag });
+        app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag });
         //return;
         //返回首页的活动页。
         wx.navigateTo({
@@ -520,33 +572,48 @@ Page({
       }
     }
   },
-  edit_group_name(e) {
+  edit_group_tag(e) {
     console.log("分组标签" + e.detail.value);
-    var group_name = e.detail.value.trim();
+    var group_tag = e.detail.value.trim();
     this.setData({
-      group_name: e.detail.value.trim()
+      group_tag: e.detail.value.trim()
     });
     this.update_save_group_button_status();
-    
   },
-  update_save_group_button_status(){
-    console.log("update_save_group_button_status分组标签："+this.data.group_name);
-    if(this.data.group_name == ""){
+  edit_group_room(e) {
+    console.log("分组标签" + e.detail.value);
+    var group_room = e.detail.value.trim();
+    this.setData({
+      group_room: e.detail.value.trim()
+    });
+    this.update_save_group_button_status();
+  },
+  edit_group_limit(e) {
+    console.log("分组标签" + e.detail.value);
+    var group_limit = e.detail.value.trim();
+    this.setData({
+      group_limit: e.detail.value.trim()
+    });
+    this.update_save_group_button_status();
+  },
+  update_save_group_button_status() {
+    console.log("update_save_group_button_status分组标签：" + this.data.group_name);
+    if (this.data.group_tag == "" || this.data.group_room == "" || this.data.group_limit == "" || this.data.current_edit_group.length == 0) {
       this.setData({
-        disable_save_group:true
+        disable_save_group: true
       })
-    }else if(this.data.current_edit_group.length > 0){
+    } else {
       this.setData({
-        disable_save_group:false
+        disable_save_group: false
       })
     }
   },
   //添加分组成员
   add_group_member() {
-    if(this.data.ungroup_partinfo_list.length == 0){
+    if (this.data.ungroup_partinfo_list.length == 0) {
       wx.showToast({
         title: '活动成员已全部分组',
-        icon:"none"
+        icon: "none"
       })
       return;
     }
@@ -564,19 +631,21 @@ Page({
   del_group_member(e) {
     console.log(e.currentTarget.dataset.num);
     var member_num = e.currentTarget.dataset.num;
-    console.log(typeof(member_num));//number
+    console.log(typeof (member_num));//number
     var new_current_edit_group = [];
     var ungroup_partinfo_list = this.data.ungroup_partinfo_list;
-    this.data.current_edit_group.forEach(item=>{
-       if(item["member_num"] != member_num){
+    this.data.current_edit_group.forEach(item => {
+      if (item["member_num"] != member_num) {
+        
         new_current_edit_group.push(item);
-       }else{
+      } else {
+        console.log(item["member_num"]+"被删")
         ungroup_partinfo_list.push(item);
-       }
+      }
     })
     this.setData({
-      current_edit_group:new_current_edit_group,
-      ungroup_partinfo_list:ungroup_partinfo_list
+      current_edit_group: new_current_edit_group,
+      ungroup_partinfo_list: ungroup_partinfo_list
     })
   },
 
@@ -604,24 +673,81 @@ Page({
       }
     });
   },
+  clear_group(e) {
+    var that = this;
+    console.log(e.currentTarget.dataset.tag);
+    var group_tag = e.currentTarget.dataset.tag;
+    var current = this.data.all_group_tag_dict[group_tag];
+    var group_users = []
+    current.forEach(item => {
+      var temp = {}
+      temp["member_num"] = item["member_num"]
+      temp["group_tag"] = ""
+      group_users.push(temp)
+    })
+    //更新成员对应的分组标签
+    wx.request({
+      url: app.globalData.hosturl + 'edit_part_user_group', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": this.data.activity_info.activity_id,
+        "group_users": group_users,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        app.globalData.edit_group_user = [];
+        app.globalData.group_sel_values = [];
+
+        that.update_part_info(that, res);
+      }
+    })
+
+    //更新活动的分组列表
+    wx.request({
+      url: app.globalData.hosturl + 'update_activity_group_tag_dict', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": that.data.activity_info.activity_id,
+        "old_group_tag": group_tag,
+        "new_group_tag_dict": {}
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if (res.data != "") {
+          var activity_info = that.data.activity_info;
+          activity_info.group_tag_dict = res.data;
+          that.setData({ activity_info: activity_info })
+        }
+
+      }
+    })
+  },
   save_group() {
     console.log("保存分组");
     console.log(this.data.current_edit_group);
     var that = this;
-    var group_name = this.data.group_name;
+    var group_tag = this.data.group_tag;
     var group_users = this.data.current_edit_group;
     console.log(group_users[0].group_tag);
     var pre_group_users = this.data.pre_edit_group;
+    var old_group_tag = "";
+    if (pre_group_users.length > 0) {
+      old_group_tag = pre_group_users[0].group_tag;
+    }
+    var new_group_tag_dict = { "name": group_tag, "room": this.data.group_room, "limit": this.data.group_limit }
     var params = [];
-    
+
     pre_group_users.forEach(item => {
-      console.log("先跑这里了？"+item["group_tag"]);
+      console.log("先跑这里了？" + item["group_tag"]);
       item["group_tag"] = "";
     })
     console.log("查看pre_group_users处理之后的状态");
     console.log(group_users);
     group_users.forEach(item => {
-      item["group_tag"] = group_name;
+      item["group_tag"] = group_tag;
     })
     group_users.forEach(item => {
       var temp = {};
@@ -637,7 +763,7 @@ Page({
     })
     console.log(group_users);
     console.log(params);
-    
+    //更新成员对应的分组标签
     wx.request({
       url: app.globalData.hosturl + 'edit_part_user_group', //仅为示例，并非真实的接口地址
       data: {
@@ -651,51 +777,140 @@ Page({
         app.globalData.edit_group_user = [];
         app.globalData.group_sel_values = [];
         that.setData({
-          current_edit_group:[],
-          group_name:""
+          current_edit_group: [],
+          group_tag: ""
         });
         that.update_part_info(that, res);
       }
     })
+    //更新活动的分组列表
+    wx.request({
+      url: app.globalData.hosturl + 'update_activity_group_tag_dict', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": that.data.activity_info.activity_id,
+        "old_group_tag": old_group_tag,
+        "new_group_tag_dict": new_group_tag_dict
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if (res.data != "") {
+          var activity_info = that.data.activity_info;
+          activity_info.group_tag_dict = res.data;
+          that.setData({ activity_info: activity_info })
+        }
 
+      }
+    })
+    that.setData({
+      group_tag: "",
+      group_room: "",
+      group_limit: "",
+      disable_save_group:true
+    })
   },
   edit_completed_group(e) {
     console.log(e.currentTarget.dataset.tag);
-    var current = this.data.all_group_tag_dict[e.currentTarget.dataset.tag];
-    var name = current[0]["group_tag"];
+    var group_tag = e.currentTarget.dataset.tag;
+    var current = this.data.all_group_tag_dict[group_tag];
+    var edit_group_tag_dict = this.data.activity_info["group_tag_dict"][group_tag]
     console.log(current);
     this.setData({
       current_edit_group: current,
-      pre_edit_group:current,
-      group_name: name,
-      disable_save_group:false,
-      hidden_del_tag:true
+      pre_edit_group: current,
+      edit_group_tag_dict: edit_group_tag_dict,
+      group_tag: group_tag,
+      group_room: edit_group_tag_dict["room"],
+      group_limit: edit_group_tag_dict["limit"],
+      disable_save_group: false,
+      hidden_del_tag: true
     })
+    app.globalData.edit_group_user = []
     console.log(this.data.current_edit_group);
   },
-  pk_page(e){
+  pk_page(e) {
     console.log(e.currentTarget.dataset.tag);
     var group_tag = e.currentTarget.dataset.tag;
     var groups = "";
-    if(group_tag == ""){
+    if (group_tag == "") {
       groups = this.data.ungroup_partinfo_list;
-    }else{
+    } else {
       groups = this.data.all_group_tag_dict[group_tag];
     }
     //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(groups));
 
     wx.navigateTo({
-      url: 'pkpage?group_users=' + group_users+'&&group_tag='+group_tag
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id
     })
   },
-  swiper_change(event){
+  swiper_change(event) {
     console.log("swiper_change")
     console.log(event);
     this.setData({
-      current_swiper_item_index:event.detail.current
+      current_swiper_item_index: event.detail.current
     })
+    //进入排名界面
+    if (event.detail.current == 2) {
+      //要对点赞情况进行初始化
+      var like_dict = score.is_like(this.data.part_member_num, this.data.like_dict);
+      this.setData({
+        like_dict: like_dict
+      })
+    }
+  },
+  like(e) {
+    var like_member_group = e.currentTarget.dataset.likemembergroup;
+    var part_member_num = this.data.part_member_num;
+    var that = this;
+    var url = "";//去点赞
+    var like_dict = this.data.like_dict;
+    if (!like_dict.hasOwnProperty(like_member_group)) {
+      like_dict[like_member_group] = { "like_flag": false, "member_nums": [] };
+    }
+    var member_nums = like_dict[like_member_group]["member_nums"];
+    if (like_dict[like_member_group]["like_flag"] == true) {
+      url = "del_activity_member_like"//取消点赞
+      like_dict[like_member_group]["like_flag"] = false;
+      member_nums.splice(member_nums.indexOf(part_member_num), 1)//删除
+    } else {
+      url = "like_activity_member";//去点赞
+      like_dict[like_member_group]["like_flag"] = true;
+      member_nums.push(part_member_num)//新增
+    }
+    this.setData({
+      like_dict: like_dict
+    })
+    wx.request({
+      url: app.globalData.hosturl + url, //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": that.data.activity_info.activity_id,
+        "like_member_group": like_member_group,
+        "member_num": part_member_num
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log("点赞了")
+      },
+      fail(res) {
+        wx.showToast({
+          title: "服务器异常",
+          icon: "error"
+        })
+      }
+    });
 
+  },
+  update_activity_info() {
+    //直接跳转到创建activity的界面
+    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+    wx.navigateTo({
+      url: '../activity/activity?activity_info=' + activity_info + "&&test=test"
+    })
   }
 
 })

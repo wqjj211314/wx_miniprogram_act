@@ -1,5 +1,6 @@
 // pages/activityshowinfo/pkpage.js
 const app = getApp();
+const score = require("score.js");
 Page({
 
   /**
@@ -11,7 +12,7 @@ Page({
     modalName: "",
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
     group_users: [],//这是当前分组的成员，数组形式
-    member_users: {},
+    member_users: {},//当前分组成员的字典形式，“#1”是key，成员信息是value
     pk_groups: [],
     custom_pk_group: [],
     edit_pk_group_index: 0,
@@ -31,10 +32,20 @@ Page({
     console.log("onLoad加载");
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
     let group_tag = options.group_tag;
+    //初始化成员的字典形式数据，方便wxml获取
+    var member_users = {}
+    group_users.forEach(item=>{
+      var member_num = item.member_num;
+      member_users[member_num] = item;
+    })
     this.setData({
       group_users:group_users,
-      group_tag:group_tag
+      group_tag:group_tag,
+      member_users:member_users,
+      activity_id:options.activity_id
     })
+    //获取已存储的对阵列表
+    score.get_pk_groups(app.globalData.hosturl,this,options.activity_id,group_tag);
   },
   /**
    * 生命周期函数--监听页面显示
@@ -46,7 +57,7 @@ Page({
     var custom_pk_group = this.data.custom_pk_group;
     custom_pk_group[edit_index] = edit_group_user;
     app.globalData.edit_group_user = [];
-    
+    console.log(edit_group_user)
     this.setData({
       custom_pk_group
     })
@@ -80,7 +91,9 @@ Page({
       item.forEach((each_group_sample) => {
         var group_user_num = each_group_sample.length;//一方出战多少人，每个对阵方几个人
         var each_group = [];
+        console.log(each_group_sample);
         each_group_sample.forEach((num_index)=>{
+          console.log(num_index);
           each_group.push(that.data.group_users[num_index].member_num)
         })
         pk_group.push(each_group);
@@ -97,6 +110,21 @@ Page({
     var sample7 = [[[0, 1], [2, 3]], [[0, 4], [5, 6]], [[1, 2], [3, 4]], [[0, 1], [5, 6]], [[0, 2], [3, 4]], [[1, 2], [5, 6]], [[0, 1], [3, 4]], [[0, 2], [5, 6]], [[1, 3], [2, 4]]];
     var sample8 = [[[0, 1], [2, 3]], [[4, 5], [6, 7]], [[0, 2], [1, 3]], [[4, 6], [5, 7]], [[0, 3], [1, 2]], [[4, 7], [5, 6]], [[3, 7], [5, 6]], [[0, 1], [2, 4]], [[3, 5], [6, 7]]];
     var sample = sample6;
+    if(this.data.group_users.length < 4){
+      wx.showToast({
+        title: '人数太少,请自定义对阵',
+        duration:2000,
+        icon:"none"
+      })
+      return;
+    }else if(this.data.group_users.length > 8){
+      wx.showToast({
+        title: '人数太多,请自定义对阵',
+        duration:2000,
+        icon:"none"
+      })
+      return;
+    }
     if (this.data.group_users.length == 4) {
       sample = sample4;
     } else if (this.data.group_users.length == 5) {
@@ -114,11 +142,30 @@ Page({
     })
   },
   get1v1() {
+    var sample2 = [[[0], [1]], [[0], [1]], [[0], [1]]];
     var sample3 = [[[0], [1]], [[0], [2]], [[1], [2]]];
     var sample4 = [[[0], [1]], [[2], [3]], [[1], [3]], [[0], [2]], [[1], [2]], [[0], [3]]];
     var sample5 = [[[0], [1]], [[2], [3]], [[3], [4]], [[2], [4]], [[1], [4]], [[0], [2]], [[1], [3]], [[1], [2]], [[0], [3]]];
     var sample = sample4;
-    if (this.data.group_users.length == 3) {
+    if(this.data.group_users.length < 2){
+      wx.showToast({
+        title: '人数太少,请自定义对阵',
+        duration:2000,
+        icon:"none"
+      })
+      return;
+    }else if(this.data.group_users.length > 5){
+      wx.showToast({
+        title: '人数太多,请自定义对阵',
+        duration:2000,
+        icon:"none"
+      })
+      return;
+    }
+    if(this.data.group_users.length == 2){
+      sample = sample2;
+    }
+    else if (this.data.group_users.length == 3) {
       sample = sample3;
     } else if (this.data.group_users.length == 4) {
       sample = sample4;
@@ -131,6 +178,7 @@ Page({
       pk_groups: new_pk_groups,
       modalName: ""
     })
+    
   },
   del_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
@@ -144,7 +192,7 @@ Page({
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;
     var new_pk_groups = this.data.pk_groups;
-    new_pk_groups.push(new_pk_groups[index]);
+    new_pk_groups.push(JSON.parse(JSON.stringify(new_pk_groups[index])));//深度拷贝
     this.setData({ pk_groups: new_pk_groups });
   },
   score_pk_group(e) {
@@ -152,10 +200,10 @@ Page({
     var index = e.currentTarget.dataset.index;
     var score_pk_group = this.data.pk_groups[index];
     console.log(score_pk_group);//[[1,2],[3,4]]//不是[[[1,2],[3,4]]]
-    var pk_group_score = [];
+    var pk_group_score = [];//new Array(score_pk_group.length-1).fill(0);
     var score = score_pk_group[score_pk_group.length - 1];
     score.forEach(item => {
-      if (item != 0) {
+      if (item != 0) {//默认的比分是0
         pk_group_score = score;
         return;
       }
@@ -168,110 +216,6 @@ Page({
     });
 
   },
-  get_score() {
-    var pk_groups = this.data.pk_groups;
-    var users_score = {};
-    var groups_score = {};
-    pk_groups.forEach((item) => {
-      var score = item[item.length - 1];
-      var max = Math.max.apply(null, score);
-      var min = Math.min.apply(null, score);
-      console.log("max" + max);
-      console.log("min" + min);
-      var peace = false;
-      var battle = true;
-      if (max == min) {
-        //平局
-        peace = true;
-      }
-      if(peace && max == 0){
-        //没开打
-        battle = false;
-      }
-      item.forEach((group, index) => {
-        if (item.length != index + 1) {
-          var group_score = score[index];
-          var group_key = group.sort();
-          group.forEach(user => {
-            if (users_score.hasOwnProperty(user)) {
-              users_score[user]["score"] = users_score[user]["score"] + group_score;
-              if (!peace && group_score == max) {
-                //赢了
-                users_score[user]["win"] = users_score[user]["win"] + 1;
-              }else if(battle && !peace){
-                //输了
-                users_score[user]["fail"] = users_score[user]["fail"] + 1;
-              }else if(battle && peace){
-                //平了
-                users_score[user]["peace"] = users_score[user]["peace"] + 1;
-              }
-            } else {
-              if (!peace && group_score == max) {
-                //赢了
-                users_score[user] = { "score": group_score, "win": 1,"fail":0,"peace":0 };
-              } else if(battle && !peace) {
-                //输了
-                users_score[user] = { "score": group_score, "win": 0,"fail":1,"peace":0 };
-              }else if(battle && peace){
-                //平局
-                users_score[user] = { "score": group_score, "win": 0,"fail":0 ,"peace":1};
-              }else{
-                //没打
-                users_score[user] = { "score": group_score, "win": 0,"fail":0 ,"peace":0};
-              }
-
-            }
-
-          })
-          if (groups_score.hasOwnProperty(group_key)) {
-            groups_score[group_key]["score"] = groups_score[group_key]["score"] + group_score;
-            //users_score[user]["score"] = users_score[user]["score"] + group_score;
-            if (!peace && group_score == max) {
-              groups_score[group_key]["win"] = groups_score[group_key]["win"] + 1;
-            }else if(battle && !peace){
-              groups_score[group_key]["fail"] = groups_score[group_key]["fail"] + 1;
-            }else if(battle && peace){
-              groups_score[group_key]["peace"] = groups_score[group_key]["peace"] + 1;
-            }
-          } else {
-
-            if (!peace && group_score == max) {
-              groups_score[group_key] = { "score": group_score, "win": 1,"fail":0 ,"peace":0};
-            } else if(battle && !peace){
-              groups_score[group_key] = { "score": group_score, "win": 0,"fail":1 ,"peace":0};
-            }else if(battle && peace){
-              groups_score[group_key] = { "score": group_score, "win": 0,"fail":0 ,"peace":1};
-            }else{
-              groups_score[group_key] = { "score": group_score, "win": 0,"fail":0 ,"peace":0};
-            }
-          }
-        }
-      })
-    })
-    this.win_rate(users_score);
-    users_score = this.sort_dict(users_score);
-    groups_score = this.sort_dict(groups_score);
-    console.log(users_score);
-    console.log(groups_score);
-   
-    this.setData({
-      sort_users_score: users_score,
-      sort_groups_score: groups_score
-    });
-  },
-  win_rate(users_score){
-    for(var key in users_score){
-      var item = users_score[key];
-      var total = item["peace"] +item["fail"] + item["win"];
-      var rate = 0;
-      if(item["win"] > 0){
-        rate = (Math.round(item["win"] / total * 100) + "%");
-      }
-      //var rate = (Math.round(item["win"] / total * 100) / 100 + "%");
-      item["win_rate"] = rate;
-    }
-    
-  },
   input_score(e) {
     var score = e.detail.value;
     var score_index = e.currentTarget.dataset.index;
@@ -279,7 +223,9 @@ Page({
     console.log("比分" + score);
     console.log("index=" + score_index);
     var pk_group_score = this.data.pk_group_score;
+    console.log(this.data.pk_groups)
     pk_group_score[score_index] = score;
+    console.log(this.data.pk_groups)
     this.setData({
       pk_group_score: pk_group_score
     })
@@ -288,30 +234,21 @@ Page({
     var pk_group_score = this.data.pk_group_score;
     var score_pk_group = this.data.score_pk_group;
     var pk_groups = this.data.pk_groups;
+    console.log(pk_groups);
     score_pk_group[score_pk_group.length - 1] = pk_group_score;
     pk_groups[this.data.edit_pk_group_index] = score_pk_group;
+    console.log("提交比分")
+    console.log(this.data.edit_pk_group_index);
     console.log(score_pk_group);
+    console.log(pk_groups);
     this.setData({
       pk_groups: pk_groups,
       modalName: "",
       pk_group_score: []//清空比分记录
     });
-    this.get_score();
+    score.get_score(pk_groups);
   },
-  //给字典排序，按照字典中的key-value,value降序排列
-  sort_dict(data) {
-    var keys = Object.keys(data).sort((a, b) => {
-      return -(data[a]["score"] - data[b]["score"]);//降序
-    });
-    console.log(keys);
-    var new_data = {};
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      new_data[key] = data[key];
-    }
 
-    return new_data;
-  },
   update_pk_group(){
     //新增，更新
     var pk_groups = this.data.pk_groups;
@@ -322,7 +259,7 @@ Page({
       data: {
         "activity_id": activity_id,
         "group_tag": group_tag,
-        "pk_group":pk_groups
+        "pk_groups":pk_groups
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -333,6 +270,9 @@ Page({
     });
   },
   clear_pk_group(){
+    this.setData({pk_groups:[]})
+  },
+  clear_pk_group2(){
     //新增，更新
     var activity_id = this.data.activity_id;
     var group_tag = this.data.group_tag;

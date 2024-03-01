@@ -24,7 +24,7 @@
   <block wx:for="{{sort_users_score}}">
     <view class="cu-list menu-avatar" style="margin:0rpx;" hidden="{{hidden_score_list}}">
       <view class="cu-item">
-        <view style="position: absolute;left: 10rpx;">{{member_users[index].member_num}}号</view>
+        <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(member_users[index].member_num)}}号</view>
         <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{member_users[index].avatarUrl}});"></view>
         <view class="content" style="left: 170rpx;">
           <view class="text-grey">{{member_users[index].nickName}}</view>
@@ -51,6 +51,12 @@
           <view class="text-grey text-xs">胜率</view>
           <view class="cu-tag round bg-grey sm">{{item["win_rate"]}}</view>
         </view>
+        <view class="action">
+          <!--点赞功能-->
+          <text class="cuIcon-appreciate lg text-gray" style="font-size: 48rpx;" bind:tap="">
+            <text style="font-size: 30rpx;">11</text>
+          </text>
+        </view>
 
       </view>
     </view>
@@ -67,7 +73,7 @@
           <block wx:for="{{group}}" wx:for-item="group_member_num">
             <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;margin-bottom: 10rpx;margin-right:15rpx;" wx:if="{{group_index < pk_group.length -1}}">
               <!--最后一组是比分-->
-              <view class="cu-avatar radius" style="background-image:url(https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg);">
+              <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
                 <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
               </view>
               <view style="font-size: 18rpx;height: fit-content;">{{member_users[group_member_num].nickName}}</view>
@@ -79,7 +85,7 @@
       </view>
       <view class="flex" style="align-items: center;">
 
-        <view class="cu-tag line-blue" style="margin:0rpx 20rpx;" data-index="{{pk_group_index}}" bindtap="score_pk_group">
+        <view class="cu-tag line-blue" style="margin:0rpx 20rpx;min-width: 118rpx;padding:0rpx 10rpx 0rpx 16rpx;" data-index="{{pk_group_index}}" bindtap="score_pk_group">
           {{tools.show_vs_scores(pk_group[pk_group.length - 1])}}
           <text class="cuIcon-right lg text-blue"></text>
         </view>
@@ -87,32 +93,30 @@
       </view>
       <view style="width: fit-content;display: flex;flex-direction:column;margin:0 20rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center">
         <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">删除<text class="cuIcon-roundclosefill lg text-red"></text></view>
-
         <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;border-radius:2rpx;">再来一局<text class="cuIcon-roundaddfill lg text-green"></text></view>
-
       </view>
     </view>
   </block>
 </scroll-view>
 
-<view class="cu-bar tabbar bg-black" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: absolute;bottom: 0rpx;">
-  <view class="action text-orange" bindtap="refresh" style="font-size: 30rpx;" bindtap="show_modal" data-target="bottomModal">
-    新增对阵
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: absolute;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;">
+  <view class="flex" style="align-content: flex-start;font-size: 20rpx;">
+    <text class="cuIcon-warn" style="font-size: 20rpx;color: red;"></text>
+    本地编辑完成后需要提交更新
   </view>
-  <view class="action text-gray" style="font-size: 30rpx;" bindtap="clear_pk_group">
-    清空对阵
-  </view>
-
-  <view class="action text-gray" style="font-size: 30rpx;" bindtap="navigateToFriendList">
-    <view class="cu-tag badge" hidden="{{!friend_chat_msg_display}}"></view>
-    消息
-  </view>
-  <view class="action text-gray" bindtap='update_pk_group' style="font-size: 30rpx;">
-    提交
+  <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
+    <view class="" style="flex:1;margin-right:20rpx;" bindtap="show_modal" data-target="bottomModal">
+      <button class="cu-btn bg-green round" style="width: 100%;">新增对阵</button>
+    </view>
+    <view class="" style="flex:1;margin-right:20rpx;" bindtap="clear_pk_group">
+      <button class="cu-btn bg-green round" style="width: 100%;">清空对阵</button>
+    </view>
+    <view class="" style="flex:1;" bindtap="update_pk_group">
+      <button class="cu-btn bg-red round" style="width: 100%;">提交</button>
+    </view>
   </view>
 </view>
-
-
+<!--记录比分弹框-->
 <view class="cu-modal {{modalName=='scoreModal'?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
@@ -127,7 +131,7 @@
           <view class="left" style="display: flex;margin: 10rpx 20rpx;justify-content: center;align-items: center;" wx:if="{{index != score_pk_group.length-1}}">
             <block wx:for="{{item}}" wx:for-item="item2">
               <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
-                <view class="cu-avatar radius" style="background-image:url(https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg);">
+                <view class="cu-avatar radius" style="background-image:url({{member_users[item2].avatarUrl}});">
                   <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[item2].member_num)}}</view>
                 </view>
                 <view style="font-size: 18rpx;height: fit-content;">{{member_users[item2].name}}</view>
@@ -137,9 +141,7 @@
               <input placeholder="记录得分等" type="number" value="{{pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" />
             </view>
           </view>
-
         </block>
-
       </view>
     </view>
     <view class="cu-bar bg-white justify-end">
@@ -149,14 +151,13 @@
     </view>
   </view>
 </view>
-
+<!--对阵选项弹框-->
 <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
   <view class="cu-dialog">
-
-    <view class="padding-xl flex" style="justify-content: center;">
-      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="get2v2">2V2对阵9局</button>
-      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bind:tap="get1v1">1V1对阵9局</button>
-      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="show_modal" data-target="customerPKModal">自定义对阵</button>
+    <view class="padding-xl flex" style="justify-content: center;padding:70rpx 20rpx;">
+      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="get2v2">2V2对阵</button>
+      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bind:tap="get1v1">1V1对阵</button>
+      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="show_modal" data-target="customerPKModal">自定义</button>
     </view>
     <view class="cu-bar bg-grey" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 30rpx;" bindtap="hideModal">
       取消
@@ -178,7 +179,7 @@
         <block wx:for="{{custom_pk_group[0]}}" wx:for-item="group_member_num">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
-            <view class="cu-avatar radius" style="background-image:url(https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg);">
+            <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
               <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
             </view>
             <view style="font-size: 18rpx;height: fit-content;">{{users[group_member_num].name}}</view>
@@ -195,7 +196,7 @@
         <block wx:for="{{custom_pk_group[1]}}" wx:for-item="group_member_num">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
-            <view class="cu-avatar radius" style="background-image:url(https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg);">
+            <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avataUrl}});">
               <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
             </view>
             <view style="font-size: 18rpx;height: fit-content;">{{users[group_member_num].name}}</view>
@@ -212,7 +213,7 @@
         <block wx:for="{{custom_pk_group[2]}}" wx:for-item="group_member_num">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
-            <view class="cu-avatar radius" style="background-image:url(https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg);">
+            <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avataUrl}});">
               <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
             </view>
             <view style="font-size: 18rpx;height: fit-content;">{{users[group_member_num].name}}</view>
@@ -229,7 +230,7 @@
         <block wx:for="{{custom_pk_group[3]}}" wx:for-item="group_member_num">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
-            <view class="cu-avatar radius" style="background-image:url(https://www.2week.club:5000/static/avatar/o2QXs5XL_7sbn0-XYrEhdV0DR3UA1698559698.jpg);">
+            <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avataUrl}});">
               <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
             </view>
             <view style="font-size: 18rpx;height: fit-content;">{{users[group_member_num].name}}</view>
@@ -243,7 +244,7 @@
       </view>
       <view class="flex" style="align-content: flex-start;font-size: 20rpx;">
         <text class="cuIcon-warn" style="font-size: 20rpx;color: red;"></text>
-        最少添加两个对阵方
+        最少添加1个对阵方
       </view>
     </view>
     <view class="cu-bar bg-white">

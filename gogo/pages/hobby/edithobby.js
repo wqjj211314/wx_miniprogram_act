@@ -19,7 +19,7 @@ Page({
     hobby_freq: "请选择",
     hobby_freq_index: -1,
 
-    hobby_live_tags: ["练习生", "新人出道", "群友高手", "比赛四强"],
+    hobby_live_tags: ["初级", "中级", "高级", "专业级"],
     hobby_live: "请选择",
     hobby_live_index: -1,
 
@@ -28,8 +28,9 @@ Page({
 
     imgList: [],
     img_change: false,
-    hobby_info: [],
-    edit_flag: false
+    hobby_info: {},
+    edit_flag: false,
+    hosturl:app.globalData.hosturl
 
   },
 
@@ -51,7 +52,7 @@ Page({
       hobby_live_index: this.data.hobby_live_tags.indexOf(hobby_info.hobby_live),
       hobby_info: hobby_info,
       hobby_point: hobby_info.hobby_point,
-      imgList: [app.globalData.hosturl + "static/" + hobby_info.user_id + hobby_info.hobby_tag + ".jpg"]
+      imgList: hobby_info.bg_img_exist?[app.globalData.hosturl + "static/" + hobby_info.user_id + hobby_info.hobby_tag + ".jpg"]:[]
     });
     console.log(this.data.hobby_time_index);
   },
@@ -176,7 +177,8 @@ Page({
     console.log("修改标题");
     console.log(e.detail.value.trim());
     this.setData({
-      hobby_title: e.detail.value.trim()
+      hobby_title: e.detail.value.trim(),
+      edit_flag:true
     })
   },
   ChooseImage() {
@@ -308,7 +310,7 @@ Page({
         console.log("成功创建活动：" + res.data);
         //后台上传背景图片，创建活动成功后直接跳转至用户页
         wx.navigateTo({
-          url: '../userability/ability?user_id='+app.globalData.openid
+          url: 'hobbylist?user_id='+app.globalData.openid
         })
       },
       fail: function (error) {

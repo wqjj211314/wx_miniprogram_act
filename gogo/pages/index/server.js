@@ -33,7 +33,8 @@ function get_activity_list(that,app,activity_id="") {
         list.push(element);
       });
       _that.setData({
-        activity_list: list
+        activity_list: list,
+        isdisplay:true
       })
       //初始化第一个id
       var first = _that.data.activity_list;

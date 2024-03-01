@@ -82,9 +82,26 @@ function getCurrentPageUrl(){
   let url = currentPage.route    //当前页面url
   return url//pages/index/index
 }
-
+function check_login(app){
+  console.log("检查是否需要登录")
+  console.log(app.globalData.login_userInfo)
+  var info = app.globalData.login_userInfo;
+  if(info["nickName"] != ""){
+    console.log(info["nickName"])
+    console.log("比较不出来吗？")
+  }
+  if(app.globalData.login_userInfo["user_id"] == ""||app.globalData.login_userInfo["nickName"] == ""||app.globalData.login_userInfo["gender"] == -1||app.globalData.login_userInfo["avatarUrl"] == ""){
+    console.log("跳转到登录界面")
+    wx.navigateTo({
+      url: '/pages/user/login?userInfo='+encodeURIComponent(JSON.stringify(app.globalData.login_userInfo)),
+    })
+    return false
+  }
+  return true
+}
 exports.convert_date = convert_date;
 exports.toweek = toweek;
 exports.toweek2 = toweek2;
 exports.GetDistance = GetDistance;
 exports.getCurrentPageUrl = getCurrentPageUrl;
+exports.check_login = check_login;

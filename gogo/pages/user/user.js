@@ -149,10 +149,10 @@ Page({
       url: '../friend/friend'
     })
   },
-  navigateToAbility() {
+  navigateTohobbylist() {
     console.log(this.data.userinfo);
     wx.navigateTo({
-      url: '../userability/ability?user_id='+this.data.userinfo.user_id
+      url: '../hobby/hobbylist?user_id='+this.data.userinfo.user_id
     })
   },
   chat_with_dev() {

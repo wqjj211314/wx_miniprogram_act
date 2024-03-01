@@ -35,7 +35,7 @@ Page({
       filePath: avatarUrl,
       name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
       formData: {
-        'user_id': userInfo["user_id"]
+        'user_id': app.globalData.login_userInfo["user_id"]
       },
       success: function (res) {
         
@@ -60,6 +60,12 @@ Page({
     const nickName = e.detail.value;
     var avatarUrl = this.data.userInfo.avatarUrl;
     var gender = this.data.userInfo.gender;
+    if(nickName == ""||nickName == "匿名"){
+      wx.showToast({
+        title: '请填写合法昵称',
+      })
+      return;
+    }
 
     this.setData({
       "userInfo.nickName": nickName,
@@ -68,11 +74,10 @@ Page({
   },
   submit_userinfo:function(){
     var that = this;
-
     wx.request({
       url: app.globalData.hosturl + 'update_user_info',
       data: {
-        "user_id":that.data.userInfo["user_id"],
+        "user_id":app.globalData.login_userInfo["user_id"],
         "nickName":that.data.userInfo["nickName"],
         "avatarUrl":that.data.userInfo["avatarUrl"],
         "gender":that.data.userInfo["gender"]
@@ -99,11 +104,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    let userInfo = JSON.parse(decodeURIComponent(options.userInfo))
-    if(userInfo.avatarUrl == ""){
-      userInfo.avatarUrl = defaultAvatarUrl;
+    if(options.hasOwnProperty("userInfo")){
+      let userInfo = JSON.parse(decodeURIComponent(options.userInfo))
+      if(userInfo.avatarUrl == ""){
+        userInfo.avatarUrl = defaultAvatarUrl;
+      }
+      this.setData({userInfo:userInfo})
     }
-    this.setData({userInfo:userInfo})
+    
   },
 
   /**

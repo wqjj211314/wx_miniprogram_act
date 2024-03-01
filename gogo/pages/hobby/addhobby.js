@@ -20,7 +20,7 @@ Page({
     hobby_freq:"请选择",
     hobby_freq_index:-1,
 
-    hobby_live_tags:["练习生","新人出道","群友高手","比赛四强"],
+    hobby_live_tags:["初级", "中级", "高级", "专业级"],
     hobby_live:"请选择",
     hobby_live_index:-1,
 
@@ -309,7 +309,7 @@ Page({
         //后台上传背景图片，创建活动成功后直接跳转至用户页
         setTimeout(function () {
           wx.navigateTo({
-            url: '../userability/ability?user_id='+that.data.user_id
+            url: 'hobbylist?user_id='+that.data.user_id
           })
         }, 5000)
 

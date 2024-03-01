@@ -102,7 +102,7 @@ Page({
   },
   navigateToAbility() {
     wx.navigateTo({
-      url: '../userability/ability?user_id='+this.data.userinfo.user_id
+      url: '../hobby/hobbylist?user_id='+this.data.userinfo.user_id
     })
   },
   chat_with_dev() {

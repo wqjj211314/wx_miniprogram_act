@@ -14,6 +14,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading({
+      title: '数据获取中...',
+    });
     this.navigateToActivitycreate();
   },
   navigateToActivitycreate(){
@@ -27,6 +30,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success (res) {
+        wx.hideLoading();
         if(res.data.length>=0){
           console.log("创建的活动")
           //console.log(JSON.stringify(res.data))
@@ -51,19 +55,9 @@ Page({
     var index = parseInt(e.currentTarget.dataset.index);
     console.log(typeof index);
     console.log(this.data.activity_create_list.length);
-    var index_activity = this.data.activity_create_list[index];
-    var activity_id = index_activity["id"];
-    if(index_activity["activity_status"] == -1){
-      wx.showToast({
-        title: '审核中，无法查看',
-        icon:"none",
-        mask:true
-      })
-      return;
-    }
-    let id = JSON.stringify({"activity_id":activity_id});
+    var activity_info = this.data.activity_create_list[index];
     wx.navigateTo({
-      url: '../index/index?activity_id='+encodeURIComponent(id)
+      url: '../index/index?activity_id='+ encodeURIComponent(JSON.stringify({ "activity_id": activity_info.activity_id }))
     })
   },
   delete_activity(e){
@@ -71,8 +65,8 @@ Page({
     var index = parseInt(e.currentTarget.dataset.index);
     console.log(typeof index);
     console.log(this.data.activity_create_list.length);
-    var index_activity = this.data.activity_create_list[index];
-    var activity_id = index_activity["id"];
+    var activity_info = this.data.activity_create_list[index];
+    var activity_id = activity_info["activity_id"];
     wx.request({
       url: app.globalData.hosturl+'delete_activity', //仅为示例，并非真实的接口地址
       data: {
@@ -87,6 +81,18 @@ Page({
       }
     });
     
+  },
+  update_activity_info(e) {
+    var that = this;
+    var index = parseInt(e.currentTarget.dataset.index);
+    console.log(typeof index);
+    console.log(this.data.activity_create_list.length);
+    var activity_info = this.data.activity_create_list[index];
+    //直接跳转到创建activity的界面
+    activity_info = encodeURIComponent(JSON.stringify(activity_info));
+    wx.navigateTo({
+      url: '../activity/activity?activity_info=' + activity_info
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

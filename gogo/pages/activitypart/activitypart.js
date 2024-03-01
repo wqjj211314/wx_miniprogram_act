@@ -14,6 +14,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    wx.showLoading({
+      title: '数据获取中...',
+    });
     this.navigateToActivityadd();
   },
   navigateToActivityadd(){
@@ -27,6 +30,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success (res) {
+        wx.hideLoading();
         if(res.data.length>=0){
           console.log("参与的活动")
           console.log(JSON.stringify(res.data))

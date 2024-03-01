@@ -1,4 +1,3 @@
-// pages/userability/ability.js
 const app = getApp();
 Page({
 

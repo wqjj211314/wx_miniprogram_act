@@ -1,40 +1,36 @@
+<scroll-view scroll-y="true" style="height: 100%;">
 <block wx:for-index="idx" wx:for='{{hobby_list}}' wx:key="index">
   <view class="cu-card case no-card" style="margin-bottom: 8rpx;">
     <view class="cu-item">
-      <view class="image" style="height:300rpx;">
-        <image src="{{hosturl}}static/{{item.user_id}}{{item.hobby_tag}}.jpg" mode="aspectFill"></image>
+      <view class="image" style="height:400rpx;" data-index="{{idx}}" bind:tap="edit_hobby_info">
+        <image src="{{hosturl}}static/{{item.user_id}}{{item.hobby_tag}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}"></image>
+        <image src="/logo.png" mode="aspectFill" wx:else></image>
         <view class="cu-tag bg-blue" style="position: absolute;left:0;right:auto;margin-left:0rpx;">{{item.hobby_tag}}</view>
         <view class="cu-tag bg-blue">{{item.hobby_tag}}积分：{{item.hobby_point}}</view>
-
-        <view class="cu-bar" style="height:50%;">
+        <!--留言功能-->
+        <!--
+        <view class="cu-bar" style="height:50%;" wx:if="{{false}}">
           <swiper class="new_swiper" vertical="true" autoplay="true" circular="true" interval="2000" duration="3000" display-multiple-items='1' easing-function="linear" style="width:98%;left:10rpx;margin-right:10rpx;">
             <block wx:for-index="msgidx" wx:for='{{messages}}' wx:key="index">
               <swiper-item>
                 <view class="box_item" style="height:fit-content;background-color: rgba(51,51,51,0.3);margin-right: 10rpx;">
-
                   <text class="text-cyan" style="width:80%;height:fit-content;word-wrap: break-word;color:white">{{item}}</text>
-
                 </view>
               </swiper-item>
-              <!-- 当仅有一条数据的时候，添加一条数据 实现滚动 -->
+              
               <swiper-item wx:if="{{messages.length === 1}}">
                 <view class="box_item" style="height:fit-content;background-color: rgba(51,51,51,0.3);margin-right: 10rpx;">
-
                   <text class="text-cyan" style="width:80%;height:fit-content;word-wrap: break-word;color:white">{{item}}</text>
-
                 </view>
               </swiper-item>
             </block>
           </swiper>
 
         </view>
-
+      -->
       </view>
       <view class="cu-list menu-avatar" style="margin: 5rpx 30rpx 0;">
         <view class="cu-item" style="justify-content: space-between;align-items: center;">
-          <!--
-        <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
-        -->
           <view class="content flex-sub" style="width: 100%;left: 0rpx;">
             <view class="text-black margin-lr-xs">{{item.hobby_title}}</view>
             <view class="text-blue text-sm" style="display:flex;justify-content:space-between;">
@@ -42,9 +38,10 @@
                 <text class="cuIcon-tagfill margin-lr-xs">{{item.hobby_live}}|{{item.hobby_time}}|{{item.hobby_freq}}</text>
               </view>
               <view>
-                <text class="cuIcon-messagefill margin-lr-xs text-green" bindtap="">留言</text>
-                <text class="cuIcon-edit margin-lr-xs text-black" data-index="{{idx}}" bindtap="edit_hobby_info" wx:if="{{self_flag}}">编辑</text>
                 <text class="cuIcon-roundclosefill margin-lr-xs text-red" data-index="{{idx}}" bindtap="delete_hobby" wx:if="{{self_flag}}">删除</text>
+                <!--<text class="cuIcon-messagefill margin-lr-xs text-green" bindtap="">留言</text>-->
+                <text class="cuIcon-edit margin-lr-xs text-black" data-index="{{idx}}" bindtap="edit_hobby_info" wx:if="{{self_flag}}">编辑</text>
+
               </view>
             </view>
           </view>
@@ -59,3 +56,8 @@
     <view class="" style="font-size:30rpx;width: fit-content;margin:0 auto;">添加我的爱好</view>
   </view>
 </view>
+
+<!--空白站位，保证以上内容能全部显示-->
+<view style="height: 150rpx;">
+</view>
+</scroll-view>

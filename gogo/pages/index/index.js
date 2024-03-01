@@ -394,6 +394,9 @@ Page({
   },
   openKey(e) {
     console.log('onClick', e.detail)
+    if(!util.check_login(app)){
+      return;
+    }
     this.setData({
       isdisplay: false
     });
@@ -402,6 +405,7 @@ Page({
   onblurkey() {
     console.log("onblurkey");
     this.setData({
+      
       isFocus: false,
       isdisplay: true
     })

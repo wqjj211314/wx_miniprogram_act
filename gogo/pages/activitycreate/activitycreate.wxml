@@ -1,40 +1,55 @@
 <!--pages/activityadd/activityadd.wxml-->
-<view style="width:100vw;height:100vh;background-color: white;">
-<block wx:for="{{activity_create_list}}" wx:key="id" wx:for-index="index">
-<view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
-  <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}</view>
-  <view class="cu-item text-blue">
-    <view class="cu-card article" style="">
-      <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
+<scroll-view scroll-y="true" style="height: 100%;">
+  <view style="width:100vw;height:100vh;background-color: white;">
+    <block wx:for="{{activity_create_list}}" wx:key="id" wx:for-index="index">
+      <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
+        <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}</view>
+        <view class="cu-item text-blue">
+          <view class="cu-card article" style="">
+            <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
 
-        <view class="title" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
-          <view class="text-cut">{{item.title}}<view class="cu-tag bg-red light sm round">{{item.activity_status_comment}}</view></view>
-        </view>
+              <view class="title" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
+                <view class="text-cut">{{item.title}}
 
-        <view class="content" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
-        
-          <image wx:if="{{item.bg_img_exist}}" src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
-          <image wx:else src="/default_showlist_bg.png" mode="aspectFill" style="width:40%;height:200rpx;"></image>
-          <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
-            <view class="text-content" style="width:90%;color:black;font-size:13px;height:4em;">{{item.detail}}</view>
+                </view>
+              </view>
 
-            <view>
-              <view class="cu-tag bg-red light sm round">{{item.activity_live}}</view>
+              <view class="content" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
+                <image wx:if="{{item.bg_img_exist}}" src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
+                <image wx:else src="/default_showlist_bg.png" mode="aspectFill" style="width:40%;height:200rpx;"></image>
+                <view class="desc" style="margin-top: 10rpx;margin-bottom: 0rpx;">
+                  <view class="text-content" style="width:100%;color:black;font-size:13px;height: fit-content;">
+                    <view>
+                      <text class="{{item.activity_status == 1?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'}}"></text>{{item.activity_status_comment}}
+                    </view>
+                    <view>
+                      <text class="cuIcon-locationfill text-green"></text>{{item.show_activityaddress}}
+                    </view>
+                    <view>
+                      <text class="cuIcon-circlefill text-green"></text>
+                      <text class="text-black">参与{{item.member+"/"+item.max_part_number}}</text>
+                    </view>
+                    <view class="">
+                      <text class="cuIcon-timefill text-green"></text>
+                      <text class="text-black">{{item.begintimeweek}}</text>
+                    </view>
+                  </view>
+
+                </view>
+              </view>
+              <view class="flex" style="margin-top: 30rpx;justify-content: space-around;">
+                <button class="cu-btn bg-red" style="" bindtap="delete_activity" data-index="{{index}}">删除</button>
+                <button class="cu-btn bg-red" style="" bindtap="delete_activity" data-index="{{index}}">取消</button>
+                <button class="cu-btn bg-green" style="" bindtap="update_activity_info" data-index="{{index}}">编辑查看</button>
+              </view>
             </view>
-
-            
-
           </view>
         </view>
-        <view class="" style="margin-top: 30rpx;">
-
-          <button class="cu-btn bg-red" style="width: 100%;" bindtap="delete_activity" data-index="{{index}}">删除活动</button>
-              
-        </view>
       </view>
-    </view>
+    </block>
+    <!--pages/activityadd/activityadd.wxml-->
   </view>
+</scroll-view>
+<!--空白站位，保证以上内容能全部显示-->
+<view style="height: 150rpx;">
 </view>
-</block>
-<!--pages/activityadd/activityadd.wxml-->
-  </view>

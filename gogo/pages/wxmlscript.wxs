@@ -1,4 +1,13 @@
 //#1=>1,去除#字符
+var iscontain = function(arraylist,item){
+  item = item + "";
+  for(var i=0;i<arraylist.length;i++){
+    if(arraylist[i] == item){
+      return true;
+    }
+  }
+  return false;
+}
 var show_member_num = function (member_num_str) {
   member_num_str = ""+member_num_str;
   return member_num_str.replace("#","");
@@ -23,5 +32,6 @@ var show_vs_scores = function(scores){
 module.exports = {
   show_member_num: show_member_num,
   show_vs_scores:show_vs_scores,
+  iscontain:iscontain
 };
 module.exports.msg = "some msg";

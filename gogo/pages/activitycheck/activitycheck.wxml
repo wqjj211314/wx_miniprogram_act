@@ -1,39 +1,36 @@
 <!--pages/activityadd/activityadd.wxml-->
-<view style="width:100vw;height:100vh;background-color: white;">
-<block wx:for="{{activity_create_list}}" wx:key="id">
-<view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
-  <view class="cu-time" style="width: fit-content;">{{item.begintime}}</view>
-  <view class="cu-item text-blue">
-    <view class="cu-card article" style="">
-      <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
-
-        <view class="title" style="padding:0px;">
-          <view class="text-cut">{{item.title}}</view>
-        </view>
-
-        <view class="content" style="padding:0px;">
-          <image src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
-          <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
-            <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.detail}}</view>
-
-            <view>
-              <view class="cu-tag bg-red light round" bindtap="update_activity_bg_issue" data-id="{{item.activity_id}}">图片敏感</view>
-              <view class="cu-tag bg-red light round" bindtap="update_activity_pass" data-id="{{item.activity_id}}">审核通过</view>
-              
+<scroll-view scroll-y="true" style="height: 100%;">
+  <view style="width:100vw;height:100vh;background-color: white;">
+    <block wx:for="{{activity_create_list}}" wx:key="id">
+      <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
+        <view class="cu-time" style="width: fit-content;">{{item.begintime}}</view>
+        <view class="cu-item text-blue">
+          <view class="cu-card article" style="">
+            <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
+              <view class="title" style="padding:0px;">
+                <view class="text-cut">{{item.title}}</view>
+              </view>
+              <view class="content" style="padding:0px;">
+                <image src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
+                <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
+                  <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.detail}}</view>
+                  <view>
+                    <view class="cu-tag bg-red light round" bindtap="update_activity_bg_issue" data-id="{{item.activity_id}}">图片敏感</view>
+                    <view class="cu-tag bg-red light round" bindtap="update_activity_pass" data-id="{{item.activity_id}}">审核通过</view>
+                  </view>
+                </view>
+              </view>
+              <view class="" style="margin-top: 30rpx;">
+                <button class="cu-btn bg-red" style="width: 100%;" bindtap="update_activity_invalid" data-id="{{item.activity_id}}">活动违规</button>
+              </view>
             </view>
-
           </view>
-          
-        </view>
-        <view class="" style="margin-top: 30rpx;">
-
-          <button class="cu-btn bg-red" style="width: 100%;" bindtap="update_activity_invalid" data-id="{{item.activity_id}}">活动违规</button>
-            
         </view>
       </view>
-    </view>
+    </block>
+    <!--pages/activityadd/activityadd.wxml-->
   </view>
+</scroll-view>
+<!--空白站位，保证以上内容能全部显示-->
+<view style="height: 150rpx;">
 </view>
-</block>
-<!--pages/activityadd/activityadd.wxml-->
-  </view>
