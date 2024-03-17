@@ -12,6 +12,7 @@ var show_member_num = function (member_num_str) {
   member_num_str = ""+member_num_str;
   return member_num_str.replace("#","");
 }
+//scores最后一位是比分标签
 var show_vs_scores = function(scores){
   var flag = true;
   //console.log(scores);

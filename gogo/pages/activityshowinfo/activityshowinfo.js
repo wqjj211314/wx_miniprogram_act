@@ -2,6 +2,7 @@
 const app = getApp();
 const util = require("../../utils/util.js");
 const score = require("score.js");
+const share = require("share.js");
 Page({
   /**
    * 页面的初始数据
@@ -30,8 +31,9 @@ Page({
     admin_flag: false,//是否是发布者，超级权限：编辑活动，删除成员
     announcement: "",
     new_announcement: "",
+    partinfo_sex:"",
     picker_index: 0,
-    picker: ["小白", "青铜", "白银", "黄金", "钻石"],
+    picker: ["1级", "2级", "3级", "4级", "5级", "6级", "7级", "8级", "9级", "10级"],
     activity_date: "",
     share_use_id: "",
     part_limit: 1,//0不限制参与，1限制参与,
@@ -56,6 +58,10 @@ Page({
     group_room: "",//编辑分组
     group_limit: "",//编辑分组
     edit_group_tag_dict: {},//编辑分组
+    triggered: false,
+    moods: [],
+    mood_img_list: [],
+    select_group_tag: ""//报名所选择的分组
   },
 
   /**
@@ -94,11 +100,15 @@ Page({
     wx.setNavigationBarTitle({
       title: activity_info.title
     })
+    this.init_activity_all_info(activity_info);
+  },
+  init_activity_all_info(activity_info) {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id": activity_info.activity_id
+        "activity_id": activity_info.activity_id,
+        "hobby_tag":activity_info.activity_tag
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -114,10 +124,9 @@ Page({
         })
       }
     });
-    console.log("是否登录");
-    console.log(app.globalData.hasUserInfo);
     score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id)
     score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
+    share.get_activity_moods(app.globalData.hosturl, that, activity_info.activity_id)
   },
   show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
@@ -201,6 +210,14 @@ Page({
       console.log("找到当前参加的编号")
       if (item["user_id"] == app.globalData.login_userInfo["user_id"] && part_member_num == "") {
         part_member_num = item["member_num"];
+        var partinfo = that.data.partinfo;
+        //有参与编号代表已参与，已参与如果重复报名需要提供姓名，性别
+        if(partinfo.indexOf("姓名") == -1){//没找到
+          partinfo.push("姓名")
+        }
+        if(partinfo.indexOf("性别") == -1){//没找到
+          partinfo.push("性别")
+        }
         that.setData({
           part_flag: true,
           part_member_num: item["member_num"]
@@ -253,6 +270,15 @@ Page({
   onReady: function () {
 
   },
+  choosesex(e){
+    var value = e.currentTarget.dataset.sex;
+    var info = this.data.partinfoinput;
+    info["性别"] = value;
+    this.setData({
+      partinfo_sex:value,
+      partinfoinput: info
+    });
+  },
   PickerChange(e) {
     console.log(e);
     var info = this.data.partinfoinput;
@@ -281,7 +307,8 @@ Page({
       url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": that.data.activity_info.activity_id,
-        "cancel_part_members": that.data.cancel_part_members
+        "cancel_part_members": that.data.cancel_part_members,
+        "begintime": activity_info["begintime"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -320,6 +347,7 @@ Page({
         admin_flag: true
       });
     }
+    //这是针对选择分组成员之后的数据更新，从partuser界面返回
     var edit_group_user = app.globalData.edit_group_user;
     var current_edit_group = this.data.current_edit_group;
     var ungroup_partinfo_list = this.data.ungroup_partinfo_list;
@@ -344,6 +372,11 @@ Page({
     console.log(current_edit_group);
     app.globalData.edit_group_user = [];//app只短暂存储编辑选择的分组成员
     this.update_save_group_button_status();
+    //重新加载见闻的图片记录
+    if (app.globalData.reload_activity_share_moods == true) {
+      app.globalData.reload_activity_share_moods = false;
+      share.get_activity_moods(app.globalData.hosturl, this, this.data.activity_info.activity_id);
+    }
 
   },
 
@@ -419,6 +452,7 @@ Page({
       }
     }
   },
+  //
   partinfoInput(event) {
     var partinfokey = event.target.dataset.value
     var partinfovalue = event.detail.value;
@@ -432,8 +466,9 @@ Page({
   },
   navigateToIndex() {
     //返回首页的活动页。
-    wx.navigateTo({
-      url: '../index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_info.activity_id }))
+    app.globalData.current_activity_id = this.data.activity_info.activity_id;
+    wx.switchTab({
+      url: '../index/index'
     })
   },
   part_activity() {
@@ -462,23 +497,24 @@ Page({
             console.log("按钮获取用户信息 " + res.userInfo.nickName)
             app.globalData.login_userInfo = res.userInfo;
             app.globalData.hasUserInfo = true;
-
-            app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag });
+            app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag, "group_tag": this.data.select_group_tag });
             app.store_userInfo();
             //返回首页的活动页。
-            wx.navigateTo({
-              url: '../index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_info.id }))
+            app.globalData.current_activity_id = this.data.activity_info.activity_id;
+            wx.switchTab({
+              url: '../index/index'
             })
           }
         });
       } else {
         console.log("报名的用户id" + app.globalData.openid);
         console.log(this.data.activity_info);
-        app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag });
+        app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag, "group_tag": this.data.select_group_tag });
         //return;
         //返回首页的活动页。
-        wx.navigateTo({
-          url: '../index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_info.id }))
+        app.globalData.current_activity_id = this.data.activity_info.activity_id;
+        wx.switchTab({
+          url: '../index/index'
         })
       }
 
@@ -636,10 +672,10 @@ Page({
     var ungroup_partinfo_list = this.data.ungroup_partinfo_list;
     this.data.current_edit_group.forEach(item => {
       if (item["member_num"] != member_num) {
-        
+
         new_current_edit_group.push(item);
       } else {
-        console.log(item["member_num"]+"被删")
+        console.log(item["member_num"] + "被删")
         ungroup_partinfo_list.push(item);
       }
     })
@@ -652,24 +688,19 @@ Page({
   delete_member(e) {
     console.log("移除成员");
     var that = this;
-
-    var index = e.currentTarget.dataset.index;
-    var user_id = this.data.user_info_list[index]["user_id"];
+    var membernum = e.currentTarget.dataset.membernum;
+    var cancel_part_members = [membernum]
     wx.request({
       url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id": that.data.activity_info.id,
-        "user_id": user_id
+        "activity_id": that.data.activity_info.activity_id,
+        "cancel_part_members": cancel_part_members
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
         that.update_part_info(that, res);
-        that.setData({
-          modalName: null
-        })
-
       }
     });
   },
@@ -769,6 +800,7 @@ Page({
       data: {
         "activity_id": that.data.activity_info.activity_id,
         "group_users": JSON.stringify(params),
+        "activity_tag":that.data.activity_info.activity_tag
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -785,7 +817,7 @@ Page({
     })
     //更新活动的分组列表
     wx.request({
-      url: app.globalData.hosturl + 'update_activity_group_tag_dict', //仅为示例，并非真实的接口地址
+      url: app.globalData.hosturl + 'update_activity_group_tag_dict',
       data: {
         "activity_id": that.data.activity_info.activity_id,
         "old_group_tag": old_group_tag,
@@ -808,7 +840,7 @@ Page({
       group_tag: "",
       group_room: "",
       group_limit: "",
-      disable_save_group:true
+      disable_save_group: true
     })
   },
   edit_completed_group(e) {
@@ -843,7 +875,7 @@ Page({
     let group_users = encodeURIComponent(JSON.stringify(groups));
 
     wx.navigateTo({
-      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
     })
   },
   swiper_change(event) {
@@ -911,6 +943,36 @@ Page({
     wx.navigateTo({
       url: '../activity/activity?activity_info=' + activity_info + "&&test=test"
     })
+  },
+  /**
+ * 页面相关事件处理函数--监听用户下拉动作
+ */
+  onScrollRefresh() {
+    console.log("下拉刷新" + this.data.triggered)
+    var that = this;
+    setTimeout(function () {
+      that.setData({
+        triggered: false,
+      })
+    }, 2000);
+    this.init_activity_all_info(this.data.activity_info);
+  },
+  recore_mood() {
+    wx.navigateTo({
+      url: 'share_mood?activity_id=' + this.data.activity_info["activity_id"],
+    })
+  },
+  ViewImage(e) {
+    wx.previewImage({
+      urls: this.data.mood_img_list,
+      current: e.currentTarget.dataset.url
+    });
+  },
+  listenRadioChange(e) {
+    console.log(e.detail.value);
+    var sel_value = e.detail.value;
+    this.setData({
+      select_group_tag: sel_value
+    })
   }
-
 })

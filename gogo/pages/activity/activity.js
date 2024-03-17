@@ -59,13 +59,20 @@ Page({
     group_tag_list:new Array(1),
     group_room_list:[],
     group_limit_list:[],
-    group_tag_dict:{}
-
+    group_tag_dict:{},
+    pay_type:"免费",
+    pay_price:"0.00"
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
     this.setData({
       hobby_tag: hobbytagvalue
+    })
+  },
+  choose_pay_type(event) {
+    var pay_type = event.target.dataset.paytype;
+    this.setData({
+      pay_type: pay_type
     })
   },
   titleInput(e) {
@@ -82,6 +89,37 @@ Page({
     this.setData({
       max_part_number: e.detail.value
     })
+  },
+  priceInput(e) {
+    console.log(typeof(e.detail.value))
+    //var price = parseFloat(e.detail.value).toFixed(2);
+    this.setData({
+      pay_price: e.detail.value
+    })
+  },
+  priceInputBlur(){
+    var price = parseFloat(this.data.pay_price).toFixed(2);
+    console.log(typeof(price))
+    console.log(price)
+    if(price == "NaN"){
+      wx.showToast({
+        title: '金额有误',
+        icon:"error",
+        duration:3000
+      })
+      this.setData({
+        pay_price:"0.00"
+      })
+    }else{
+      wx.showToast({
+        title: '收费金额： '+price+"元",
+        icon:"none",
+        duration:3000
+      })
+      this.setData({
+        pay_price:price
+      })
+    }
   },
   roomInput(e) {
     this.setData({
@@ -105,6 +143,15 @@ Page({
     this.setData({
       begintime: e.detail.value
     })
+    var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
+    var begindate = new Date(this.data.begintime.replaceAll("-","/"))
+    console.log(enddate)
+    console.log(begindate)
+    if(begindate - enddate >= 0){
+      this.setData({
+        endtime: e.detail.value
+      })
+    }
   },
   TimeChange_endtime(e) {
     var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
@@ -114,7 +161,9 @@ Page({
     if(begindate - enddate >= 0){
       console.log("不合理的日期")
       wx.showToast({
-        title: '结束时间不能比开始时间早',
+        title: '不合理的日期',
+        icon:"error",
+        duration:3000
       })
       return;
     }
@@ -126,11 +175,34 @@ Page({
     this.setData({
       addendtime: e.detail.value
     })
+    var cancelendtime = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
+    var addendtime = new Date(this.data.addendtime.replaceAll("-","/"))
+    console.log(cancelendtime)
+    console.log(addendtime)
+    if(cancelendtime - addendtime > 0){
+      this.setData({
+        cancelendtime: e.detail.value
+      })
+    }
   },
   TimeChange_cancelendtime(e) {
+    var cancelendtime = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
+    var addendtime = new Date(this.data.addendtime.replaceAll("-","/"))
+    console.log(cancelendtime)
+    console.log(addendtime)
+    if(cancelendtime - addendtime > 0){
+      console.log("不合理的日期")
+      wx.showToast({
+        title: '不合理的日期',
+        icon:"error",
+        duration:3000
+      })
+      return;
+    }
     this.setData({
       cancelendtime: e.detail.value
     })
+
   },
   DateChange(e) {
     this.setData({
@@ -177,7 +249,6 @@ Page({
     })
   },
   chooseposition() {
-
     const key = 'R4FBZ-BCLKU-AQGVP-B3IJ4-TVKZS-YCBKJ'; //使用在腾讯位置服务申请的key
     const referer = '来呀'; //调用插件的app的名称
     console.log(this.data.latitude);
@@ -233,7 +304,6 @@ Page({
         info.push(that.data.partinfo_all_options[index])
       }
     });
-
     return info;
   },
   create_activity(nickname, url, gender) {
@@ -243,7 +313,7 @@ Page({
     this.setData({
       disabled_flag: true
     });
-
+    
     if (this.data.title == "") {
       wx.showToast({
         title: "请填写活动标题",
@@ -258,6 +328,14 @@ Page({
         icon: "none",
         duration: 3000
       });
+      return;
+    }else if(this.data.pay_type == "线上报名收费"&& (this.data.pay_price == NaN || this.data.pay_price == "0.00")){
+      wx.showToast({
+        title: "收费金额有误",
+        icon: "none",
+        duration: 3000
+      });
+      
       return;
     }
     else if (this.data.activityaddress == "请选择活动地点") {
@@ -297,7 +375,6 @@ Page({
       addendtime: this.data.addendtime,
       cancelendtime: this.data.cancelendtime
     });
-
     var that = this;
     console.log(typeof(that.data.edit_activity_flag))
     wx.request({
@@ -318,23 +395,26 @@ Page({
         "max_part_number": this.data.max_part_number,
         "partinfo": this.data.partinfo.toString(),
         "part_limit": this.data.part_limit_index,
-        "edit_activity_flag":this.data.edit_activity_flag
+        "edit_activity_flag":this.data.edit_activity_flag,
+        "pay_type":this.data.pay_type,
+        "pay_price":this.data.pay_price
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
+        wx.hideLoading();
         console.log("成功创建活动：" + res.data);
-        let activity_id = res.data;
-        if (activity_id["activity_id"] == "") {
-          wx.hideLoading();
+        let result = res.data;
+        if (result["activity_id"] == "") {
+          
           wx.showToast({
-            title: activity_id["result"],
+            title: result["result"],
             icon: "none",
             duration: 4000
           });
         }
-        if (activity_id["activity_id"] == "") {
+        if (result["activity_id"] == "") {
           console.log("创建失败");
           return;
         }
@@ -347,7 +427,7 @@ Page({
             name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
             formData: {
               'user': 'test',
-              'activity_id': activity_id["activity_id"]
+              'activity_id': result["activity_id"]
             },
             success: function (res) {
               wx.showToast({
@@ -362,12 +442,10 @@ Page({
             }
           });
         }
-       
         //后台上传背景图片，创建活动成功后直接跳转至用户页
-        wx.navigateTo({
+        wx.switchTab({
           url: '../user/user'
         })
-
       },
       fail: function (error) {
         wx.hideLoading();
@@ -731,5 +809,11 @@ Page({
    */
   onReachBottom: function () {
 
+  },
+  onTabItemTap(item) {
+    console.log(item.index)//0
+    console.log(item.pagePath)//pages/index/index
+    console.log(item.text)//首页
+    app.globalData.tab_page_path = item.pagePath;
   },
 })

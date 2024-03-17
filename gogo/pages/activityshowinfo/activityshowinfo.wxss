@@ -8,9 +8,6 @@
   .img{
     width:100vw;
     height:30vh;
-    z-index: -1;
-    position:absolute; 
-    top:0px;
   }
   .background {
     width: 100%;
@@ -115,4 +112,6 @@
       border-bottom: solid;
       border-width: 6rpx;
     }
+    .divide::after{border-bottom: blue 2px solid;}
+    .divide::last-child{border-bottom: red 2px solid;}
 	

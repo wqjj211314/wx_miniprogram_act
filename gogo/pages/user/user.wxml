@@ -5,14 +5,14 @@
 </view>
 <view class="main">
     <view class="flex userinfo">
-      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;">
+      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
           <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
           </view>
         </view>
 
 
       <view class="column-sidebar">
-        <button class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;" 	bindtap="new_nickName"><!--class="rightarrow"--> 
+        <button class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;" 	bindtap="modify_user_info"><!--class="rightarrow"--> 
           <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text><text class="cuIcon-triangledownfill text-black" style="font-size: 40rpx;margin-left:-2rpx;"></text>
         </button>
         <view bindtap="showModal-none" data-target="DialogModal-tag">
@@ -32,7 +32,7 @@
     </view>
 	 <view class="cu-item" bindtap="navigateToFriendList">
       <view class="cuIcon-comment text-green">
-        <view class="cu-tag badge" style="top:-1rpx;left:80rpx;" hidden="{{!friend_chat_msg_display}}"></view>
+        <view class="cu-tag badge" style="top:-1rpx;left:120rpx;" hidden="{{!friend_chat_msg_display}}"></view>
       </view>
       <text>消息</text>
     </view>
@@ -195,19 +195,3 @@
   </view>
 </view>
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="position: absolute;bottom: 0rpx;width: 100%;">
-  <view class="action {{url=='pages/index/index'?'text-blue':'text-black'}}" bindtap="navigateToindex">
-    <view class="cuIcon-homefill"></view> 首页
-  </view>
-  <view class="action {{url=='pages/activity/activity'?'text-red':'text-black'}}" bindtap="navigateToActivity">
-    <view class="cuIcon-roundaddfill"></view> 创建
-  </view>
-  <view class="action {{url=='pages/friend/friend'?'text-green':'text-black'}}" style="font-size: 30rpx;" bindtap="navigateToFriendList">
-    <view class="cuIcon-weixin"></view>
-    <view class="cu-tag badge" hidden="{{!friend_chat_msg_display}}"></view>
-    消息
-  </view>
-  <view class="action {{url=='pages/user/user'?'text-blue':'text-black'}}">
-    <view class="cuIcon-myfill"></view> 我的
-  </view>
-</view>

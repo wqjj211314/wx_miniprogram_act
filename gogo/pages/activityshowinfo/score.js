@@ -54,6 +54,7 @@ function get_pk_groups(hosturl,that,activity_id,group_tag){
       win_rate(users_score);
       users_score = sort_dict(users_score);
       that.setData({
+        all_pk_info:pkinfo,
         pk_groups:pkinfo.pk_groups,
         sort_users_score:users_score
       })
@@ -129,7 +130,7 @@ function get_score(pk_groups) {
   var users_score = {};
   var groups_score = {};
   pk_groups.forEach((item) => {
-    var score = item[item.length - 1];
+    var score = item[item.length - 2];
     var max = Math.max.apply(null, score);
     var min = Math.min.apply(null, score);
     console.log("max" + max);
@@ -145,7 +146,7 @@ function get_score(pk_groups) {
       battle = false;
     }
     item.forEach((group, index) => {
-      if (item.length != index + 1) {
+      if (index + 1 != item.length && index + 2 != item.length) {
         var group_score = score[index];
         var group_key = group.sort();
         group.forEach(user => {
@@ -242,7 +243,7 @@ function sort_dict(data) {
 
   return new_data;
 }
-
+exports.get_score = get_score
 exports.get_pk_groups = get_pk_groups
 exports.get_pk_groups_list = get_pk_groups_list
 exports.merge_all_pkgroups_score = merge_all_pkgroups_score

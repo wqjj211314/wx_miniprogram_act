@@ -79,6 +79,12 @@ Page({
   onPullDownRefresh() {
 
   },
+  onTabItemTap(item) {
+    console.log(item.index)//0
+    console.log(item.pagePath)//pages/index/index
+    console.log(item.text)//首页
+    app.globalData.tab_page_path = item.pagePath;
+  },
 
   /**
    * 页面上拉触底事件的处理函数

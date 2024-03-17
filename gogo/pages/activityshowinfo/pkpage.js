@@ -7,17 +7,20 @@ Page({
    * 页面的初始数据
    */
   data: {
+    activity_info:{},
     activity_id:"",
     group_tag:"",
     modalName: "",
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
     group_users: [],//这是当前分组的成员，数组形式
     member_users: {},//当前分组成员的字典形式，“#1”是key，成员信息是value
+    all_pk_info:{},//获取到的当前group_tag的Activitymemberpk信息
     pk_groups: [],
     custom_pk_group: [],
     edit_pk_group_index: 0,
     score_pk_group: [[0, 1], [2, 3]],
     pk_group_score: [],
+    pk_group_score_tags:[],
     sort_users_score: {},
     sort_users_score_list:[],
     sort_groups_score: {},
@@ -42,7 +45,8 @@ Page({
       group_users:group_users,
       group_tag:group_tag,
       member_users:member_users,
-      activity_id:options.activity_id
+      activity_id:options.activity_id,
+      activity_info:JSON.parse(decodeURIComponent(options.activity_info))
     })
     //获取已存储的对阵列表
     score.get_pk_groups(app.globalData.hosturl,this,options.activity_id,group_tag);
@@ -98,7 +102,11 @@ Page({
         })
         pk_group.push(each_group);
       })
-      pk_group.push(new Array(pk_num).fill(0));
+      var score = new Array(pk_num).fill(0);
+      var score_tags = [];
+      //score[score.length-1] = "";//比分标签
+      pk_group.push(score);
+      pk_group.push(score_tags);
       pk_groups.push(pk_group);
     });
     return pk_groups;
@@ -201,7 +209,7 @@ Page({
     var score_pk_group = this.data.pk_groups[index];
     console.log(score_pk_group);//[[1,2],[3,4]]//不是[[[1,2],[3,4]]]
     var pk_group_score = [];//new Array(score_pk_group.length-1).fill(0);
-    var score = score_pk_group[score_pk_group.length - 1];
+    var score = score_pk_group[score_pk_group.length - 2];
     score.forEach(item => {
       if (item != 0) {//默认的比分是0
         pk_group_score = score;
@@ -212,6 +220,7 @@ Page({
       edit_pk_group_index: index,
       score_pk_group: score_pk_group,
       pk_group_score: pk_group_score,
+      pk_group_score_tags:score_pk_group[score_pk_group.length - 1],
       modalName: "scoreModal"
     });
 
@@ -230,12 +239,21 @@ Page({
       pk_group_score: pk_group_score
     })
   },
+  input_score_tag(e) {
+    var score_tag = e.detail.value;
+    console.log("比分标签" + score_tag);
+    var pk_group_score_tags = this.data.pk_group_score_tags;
+    pk_group_score_tags[0] = score_tag;
+    this.setData({
+      pk_group_score_tags: pk_group_score_tags
+    })
+  },
   update_score(e) {
     var pk_group_score = this.data.pk_group_score;
     var score_pk_group = this.data.score_pk_group;
     var pk_groups = this.data.pk_groups;
     console.log(pk_groups);
-    score_pk_group[score_pk_group.length - 1] = pk_group_score;
+    score_pk_group[score_pk_group.length - 2] = pk_group_score;
     pk_groups[this.data.edit_pk_group_index] = score_pk_group;
     console.log("提交比分")
     console.log(this.data.edit_pk_group_index);
@@ -244,7 +262,8 @@ Page({
     this.setData({
       pk_groups: pk_groups,
       modalName: "",
-      pk_group_score: []//清空比分记录
+      pk_group_score: [],//清空比分记录
+      pk_group_score_tags:[]
     });
     score.get_score(pk_groups);
   },
@@ -259,13 +278,20 @@ Page({
       data: {
         "activity_id": activity_id,
         "group_tag": group_tag,
-        "pk_groups":pk_groups
+        "pk_groups":pk_groups,
+        "begintime":activity_info["begintime"],
+        "modify_time":this.data.all_pk_info["modify_time"] == undefined?"":this.data.all_pk_info["modify_time"]
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
         console.log(res);
+        wx.showToast({
+          title: res.data,
+          icon:"none",
+          duration:3000
+        })
       }
     });
   },
@@ -318,7 +344,6 @@ Page({
     })
   },
   expand_pk_group(){
-    
     var hidden_pk_group = !this.data.hidden_pk_group;
     console.log("展示隐藏对阵情况"+hidden_pk_group);
     this.setData({

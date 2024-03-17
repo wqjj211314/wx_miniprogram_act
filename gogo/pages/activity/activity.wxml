@@ -17,41 +17,24 @@
         </view>
       </view>
       <view class="cu-form-group">
-        <view class="title">活动开始时间</view>
-        <DatetimePicker mode="dateminute" value="{{begintime}}" bindchange="TimeChange_begintime">
-          <view class="picker">
-            {{begintime}}
+        <view class="title">收费类型</view>
+        <view class="flex justify-start" style="flex-flow: wrap;align-items: center;height: 60rpx;padding-top:10rpx;">
+          <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+            <button class="cu-btn round {{pay_type == '免费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="免费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">免费</button>
           </view>
-        </DatetimePicker>
+          <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+            <button class="cu-btn round {{pay_type == '线下收费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="线下收费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">线下收费</button>
+          </view>
+          <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+            <button class="cu-btn round {{pay_type == '线上报名收费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="线上报名收费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">线上报名收费</button>
+          </view>
+        </view>
       </view>
-
       <view class="cu-form-group">
-        <view class="title">活动结束时间</view>
-        <DatetimePicker mode="dateminute" value="{{endtime}}" bindchange="TimeChange_endtime">
-          <view class="picker">
-            {{endtime}}
-          </view>
-        </DatetimePicker>
+        <view class="title">收费金额<text class="cuIcon-recharge lg text-red"></text></view>
+        <input placeholder="请输入收费金额" bindinput='priceInput' type="digit" style="color:black;text-align: right;" bindblur="priceInputBlur" value="{{pay_price}}"></input>
       </view>
-
-      <view class="cu-form-group">
-        <view class="title">报名截止时间</view>
-        <DatetimePicker mode="dateminute" value="{{addendtime}}" bindchange="TimeChange_addendtime">
-          <view class="picker">
-            {{addendtime}}
-          </view>
-        </DatetimePicker>
-      </view>
-
-      <view class="cu-form-group">
-        <view class="title">取消报名截止时间</view>
-        <DatetimePicker mode="dateminute" value="{{cancelendtime}}" bindchange="TimeChange_cancelendtime">
-          <view class="picker">
-            {{cancelendtime}}
-          </view>
-        </DatetimePicker>
-      </view>
-
+      
       <view class="cu-form-group">
         <view class="title">限制人数</view>
         <input placeholder="默认10" bindinput='numberInput' type="number" style="color:black;text-align: right" value="{{max_part_number}}"></input>
@@ -69,9 +52,44 @@
       </view>
     </form>
   </view>
-
   <view class="cu-list menu card-menu margin-top shadow-warp">
+    <view class="cu-form-group">
+      <view class="title">活动开始时间</view>
+      <DatetimePicker mode="dateminute" value="{{begintime}}" bindchange="TimeChange_begintime">
+        <view class="picker">
+          {{begintime}}
+        </view>
+      </DatetimePicker>
+    </view>
 
+    <view class="cu-form-group">
+      <view class="title">活动结束时间</view>
+      <DatetimePicker mode="dateminute" value="{{endtime}}" bindchange="TimeChange_endtime">
+        <view class="picker">
+          {{endtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="title">报名截止时间</view>
+      <DatetimePicker mode="dateminute" value="{{addendtime}}" bindchange="TimeChange_addendtime">
+        <view class="picker">
+          {{addendtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+
+    <view class="cu-form-group">
+      <view class="title">取消报名截止时间</view>
+      <DatetimePicker mode="dateminute" value="{{cancelendtime}}" bindchange="TimeChange_cancelendtime">
+        <view class="picker">
+          {{cancelendtime}}
+        </view>
+      </DatetimePicker>
+    </view>
+  </view>
+  <view class="cu-list menu card-menu margin-top shadow-warp">
     <view class="cu-form-group" bindtap="chooseposition">
       <view class="title" style="width:22%;"><text class="cuIcon-locationfill text-green"></text>位置</view>
       <view class="flex" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;font-size: larger;">
@@ -131,19 +149,19 @@
       <button class="cu-btn bg-green shadow" bind:tap="show_group_tag_modal">自定义</button>
     </view>
     <block wx:for="{{group_tag_dict}}">
-    <view class="cu-form-group" style="">
-      <view class="title" style="flex:2;">{{index}}</view>
-      <view class="" style="flex:1;">人数:{{group_tag_dict[index].limit}}场地:{{group_tag_dict[index].room}}</view>
-    </view>
+      <view class="cu-form-group" style="">
+        <view class="title" style="flex:2;">{{index}}</view>
+        <view class="" style="flex:1;">人数:{{group_tag_dict[index].limit}}场地:{{group_tag_dict[index].room}}</view>
+      </view>
     </block>
   </view>
   <!--空白站位，保证以上内容能全部显示-->
   <view style="height: 150rpx;">
   </view>
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;">
-  <view class="" bindtap="getUserProfile" style="width: 100%;">
-    <button class="cu-btn bg-green round" style="width: 100%;">创建更新活动</button>
+<view class="cu-bar tabbar" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;padding-left: 20rpx;padding-right: 20rpx;">
+  <view class="" bindtap="getUserProfile" style="width: 100%;height: fit-content;">
+    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">创建更新活动</button>
   </view>
 </view>
 
@@ -203,24 +221,24 @@
       </view>
     </view>
     <view class="" style="padding: 20rpx;">
-    <scroll-view scroll-y="true" style="{{group_tag_list.length > 1?'height: 500rpx;':'height: 250rpx;'}}">
-    <block wx:for="{{group_tag_list}}">
-      <view class="flex" style="align-items: center;background-color: gainsboro;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
-        <view style="margin-right:20rpx;min-width: 85rpx;">分组{{index+1}}</view>
-        <view class="cu-form-group text-left flex" style="flex-direction: column;height:200rpx;background-color: gainsboro;flex:1;padding:0;">
-        <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;justify-content: space-between;">
-          <input placeholder="分组名称" bindinput='grouptagInput' style="color:black;" value="{{item}}" data-index="{{index}}" maxlength="20"></input>
-        </view>
-        <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
-          <input placeholder="场地房间信息" bindinput='grouproomInput' style="color:black;" value="{{grou_room_list[index]}}" data-index="{{index}}" maxlength="20"></input>
-        </view>
-        <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
-          <input placeholder="限制人数" bindinput='grouplimitInput' style="color:black;" value="{{group_limit_list[index]}}" data-index="{{index}}" type="number" maxlength="5"></input>
-        </view>
-        </view>
-      </view>
-    </block>
-    <view style="height: 10rpx;"></view>
+      <scroll-view scroll-y="true" style="{{group_tag_list.length > 1?'height: 500rpx;':'height: 250rpx;'}}">
+        <block wx:for="{{group_tag_list}}">
+          <view class="flex" style="align-items: center;background-color: gainsboro;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
+            <view style="margin-right:20rpx;min-width: 85rpx;">分组{{index+1}}</view>
+            <view class="cu-form-group text-left flex" style="flex-direction: column;height:200rpx;background-color: gainsboro;flex:1;padding:0;">
+              <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;justify-content: space-between;">
+                <input placeholder="分组名称" bindinput='grouptagInput' style="color:black;" value="{{item}}" data-index="{{index}}" maxlength="20"></input>
+              </view>
+              <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+                <input placeholder="场地房间信息" bindinput='grouproomInput' style="color:black;" value="{{grou_room_list[index]}}" data-index="{{index}}" maxlength="20"></input>
+              </view>
+              <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+                <input placeholder="限制人数" bindinput='grouplimitInput' style="color:black;" value="{{group_limit_list[index]}}" data-index="{{index}}" type="number" maxlength="5"></input>
+              </view>
+            </view>
+          </view>
+        </block>
+        <view style="height: 10rpx;"></view>
       </scroll-view>
       <view class="flex" style="align-content: flex-start;font-size: 20rpx;">
         <text class="cuIcon-warn" style="font-size: 20rpx;color: red;"></text>

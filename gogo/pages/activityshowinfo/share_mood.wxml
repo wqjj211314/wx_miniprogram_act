@@ -1,0 +1,23 @@
+<view class="" style="padding-top:0px;margin-top:0px;">
+<view class="bg-white padding" >
+  <textarea placeholder="说下此刻的心情想法..." auto-height maxlength="400" bindinput='detailInput' style="max-height:10em;min-height: 5em;width: 100%;" value="{{detail}}"></textarea>
+</view>
+    <view class="radius bg-white">
+      <view class='pagecenter1' style="padding-top:20rpx;">
+        <view class="cu-form-group">
+          <view class="grid col-4 grid-square flex-sub">
+            <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+              <image src='{{imgList[index]}}' mode='aspectFill'></image>
+              <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+                <text class="cuIcon-close"></text>
+              </view>
+            </view>
+            <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
+              <text class="cuIcon-cameraadd"></text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <button class="bg-green margin-top" bind:tap="save_mood">发表</button>

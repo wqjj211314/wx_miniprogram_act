@@ -18,7 +18,7 @@ Page({
     isFocus: false,
     isdisplay: true,
     vertical: true,
-    activity_id: "",
+    activity_id: "",//当前所要展示的id，主要用于活动页切换首页的首个id显示
     option_activity_id: "",
     first_activity_id: "",
     activity_list: [],//实际数据
@@ -39,31 +39,19 @@ Page({
     share_res_limit:0,
     share_use_id:"",
     friend_chat_msg_display:false,
-    url:"pages/index/index"
   },
   onLoad: function (options) {
 
     console.log("onload函数");
-    var url = util.getCurrentPageUrl();
-    console.log(url);
-    this.setData({url});
-    if (options.hasOwnProperty("activity_id")) {
-      var info = JSON.parse(decodeURIComponent(options.activity_id));
-      console.log("创建的活动id" + info);
-      this.setData({
-        activity_id: info.activity_id
-      });
-    }
     if (options.hasOwnProperty("share_use_id")){
       let share_use_id = decodeURIComponent(options.share_use_id);
         this.setData({
           share_use_id:share_use_id
         });
     }
+    
     server.get_activity_list(this, app);
     server.get_friend_newest_chat_msg(this, app);
-    
-
   },
   socketinit() {
     var that = this;
@@ -188,7 +176,7 @@ Page({
         })
       }else{
       //登录的情况下，点击跳转用户页
-      wx.navigateTo({
+      wx.switchTab({
         url: '../user/user'
         
       })
@@ -314,7 +302,6 @@ Page({
   onShow: function () {
     console.log("首页onShow");
     this.setData({
-      
       friend_chat_msg_display:app.globalData.friend_chat_msg_display
     });
     //查看是否授权
@@ -322,47 +309,12 @@ Page({
     this.check_user_profile_cache();
     console.log("onshow 函数" + this.data.activity_id);
     console.log("onshow 函数" + this.data.option_activity_id);
-    if (this.data.activity_id != "") {
-      //server.get_init_msg(this,app,this.data.activity_id);
+    //用户其他页面切换刷新，从活动页切换首页要刷新
+    if (app.globalData.current_activity_id != "") {
+      server.get_activity_list(this, app,app.globalData.current_activity_id);
+      app.globalData.current_activity_id = "";
+      server.get_friend_newest_chat_msg(this, app);
     }
-    var that = this;
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-              console.log("appjs用户openid");
-              console.log(res.data);
-              console.log(res.data.openid);
-              
-              var login_userInfo = that.data.login_userInfo;
-              login_userInfo["user_id"] = res.data.openid;
-              login_userInfo["nickName"] = res.data.nickName;
-              login_userInfo["avatarUrl"] = res.data.avatarUrl;
-              login_userInfo["gender"] = res.data.gender;
-              that.setData({
-                login_userInfo,
-                hasUserInfo:true
-              });
-              try {
-                wx.setStorageSync('openid', res.data.openid);
-                //wx.setStorageSync('nickName', res.data.nickName);
-              } catch (e) { }
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    });
-
-
-
   },
   /**
    * 页面相关事件处理函数--监听用户下拉动作
@@ -434,5 +386,15 @@ Page({
     wx.navigateTo({
       url: '../friend/friend'
     })
+  },
+  onTabItemTap(item) {
+    console.log(item.index)//0
+    console.log(item.pagePath)//pages/index/index
+    console.log(item.text)//首页
+    if(item.pagePath == app.globalData.tab_page_path){
+      server.get_activity_list(this, app, "refresh");
+      server.get_friend_newest_chat_msg(this, app);
+    }
+    app.globalData.tab_page_path = item.pagePath;
   },
 })

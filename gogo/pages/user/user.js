@@ -42,27 +42,10 @@ Page({
     })
   },
   modify_user_info:function(e){
-    console.log(e);
-    var avatarUrl = e.detail.avatarUrl;
-    var userinfo = this.data.userinfo;
-    userinfo["avatarUrl"] = avatarUrl;
-    this.setData({
-      userinfo
-    });
-    wx.uploadFile({
-      url: app.globalData.hosturl + 'upload_avatar_url', //接口
-      filePath: avatarUrl,
-      name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
-      formData: {
-        'user_id': userinfo["user_id"]
-      },
-      success: function (res) {
-        
-      },
-      fail: function (error) {
-        console.log(error);
-      }
-    });
+    wx.navigateTo({
+      url: 'login?userInfo='+encodeURIComponent(JSON.stringify(this.data.userinfo))
+    })
+    return;
 
   },
   new_nickName:function(){
@@ -228,5 +211,11 @@ Page({
    */
   onReachBottom: function () {
 
-  }
+  },
+  onTabItemTap(item) {
+    console.log(item.index)//0
+    console.log(item.pagePath)//pages/index/index
+    console.log(item.text)//首页
+    app.globalData.tab_page_path = item.pagePath;
+  },
 })

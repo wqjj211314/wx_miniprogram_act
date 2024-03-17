@@ -1,0 +1,79 @@
+<scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+  <view wx:for="{{moods}}" class="" wx:key="{{item.id}}" bindtap="ViewImage" data-url="{{item.img_url}}" wx:if="{{sort_users_score_empty_flag}}">
+    <view style="margin-top: 10rpx;">
+      <view class="cu-avatar square sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">
+      </view>
+      <text class="text-black" style="max-width:200px;font-size:30rpx;padding-right:10rpx;font-weight:bold;" bindtap="">{{item["user_info"].nickName}}
+      </text>
+    </view>
+    <view class="text-content" style="color:black;font-size: 25rpx;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;word-wrap: break-word;line-height: normal;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;"><text>{{item.mood_text}}</text>
+    </view>
+    <image src="{{item.img_url}}" mode="aspectFill" style="height: 800rpx;width: 100%;"></image>
+  </view>
+  <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:600rpx" autoplay="true" wx:if="{{moods.length > 0 && !sort_users_score_empty_flag}}">
+    <swiper-item wx:for="{{moods}}" class="" wx:key="{{item.id}}" bindtap="ViewImage" data-url="{{item.img_url}}">
+      <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;"></image>
+      <view class="" style="position: absolute;bottom: 0;width: 100%;">
+        <view class="cu-card article" style="width:80%;margin-bottom:15rpx;">
+          <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
+            <view class="title" style="padding:0rpx;">
+              <view class="customer-title-cu-btn flex" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
+                <view>
+                  <view class="cu-avatar round sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">
+                  </view>
+                  <text class="text-white" style="max-width:200px;font-size:30rpx;padding-right:10rpx;" bindtap="">{{item["user_info"].nickName}}
+                  </text>
+                </view>
+                <view class="text-content" style="color:white;font-size: 25rpx;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;word-wrap: break-word;line-height: normal;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;"><text>{{item.mood_text}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+  <view wx:if="{{!sort_users_score_empty_flag}}">数据排名</view>
+  <block wx:for="{{sort_users_score}}">
+    <view class="cu-list menu-avatar" style="margin:0rpx;">
+      <view class="cu-item">
+        <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(member_users[index].member_num)}}号</view>
+        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{member_users[index].avatarUrl}});"></view>
+        <view class="content" style="left: 170rpx;">
+          <view class="text-grey">{{member_users[index].nickName}}</view>
+          <view class="text-black flex" style="font-size: 20rpx;">
+            <view class="text-cut">
+              <view class="flex">
+                <text class="cuIcon-tagfill text-red  margin-right-xs"></text>
+                <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">{{key}}:{{value}}<text style="color: red;">|</text>
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="action">
+          <view class="text-grey text-xs">平|负|胜</view>
+          <view class=" bg-grey">{{item["peace"]}} | {{item["fail"]}} | {{item["win"]}}</view>
+        </view>
+        <view class="action">
+          <view class="text-grey text-xs">总得分</view>
+          <view class="cu-tag round bg-grey sm">{{item["score"]}}</view>
+        </view>
+        <view class="action">
+          <view class="text-grey text-xs">胜率</view>
+          <view class="cu-tag round bg-grey sm">{{item["win_rate"]}}</view>
+        </view>
+        <view class="action" bind:tap="like" data-likemembergroup="{{index}}">
+          <!--点赞功能-->
+          <text class="lg {{like_dict[index]['like_flag']?'text-red cuIcon-appreciatefill':'text-gray cuIcon-appreciate'}}" style="font-size: 48rpx;">
+            <text style="font-size: 30rpx;">{{like_dict[index]['member_nums'].length}}</text>
+          </text>
+        </view>
+
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{sort_users_score_empty_flag && moods.length <= 0}}" style="margin-top: 40vh;font-size: 50rpx;margin-left: 18vw;color: gray;">开始对阵记录见闻吧</view>
+  <view style="height: 200rpx;"></view>
+</scroll-view>

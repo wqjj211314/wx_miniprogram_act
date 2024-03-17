@@ -2,7 +2,9 @@
   <image class='background2' src="/default_index_bg.png" mode="aspectFill"></image>
   <button class="cu-btn lines-white margin-tb-sm padding lg" style="margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">重新加载</button>
 </view>
-<swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}" bindchange="slide" style="height:92.5vh;">
+<!---->
+<!--circular-->
+<swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}" bindchange="slide" style="height:100vh;">
   <block wx:for="{{recyler_list}}" wx:key="id" wx:for-index="idx">
     <swiper-item>
       <image class='background' src="{{hosturl}}static/blur_{{item.activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
@@ -40,7 +42,7 @@
         <block wx:for="{{chat_msgs}}">
           <view>
             <view class="customer-msg-cu-btn bg-touming">
-              <text class="text-cyan text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
+              <text class="text-blue text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
             </view>
           </view>
         </block>
@@ -109,20 +111,3 @@
     </swiper-item>
   </block>
 </swiper>
-
-<view class="cu-bar tabbar bg-white">
-  <view class="action {{url=='pages/index/index'?'text-blue':'text-black'}}" bindtap="refresh">
-    <view class="cuIcon-homefill"></view> 首页
-  </view>
-  <view class="action {{url=='pages/activity/activity'?'text-red':'text-black'}}" bindtap="navigateToActivity">
-    <view class="cuIcon-roundaddfill"></view> 创建
-  </view>
-  <view class="action {{url=='pages/friend/friend'?'text-green':'text-black'}}" style="font-size: 30rpx;" bindtap="navigateToFriendList">
-    <view class="cuIcon-weixin"></view>
-    <view class="cu-tag badge" hidden="{{!friend_chat_msg_display}}"></view>
-    消息
-  </view>
-  <view class="action {{url=='pages/user/user'?'text-blue':'text-black'}}" bindtap='getUserProfile'>
-    <view class="cuIcon-myfill"></view> 我的
-  </view>
-</view>

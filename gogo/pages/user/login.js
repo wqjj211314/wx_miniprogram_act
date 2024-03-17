@@ -73,13 +73,15 @@ Page({
     });
   },
   submit_userinfo:function(){
+    console.log(this.data.userInfo["avatarUrl"])
     var that = this;
+    
     wx.request({
       url: app.globalData.hosturl + 'update_user_info',
       data: {
         "user_id":app.globalData.login_userInfo["user_id"],
         "nickName":that.data.userInfo["nickName"],
-        "avatarUrl":that.data.userInfo["avatarUrl"],
+        "avatarUrl":"",
         "gender":that.data.userInfo["gender"]
       },
       header: {
@@ -93,7 +95,7 @@ Page({
             modalName: ""
           });
           app.globalData.login_userInfo = res.data;
-          wx.navigateTo({
+          wx.switchTab({
             url: '../user/user'
           })
         }

@@ -74,7 +74,9 @@ App({
     group_sel_values: [],
     edit_group_user: [],
     edit_index: 0,
-    edit_group_tag: ""
+    edit_group_tag: "",
+    tab_page_path:"pages/index/index",
+    reload_activity_share_moods:false//在分享见闻界面返回活动界面时需要重新加载
   },
   user_login() {
     var that = this;
