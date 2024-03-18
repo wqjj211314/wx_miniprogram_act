@@ -342,7 +342,9 @@ Page({
    */
   onShow: function (options) {
     console.log("onshow加载");
-    if (app.globalData.openid == this.data.activity_user_info["user_id"] || app.globalData.checking_flag) {
+    console.log(app.globalData.login_userInfo["user_id"])//可能会慢
+    console.log(this.data.activity_user_info["user_id"])
+    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"] || app.globalData.checking_flag) {
       this.setData({
         admin_flag: true
       });

@@ -3,7 +3,7 @@
 <scroll-view scroll-x="false" scroll-y="true" style="height: 90vh;">
 <!--当前分组或者未分组成员展示-->
   <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-left:13rpx;border-bottom: 10rpx;">
-    <view style="width: 100%;margin-bottom: 10rpx;">{{group_tag==""?"未分组":group_tag}}（{{group_users.length}}）</view>
+    <view style="width: 100%;margin-bottom: 10rpx;">{{group_tag==""?"未分组":group_tag}}({{group_users.length}})</view>
     <block wx:for="{{group_users}}" wx:for-item="user">
       <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
         <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
@@ -13,10 +13,37 @@
         <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
       </view>
     </block>
-    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag}}">
-      <text class="cuIcon-edit" style="font-size: 45rpx;color: grey;"></text>
-    </view>
   </view>
+<!--详情展示-->
+<block wx:if="{{item0.show_flag}}">
+          <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
+            <view class="cu-list menu-avatar" style="margin:0rpx;{{index==0?'border-top-style:solid;border-color:gray;border-width: 0.5rpx;':''}}">
+              <view class="cu-item">
+                <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
+                <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
+                  <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+                  </view>
+                </view>
+                <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
+                  <view class="text-black">{{item.nickName}}</view>
+                  <view class="text-black flex" style="font-size: 20rpx;">
+                    <view class="" style="word-break: break-all;">
+                      <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
+                        <text class="cuIcon-tagfill text-red"></text>
+                        <text class="margin-right-xs">{{key}}:{{value}}</text>
+                      </block>
+                    </view>
+                  </view>
+                </view>
+                <view class="action">
+                  <view class="text-black text-xs">{{activity_info.activity_tag}}积分</view>
+                  <view class="cu-tag round bg-green sm">{{item.hobby_info.hobby_point}}</view>
+                </view>
+              </view>
+            </view>
+          </block>
+        </block>
+
 
   <view class="flex" style="justify-content:space-between;padding: 10rpx 10rpx;">
     <view>战绩排行</view>

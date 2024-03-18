@@ -88,10 +88,10 @@ Page({
     console.log(typeof index);
     console.log(this.data.activity_create_list.length);
     var activity_info = this.data.activity_create_list[index];
-    //直接跳转到创建activity的界面
+    //跳转到更新activity的界面
     activity_info = encodeURIComponent(JSON.stringify(activity_info));
     wx.navigateTo({
-      url: '../activity/activity?activity_info=' + activity_info
+      url: '../activity/editactivity?activity_info=' + activity_info
     })
   },
   /**

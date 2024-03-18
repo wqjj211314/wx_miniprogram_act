@@ -58,7 +58,6 @@
           <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}">
             <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
           </view>
-
           <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
             <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
           </view>

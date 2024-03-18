@@ -19,6 +19,11 @@ App({
 
     try {
       console.log("用户APP登录");
+      //直接获取缓存保存的
+      var openid = wx.getStorageSync('openid');
+      if (openid == "" || openid == undefined) {
+        this.globalData.login_userInfo["user_id"] = openid;
+      }
       this.user_login();
     } catch (e) {
       console.log("持久化登录信息获取失败");
@@ -60,6 +65,7 @@ App({
   globalData: {
     hosturl: "https://www.2week.club:5000/",
     current_activity_id: "",
+    activity_info:"",//跳转TAB activity.js页面要使用的，
     activity_user_info: "",
     login_userInfo: {},
     hasUserInfo: false,

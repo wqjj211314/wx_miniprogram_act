@@ -279,7 +279,7 @@ Page({
         "activity_id": activity_id,
         "group_tag": group_tag,
         "pk_groups":pk_groups,
-        "begintime":activity_info["begintime"],
+        "begintime":this.data.activity_info["begintime"],
         "modify_time":this.data.all_pk_info["modify_time"] == undefined?"":this.data.all_pk_info["modify_time"]
       },
       header: {

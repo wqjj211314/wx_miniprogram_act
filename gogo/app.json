@@ -21,13 +21,14 @@
     "pages/activitycheck/activitycheck",
     "pages/logs/logs",
     "pages/hobby/edithobby",
-    "pages/components/datetimepicker"
+    "pages/components/datetimepicker",
+    "pages/activity/editactivity"
   ],
   "tabBar": {
     "color": "#2c2c2c",
-        "selectedColor": "#39b54a",
-        "backgroundColor": "#fff",
-        "borderStyle": "white",
+    "selectedColor": "#39b54a",
+    "backgroundColor": "#fff",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -55,7 +56,6 @@
       }
     ]
   },
- 
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",

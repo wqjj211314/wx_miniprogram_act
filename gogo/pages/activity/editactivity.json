@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "DatetimePicker": "../components/datetimepicker"
+
+  },
+  "navigationBarTitleText": "更新活动"
+}
