@@ -78,8 +78,8 @@
                   <view class="text-black flex" style="font-size: 20rpx;">
                     <view class="" style="word-break: break-all;">
                       <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
-                        <text class="cuIcon-tagfill text-red" wx:if="{{tools.not_equal(key,'姓名','性别')}}"></text>
-                        <text class="margin-right-xs" wx:if="{{tools.not_equal(key,'姓名','性别')}}">{{key}}:{{value}}</text>
+                        <text class="cuIcon-tagfill text-red"></text>
+                        <text class="margin-right-xs">{{key}}:{{value}}</text>
                       </block>
                     </view>
                   </view>
