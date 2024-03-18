@@ -308,7 +308,7 @@ Page({
       data: {
         "activity_id": that.data.activity_info.activity_id,
         "cancel_part_members": that.data.cancel_part_members,
-        "begintime": activity_info["begintime"]
+        "begintime": that.data.activity_info["begintime"]
       },
       header: {
         'content-type': 'application/json' // 默认值

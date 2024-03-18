@@ -29,10 +29,18 @@ var show_vs_scores = function(scores){
   }
 }
 
+var not_equal = function(v1,v2,v3){
+  if(v1 != v2 || v1 != v3){
+    return true;
+  }else{
+    return false;
+  }
+}
 
 module.exports = {
   show_member_num: show_member_num,
   show_vs_scores:show_vs_scores,
-  iscontain:iscontain
+  iscontain:iscontain,
+  not_equal:not_equal
 };
 module.exports.msg = "some msg";
