@@ -7,32 +7,26 @@
       </view>
       <view class="cu-form-group">
         <view class="title">活动类型</view>
-        <input placeholder="选择或输入" bindinput='tagInput' style="color:black;" value="{{hobby_tag}}"></input>
-      </view>
-      <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
-        <view class="flex justify-start" style="flex-flow: wrap;">
-          <view class="text-center" wx:for="{{hobby_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;">
-            <button class="cu-btn round {{hobby_tag == hobby_tags[index]?'bg-green':''}}" bindtap="choosetag" data-hobbytag="{{hobby_tags[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
+        <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+            <button class="cu-btn round bg-green" bindtap="choosetag" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{hobby_tag}}</button>
           </view>
-        </view>
       </view>
+
       <view class="cu-form-group">
         <view class="title">收费类型</view>
         <view class="flex justify-start" style="flex-flow: wrap;align-items: center;height: 60rpx;padding-top:10rpx;">
           <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
-            <button class="cu-btn round {{pay_type == '免费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="免费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">免费</button>
-          </view>
-          <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
-            <button class="cu-btn round {{pay_type == '线下收费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="线下收费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">线下收费</button>
-          </view>
-          <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
-            <button class="cu-btn round {{pay_type == '线上报名收费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="线上报名收费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">线上报名收费</button>
+            <button class="cu-btn round bg-green" bindtap="choose_pay_type" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{pay_type}}</button>
           </view>
         </view>
       </view>
       <view class="cu-form-group">
         <view class="title">收费金额<text class="cuIcon-recharge lg text-red"></text></view>
-        <input placeholder="请输入收费金额" bindinput='priceInput' type="digit" style="color:black;text-align: right;" bindblur="priceInputBlur" value="{{pay_price}}"></input>
+        <view class="flex justify-start" style="flex-flow: wrap;align-items: center;height: 60rpx;padding-top:10rpx;">
+          <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+            <button class="cu-btn round bg-green" bindtap="choose_pay_type" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{pay_price}}</button>
+          </view>
+        </view>
       </view>
       
       <view class="cu-form-group">

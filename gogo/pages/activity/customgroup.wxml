@@ -1,0 +1,45 @@
+<view class="" style="padding: 20rpx;width: 100%;height: fit-content;">
+  <scroll-view scroll-y="true" style="{{group_tag_list.length > 1?'max-height: 100vh;':'height: 250rpx;'}}">
+    <block wx:if="{{group_tag_list.length == 0}}">
+      <view class="flex" style="align-items: center;background-color: gainsboro;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
+        <view style="margin-right:20rpx;min-width: 85rpx;">分组1</view>
+        <view class="cu-form-group text-left flex" style="flex-direction: column;height:200rpx;background-color: gainsboro;flex:1;padding:0;">
+          <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;justify-content: space-between;">
+            <input placeholder="分组名称" bindinput='grouptagInput' style="color:black;" value="" data-index="{{0}}" maxlength="20"></input>
+          </view>
+          <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+            <input placeholder="场地房间信息" bindinput='grouproomInput' style="color:black;" value="" data-index="{{0}}" maxlength="20"></input>
+          </view>
+          <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+            <input placeholder="限制人数" bindinput='grouplimitInput' style="color:black;" value="" data-index="{{0}}" type="number" maxlength="5"></input>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:for="{{group_tag_list}}">
+      <view class="flex" style="align-items: center;background-color: gainsboro;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
+        <view style="margin-right:20rpx;min-width: 85rpx;">分组{{index+1}}</view>
+        <view class="cu-form-group text-left flex" style="flex-direction: column;height:200rpx;background-color: gainsboro;flex:1;padding:0;">
+          <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;justify-content: space-between;">
+            <input placeholder="分组名称" bindinput='grouptagInput' style="color:black;" value="{{group_tag_list[index]}}" data-index="{{index}}" maxlength="20"></input>
+          </view>
+          <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+            <input placeholder="场地房间信息" bindinput='grouproomInput' style="color:black;" value="{{group_room_list[index]}}" data-index="{{index}}" maxlength="20"></input>
+          </view>
+          <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+            <input placeholder="限制人数" bindinput='grouplimitInput' style="color:black;" value="{{group_limit_list[index]}}" data-index="{{index}}" type="number" maxlength="5"></input>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view style="height: 10rpx;"></view>
+  </scroll-view>
+  <view class="flex" style="align-content: flex-start;font-size: 20rpx;">
+    <text class="cuIcon-warn" style="font-size: 20rpx;color: red;"></text>
+    分组名称要唯一，创建完活动之后仍然可以修改新增分组
+  </view>
+</view>
+<view class="cu-bar bg-white">
+  <view class="action margin-0 flex-sub text-green solid-left" bindtap="addgroup">新增分组</view>
+  <view class="action margin-0 flex-sub  solid-left" bindtap="save_group_tag_dict">确定</view>
+</view>

@@ -16,7 +16,7 @@
           <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text><text class="cuIcon-triangledownfill text-black" style="font-size: 40rpx;margin-left:-2rpx;"></text>
         </button>
         <view bindtap="showModal-none" data-target="DialogModal-tag">
-          <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;"><!--class="rightarrowred"-->小队出发啦</view>
+          <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
         </view>
       </view>
 

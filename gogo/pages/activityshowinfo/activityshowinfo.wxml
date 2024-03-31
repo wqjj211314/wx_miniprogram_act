@@ -1,29 +1,30 @@
+<cu-custom bgColor="bg-gradual-pink" isCustom="{{true}}" activityid="{{activity_info.activity_id}}">
+  <view slot="content">{{activity_info.title}}</view>
+</cu-custom>
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-<view class="bg-white nav text-center flex" style="height:45rpx;margin: 0;padding: 0;justify-content:space-around;align-items: center;">
-  <view class="cu-item {{0==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;">
-    <text class="cuIcon-activityfill"></text> 活动
-  </view>
-  <view class="cu-item {{1==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;">
-    <text class="cuIcon-circlefill"></text> 分组
-  </view>
-  <view class="cu-item {{2==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;">
-    <text class="cuIcon-upstagefill"></text> 数据记录
-  </view>
-</view>
+<include src="activityshowinfo_topscrollbar.wxml" />
 <swiper style="height:calc(100% - 45rpx);;" current="{{current_swiper_item_index}}" bindchange="swiper_change">
   <!--活动页面-->
   <swiper-item style="width: 100%;height:100%;overflow: auto;">
-    <scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+
+    <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
       <!--这个创建活动页面基本完整，UI上正常-->
       <view style="width:100vw;height:30vh;">
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
       </view>
-      <view class="cu-list menu card-menu" style="margin-top: -130rpx;">
-        <button class="bg-white" style="max-width: 280rpx;margin-left:0rpx;margin-bottom: -20rpx;border-top-right-radius: 55rpx;height:100rpx;padding:0rpx;text-align:left;padding-left:30rpx;color: red;">收费{{activity_info.pay_price}}元</button>
+      <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
         <view class="cu-item" style="padding-right:5rpx;border-top-right-radius: 20rpx;">
           <view class="content" style="word-break: break-all;">
-            <text class="text-black text-lg" style="flex-flow: wrap;">{{activity_info.title}}{{activity_info.title}}</text>
+            <view class="text-black text-lg" style="flex-flow: wrap;margin-bottom: 10rpx;margin-top: 15rpx;font-size: 45rpx;">{{activity_info.title}}</view>
+            <view class="flex justify-start" style="flex-flow: wrap;">
+              <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+                <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{activity_info.pay_type}}<text style="color: red;">{{activity_info.pay_price==0?"":activity_info.pay_price+"元"}}</text></button>
+              </view>
+              <view class="text-center" wx:for="{{title_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+                <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
+              </view>
+            </view>
           </view>
           <button class="cu-btn icon bg-white" open-type="share">
             <text class="cuIcon-share text-green" style="font-size: 45rpx;"></text>
@@ -35,28 +36,23 @@
           </view>
           <view class="action" style="flex:1;">
             <text class="text-blue text-sm">{{activity_info.activity_live}}</text>
+            
           </view>
         </view>
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-locationfill text-green"></text>
+            <text class="iconfont icon-changguanyuyue text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
 
-            <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
+            <text class="text-blue text-sm">{{activity_info.show_activityaddress}}</text>
           </view>
         </view>
-        <view class="cu-item">
-          <view class="content">
-            <text class="cuIcon-peoplefill text-green"></text>
-            <text class="text-grey">场地</text>
-          </view>
-          <view class="action" style="max-width:70%;">
-            <text class="text-blue text-sm">{{activity_info.room==""?"暂定":activity_info.room}}</text>
-          </view>
-        </view>
-        <view class="cu-item arrow" style="" bindtap="showModal" data-target="DialogModal-partinfo">
+        <view class="cu-item arrow" bindtap="showModal" data-target="DialogModal-partinfo">
           <view class="content" style="width:30%;">
             <text class="cuIcon-circlefill text-green"></text>
-            <text class="text-grey">参与{{avatarUrl_list.length+"/"+activity_info.max_part_number}}</text>
+            <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 30rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">{{activity_info.pay_price}}
+          </text>
+          参与{{avatarUrl_list.length+"/"+activity_info.max_part_number}}
+            
           </view>
           <view class="action" style="max-width:70%;">
             <view class="cu-avatar-group">
@@ -67,12 +63,27 @@
             </view>
           </view>
         </view>
-
-
-
+      
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-peoplefill text-green"></text>
+            <text class="cuIcon-locationfill text-green"></text>
+
+            <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
+          </view>
+        </view>
+        <view class="cu-item">
+          <view class="content">
+            <text class="iconfont icon-changdi text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
+            <text class="text-grey">场地</text>
+          </view>
+          <view class="action" style="max-width:70%;">
+            <text class="text-blue text-sm">{{activity_info.room==""?"暂定":activity_info.room}}</text>
+          </view>
+        </view>
+        
+        <view class="cu-item">
+          <view class="content">
+            <text class="cuIcon-activityfill text-green"></text>
             <text class="text-grey">发起人</text>
           </view>
           <view class="action" style="max-width:70%;">
@@ -91,9 +102,6 @@
             <text class="text-blue text-sm">{{activity_info.part_limit_dec}}</text>
           </view>
         </view>
-
-
-
         <view class="cu-item">
           <view class="content">
             <view class="text-blue text-sm" style="">
@@ -104,11 +112,14 @@
             </view>
           </view>
         </view>
-
       </view>
 
       <view class="cu-list menu card-menu margin-top">
+        <view style="text-align: center;" class="bg-white">
+        <text class="text-grey text-sm"><text class="cuIcon-remind lg text-red"></text>{{activity_info.addendtimeweek}}报名截止</text>
+      </view>
         <view class="cu-item" wx:if="{{partinfo.length > 0}}">
+          
           <view class="content">
             <text class="cuIcon-newsfill text-green"></text>
             <text class="text-grey">报名信息</text>
@@ -127,7 +138,7 @@
                   <text class="cuIcon-female">
                   </text>
                 </view>
-                <view class="cu-tag round {{partinfo_sex=='1'?'bg-blue':''}}" style="width: 80rpx;height:50rpx;margin-left:40rpx;"  bind:tap="choosesex" data-sex="1">男
+                <view class="cu-tag round {{partinfo_sex=='1'?'bg-blue':''}}" style="width: 80rpx;height:50rpx;margin-left:40rpx;" bind:tap="choosesex" data-sex="1">男
                   <text class="cuIcon-male">
                   </text>
                 </view>
@@ -143,7 +154,7 @@
         </form>
         <view class="cu-item" wx:if="{{partinfo.length > 0}}" style="flex-direction: column;align-items: flex-start;">
           <view class="content">
-            <text class="cuIcon-newsfill text-green"></text>
+            <text class="iconfont icon-fenzu text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
             <text class="text-grey">报名预分组</text>
           </view>
         </view>
@@ -162,80 +173,90 @@
           </form>
         </radio-group>
       </view>
-
-      <view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
-        <view class="cu-dialog" style="width: fit-content;max-width: 680rpx;">
-          <view class="cu-bar bg-white justify-end">
-            <view class="content text-bold" style="font-size: 30rpx;color: #070707;">报名(限{{activity_info.max_part_number}}名)</view>
-            <view class="action" bindtap="hideModal">
-              <text class="cuIcon-close text-red"></text>
+      <view class="cu-list menu card-menu margin-top" wx:if="{{activity_info.detail.length>0}}">
+        <view style="text-align: center;" class="bg-white">
+        <text class="text-grey text-sm"><text class="cuIcon-form lg text-green"></text>活动详情</text>
+      </view>
+      <view class="cu-item">
+          <view class="content">
+            <view class="text-grey text-sm" style="">
+              <text>{{activity_info.detail}}
+              </text>
             </view>
           </view>
-          <view class="">
-            <view class="su-table-box">
-              <view class="su-table">
-                <!-- 表格标题 -->
-                <view class="su-tr">
+        </view>
+      </view>
+    </scroll-view>
+    <view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
+      <view class="cu-dialog" style="width: fit-content;max-width: 680rpx;">
+        <view class="cu-bar bg-white justify-end">
+          <view class="content text-bold" style="font-size: 30rpx;color: #070707;">报名(限{{activity_info.max_part_number}}名)</view>
+          <view class="action" bindtap="hideModal">
+            <text class="cuIcon-close text-red"></text>
+          </view>
+        </view>
+        <view class="">
+          <view class="su-table-box">
+            <view class="su-table">
+              <!-- 表格标题 -->
+              <view class="su-tr">
+                <view class="su-th text-bold">
+                  序号
+                </view>
+                <block wx:if="{{checking_flag}}">
                   <view class="su-th text-bold">
-                    序号
+                    审核
                   </view>
-                  <block wx:if="{{checking_flag}}">
-                    <view class="su-th text-bold">
-                      审核
+                </block>
+                <view class="su-th text-bold" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
+              </view>
+              <!-- 表格内容 -->
+              <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item" wx:for-index="index1">
+                <view class="su-td">
+                  {{index1+1>activity_info.max_part_number?"排队中":index1+1}}
+                </view>
+
+                <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
+                  <block wx:if="{{index==0}}">
+                    <view class="cu-avatar round sm" style="background-image:url({{info}});" bindtap="chat_with" data-index="{{index1}}">
                     </view>
                   </block>
-                  <view class="su-th text-bold" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
-                </view>
-                <!-- 表格内容 -->
-                <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item" wx:for-index="index1">
-                  <view class="su-td">
-                    {{index1+1>activity_info.max_part_number?"排队中":index1+1}}
-                  </view>
-
-                  <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
-                    <block wx:if="{{index==0}}">
-                      <view class="cu-avatar round sm" style="background-image:url({{info}});" bindtap="chat_with" data-index="{{index1}}">
-                      </view>
-                    </block>
-                    <block wx:else>
-                      {{info}}
-                    </block>
-                  </view>
+                  <block wx:else>
+                    {{info}}
+                  </block>
                 </view>
               </view>
             </view>
           </view>
         </view>
       </view>
-      <view class="cu-modal {{modalName=='Modal_update_activity_info'?'show':''}}">
-        <view class="cu-dialog">
-          <view class="cu-bar bg-white justify-end">
-            <view class="content">发布公告</view>
-            <view class="action" bindtap="hideModal">
-              <text class="cuIcon-close text-red"></text>
-            </view>
+    </view>
+    <view class="cu-modal {{modalName=='Modal_update_activity_info'?'show':''}}">
+      <view class="cu-dialog">
+        <view class="cu-bar bg-white justify-end">
+          <view class="content">发布公告</view>
+          <view class="action" bindtap="hideModal">
+            <text class="cuIcon-close text-red"></text>
           </view>
-          <view class="{{modalName=='Modal_update_activity_info'?'show':''}}">
-            <view class="cu-form-group solid" style="margin: 10rpx;">
-              <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
-            </view>
+        </view>
+        <view class="{{modalName=='Modal_update_activity_info'?'show':''}}">
+          <view class="cu-form-group solid" style="margin: 10rpx;">
+            <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
           </view>
-          <view class="cu-bar bg-white justify-end">
-            <view class="action">
+        </view>
+        <view class="cu-bar bg-white justify-end">
+          <view class="action">
 
-              <button class="cu-btn bg-green margin-left" bindtap="update_activity_announcement">发布</button>
+            <button class="cu-btn bg-green margin-left" bindtap="update_activity_announcement">发布</button>
 
-            </view>
           </view>
         </view>
       </view>
-      <view style="height: 200rpx;text-align: center;padding: 20rpx;">
-        <text class="text-grey text-sm"><text class="cuIcon-remind lg text-red"></text>{{activity_info.addendtimeweek}}报名截止</text>
-      </view>
-    </scroll-view>
+    </view>
   </swiper-item>
   <!--分组，提供分组功能，对阵选项，踢出成员选项-->
   <swiper-item style="width: 100%;">
+
     <include src="activityshowinfo_group.wxml" />
   </swiper-item>
   <!--排名页面，提供胜率展示和点赞-->
@@ -245,20 +266,24 @@
 </swiper>
 
 <!--底部导航栏-->
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;">
-  <view class="" bindtap="navigateToIndex" style="width: 120rpx;margin-left: 10rpx;" wx:if="{{login_user_part_list.length > 0}}">
-    <button class="cu-btn bg-green round">首页</button>
+<!--未结束wx:if="!is_end"要显示-->
+<view class="flex bg-white" style="padding:0rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-top:15rpx;" wx:if="{{!is_end}}">
+  <!--父组件已经判断：未结束-->
+  <!--已报名，未开始，取消未截止hidden=is_cancelend，要显示-->
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="cancel_part" wx:if="{{login_user_part_list.length > 0}}" hidden="{{is_cancelend}}">
+    <button class="cu-btn bg-red round" style="width: 100%;height: 85rpx;" bindtap="cancel_part" disabled="{{is_begin}}">取消报名</button>
   </view>
-  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="cancel_part" wx:if="{{login_user_part_list.length > 0}}">
-    <button class="cu-btn bg-red round" style="width: 100%;" bindtap="cancel_part">取消报名</button>
-  </view>
-  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="part_activity">
+  <!--父组件已经判断：未结束-->
+  <!--未截止wx:if="{{!is_addend}}"，要显示-->
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="part_activity" wx:if="{{!is_addend}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <button class="cu-btn bg-green round" style="width: 100%;">报名</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">报名</button>
   </view>
-  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="recore_mood">
+  <!--父组件已经判断：已开始未结束-->
+  <!--已报名，要显示-->
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="recore_mood" wx:if="{{login_user_part_list.length > 0}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <button class="cu-btn bg-green round" style="width: 100%;">记录见闻</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">记录见闻</button>
   </view>
 </view>
 <!--取消报名的弹框选择，针对重复报名的成员-->

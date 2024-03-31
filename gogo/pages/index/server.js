@@ -1,9 +1,15 @@
 const swiper = require("swiper.js");
+const share = require("../activityshowinfo/share.js")
 function get_activity_list(that,app,activity_id="") {
   console.log("获取活动列表");
   var id = "";
-  if(activity_id=="" && that.data.activity_id != undefined) id = that.data.activity_id;
-
+  
+  if(activity_id =="" || activity_id == "refresh"){//直接刷新
+    id = "";
+  }else{
+    id = activity_id;
+  }
+  console.log(id);
   wx.showLoading({
     title: '',
   });
@@ -53,6 +59,7 @@ function get_activity_list(that,app,activity_id="") {
       //这里应该将活动信息和用户信息都提取保存起来
       _that.getstore_activity_user_info(first[0].activity_id);
       get_init_msg(_that,app,first[0].activity_id);
+      share.get_activity_moods(app.globalData.hosturl, _that, first[0].activity_id);
       wx.stopPullDownRefresh();
       wx.hideLoading({
         success: (res) => {},

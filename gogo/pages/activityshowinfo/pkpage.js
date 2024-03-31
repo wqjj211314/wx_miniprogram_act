@@ -13,6 +13,9 @@ Page({
     modalName: "",
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
     group_users: [],//这是当前分组的成员，数组形式
+    show_member_info_flag:false,
+    boy_num:0,
+    girl_num:0,
     member_users: {},//当前分组成员的字典形式，“#1”是key，成员信息是value
     all_pk_info:{},//获取到的当前group_tag的Activitymemberpk信息
     pk_groups: [],
@@ -35,14 +38,24 @@ Page({
     console.log("onLoad加载");
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
     let group_tag = options.group_tag;
+    var boy_num = 0;
+    var girl_num = 0;
+
     //初始化成员的字典形式数据，方便wxml获取
     var member_users = {}
     group_users.forEach(item=>{
       var member_num = item.member_num;
       member_users[member_num] = item;
+      if(item.gender == "0"){
+        girl_num = girl_num + 1;
+      }else if(item.gender == "1"){
+        boy_num = boy_num + 1;
+      }
     })
     this.setData({
       group_users:group_users,
+      boy_num:boy_num,
+      girl_num:girl_num,
       group_tag:group_tag,
       member_users:member_users,
       activity_id:options.activity_id,
@@ -72,6 +85,11 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+  show_user_detail(){
+    this.setData({
+      show_member_info_flag:!this.data.show_member_info_flag
+    })
   },
   show_modal(e) {
     this.setData({

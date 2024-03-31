@@ -28,7 +28,6 @@ function is_like(part_member_num,like_dict){
     console.log(member_nums)
     if(member_nums.indexOf(part_member_num) != -1){
       like_dict[like_member_group]["like_flag"] = true;
-      return like_dict;
     }
   }
   return like_dict;
@@ -68,29 +67,35 @@ function get_pk_groups(hosturl,that,activity_id,group_tag){
   });
   return pkinfo;
 }
-function get_pk_groups_list(hosturl,that,activity_id){
+function get_pk_groups_list(hosturl,that,activity_id,activity_tag){
   wx.request({
     url: hosturl + 'get_activity_member_pk_list', //仅为示例，并非真实的接口地址
     data: {
-      "activity_id": activity_id
+      "activity_id": activity_id,
+      "hobby_tag":activity_tag
     },
     header: {
       'content-type': 'application/json' // 默认值
     },
     success(res) {
-      var activity_member_pk_list = res.data;
+      var activity_member_pk_list = res.data["activity_member_pk_list"];
+      var pk_result = res.data["pk_result"];
       console.log("获取到所有的对阵情况");
       console.log(activity_member_pk_list);
-      var sort_users_score = merge_all_pkgroups_score(activity_member_pk_list);
+      console.log(pk_result)
+      //var sort_users_score = sort_dict(pk_result);//merge_all_pkgroups_score(activity_member_pk_list);
       var sort_users_score_empty_flag = true;
-      for(var key in sort_users_score){
+      for(var key in pk_result){
         sort_users_score_empty_flag = false;
         break;
+      }
+      var sort_users_score = {};
+      if(!sort_users_score_empty_flag){
+        sort_users_score = sort_dict(pk_result);
       }
       that.setData({
         sort_users_score:sort_users_score,
         sort_users_score_empty_flag:sort_users_score_empty_flag
-
       })
 
     },
@@ -232,7 +237,13 @@ function  win_rate(users_score){
 //给字典排序，按照字典中的key-value,value降序排列
 function sort_dict(data) {
   var keys = Object.keys(data).sort((a, b) => {
-    return -(data[a]["score"] - data[b]["score"]);//降序
+    if(data[a]["all_win"] == data[b]["all_win"]){
+      if(data[a]["grade_win"] == data[b]["grade_win"]){
+        return -(data[a]["total_scores"] - data[b]["total_scores"])
+      }
+      return -(data[a]["grade_win"] - data[b]["grade_win"])
+    }
+    return -(data[a]["all_win"] - data[b]["all_win"]);//降序
   });
   console.log(keys);
   var new_data = {};
@@ -240,7 +251,6 @@ function sort_dict(data) {
     var key = keys[i];
     new_data[key] = data[key];
   }
-
   return new_data;
 }
 exports.get_score = get_score

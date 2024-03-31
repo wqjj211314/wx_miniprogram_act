@@ -7,11 +7,13 @@
 <swiper wx:else id="swiper" circular current="{{swiper_current_index}}" duration="{{duration}}" vertical="{{vertical}}" bindchange="slide" style="height:100vh;">
   <block wx:for="{{recyler_list}}" wx:key="id" wx:for-index="idx">
     <swiper-item>
-      <image class='background' src="{{hosturl}}static/blur_{{item.activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
-      <image class='background2' src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
-      <!--默认的背景图片显示-->
-      <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>
-      <!--视频媒体播放
+      <swiper style="height: 100%;width: 100%;">
+        <swiper-item>
+          <image class='background' src="{{hosturl}}static/blur_{{item.activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
+          <image class='background2' src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
+          <!--默认的背景图片显示-->
+          <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>
+          <!--视频媒体播放
       <video class='background2'
       id="myVideo" 
       src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" 
@@ -23,82 +25,82 @@
       bindenterpictureinpicture='bindVideoEnterPictureInPicture'
       bindleavepictureinpicture='bindVideoLeavePictureInPicture'
     ></video>-->
-      <!--侧边栏，暂时不用
+          <!--侧边栏，暂时不用
       <view class="flex bg-touming"  style="position:fixed;top:40vh;right:40rpx;flex-direction:column;justify-content:center;align-items:center;">
       
         <text class="cuIcon-refresh lg text-white" style="font-size: 50rpx;"></text>
         <text class="lg text-white" style="font-size: 30rpx;">首页</text>
       </view>
       -->
-      <!--弹幕格式-->
-      <scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
-      <!--活动本身信息不在首页展示
+          <!--弹幕格式-->
+          <scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}">
+            <!--活动本身信息不在首页展示
         <block wx:for="{{activityinfo}}">
           <view class="customer-msg-cu-btn2">
             {{item}}
           </view>
         </block>
         -->
-        <block wx:for="{{chat_msgs}}">
-          <view>
-            <view class="customer-msg-cu-btn bg-touming">
-              <text class="text-blue text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
-            </view>
-          </view>
-        </block>
-      </scroll-view>
-      <view class="bottomPos">
-        <view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:15rpx;">
-          <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
-            <view class="title" style="line-height:0px;padding-left:5rpx;">
-              <view class="customer-title-cu-btn bg-touming">
-                <view class="cu-avatar round sm" style="background-image:url({{activity_user_info.avatarUrl}});margin-right:10rpx;" bindtap="show_activityuser_info"></view>
-                <text class="text-white text-cut" style="max-width:200px;font-size: 30rpx;padding-right:10rpx;" bindtap="navigateToactivityinfo">{{item.title}}
-                </text>
-              </view>
-
-            </view>
-            <view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
-              <view class="desc">
-                <view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;"><text>{{item.show_activityaddress==""?"": item.show_activityaddress+ "\n" + item.detail}}</text>
-                </view>
-                <view style="margin-left:10rpx;">
-
-                  <view class="cu-tag bg-touming light lg round">{{item.activity_live}}</view>
+            <block wx:for="{{chat_msgs}}">
+              <view>
+                <view class="customer-msg-cu-btn bg-touming">
+                  <text class="text-blue text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
                 </view>
               </view>
+            </block>
+          </scroll-view>
+          <view class="bottomPos">
+            <view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:15rpx;">
+              <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
+                <view class="title" style="line-height:0px;padding-left:5rpx;">
+                  <view class="customer-title-cu-btn bg-touming" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
+                    <view>
+                    <view class="cu-avatar round sm" style="background-image:url({{activity_user_info.avatarUrl}});margin-right:10rpx;" bindtap="show_activityuser_info"></view>
+                    <text class="text-white text-cut" style="max-width:200px;font-size: 30rpx;padding-right:10rpx;" bindtap="navigateToactivityinfo">{{item.title}}
+                    </text>
+                  </view>
+                  </view>
+                </view>
+                <view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
+                  <view class="desc">
+                    <view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;" wx:if="{{item.show_activityaddress != ''}}"><text>{{item.show_activityaddress==""?"": item.show_activityaddress}}</text>
+                    </view>
+                    <view style="{{item.show_activityaddress == ''?'margin-top:20rpx;':''}}">
+                      <view class="cu-tag bg-touming light lg round">{{item.activity_live}}</view>
+                    </view>
+                  </view>
+                </view>
+              </view>
             </view>
-          </view>
-        </view>
 
-        <!--隐藏的输入框{{isFocus}} hidden="{{isdisplay}}"-->
-        <view class="cu-bar input" wx:if="{{!isdisplay}}" style="margin-bottom: 0rpx;">
-          <view class="action">
-            <text class="cuIcon-write text-grey"></text>
-          </view>
-          <!--focus改成auto?!-->
-          <input class="solid-bottom" focus="{{isFocus}}" value="{{inputMsg}}" maxlength="300" cursor-spacing="0" bindblur="onblurkey" bindinput="inputMsg" style="margin-bottom: 15rpx;"></input>
-          <button class="cu-btn bg-green shadow-blur" bindtap="sendMsg">发送</button>
-        </view>
+            <!--隐藏的输入框{{isFocus}} hidden="{{isdisplay}}"-->
+            <view class="cu-bar input" wx:if="{{!isdisplay}}" style="margin-bottom: 0rpx;">
+              <view class="action">
+                <text class="cuIcon-write text-grey"></text>
+              </view>
+              <!--focus改成auto?!-->
+              <input class="solid-bottom" focus="{{isFocus}}" value="{{inputMsg}}" maxlength="300" cursor-spacing="0" bindblur="onblurkey" bindinput="inputMsg" style="margin-bottom: 15rpx;"></input>
+              <button class="cu-btn bg-green shadow-blur" bindtap="sendMsg" disabled="{{inputMsg.length <= 0}}">发送</button>
+            </view>
 
-        <!--底部导航-->
-        <view class="padding-left-xs padding-right-xs flex solid-bottom justify-between" wx:if="{{isdisplay}}" style="padding-bottom: 5rpx;">
-          <button class="bg-touming chatbutton cu-btn round" bindtap="openKey" style="height:96rpx;font-size:35rpx;border-style: solid;border-width: 1px;">
-            说点什么...
-          </button>
-          <!--
+            <!--底部导航-->
+            <view class="padding-left-xs padding-right-xs flex solid-bottom justify-between" wx:if="{{isdisplay}}" style="padding-bottom: 5rpx;">
+              <button class="bg-touming chatbutton cu-btn round" bindtap="openKey" style="height:96rpx;font-size:35rpx;border-style: solid;border-width: 1px;">
+                说点什么...
+              </button>
+              <!--
           <view class="cu-avatar round bg-blue lg" style="display:flex;flex-flow:column;" bindtap="refresh">
             <text class="cuIcon-refresh xl text-white"></text>
 
             <text class="text-white" style="font-size:25rpx;margin-top:-10rpx;">首页</text>
           </view>
 -->
-          <view class="cu-avatar round bg-green lg" style="display:flex;flex-flow:column;" bindtap="navigateToactivityinfo">
-            <text class="cuIcon-group xl text-white"></text>
-            <view class="cu-tag badge" style="top:-5rpx;right:-5rpx;">{{member}}人</view>
-            <text class="text-white" style="font-size:25rpx;margin-top:-10rpx;">报名</text>
-          </view>
-          <!--
+              <view class="cu-avatar round bg-green lg" style="display:flex;flex-flow:column;" bindtap="navigateToactivityinfo">
+                <text class="cuIcon-group xl text-white"></text>
+                <view class="cu-tag badge" style="top:-5rpx;right:-5rpx;">{{member}}人</view>
+                <text class="text-white" style="font-size:25rpx;margin-top:-10rpx;">报名</text>
+              </view>
+              <!--
           <view class="cu-avatar round lg" style="background-image:url({{login_userInfo.avatarUrl}});" bindtap='getUserProfile' wx:if="{{hasUserInfo}}">
             <view class="cu-tag badge" style="top:2rpx;right:1rpx;" hidden="{{!friend_chat_msg_display}}"></view>
           </view>
@@ -106,8 +108,32 @@
             <text class="cuIcon-profile text-white" style="font-size: 75rpx;margin-bottom: 10rpx;margin-left: 5rpx;"></text>
           </button>
           -->
-        </view>
-      </view>
+            </view>
+          </view>
+        </swiper-item>
+        <swiper-item wx:for="{{moods}}" class="" wx:key="{{item.id}}">
+          <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;width: 100%;" lazy-load="true" bindload="lazyload"></image>
+          <view class="" style="position: absolute;bottom: 0;width: 100%;">
+            <view class="cu-card article" style="width:80%;margin-bottom:15rpx;">
+              <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
+                <view class="title" style="padding:0rpx;">
+                  <view class="customer-title-cu-btn flex" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
+                    <view>
+                      <view class="cu-avatar round sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">
+                      </view>
+                      <text class="text-white" style="max-width:200px;font-size:30rpx;padding-right:10rpx;" bindtap="">{{item["user_info"].nickName}}
+                      </text>
+                    </view>
+                    <view class="text-content" style="color:white;font-size: 25rpx;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;word-wrap: break-word;line-height: normal;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;">
+                      <text>{{item.mood_text}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
     </swiper-item>
   </block>
 </swiper>

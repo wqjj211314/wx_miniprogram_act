@@ -13,9 +13,9 @@ Page({
       user_id:"",
       avatarUrl: defaultAvatarUrl,
       nickName: '',
-      gender:-1
+      gender:-1,
+      signature:"个性签名"
     },
-    hasUserInfo: false,
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
   },
@@ -24,11 +24,8 @@ Page({
     var avatarUrl = e.detail.avatarUrl;
     var userInfo = this.data.userInfo;
     userInfo["avatarUrl"] = avatarUrl;
-    var nickName = this.data.userInfo.nickName;
-    var gender = this.data.userInfo.gender;
     this.setData({
-      userInfo:userInfo,
-      hasUserInfo: nickName && gender!=-1 && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      userInfo:userInfo
     });
     wx.uploadFile({
       url: app.globalData.hosturl + 'upload_avatar_url', //接口
@@ -38,7 +35,6 @@ Page({
         'user_id': app.globalData.login_userInfo["user_id"]
       },
       success: function (res) {
-        
       },
       fail: function (error) {
         console.log(error);
@@ -48,41 +44,82 @@ Page({
   },
   listenRadioChange:function(e){
     console.log('radio发生change事件，携带value值为：', e.detail.value)
-    const nickName = this.data.userInfo.nickName;
-    var avatarUrl = this.data.userInfo.avatarUrl;
     var gender = e.detail.value;
     this.setData({
-      "userInfo.gender":  gender,
-      hasUserInfo: nickName && gender!=-1 && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      "userInfo.gender":  gender
+    });
+  },
+  onsignatureChange:function(e){
+    const signature = e.detail.value;
+    if(signature == ""){
+      wx.showToast({
+        title: '请填写个性签名',
+      })
+      return;
+    }
+    //去除表情的特殊字符
+    /*
+    var regRule = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
+    if(signature.match(regRule)){
+      console.log("有表情")
+      signature = signature.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+      console.log(signature)
+    }
+    */
+    this.setData({
+      "userInfo.signature": signature
     });
   },
   onInputChange: function (e) {
     const nickName = e.detail.value;
-    var avatarUrl = this.data.userInfo.avatarUrl;
-    var gender = this.data.userInfo.gender;
     if(nickName == ""||nickName == "匿名"){
       wx.showToast({
         title: '请填写合法昵称',
       })
       return;
     }
+    //去除表情的特殊字符
+    /*
+    var regRule = /\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g;
+    if(nickName.match(regRule)){
+      console.log("有表情")
+      nickName = nickName.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
+      console.log(nickName)
+    }
+    */
 
     this.setData({
-      "userInfo.nickName": nickName,
-      hasUserInfo: nickName && gender!=-1 && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      "userInfo.nickName": nickName
     });
   },
   submit_userinfo:function(){
     console.log(this.data.userInfo["avatarUrl"])
     var that = this;
-    
+    //重新登录获取openid
+    //然后修改个人信息
+     //上传头像
+     wx.uploadFile({
+      url: app.globalData.hosturl + 'upload_avatar_url', //接口
+      filePath: that.data.userInfo["avatarUrl"],
+      name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
+      formData: {
+        'user_id': app.globalData.login_userInfo["user_id"],
+      },
+      success: function (res) {
+      },
+      fail: function (error) {
+        console.log(error);
+      }
+    });
+    //修改个人信息
     wx.request({
       url: app.globalData.hosturl + 'update_user_info',
       data: {
         "user_id":app.globalData.login_userInfo["user_id"],
         "nickName":that.data.userInfo["nickName"],
         "avatarUrl":"",
-        "gender":that.data.userInfo["gender"]
+        "gender":that.data.userInfo["gender"],
+        "signature":that.data.userInfo["signature"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -95,12 +132,17 @@ Page({
             modalName: ""
           });
           app.globalData.login_userInfo = res.data;
+          try {
+            wx.setStorageSync('openid', res.data.openid);
+          } catch (e) { }
           wx.switchTab({
             url: '../user/user'
           })
         }
       }
     });
+    
+    
   },
   /**
    * 生命周期函数--监听页面加载
@@ -113,6 +155,28 @@ Page({
       }
       this.setData({userInfo:userInfo})
     }
+    var that = this;
+    wx.login({
+      success(res) {
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: that.globalData.hosturl + 'getopenid',
+            data: {
+              code: res.code
+            },
+            success: (res) => {
+              console.log("appjs用户openid");
+              console.log(res.data);
+              console.log(res.data.openid);
+              app.globalData.login_userInfo["user_id"] = res.data.openid;
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
+    });
     
   },
 

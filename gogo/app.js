@@ -1,30 +1,44 @@
 //app.js
 App({
   onLaunch: function () {
-    // 获取系统信息  
     wx.getSystemInfo({
-      success: (res) => {
-        // 获取屏幕高度
-        this.screenHeight = res.screenHeight
-        // 获取状态栏高度
-        this.statusBarHeight = res.statusBarHeight
-        // 通过操作系统 确定自定义导航栏高度  
-        if (res.system.substring(0, 3) == "iOS") {
-          this.navBarHeight = 42
-        } else {
-          this.navBarHeight = 44
-        }
+      success: e => {
+        this.globalData.StatusBar = e.statusBarHeight;
+        let capsule = wx.getMenuButtonBoundingClientRect();
+		if (capsule) {
+		 	this.globalData.Custom = capsule;
+			this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
+		} else {
+			this.globalData.CustomBar = e.statusBarHeight + 50;
+		}
       }
     })
-
     try {
       console.log("用户APP登录");
       //直接获取缓存保存的
       var openid = wx.getStorageSync('openid');
+      console.log(openid)
       if (openid == "" || openid == undefined) {
-        this.globalData.login_userInfo["user_id"] = openid;
+        //this.globalData.login_userInfo["user_id"] = openid;
+        console.log("需要登录获取openid")
+        this.user_login();
+      }else{
+        //发起网络请求
+        var that = this;
+        wx.request({
+          url: that.globalData.hosturl + 'get_userinfo',
+          data: {
+            "user_id": openid
+          },
+          success: (res) => {
+            that.globalData.openid = res.data.user_id;
+            that.globalData.checking_flag = res.data.checking_flag;
+            that.globalData.login_userInfo = res.data;
+            that.globalData.hasUserInfo = true;
+          }
+        })
       }
-      this.user_login();
+      //this.user_login();
     } catch (e) {
       console.log("持久化登录信息获取失败");
       console.log(e);
@@ -82,12 +96,17 @@ App({
     edit_index: 0,
     edit_group_tag: "",
     tab_page_path:"pages/index/index",
-    reload_activity_share_moods:false//在分享见闻界面返回活动界面时需要重新加载
+    reload_activity_share_moods:false,//在分享见闻界面返回活动界面时需要重新加载
+    custom_group_tag_dict:{}//创建活动页的自定义分组信息
   },
   user_login() {
+    //return;
     var that = this;
     wx.login({
+      timeout:3000,
       success(res) {
+        console.log("登录授权结果")
+        console.log(res)
         if (res.code) {
           //发起网络请求
           wx.request({
@@ -106,6 +125,7 @@ App({
               that.globalData.login_userInfo["nickName"] = res.data.nickName;
               that.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
               that.globalData.login_userInfo["gender"] = res.data.gender;
+              that.globalData.login_userInfo["signature"] = res.data.signature;
               try {
                 wx.setStorageSync('openid', res.data.openid);
                 that.globalData.hasUserInfo = true;
@@ -116,13 +136,15 @@ App({
         } else {
           console.log('登录失败！' + res.errMsg)
         }
+      },
+      fail(res){
+        console.log("登录失败")
+      },
+      complete(res){
+        console.log("登录完成")
+        console.log(res)
       }
     });
   },
-  store_userInfo: function () {
-    try {
-      //wx.setStorageSync('nickName', this.globalData.login_userInfo.nickName);
-      //wx.setStorageSync('avatarUrl', this.globalData.login_userInfo.avatarUrl);
-    } catch (e) { }
-  }
+  
 })

@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "cu-custom": "colorui/components/cu-custom"
+  },
   "pages": [
     "pages/index/index",
     "pages/activity/activity",
@@ -22,7 +24,8 @@
     "pages/logs/logs",
     "pages/hobby/edithobby",
     "pages/components/datetimepicker",
-    "pages/activity/editactivity"
+    "pages/activity/editactivity",
+    "pages/activity/customgroup"
   ],
   "tabBar": {
     "color": "#2c2c2c",

@@ -1,9 +1,12 @@
 <!--pages/activityshowinfo/pkpage.wxml-->
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-x="false" scroll-y="true" style="height: 90vh;">
-<!--当前分组或者未分组成员展示-->
-  <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-left:13rpx;border-bottom: 10rpx;">
-    <view style="width: 100%;margin-bottom: 10rpx;">{{group_tag==""?"未分组":group_tag}}({{group_users.length}})</view>
+  <!--当前分组或者未分组成员展示-->
+  <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
+      <view class="cu-btn line-green round">{{group_tag==""?"未分组":group_tag}}({{group_users.length}})</view>
+      <view class="cu-btn line-green round">男{{boy_num}} 女{{girl_num}}</view>
+    </view>
+  <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-left:20rpx;border-bottom: 10rpx;">
     <block wx:for="{{group_users}}" wx:for-item="user">
       <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
         <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
@@ -13,44 +16,47 @@
         <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
       </view>
     </block>
+    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="show_user_detail">
+      <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
+    </view>
   </view>
-<!--详情展示-->
-<block wx:if="{{item0.show_flag}}">
-          <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
-            <view class="cu-list menu-avatar" style="margin:0rpx;{{index==0?'border-top-style:solid;border-color:gray;border-width: 0.5rpx;':''}}">
-              <view class="cu-item">
-                <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
-                <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
-                  <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
-                  </view>
-                </view>
-                <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
-                  <view class="text-black">{{item.nickName}}</view>
-                  <view class="text-black flex" style="font-size: 20rpx;">
-                    <view class="" style="word-break: break-all;">
-                      <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
-                        <text class="cuIcon-tagfill text-red"></text>
-                        <text class="margin-right-xs">{{key}}:{{value}}</text>
-                      </block>
-                    </view>
-                  </view>
-                </view>
-                <view class="action">
-                  <view class="text-black text-xs">{{activity_info.activity_tag}}积分</view>
-                  <view class="cu-tag round bg-green sm">{{item.hobby_info.hobby_point}}</view>
-                </view>
+  <!--详情展示-->
+  <block wx:if="{{show_member_info_flag}}">
+    <block wx:for="{{group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
+      <view class="cu-list menu-avatar bg-white text-black" style="padding-left:15rpx;margin:0rpx;">
+        <view class="cu-item">
+          <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
+          <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
+            <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+            </view>
+          </view>
+          <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
+            <view class="text-black">{{item.nickName}}</view>
+            <view class="text-black flex" style="font-size: 20rpx;">
+              <view class="" style="word-break: break-all;">
+                <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
+                  <text class="cuIcon-tagfill text-red"></text>
+                  <text class="margin-right-xs">{{key}}:{{value}}</text>
+                </block>
               </view>
             </view>
-          </block>
-        </block>
+          </view>
+          <view class="action">
+            <view class="text-black text-xs">{{activity_info.activity_tag}}积分</view>
+            <view class="cu-tag round bg-green sm">{{item.hobby_info.hobby_point}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </block>
 
 
-  <view class="flex" style="justify-content:space-between;padding: 10rpx 10rpx;">
+  <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;margin-top: 25rpx;" wx:if="{{sort_users_score_empty_flag}}">
     <view>战绩排行</view>
     <view style="" bind:tap="expand_score_list">展开|隐藏</view>
   </view>
   <block wx:for="{{sort_users_score}}">
-    <view class="cu-list menu-avatar" style="margin:0rpx;" hidden="{{hidden_score_list}}">
+    <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" hidden="{{hidden_score_list}}">
       <view class="cu-item">
         <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(member_users[index].member_num)}}号</view>
         <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{member_users[index].avatarUrl}});"></view>
@@ -67,21 +73,25 @@
           </view>
         </view>
         <view class="action">
-          <view class="text-grey text-xs">平|负|胜</view>
-          <view class=" bg-grey">{{item["peace"]}} | {{item["fail"]}} | {{item["win"]}}</view>
+          <view class="text-grey text-xs">负</view>
+          <view class="cu-tag round line-black">{{item["fail"]}}</view>
         </view>
         <view class="action">
           <view class="text-grey text-xs">总得分</view>
-          <view class="cu-tag round bg-grey sm">{{item["score"]}}</view>
+          <view class="cu-tag round line-black">{{item["score"]}}</view>
         </view>
         <view class="action">
           <view class="text-grey text-xs">胜率</view>
-          <view class="cu-tag round bg-grey sm">{{item["win_rate"]}}</view>
+          <view class="cu-tag round line-black">{{item["win_rate"]}}</view>
+        </view>
+        <view class="action">
+          <view class="text-grey text-xs">胜场数</view>
+          <view class="cu-tag round line-black">{{item["win"]}}</view>
         </view>
       </view>
     </view>
   </block>
-  <view class="flex" style="justify-content:space-between;padding: 10rpx 10rpx;">
+  <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;margin-top: 25rpx;" wx:if="{{pk_groups.length > 0}}">
     <view>对阵|比分</view>
     <view style="" bind:tap="expand_pk_group">展开|隐藏</view>
   </view>
@@ -105,12 +115,12 @@
       </view>
       <view class="flex" style="align-items: center;">
         <view class="flex" style="flex-direction: column;align-items: center;">
-        <view class="cu-tag line-blue" style="margin:0rpx 20rpx;min-width: 118rpx;padding:0rpx 10rpx 0rpx 16rpx;" data-index="{{pk_group_index}}" bindtap="score_pk_group">
-          {{tools.show_vs_scores(pk_group[pk_group.length - 2])}}
-          <text class="cuIcon-right lg text-blue"></text>
+          <view class="cu-tag line-blue" style="margin:0rpx 20rpx;min-width: 118rpx;padding:0rpx 10rpx 0rpx 16rpx;" data-index="{{pk_group_index}}" bindtap="score_pk_group">
+            {{tools.show_vs_scores(pk_group[pk_group.length - 2])}}
+            <text class="cuIcon-right lg text-blue"></text>
+          </view>
+          <view class="cu-tag radius sm bg-red" style="margin-top: 10rpx;" wx:if="{{pk_group[pk_group.length - 1][0]!=undefined}}">{{pk_group[pk_group.length - 1][0]}}</view>
         </view>
-        <view class="cu-tag radius sm bg-red" style="margin-top: 10rpx;" wx:if="{{pk_group[pk_group.length - 1][0]!=undefined}}">{{pk_group[pk_group.length - 1][0]}}</view>
-      </view>
         <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);"></view>
       </view>
       <view style="width: fit-content;display: flex;flex-direction:column;margin:0 20rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center">
@@ -128,13 +138,11 @@
   </view>
   <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
     <view class="" style="flex:1;margin-right:20rpx;" bindtap="show_modal" data-target="bottomModal">
-      <button class="cu-btn bg-green round" style="width: 100%;">新增对阵</button>
+      <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">新增对阵</button>
     </view>
-    <view class="" style="flex:1;margin-right:20rpx;" bindtap="clear_pk_group">
-      <button class="cu-btn bg-green round" style="width: 100%;">清空对阵</button>
-    </view>
+
     <view class="" style="flex:1;" bindtap="update_pk_group">
-      <button class="cu-btn bg-red round" style="width: 100%;">提交</button>
+      <button class="cu-btn bg-red round" style="width: 100%;height: 85rpx;">提交</button>
     </view>
   </view>
 </view>
@@ -165,8 +173,8 @@
           </view>
         </block>
         <view class="cu-form-group" style="height: 35rpx;flex:1;">
-              <input placeholder="为本局比赛打个标签" type="string" maxlength="4" value="{{pk_group_score_tags[0]}}" bindinput='input_score_tag' />
-            </view>
+          <input placeholder="为本局比赛打个标签" type="string" maxlength="4" value="{{pk_group_score_tags[0]}}" bindinput='input_score_tag' />
+        </view>
       </view>
     </view>
     <view class="cu-bar bg-white justify-end">
@@ -179,12 +187,25 @@
 <!--对阵选项弹框-->
 <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
   <view class="cu-dialog">
-    <view class="padding-xl flex" style="justify-content: center;padding:70rpx 20rpx;">
-      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="get2v2">2V2对阵</button>
-      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bind:tap="get1v1">1V1对阵</button>
-      <button role="button" class="cu-btn round bg-yellow" style="margin-right: 10rpx;" bindtap="show_modal" data-target="customerPKModal">自定义</button>
+    <view class="cu-list grid col-2" style="">
+      <view class="cu-item" bind:tap="get1v1">
+        <view class="cuIcon-friend text-orange"></view>
+        <text>1V1对阵</text>
+      </view>
+      <view class="cu-item" bindtap="get2v2">
+        <view class="cuIcon-group_fill text-orange"></view>
+        <text>2V2对阵</text>
+      </view>
+      <view class="cu-item" bindtap="show_modal">
+        <view class="cuIcon-post text-orange"></view>
+        <text>自定义</text>
+      </view>
+      <view class="cu-item" bind:tap="clear_pk_group">
+        <view class="cuIcon-deletefill text-black"></view>
+        <text>清空对阵</text>
+      </view>
     </view>
-    <view class="cu-bar bg-grey" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 30rpx;" bindtap="hideModal">
+    <view class="cu-bar bg-grey" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 0rpx;" bindtap="hideModal">
       取消
     </view>
   </view>

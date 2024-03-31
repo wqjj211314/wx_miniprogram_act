@@ -35,6 +35,7 @@ Page({
     hobby_tag: "",
     max_part_number: 10,
     title: "",
+    title_tags:[],
     detail: "",
     imgList: [],
     latitude: "",
@@ -61,7 +62,8 @@ Page({
     group_limit_list:[],
     group_tag_dict:{},
     pay_type:"免费",
-    pay_price:"0.00"
+    pay_price:"0.00",
+    custom_part:false
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
@@ -386,6 +388,7 @@ Page({
         "avatarUrl": url,
         "gender": gender,
         "title": this.data.title,
+        "title_tags":this.data.title_tags.toString(),
         "activity_tag": this.data.hobby_tag,
         "detail": this.data.detail,
         "location": location,
@@ -660,6 +663,7 @@ Page({
    */
   onShow: function () {
     var _this = this;
+    console.log("活动创建页onshow")
     wx.request({
       url: app.globalData.hosturl + 'get_partinfo_all_options', //仅为示例，并非真实的接口地址
       data: {
@@ -679,10 +683,27 @@ Page({
 
       }
     });
+    var group_tag_dict = app.globalData.custom_group_tag_dict;
+    
+    var group_tag_list = [];
+    var group_room_list = [];
+    var group_limit_list = [];
+    for(var key in group_tag_dict){
+      group_tag_list.push(group_tag_dict[key]["name"])
+      group_room_list.push(group_tag_dict[key]["room"])
+      group_limit_list.push(group_tag_dict[key]["limit"])
+    }
+    this.setData({
+      group_tag_dict:app.globalData.custom_group_tag_dict,
+      group_tag_list:group_tag_list,
+      group_room_list:group_room_list,
+      group_limit_list:group_limit_list
+    })
+    app.globalData.custom_group_tag = {}
   },
   add_partinfo: function () {
     this.setData({
-      modalName: "partinfo_modal"
+      custom_part: !this.data.custom_part
     });
 
   },
@@ -712,74 +733,38 @@ Page({
       add_new_partinfo: e.detail.value
     });
   },
-  grouptagInput: function (e) {
-    var value = e.detail.value;
-    var grouptagindex = e.currentTarget.dataset.index;
-    console.log(value)
-    console.log(grouptagindex)
-    console.log(typeof grouptagindex)//number
-    var group_tag_list = this.data.group_tag_list;
-    group_tag_list[grouptagindex] = value;
+  input_title_tag: function (e) {
+    var new_title_tag = e.detail.value;
+    //new_title_tag = new_title_tag.replace(",|，","")
+    //new_title_tag = new_title_tag.replace(" ","")
     this.setData({
-      group_tag_list:group_tag_list
-    })
-   
+      new_title_tag:new_title_tag
+    });
   },
-  grouproomInput: function (e) {
-    var value = e.detail.value;
-    var grouproomindex = e.currentTarget.dataset.index;
-    console.log(value)
-    console.log(grouproomindex)
-    console.log(typeof grouproomindex)//number
-    var group_room_list = this.data.group_room_list;
-    group_room_list[grouproomindex] = value;
-    this.setData({
-      group_room_list:group_room_list
-    })
+  add_title_tag: function () {
+    console.log("add_title_tag:" + this.data.new_title_tag);
+    var new_tag = this.data.new_title_tag.replace(" ", "");
+    new_tag = new_tag.replace(",", "");
+    new_tag = new_tag.replace("，", "");
+    if (new_tag == ""||this.data.title_tags.length > 10) {
+      wx.showToast({
+        title: '添加失败',
+      })
+      return;
+    }
+    console.log("add_title_tag:" + this.data.title_tags);
+    var title_tags = this.data.title_tags;
+    title_tags.push(new_tag);
     
+    this.setData({
+      title_tags,
+      new_title_tag: ""
+    });
   },
-  grouplimitInput: function (e) {
-    var value = e.detail.value;
-    var grouplimitindex = e.currentTarget.dataset.index;
-    console.log(value)
-    console.log(grouplimitindex)
-    console.log(typeof grouplimitindex)//number
 
-    var group_limit_list = this.data.group_limit_list;
-    group_limit_list[grouplimitindex] = value;
-    this.setData({
-      group_limit_list:group_limit_list
-    })
-    
-  },
-  save_group_tag_dict(){
-    var group_tag_dict = this.data.group_tag_dict;
-    var group_tag_list = this.data.group_tag_list;
-    var group_room_list = this.data.group_room_list;
-    var group_limit_list = this.data.group_limit_list;
-    console.log(group_tag_list)
-    group_tag_list.forEach((group_tag,index)=>{
-      if(group_tag!=undefined && group_tag!=""  && !group_tag_dict.hasOwnProperty(group_tag)){
-        group_tag_dict[group_tag] = {"name":group_tag,"room":group_room_list[index]==undefined?"":group_room_list[index],"limit":group_limit_list[index]==undefined?"":group_limit_list[index]}
-      }
-    })
-    this.setData({
-      group_tag_dict:group_tag_dict,
-      modalName:""
-    })
-    console.log(group_tag_dict)
-  },
-  addgroup(){
-    var group_tag_list = this.data.group_tag_list;
-    group_tag_list.push(null)
-    console.log(group_tag_list)
-    this.setData({
-      group_tag_list:group_tag_list
-    })
-  },
-  show_group_tag_modal(){
-    this.setData({
-      modalName:"group_tag_modal"
+  custom_group_tag(){
+    wx.navigateTo({
+      url: 'customgroup?group_tag_list='+encodeURIComponent(JSON.stringify(this.data.group_tag_list))+'&&group_room_list='+encodeURIComponent(JSON.stringify(this.data.group_room_list))+'&&group_limit_list='+encodeURIComponent(JSON.stringify(this.data.group_limit_list)),
     })
   },
   /**

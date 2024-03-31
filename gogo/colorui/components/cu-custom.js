@@ -27,6 +27,10 @@ Component({
       type: String,
       default: ''
     },
+    activityid:{
+      type: String,
+      default: ''
+    },
   },
   /**
    * 组件的初始数据
@@ -46,7 +50,10 @@ Component({
       });
     },
     toHome(){
-      wx.reLaunch({
+      console.log("导航栏跳转首页");
+      console.log(this.properties)
+      app.globalData.current_activity_id = this.properties.activityid;
+      wx.switchTab({
         url: '/pages/index/index',
       })
     }

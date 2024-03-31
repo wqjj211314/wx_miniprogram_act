@@ -1,9 +1,11 @@
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
     <view class="userinfo">
-      <block wx:if="{{!hasUserInfo}}">
+      <block>
         <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
           <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+          <view class="cu-tag badge {{userInfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+          </view>
         </button>
         <view style="margin-bottom: 40rpx;color: black;">
           <radio-group bindchange="listenRadioChange">
@@ -19,18 +21,15 @@
           <text class="nickname-label">昵称</text>
           <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" value="{{userInfo.nickName}}"/>
         </view>
-      </block>
-
-      <block wx:else>
-        <view class="cu-avatar round lg" style="background-image:url({{userInfo.avatarUrl}});width: 128rpx;height: 128rpx;">
-          <view class="cu-tag badge {{userInfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
-          </view>
+        <view class="nickname-wrapper">
+          <text class="nickname-label">个性签名</text>
+          <input type="string" class="nickname-input" placeholder="请填写个性签名" maxlength="20" bind:change="onsignatureChange" value="{{userInfo.signature}}"/>
         </view>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
       </block>
     </view>
-    <view class="usermotto" wx:if="{{hasUserInfo}}">
+    <view class="usermotto">
       <button class="cu-btn bg-green lg" bind:tap="submit_userinfo" style="background-color: #07c160;width: 200rpx;">提交</button>
     </view>
+    
   </view>
 </scroll-view>

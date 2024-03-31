@@ -2,6 +2,7 @@ const socket = require("../../utils/socket.js");
 const util = require("../../utils/util.js");
 const swiper = require("swiper.js");
 const server = require("server.js");
+const share = require("../activityshowinfo/share.js")
 var doommList = [];
 const app = getApp();
 const iotest = require("weapp.socket.io.js");  // 引入 socket.io
@@ -39,9 +40,10 @@ Page({
     share_res_limit:0,
     share_use_id:"",
     friend_chat_msg_display:false,
+    moods:[],
+    mood_img_list:[]
   },
   onLoad: function (options) {
-
     console.log("onload函数");
     if (options.hasOwnProperty("share_use_id")){
       let share_use_id = decodeURIComponent(options.share_use_id);
@@ -315,6 +317,7 @@ Page({
       app.globalData.current_activity_id = "";
       server.get_friend_newest_chat_msg(this, app);
     }
+    
   },
   /**
    * 页面相关事件处理函数--监听用户下拉动作
@@ -337,11 +340,13 @@ Page({
 
     this.setData({
       activity_id: this.data.recyler_list[e.detail.current].activity_id,
-      current:e.detail.current
+      current:e.detail.current,
+      isdisplay:true
     });
     //这里应该将活动信息和用户信息都提取保存起来
     this.getstore_activity_user_info(this.data.recyler_list[e.detail.current].activity_id);
     server.get_init_msg(this, app, this.data.recyler_list[e.detail.current].activity_id);
+    share.get_activity_moods(app.globalData.hosturl, this, this.data.recyler_list[e.detail.current].activity_id);
     
   },
   openKey(e) {
@@ -350,14 +355,13 @@ Page({
       return;
     }
     this.setData({
-      isdisplay: false
+      isdisplay: false,
+      //isFocus:true
     });
-
   },
   onblurkey() {
     console.log("onblurkey");
     this.setData({
-      
       isFocus: false,
       isdisplay: true
     })
@@ -369,9 +373,9 @@ Page({
   },
   sendMsg() {
     console.log(this.data.inputMsg);
-    var send = this.data.inputMsg;
+    var send = this.data.inputMsg.trim();
     var activity_id = this.data.activity_id;
-    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: activity_id, user_id: this.data.hasUserInfo?app.globalData.login_userInfo["user_id"]:"",nickName: this.data.hasUserInfo?app.globalData.login_userInfo["nickName"]:"匿名" });
+    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: activity_id, user_id: app.globalData.login_userInfo["user_id"],nickName:app.globalData.login_userInfo["nickName"]});
 
     this.setData({
       inputMsg: ""
@@ -397,4 +401,7 @@ Page({
     }
     app.globalData.tab_page_path = item.pagePath;
   },
+  lazyload(){
+    console.log("加载图片")
+  }
 })

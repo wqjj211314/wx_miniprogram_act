@@ -8,11 +8,11 @@
     </view>
     <view class="text-content" style="color:black;font-size: 25rpx;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;word-wrap: break-word;line-height: normal;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;"><text>{{item.mood_text}}</text>
     </view>
-    <image src="{{item.img_url}}" mode="aspectFill" style="height: 800rpx;width: 100%;"></image>
+    <image src="{{item.img_url}}" mode="aspectFill" style="height: 800rpx;width: 100%;" lazy-load="true"></image>
   </view>
   <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:600rpx" autoplay="true" wx:if="{{moods.length > 0 && !sort_users_score_empty_flag}}">
     <swiper-item wx:for="{{moods}}" class="" wx:key="{{item.id}}" bindtap="ViewImage" data-url="{{item.img_url}}">
-      <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;"></image>
+      <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
       <view class="" style="position: absolute;bottom: 0;width: 100%;">
         <view class="cu-card article" style="width:80%;margin-bottom:15rpx;">
           <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
@@ -33,7 +33,7 @@
       </view>
     </swiper-item>
   </swiper>
-  <view wx:if="{{!sort_users_score_empty_flag}}">数据排名</view>
+  <view wx:if="{{!sort_users_score_empty_flag}}" class="bg-white flex text-bold" style="align-items: center;justify-content: center;padding-top: 20rpx;">数据排名</view>
   <block wx:for="{{sort_users_score}}">
     <view class="cu-list menu-avatar" style="margin:0rpx;">
       <view class="cu-item">
@@ -53,16 +53,20 @@
         </view>
 
         <view class="action">
-          <view class="text-grey text-xs">平|负|胜</view>
-          <view class=" bg-grey">{{item["peace"]}} | {{item["fail"]}} | {{item["win"]}}</view>
+          <view class="text-grey text-xs">负</view>
+          <view class="cu-tag round line-black">{{item["all_fail"]}}</view>
         </view>
         <view class="action">
           <view class="text-grey text-xs">总得分</view>
-          <view class="cu-tag round bg-grey sm">{{item["score"]}}</view>
+          <view class="cu-tag round line-black">{{item["total_scores"]}}</view>
         </view>
         <view class="action">
           <view class="text-grey text-xs">胜率</view>
-          <view class="cu-tag round bg-grey sm">{{item["win_rate"]}}</view>
+          <view class="cu-tag round line-black">{{item["all_win_rate"]*100}}%</view>
+        </view>
+        <view class="action">
+          <view class="text-grey text-xs">胜场数</view>
+          <view class="cu-tag text-bold round line-red">{{item["all_win"]}}</view>
         </view>
         <view class="action" bind:tap="like" data-likemembergroup="{{index}}">
           <!--点赞功能-->

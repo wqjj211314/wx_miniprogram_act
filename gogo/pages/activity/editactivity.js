@@ -473,9 +473,7 @@ Page({
     if (options.hasOwnProperty("activity_info")) {
       //传递了活动信息，那就意味着要进行编辑更新
       console.log("编辑更新活动信息")
-      wx.setNavigationBarTitle({
-        title: '更新活动',
-      })
+     
       activity_info = JSON.parse(decodeURIComponent(options.activity_info));
       console.log(activity_info);
       console.log(activity_info.partinfo.split(","));
@@ -501,38 +499,6 @@ Page({
     }
     var that = this;
     console.log(new Date());
-    //查看是否授权
-    wx.getSetting({
-      success: function (res) {
-        console.log(res.authSetting);
-        if (res.authSetting['scope.userInfo']) {
-          console.log("用户授权了");
-        } else {
-          //用户没有授权
-          console.log("用户没有授权");
-        }
-      }
-    });
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-              console.log(res.data.openid);
-              app.globalData.openid = res.data.openid;
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    });
-
   },
   getUserProfile: function (res) {
     if(!util.check_login(app)){
@@ -810,10 +776,5 @@ Page({
   onReachBottom: function () {
 
   },
-  onTabItemTap(item) {
-    console.log(item.index)//0
-    console.log(item.pagePath)//pages/index/index
-    console.log(item.text)//首页
-    app.globalData.tab_page_path = item.pagePath;
-  },
+  
 })

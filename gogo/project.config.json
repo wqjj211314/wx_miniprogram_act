@@ -1,54 +1,32 @@
 {
-  "description": "项目配置文件，详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+  "appid": "wx49f26073da6c15f9",
+  "projectname": "gogo",
+  "compileType": "miniprogram",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
   "setting": {
-    "urlCheck": true,
-    "es6": true,
-    "enhance": false,
-    "postcss": true,
-    "preloadBackgroundData": false,
-    "minified": true,
-    "newFeature": false,
+    "urlCheck": false,
     "coverView": true,
-    "nodeModules": true,
-    "autoAudits": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
     "showShadowRootInWxmlPanel": true,
-    "scopeDataCheck": false,
-    "uglifyFileName": false,
-    "checkInvalidKey": true,
-    "checkSiteMap": true,
-    "uploadWithSourceMap": true,
-    "compileHotReLoad": false,
-    "useMultiFrameRuntime": true,
+    "packNpmRelationList": [],
+    "useStaticServer": true,
+    "ignoreUploadUnusedFiles": true,
+    "compileHotReLoad": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
-    "useIsolateContext": true,
-    "userConfirmedBundleSwitch": false,
-    "packNpmManually": false,
-    "packNpmRelationList": [],
-    "minifyWXSS": true,
-    "disableUseStrict": false,
-    "showES6CompileOption": false,
-    "useCompilerPlugins": false,
-    "minifyWXML": true,
-    "lazyloadPlaceholderEnable": false,
-    "useStaticServer": true,
-    "condition": false,
-    "ignoreUploadUnusedFiles": true
+    "useIsolateContext": true
   },
-  "compileType": "miniprogram",
-  "simulatorType": "wechat",
-  "simulatorPluginLibVersion": {},
-  "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
-  },
-  "packOptions": {
-    "ignore": [],
-    "include": []
-  },
-  "appid": "wx49f26073da6c15f9"
+  }
 }
