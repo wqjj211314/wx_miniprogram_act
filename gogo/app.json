@@ -25,7 +25,8 @@
     "pages/hobby/edithobby",
     "pages/components/datetimepicker",
     "pages/activity/editactivity",
-    "pages/activity/customgroup"
+    "pages/activity/customgroup",
+    "pages/user/money"
   ],
   "tabBar": {
     "color": "#2c2c2c",

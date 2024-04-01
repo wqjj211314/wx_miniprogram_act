@@ -1,121 +1,77 @@
 <scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
-      <view wx:if="{{admin_flag&&entire_part_info.length > 0}}">
-        <view style="margin: 10rpx 10rpx;">分组名称</view>
-        <view class="cu-form-group">
-          <input placeholder="分组标签名称" value="{{group_tag}}" bindinput='edit_group_tag'></input>
-        </view>
-        <view style="margin: 10rpx 10rpx;">场地</view>
-        <view class="cu-form-group" style="">
-          <input placeholder="场地" value="{{group_room}}" bindinput='edit_group_room' style="margin-right: 20rpx;"></input>
-        </view>
-        <view style="margin: 10rpx 10rpx;">人数限制</view>
-        <view class="cu-form-group" style="">
-          <input placeholder="人数限制" value="{{group_limit}}" bindinput='edit_group_limit' style="margin-right: 20rpx;"></input>
-        </view>
-        <view style="margin: 10rpx 10rpx;">分组成员</view>
-        <view class="grid padding-sm" style="background-color: white;padding:20rpx;flex-wrap: wrap;padding:0rpx;padding-left:13rpx;padding-top: 30rpx;margin-bottom: 20rpx;">
-          <block wx:for="{{current_edit_group}}">
-            <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
-              <view class="cu-avatar radius" style="background-image:url({{item.avatarUrl}});">
-                <view class="cu-tag badge" style="left:-10rpx;right:auto;padding:0rpx;border-radius:0rpx;height:24rpx;width: 28rpx;" bindtap="del_group_member" data-num="{{item.member_num}}" hidden="{{hidden_del_tag}}">
-                  <text class="cuIcon-move text-bold" style="font-size: 25rpx;"></text>
-                </view>
-                <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(item.member_num)}}</view>
-              </view>
-              <view style="font-size: 18rpx;height: fit-content;">{{item.nickName}}</view>
+  <view wx:if="{{admin_flag&&entire_part_info.length > 0}}">
+    <view style="margin: 10rpx 10rpx;">分组名称</view>
+    <view class="cu-form-group">
+      <input placeholder="分组标签名称" value="{{group_tag}}" bindinput='edit_group_tag'></input>
+    </view>
+    <view style="margin: 10rpx 10rpx;">场地</view>
+    <view class="cu-form-group" style="">
+      <input placeholder="场地" value="{{group_room}}" bindinput='edit_group_room' style="margin-right: 20rpx;"></input>
+    </view>
+    <view style="margin: 10rpx 10rpx;">人数限制</view>
+    <view class="cu-form-group" style="">
+      <input placeholder="人数限制" value="{{group_limit}}" bindinput='edit_group_limit' style="margin-right: 20rpx;"></input>
+    </view>
+    <view style="margin: 10rpx 10rpx;">分组成员</view>
+    <view class="grid padding-sm" style="background-color: white;padding:20rpx;flex-wrap: wrap;padding:0rpx;padding-left:13rpx;padding-top: 30rpx;margin-bottom: 20rpx;">
+      <block wx:for="{{current_edit_group}}">
+        <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+          <view class="cu-avatar radius" style="background-image:url({{item.avatarUrl}});">
+            <view class="cu-tag badge" style="left:-10rpx;right:auto;padding:0rpx;border-radius:0rpx;height:24rpx;width: 28rpx;" bindtap="del_group_member" data-num="{{item.member_num}}" hidden="{{hidden_del_tag}}">
+              <text class="cuIcon-move text-bold" style="font-size: 25rpx;"></text>
             </view>
-          </block>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="add_group_member">
-            <text class="cuIcon-add" style="font-size: 45rpx;color: grey;"></text>
+            <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(item.member_num)}}</view>
           </view>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group_member">
-            <text class="cuIcon-move " style="font-size: 45rpx;color: grey;"></text>
-          </view>
-          <view class="cu-avatar radius margin-right margin-bottom {{disable_save_group?'bg-white':'bg-green'}}">
-            <button class="cu-btn bg-green" style="font-size:25rpx;height:50rpx;padding:0rpx;{{disable_save_group?'height:64rpx;width:64rpx;':'height:50rpx;'}}" bindtap="save_group" disabled="{{disable_save_group}}">保存</button>
-          </view>
+          <view style="font-size: 18rpx;height: fit-content;">{{item.nickName}}</view>
         </view>
-
+      </block>
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="add_group_member">
+        <text class="cuIcon-add" style="font-size: 45rpx;color: grey;"></text>
       </view>
-      <block wx:for="{{all_group_tag_list}}" wx:for-item="item0">
-        <view class="flex bg-white text-black" style="justify-content:space-between;padding: 20rpx 20rpx;">
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group_member">
+        <text class="cuIcon-move " style="font-size: 45rpx;color: grey;"></text>
+      </view>
+      <view class="cu-avatar radius margin-right margin-bottom {{disable_save_group?'bg-white':'bg-green'}}">
+        <button class="cu-btn bg-green" style="font-size:25rpx;height:50rpx;padding:0rpx;{{disable_save_group?'height:64rpx;width:64rpx;':'height:50rpx;'}}" bindtap="save_group" disabled="{{disable_save_group}}">保存</button>
+      </view>
+    </view>
+
+  </view>
+  <block wx:for="{{all_group_tag_list}}" wx:for-item="item0">
+    <view class="flex bg-white text-black" style="justify-content:space-between;padding: 20rpx 20rpx;">
       <view class="cu-btn line-green round">{{item0.group_tag}}({{item0.group_users.length}}/{{activity_info["group_tag_dict"][item0.group_tag]["limit"]}})</view>
       <view class="cu-btn line-green round">男{{item0.boy_num}} 女{{item0.girl_num}}</view>
     </view>
-        <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:10rpx;padding-left:20rpx;border:none;">
-          
-          <block wx:for="{{item0.group_users}}" wx:for-item="user">
-            <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
-              <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
+    <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:10rpx;padding-left:20rpx;border:none;">
 
-                <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
-              </view>
-              <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
-            </view>
-          </block>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}">
-            <text class="cuIcon-edit" style="font-size: 45rpx;color: grey;"></text>
+      <block wx:for="{{item0.group_users}}" wx:for-item="user">
+        <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+          <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
+
+            <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
           </view>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="clear_group" data-tag="{{item0.group_tag}}">
-            <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
-          </view>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}">
-            <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
-          </view>
-          <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
-            <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
-          </view>
+          <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
         </view>
-
-        <block wx:if="{{item0.show_flag}}">
-          <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
-            <view class="cu-list menu-avatar" style="margin:0rpx;">
-              <view class="cu-item">
-                <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
-                <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
-                  <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
-                  </view>
-                </view>
-                <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
-                  <view class="text-black">{{item.nickName}}</view>
-                  <view class="text-black flex" style="font-size: 20rpx;">
-                    <view class="" style="word-break: break-all;">
-                      <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
-                        <text class="cuIcon-tagfill text-red"></text>
-                        <text class="margin-right-xs">{{key}}:{{value}}</text>
-                      </block>
-                    </view>
-                  </view>
-                </view>
-                <view class="action">
-                  <view class="text-black text-xs">{{activity_info.activity_tag}}积分</view>
-                  <view class="cu-tag round line-black">{{item.hobby_info.hobby_point}}</view>
-                </view>
-              </view>
-            </view>
-          </block>
-        </block>
       </block>
-      <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;margin-top:20rpx;padding:0rpx;padding-top:10rpx;padding-left:20rpx;border-bottom: 10rpx;" wx:if="{{ungroup_partinfo_list.length > 0}}">
-        <view style="width: 100%;margin-bottom: 25rpx;">
-          <view class="cu-btn line-green round">未分组({{ungroup_partinfo_list.length}})</view>
-        </view>
-        <block wx:for="{{ungroup_partinfo_list}}" wx:for-item="user">
-          <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
-            <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
-              <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
-            </view>
-            <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
-          </view>
-        </block>
-        <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="">
-          <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
-        </view>
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}">
+        <text class="cuIcon-edit" style="font-size: 45rpx;color: grey;"></text>
       </view>
-      <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="clear_group" data-tag="{{item0.group_tag}}">
+        <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
+      </view>
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}">
+        <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
+      </view>
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
+        <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
+      </view>
+    </view>
+
+    <block wx:if="{{item0.show_flag}}">
+      <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
         <view class="cu-list menu-avatar" style="margin:0rpx;">
-          <view class="cu-item" style="height: fit-content;min-height: 140rpx;">
-            <view style="position: absolute;left: 10rpx;width: 50rpx;">{{tools.show_member_num(item.member_num)}}号</view>
+          <view class="cu-item">
+            <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
             <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
               <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
               </view>
@@ -125,23 +81,79 @@
               <view class="text-black flex" style="font-size: 20rpx;">
                 <view class="" style="word-break: break-all;">
                   <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
-                    <text class="cuIcon-tagfill text-red"></text><text class="  margin-right-xs" wx:if="{{key!='姓名'||key!='性别'}}">{{key}}:{{value}}</text>
+                    <text class="cuIcon-tagfill text-red"></text>
+                    <text class="margin-right-xs">{{key}}:{{value}}</text>
                   </block>
                 </view>
               </view>
             </view>
-            <view class="action" style="width: 130rpx;">
+
+            <view class="action">
               <view class="text-black text-xs">{{activity_info.activity_tag}}积分</view>
-              <view class="cu-tag round line-black">{{item.hobby_info.hobby_point}}</view>
+              <view class="cu-tag round line-black">{{item.hobby_info.hobby_point}}-L{{item.hobby_info.hobby_point/1000 + 1}}级</view>
             </view>
-            <view class="action" style="width: 120rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}">
-              <button class="cu-btn bg-red round">踢出</button>
+            <view class="action" style="width: 120rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
+              <button class="cu-btn line-green" style="padding-left: 10rpx;padding-right:10rpx;">踢出</button>
+            </view>
+            <view class="action" style="width: fit-content;" hidden="{{!admin_flag}}" bind:tap="update_member_admin" data-membernum="{{item.member_num}}">
+              <button class="cu-btn line-green" style="padding-left: 10rpx;padding-right:10rpx;">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
             </view>
           </view>
         </view>
       </block>
-      <view wx:if="{{entire_part_info.length <= 0}}">
-        <view style="margin-top: 40vh;font-size: 50rpx;margin-left: 30vw;color: gray;">还没人报名</view>
+    </block>
+  </block>
+  <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;margin-top:20rpx;padding:0rpx;padding-top:10rpx;padding-left:20rpx;border-bottom: 10rpx;" wx:if="{{ungroup_partinfo_list.length > 0}}">
+    <view style="width: 100%;margin-bottom: 25rpx;">
+      <view class="cu-btn line-green round">未分组({{ungroup_partinfo_list.length}})</view>
+    </view>
+    <block wx:for="{{ungroup_partinfo_list}}" wx:for-item="user">
+      <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+        <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
+          <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
+        </view>
+        <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
       </view>
-      <view style="height: 150rpx;"></view>
-    </scroll-view>
+    </block>
+    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="">
+      <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
+    </view>
+  </view>
+  <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+    <view class="cu-list menu-avatar" style="margin:0rpx;">
+      <view class="cu-item" style="height: fit-content;min-height: 140rpx;">
+        <view style="position: absolute;left: 10rpx;width: 50rpx;">{{tools.show_member_num(item.member_num)}}号</view>
+        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
+          <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+          </view>
+        </view>
+        <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
+          <view class="text-black">{{item.nickName}}</view>
+          <view class="text-black flex" style="font-size: 20rpx;">
+            <view class="" style="word-break: break-all;">
+              <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
+                <text class="cuIcon-tagfill text-red"></text><text class="  margin-right-xs" wx:if="{{key!='姓名'||key!='性别'}}">{{key}}:{{value}}</text>
+              </block>
+            </view>
+          </view>
+        </view>
+        <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
+          <view class="text-black text-xs">{{activity_info.activity_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
+          
+          <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
+         
+        </view>
+        <view class="action" style="width: 120rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
+          <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;">踢出</button>
+        </view>
+        <view class="action" style="width: fit-content;" hidden="{{!admin_flag}}" bind:tap="update_member_admin" data-membernum="{{item.member_num}}">
+          <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{entire_part_info.length <= 0}}">
+    <view style="margin-top: 40vh;font-size: 50rpx;margin-left: 30vw;color: gray;">还没人报名</view>
+  </view>
+  <view style="height: 150rpx;"></view>
+</scroll-view>

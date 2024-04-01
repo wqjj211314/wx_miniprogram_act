@@ -6,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    activity_create_list:[],
+    activity_part_list:[],
     hosturl:app.globalData.hosturl
   },
 
@@ -36,7 +36,7 @@ Page({
           console.log(JSON.stringify(res.data))
           //JSON.stringify(this.data.activity_info);
           that.setData({
-            activity_create_list:res.data
+            activity_part_list:res.data
           })
           if(res.data.length == 0){
             wx.showToast({
@@ -53,12 +53,11 @@ Page({
   navigateToActivityIndex(e){
     var index = parseInt(e.currentTarget.dataset.index);
     console.log(typeof index);
-    console.log(this.data.activity_create_list.length);
-    var index_activity = this.data.activity_create_list[index];
-    var activity_id = index_activity["id"];
-    let id = JSON.stringify({"activity_id":activity_id});
-    wx.navigateTo({
-      url: '../index/index?activity_id='+encodeURIComponent(id)
+    console.log(this.data.activity_part_list.length);
+    var index_activity = this.data.activity_part_list[index];
+    app.globalData.current_activity_id = index_activity.activity_id;
+    wx.switchTab({
+      url: '../index/index'
     })
   },
   

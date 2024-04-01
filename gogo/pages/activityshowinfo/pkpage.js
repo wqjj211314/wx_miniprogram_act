@@ -15,7 +15,9 @@ Page({
     group_users: [],//这是当前分组的成员，数组形式
     show_member_info_flag:false,
     boy_num:0,
+    boy_member_num_list:[],
     girl_num:0,
+    girl_member_num_list:[],
     member_users: {},//当前分组成员的字典形式，“#1”是key，成员信息是value
     all_pk_info:{},//获取到的当前group_tag的Activitymemberpk信息
     pk_groups: [],
@@ -39,7 +41,9 @@ Page({
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
     let group_tag = options.group_tag;
     var boy_num = 0;
+    var boy_member_num_list = [];
     var girl_num = 0;
+    var girl_member_num_list = [];
 
     //初始化成员的字典形式数据，方便wxml获取
     var member_users = {}
@@ -48,14 +52,18 @@ Page({
       member_users[member_num] = item;
       if(item.gender == "0"){
         girl_num = girl_num + 1;
+        girl_member_num_list.push(item.member_num)
       }else if(item.gender == "1"){
         boy_num = boy_num + 1;
+        boy_member_num_list.push(item.member_num)
       }
     })
     this.setData({
       group_users:group_users,
       boy_num:boy_num,
+      boy_member_num_list:boy_member_num_list,
       girl_num:girl_num,
+      girl_member_num_list:girl_member_num_list,
       group_tag:group_tag,
       member_users:member_users,
       activity_id:options.activity_id,
@@ -206,6 +214,45 @@ Page({
     })
     
   },
+  get_boygirl_pk(){
+    if(this.data.boy_num >= 2 && this.data.girl_num >= 2){
+      if(this.data.boy_num + this.data.girl_num > 6){
+        wx.showToast({
+          title: '人数太多!',
+          icon:"error",
+          duration:2000
+        })
+      }else{
+        var that = this;
+        wx.request({
+          url: app.globalData.hosturl + 'get_boygirl_pk_list', //仅为示例，并非真实的接口地址
+          data: {
+            "boy_member_num_list": this.data.boy_member_num_list,
+            "girl_member_num_list": this.data.girl_member_num_list,
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success(res) {
+            console.log(res);
+            if(res.data.code == 200){
+              var new_pk_groups = that.data.pk_groups;
+              new_pk_groups.push(res.data.pk_groups);
+              that.setData({ pk_groups: new_pk_groups });
+            }
+          }
+        });
+
+      }
+    }else{
+      wx.showToast({
+        title: '混双人数不足',
+        icon:"error",
+        duration:2000
+      })
+    }
+  },
+
   del_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;

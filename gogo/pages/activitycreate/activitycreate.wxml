@@ -7,13 +7,10 @@
         <view class="cu-item text-blue">
           <view class="cu-card article" style="">
             <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
-
               <view class="title" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
                 <view class="text-cut">{{item.title}}
-
                 </view>
               </view>
-
               <view class="content" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
                 <image wx:if="{{item.bg_img_exist}}" src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
                 <image wx:else src="/default_showlist_bg.png" mode="aspectFill" style="width:40%;height:200rpx;"></image>
@@ -38,9 +35,11 @@
                 </view>
               </view>
               <view class="flex" style="margin-top: 30rpx;justify-content: space-around;">
-                <button class="cu-btn bg-red" style="" bindtap="delete_activity" data-index="{{index}}">删除</button>
-                <button class="cu-btn bg-red" style="" bindtap="delete_activity" data-index="{{index}}">取消</button>
-                <button class="cu-btn bg-green" style="" bindtap="update_activity_info" data-index="{{index}}">编辑查看</button>
+                <button class="cu-btn bg-red sm" style="" bindtap="delete_activity" data-index="{{index}}">删除</button>
+                <button class="cu-btn bg-red sm" style="" bindtap="cancel_activity" data-index="{{index}}">取消</button>
+                <button class="cu-btn bg-red sm" style="" bindtap="delete_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0}}">全部退款</button>
+                <button class="cu-btn bg-green sm" style="" bindtap="update_activity_info" data-index="{{index}}">编辑</button>
+                <button class="cu-btn bg-green sm" style="" bindtap="calculate_close_activity" data-index="{{index}}" wx:if="{{item.pay_price != 0}}" hidden="{{item.activity_status > 1}}">结算</button>
               </view>
             </view>
           </view>

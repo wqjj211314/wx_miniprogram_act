@@ -6,8 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    activity_create_list:[],
-    hosturl:app.globalData.hosturl
+    activity_create_list: [],
+    hosturl: app.globalData.hosturl
   },
 
   /**
@@ -19,48 +19,49 @@ Page({
     });
     this.navigateToActivitycreate();
   },
-  navigateToActivitycreate(){
+  navigateToActivitycreate() {
     var that = this;
     wx.request({
-      url: app.globalData.hosturl+'get_create_actlist', //仅为示例，并非真实的接口地址
+      url: app.globalData.hosturl + 'get_create_actlist', //仅为示例，并非真实的接口地址
       data: {
-        "user_id":app.globalData.openid
+        "user_id": app.globalData.openid
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success (res) {
+      success(res) {
         wx.hideLoading();
-        if(res.data.length>=0){
+        if (res.data.length >= 0) {
           console.log("创建的活动")
           //console.log(JSON.stringify(res.data))
           //JSON.stringify(this.data.activity_info);
           that.setData({
-            activity_create_list:res.data
+            activity_create_list: res.data
           });
-          if(res.data.length == 0){
+          if (res.data.length == 0) {
             wx.showToast({
               title: '还没创建活动哦',
-              icon:"success",
-              duration:2500
+              icon: "success",
+              duration: 2500
             })
           }
         }
-        
+
       }
     });
-   
+
   },
-  navigateToActivityIndex(e){
+  navigateToActivityIndex(e) {
     var index = parseInt(e.currentTarget.dataset.index);
     console.log(typeof index);
     console.log(this.data.activity_create_list.length);
     var activity_info = this.data.activity_create_list[index];
-    wx.navigateTo({
-      url: '../index/index?activity_id='+ encodeURIComponent(JSON.stringify({ "activity_id": activity_info.activity_id }))
+    app.globalData.current_activity_id = activity_info.activity_id;
+    wx.switchTab({
+      url: '../index/index'
     })
   },
-  delete_activity(e){
+  delete_activity(e) {
     var that = this;
     var index = parseInt(e.currentTarget.dataset.index);
     console.log(typeof index);
@@ -68,19 +69,98 @@ Page({
     var activity_info = this.data.activity_create_list[index];
     var activity_id = activity_info["activity_id"];
     wx.request({
-      url: app.globalData.hosturl+'delete_activity', //仅为示例，并非真实的接口地址
+      url: app.globalData.hosturl + 'delete_activity', //仅为示例，并非真实的接口地址
       data: {
-        "activity_id":activity_id
+        "activity_id": activity_id
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success (res) {
-        console.log("成功删除活动");
-        that.navigateToActivitycreate();
+      success(res) {
+        console.log(res.data);
+        wx.showToast({
+          title: res.data,
+          icon: "none",
+          duration: 2000
+        })
+        if (res.data == "成功删除活动") {
+          that.navigateToActivitycreate();
+        }
+
       }
     });
-    
+
+  },
+  cancel_activity(e) {
+    var that = this;
+    var index = parseInt(e.currentTarget.dataset.index);
+    console.log(typeof index);
+    console.log(this.data.activity_create_list.length);
+    var activity_info = this.data.activity_create_list[index];
+    var activity_id = activity_info["activity_id"];
+    wx.request({
+      url: app.globalData.hosturl + 'update_activity_status', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "activity_status": 3//取消活动
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data.result);
+        if (res.data.code == 200) {
+          wx.showToast({
+            title: res.data.result,
+            icon: "none",
+            duration: 2000
+          })
+          that.navigateToActivitycreate();
+        }else{
+          wx.showToast({
+            title: res.data.result,
+            icon: "none",
+            duration: 2000
+          })
+        }
+
+      }
+    });
+  },
+  delete_all_member(e) {
+    var that = this;
+    var index = parseInt(e.currentTarget.dataset.index);
+    console.log(typeof index);
+    console.log(this.data.activity_create_list.length);
+    var activity_info = this.data.activity_create_list[index];
+    var activity_id = activity_info["activity_id"];
+    wx.request({
+      url: app.globalData.hosturl + 'delete_all_member', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data.result);
+        if (res.data.code == 200) {
+          wx.showToast({
+            title: res.data.result,
+            icon: "none",
+            duration: 2000
+          })
+          
+        }else{
+          wx.showToast({
+            title: res.data.result,
+            icon: "none",
+            duration: 2000
+          })
+        }
+
+      }
+    });
   },
   update_activity_info(e) {
     var that = this;
@@ -93,6 +173,43 @@ Page({
     wx.navigateTo({
       url: '../activity/editactivity?activity_info=' + activity_info
     })
+  },
+  calculate_close_activity(e) {
+    var that = this;
+    var index = parseInt(e.currentTarget.dataset.index);
+    console.log(typeof index);
+    console.log(this.data.activity_create_list.length);
+    var activity_info = this.data.activity_create_list[index];
+    var activity_id = activity_info["activity_id"];
+    wx.request({
+      url: app.globalData.hosturl + 'calculate_close_activity', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "user_id":app.globalData.login_userInfo["user_id"],
+        "hobby_tag":activity_info["activity_tag"]
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data.result);
+        if (res.data.code == 200) {
+          wx.showToast({
+            title: res.data.result,
+            icon: "none",
+            duration: 2000
+          })
+          that.navigateToActivitycreate();
+        }else{
+          wx.showToast({
+            title: res.data.result,
+            icon: "error",
+            duration: 2000
+          })
+        }
+
+      }
+    });
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

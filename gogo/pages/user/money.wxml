@@ -1,0 +1,25 @@
+<view class="cu-form-group bg-green" style="height: 200rpx;">
+  <view class="title bg-blue round" style="padding: 30rpx;height: fit-content;">余额 {{userinfo.total_money}}元</view>
+  <button class="cu-btn bg-blue round" disabled="{{!can_get || userinfo.total_money == 0}}" bind:tap="getallmoney">全部提现</button>
+</view>
+<view style="margin-top: 30rpx;margin-bottom: 10rpx;">提现信息</view>
+<form>
+  <view class="cu-form-group">
+    <view class="title" style="min-width: 180rpx;">银行开户人</view>
+    <input placeholder="请输入开户人姓名" value="{{bank_num}}" bindinput='banknumInput'></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title" style="min-width: 180rpx;">银行卡号</view>
+    <input placeholder="请输入银行卡号,仅支持数字" value="{{bank_account_name}}" bindinput='bankaccountnameInput'></input>
+  </view>
+</form>
+<view style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{money_list.length > 0}}">提现记录</view>
+<form>
+  <block wx:for="{{money_list}}">
+    <view class="cu-form-group" style="height: 150rpx;">
+      <view class="title" style="width: fit-content;height: fit-content;">{{item.submit_time}}</view>
+      <view class="title" style="width: fit-content;height: fit-content;">提现{{item.get_money}}</view>
+      <view class="title" style="width: fit-content;height: fit-content;">{{item.get_status}}</view>
+    </view>
+  </block>
+</form>

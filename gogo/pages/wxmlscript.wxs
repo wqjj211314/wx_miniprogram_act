@@ -8,6 +8,12 @@ var iscontain = function(arraylist,item){
   }
   return false;
 }
+
+var hobby_point = function(hobby_point){
+  var point = parseInt(hobby_point/1000) + 1;
+  return "L"+point
+}
+
 var show_member_num = function (member_num_str) {
   member_num_str = ""+member_num_str;
   return member_num_str.replace("#","");
@@ -34,6 +40,7 @@ var show_vs_scores = function(scores){
 module.exports = {
   show_member_num: show_member_num,
   show_vs_scores:show_vs_scores,
-  iscontain:iscontain
+  iscontain:iscontain,
+  hobby_point:hobby_point
 };
 module.exports.msg = "some msg";

@@ -95,7 +95,6 @@ Page({
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend:new Date(activity_info["cancelendtime"]) - new Date() <= 0,
-      current_swiper_item_index:new Date(activity_info["begintime"]) - new Date() <= 0?1:0,
       new_announcement: activity_info["announcement"],
       member: activity_info["member"],
       addendtime: addendtime,
@@ -104,6 +103,12 @@ Page({
       title_tags: activity_info.title_tags == "" ? [] : activity_info.title_tags.split(","),
       share_res_limit: activity_info["part_limit"]
     });
+    var that = this;
+    setTimeout(function(){
+      that.setData({
+        current_swiper_item_index:new Date(activity_info["begintime"]) - new Date() <= 0?1:0,
+      })
+    },1500)
     console.log(new Date(addendtime).getTime());
     console.log(new Date().getTime());
 
@@ -318,7 +323,7 @@ Page({
   PickerChange(e) {
     console.log(e);
     var info = this.data.partinfoinput;
-    info["段位"] = this.data.picker[e.detail.value];
+    info["自评等级"] = this.data.picker[e.detail.value];
     this.setData({
       picker_index: e.detail.value,
       partinfoinput: info
@@ -518,7 +523,12 @@ Page({
       });
       return;
     }
-    if (Object.keys(this.data.partinfoinput).length != this.data.partinfo.length) {
+    var info = this.data.partinfoinput;
+    info["自评等级"] = this.data.picker[picker_index];
+    this.setData({
+      partinfoinput: info
+    });
+    if (Object.keys(info).length != info.length) {
       wx.showToast({
         title: '请填写报名信息',
         icon: 'error',
@@ -532,7 +542,7 @@ Page({
         "activity_id": this.data.activity_info.activity_id,
         "user_id": app.globalData.login_userInfo["user_id"],
         "activity_title": this.data.activity_info.activity_title,
-        "partinfo": JSON.stringify(this.data.partinfoinput),
+        "partinfo": JSON.stringify(info),
         "latitude": this.data.activity_info.latitude,
         "longitude": this.data.activity_info.longitude,
         "activity_tag": this.data.activity_info.activity_tag,
@@ -780,7 +790,37 @@ Page({
       ungroup_partinfo_list: ungroup_partinfo_list
     })
   },
-
+  update_member_admin(e) {
+    console.log("移除成员");
+    var that = this;
+    var membernum = e.currentTarget.dataset.membernum;
+    var admin_member = membernum
+    wx.showLoading({
+      title: '',
+    })
+    wx.request({
+      url: app.globalData.hosturl + 'update_member_admin_status', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": that.data.activity_info.activity_id,
+        "admin_member": admin_member
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading();
+        wx.showToast({
+          title: res.data.result,
+          icon:"none",
+          duration:1000
+        })
+        that.init_activity_all_info(that.data.activity_info);
+      },
+      fail(res){
+        wx.hideLoading();
+      }
+    });
+  },
   delete_member(e) {
     console.log("移除成员");
     var that = this;
@@ -790,7 +830,8 @@ Page({
       url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": that.data.activity_info.activity_id,
-        "cancel_part_members": cancel_part_members
+        "cancel_part_members": cancel_part_members,
+        "begintime":that.data.activity_info.begintime
       },
       header: {
         'content-type': 'application/json' // 默认值

@@ -106,6 +106,11 @@ Page({
       url: '../activity/activity'
     })
   },
+  navigateToMoney() {
+    wx.navigateTo({
+      url: 'money'
+    })
+  },
   navigateToActivitycreate() {
     wx.navigateTo({
       url: '../activitycreate/activitycreate'

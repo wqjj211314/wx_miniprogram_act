@@ -1,197 +1,177 @@
 <!--pages/user/user.wxml-->
 <scroll-view>
-<view class="img">
+  <view class="img">
     <image class='img' src="/2.jpg" mode="widthFix"></image>
-</view>
-<view class="main">
+  </view>
+  <view class="main">
     <view class="flex userinfo">
       <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
-          <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
-          </view>
+        <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
         </view>
-
-
+      </view>
       <view class="column-sidebar">
-        <button class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;" 	bindtap="modify_user_info"><!--class="rightarrow"--> 
+        <button class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;" bindtap="modify_user_info">
+          <!--class="rightarrow"-->
           <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text><text class="cuIcon-triangledownfill text-black" style="font-size: 40rpx;margin-left:-2rpx;"></text>
         </button>
         <view bindtap="showModal-none" data-target="DialogModal-tag">
           <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
         </view>
       </view>
-
       <view class="cuIcon-emoji text-yellow" style="margin-left: auto;font-size:90rpx;">
       </view>
     </view>
 
-<view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}">
-    <view class="cu-item" bindtap="navigateToActivity">
-      <view class="cuIcon-activity text-red">
+    <view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}">
+      <view class="cu-item" bindtap="navigateToActivity">
+        <view class="cuIcon-activity text-red">
+        </view>
+        <text>创建活动</text>
       </view>
-      <text>创建活动</text>
-    </view>
-	 <view class="cu-item" bindtap="navigateToFriendList">
-      <view class="cuIcon-comment text-green">
-        <view class="cu-tag badge" style="top:-1rpx;left:120rpx;" hidden="{{!friend_chat_msg_display}}"></view>
+      <view class="cu-item" bindtap="navigateToFriendList">
+        <view class="cuIcon-comment text-green">
+          <view class="cu-tag badge" style="top:-1rpx;left:120rpx;" hidden="{{!friend_chat_msg_display}}"></view>
+        </view>
+        <text>消息</text>
       </view>
-      <text>消息</text>
-    </view>
-	 <view class="cu-item" bindtap="click_setting">
-      <view class="cuIcon-down text-gray">
+      <view class="cu-item" bindtap="click_setting">
+        <view class="cuIcon-down text-gray">
+        </view>
+        <text>下载应用</text>
       </view>
-      <text>下载应用</text>
-    </view>
-    <view class="cu-item" bindtap="navigateToindex">
-      <view class="cuIcon-homefill text-blue">
+      <view class="cu-item" bindtap="navigateToindex">
+        <view class="cuIcon-homefill text-blue">
+        </view>
+        <text>首页</text>
       </view>
-      <text>首页</text>
     </view>
+
+    <view class="cu-list menu sm-border card-menu margin-top">
+      <view class="cu-item arrow" bindtap="navigateToActivitycreate">
+        <view class="content">
+          <text class="cuIcon-circle text-red"></text>
+          <text class="text-grey">创建的活动</text>
+        </view>
+      </view>
+
+      <view wx:if="{{checking_flag}}" class="cu-item arrow" bindtap="navigateToActivitychecking">
+        <view class="content">
+          <text class="cuIcon-icloading text-red"></text>
+          <text class="text-grey">待审核的活动</text>
+        </view>
+      </view>
+      <view class="cu-item arrow" bindtap="navigateToActivityadd">
+        <view class="content">
+          <text class="cuIcon-favorfill text-red"></text>
+          <text class="text-grey">参加的活动</text>
+        </view>
+      </view>
+
+      <view class="cu-item arrow" bindtap="navigateTohobbylist">
+        <view class="content">
+          <text class="cuIcon-likefill text-red"></text>
+          <text class="text-grey">兴趣列表</text>
+        </view>
+      </view>
+      <view class="cu-item arrow" bindtap="navigateToMoney">
+        <view class="content">
+          <text class="cuIcon-moneybagfill text-red"></text>
+          <text class="text-grey">余额提现</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="cu-list menu sm-border card-menu margin-top">
+      <view class="cu-item arrow" bind:tap="showModal" data-target="DialogModal-suggest">
+        <view class="content">
+          <text class="cuIcon-phone text-green" style="font-size:40rpx;"></text>
+          <text class="text-grey">微信电话联系</text>
+        </view>
+        <view class="action" style="max-width:66%;">
+          <text class="text-green">growthwang30</text>
+        </view>
+      </view>
+      <view class="cu-item">
+        <view class="content">
+          <text class="cuIcon-tag text-green" style="font-size:40rpx;"></text>
+          <text class="text-grey">版本</text>
+        </view>
+        <view class="action" style="max-width:66%;">
+          <text class="text-grey text-sm">v1.0.1</text>
+        </view>
+      </view>
+      <view class="cu-item arrow" bindtap="chat_with_dev">
+        <view class="content">
+          <text class="cuIcon-service text-green" style="font-size:40rpx;"></text>
+          <text class="text-grey">客服咨询</text>
+        </view>
+      </view>
+
+
+
+    </view>
+
   </view>
 
-  <view class="cu-list menu sm-border card-menu margin-top">
-    <view class="cu-item arrow" bindtap="navigateToActivitycreate">
-      <view class="content">
-        <text class="cuIcon-circle text-red"></text>
-        <text class="text-grey">创建的活动</text>
+  <view class="cu-modal {{modalName=='DialogModal-userinfo'?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">个人信息</view>
+        <view class="action" bindtap="hideModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
       </view>
-    </view>
-    
-    <view wx:if="{{checking_flag}}" class="cu-item arrow" bindtap="navigateToActivitychecking">
-      <view class="content">
-        <text class="cuIcon-icloading text-red"></text>
-        <text class="text-grey">待审核的活动</text>
+      <view class="padding-xl">
+        暂未开放
       </view>
-    </view>    
-	  <view class="cu-item arrow" bindtap="navigateToActivityadd">
-      <view class="content">
-        <text class="cuIcon-favorfill text-red"></text>
-        <text class="text-grey">参加的活动</text>
-      </view>
-    </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+          <button class="cu-btn bg-green margin-left" bindtap="hideModal">提交</button>
 
-	  <view class="cu-item arrow" bindtap="navigateTohobbylist">
-      <view class="content">
-        <text class="cuIcon-likefill text-red"></text>
-        <text class="text-grey">兴趣列表</text>
-      </view>
-    </view>
-  </view>
-
-  <view class="cu-list menu sm-border card-menu margin-top">
-    <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-phone text-green" style="font-size:40rpx;"></text>
-        <text class="text-grey">微信联系我们</text>
-      </view>
-      <view class="action" style="max-width:66%;">
-        
-        <text class="text-green">growthwang30</text>
-       
-      </view>
-    </view>
-    <view class="cu-item">
-      <view class="content">
-        <text class="cuIcon-tag text-green" style="font-size:40rpx;"></text>
-        <text class="text-grey">版本</text>
-      </view>
-      <view class="action" style="max-width:66%;">
-        <text class="text-grey text-sm">v1.0.0</text>
-      </view>
-    </view>
-	  <view class="cu-item arrow" bindtap="chat_with_dev">
-      <view class="content">
-        <text class="cuIcon-service text-green" style="font-size:40rpx;"></text>
-        <text class="text-grey">客服咨询</text>
-      </view>
-    </view>
-
-    
-
-  </view>
-
-</view>
-
-<view class="cu-modal {{modalName=='DialogModal-userinfo'?'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class="content">个人信息</view>
-      <view class="action" bindtap="hideModal">
-        <text class="cuIcon-close text-red"></text>
-      </view>
-    </view>
-    <view class="padding-xl">
-      暂未开放
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-        <button class="cu-btn bg-green margin-left" bindtap="hideModal">提交</button>
-
-      </view>
-    </view>
-  </view>
-</view>
-<view class="cu-modal {{modalName=='DialogModal-tag'?'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class="content">添加标签</view>
-      <view class="action" bindtap="hideModal">
-        <text class="cuIcon-close text-red"></text>
-      </view>
-    </view>
-    <view class="padding-xl">
-      联系微信：growthwang30
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-        <button class="cu-btn bg-green margin-left" bindtap="hideModal">提交</button>
-
+        </view>
       </view>
     </view>
   </view>
-</view>
-<view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class="content">我有建议</view>
-      <view class="action" bindtap="hideModal">
-        <text class="cuIcon-close text-red"></text>
+  <view class="cu-modal {{modalName=='DialogModal-tag'?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">添加标签</view>
+        <view class="action" bindtap="hideModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
       </view>
-    </view>
-    <view class="padding-xl">
-      <text>向开发者反馈，微信号：growthwang30</text>
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="hideModal">确认</button>
+      <view class="padding-xl">
+        联系微信：growthwang30
+      </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+          <button class="cu-btn bg-green margin-left" bindtap="hideModal">提交</button>
 
+        </view>
       </view>
     </view>
   </view>
-</view>
-<view class="cu-modal {{modalName=='new_nickName_modal'?'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class="content">自定义昵称</view>
-      <view class="action" bindtap="hideModal">
-        <text class="cuIcon-close text-red"></text>
+  <view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">微信电话联系</view>
+        <view class="action" bindtap="hideModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
       </view>
-    </view>
-    <view class="">
-      <view class="cu-form-group " style="border-top: 1rpx solid #eee;border-bottom: 1rpx solid #eee;">
-        <view class="title text-bold">昵称:</view>
-        <input placeholder="自定义昵称" class="text-left" maxlength="10" bindinput="inputMsg" value="{{new_nickName}}"></input>
-
+      <view class="padding-xl">
+        <text>向开发者反馈，微信：growthwang30\n</text>
+        <text>收费提现问题申诉,电话：18018757991</text>
       </view>
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-        <button class="cu-btn bg-green margin-left" bindtap="submit_new_nickName">确定</button>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" bindtap="hideModal">确认</button>
 
+        </view>
       </view>
     </view>
   </view>
-</view>
+  
 </scroll-view>

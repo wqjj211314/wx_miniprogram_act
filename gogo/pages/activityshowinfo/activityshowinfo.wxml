@@ -105,7 +105,7 @@
         <view class="cu-item">
           <view class="content">
             <view class="text-blue text-sm" style="">
-              <text>活动详情：\n{{activity_info.detail}}
+              <text>
                 <text style="color: red;">最新公告：{{new_announcement==""?"无":"\n"+new_announcement}}
                 </text>
               </text>
@@ -143,10 +143,10 @@
                   </text>
                 </view>
               </view>
-              <input wx:if="{{item != '段位' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}"></input>
-              <picker wx:if="{{item == '段位'}}" bindchange="PickerChange" value="0" range="{{picker}}">
+              <input wx:if="{{item != '自评等级' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}"></input>
+              <picker wx:if="{{item == '自评等级'}}" bindchange="PickerChange" value="0" range="{{picker}}">
                 <view class="picker">
-                  {{picker_index?picker[picker_index]:'请选择您的技术水平'}}
+                  {{picker[picker_index]}}
                 </view>
               </picker>
             </view>
