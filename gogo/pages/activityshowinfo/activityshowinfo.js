@@ -159,6 +159,16 @@ Page({
     score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
     share.get_activity_moods(app.globalData.hosturl, that, activity_info.activity_id)
   },
+  set_button_status(activity_info){
+    //报名按钮
+    
+
+    //取消报名按钮
+
+    //记录见闻按钮
+
+    
+  },
   show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
     var group_tag = e.currentTarget.dataset.tag;
@@ -251,7 +261,8 @@ Page({
         }
         that.setData({
           part_flag: true,
-          part_member_num: item["member_num"]
+          part_member_num: item["member_num"],
+          partinfo:partinfo
         })
       }
 
@@ -524,11 +535,12 @@ Page({
       return;
     }
     var info = this.data.partinfoinput;
-    info["自评等级"] = this.data.picker[picker_index];
+    info["自评等级"] = this.data.picker[this.data.picker_index];
     this.setData({
       partinfoinput: info
     });
-    if (Object.keys(info).length != info.length) {
+    console.log(info)
+    if (Object.keys(info).length != this.data.partinfo.length) {
       wx.showToast({
         title: '请填写报名信息',
         icon: 'error',
@@ -541,7 +553,7 @@ Page({
       data: {
         "activity_id": this.data.activity_info.activity_id,
         "user_id": app.globalData.login_userInfo["user_id"],
-        "activity_title": this.data.activity_info.activity_title,
+        "title": this.data.activity_info.title,
         "partinfo": JSON.stringify(info),
         "latitude": this.data.activity_info.latitude,
         "longitude": this.data.activity_info.longitude,
@@ -556,8 +568,7 @@ Page({
         //that.update_part_info(that,res);
         console.log("商户server调用支付统一下单")
         console.log(res.data.result);
-        console.log(typeof res.data.result.timeStamp);//undefined,竟然，只能强制转换了
-        console.log(''+res.data.result.timeStamp)
+        
         if(res.data.code == 0){
           wx.requestPayment({
             'timeStamp':res.data.result.timeStamp,
@@ -605,7 +616,7 @@ Page({
           },3000)
         }else{
           wx.showToast({
-            title: '服务器异常',
+            title: res.data.result,
             icon:"error",
             duration:2000
           })
