@@ -6,7 +6,6 @@
 <swiper style="height:calc(100% - 45rpx);;" current="{{current_swiper_item_index}}" bindchange="swiper_change">
   <!--活动页面-->
   <swiper-item style="width: 100%;height:100%;overflow: auto;">
-
     <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
       <!--这个创建活动页面基本完整，UI上正常-->
       <view style="width:100vw;height:30vh;">
@@ -36,7 +35,7 @@
           </view>
           <view class="action" style="flex:1;">
             <text class="text-blue text-sm">{{activity_info.activity_live}}</text>
-            
+
           </view>
         </view>
         <view class="cu-item">
@@ -50,9 +49,9 @@
           <view class="content" style="width:30%;">
             <text class="cuIcon-circlefill text-green"></text>
             <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 30rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">{{activity_info.pay_price}}
-          </text>
-          参与{{avatarUrl_list.length+"/"+activity_info.max_part_number}}
-            
+            </text>
+            参与{{avatarUrl_list.length+"/"+activity_info.max_part_number}}
+
           </view>
           <view class="action" style="max-width:70%;">
             <view class="cu-avatar-group">
@@ -63,7 +62,7 @@
             </view>
           </view>
         </view>
-      
+
         <view class="cu-item">
           <view class="content">
             <text class="cuIcon-locationfill text-green"></text>
@@ -80,7 +79,7 @@
             <text class="text-blue text-sm">{{activity_info.room==""?"暂定":activity_info.room}}</text>
           </view>
         </view>
-        
+
         <view class="cu-item">
           <view class="content">
             <text class="cuIcon-activityfill text-green"></text>
@@ -104,6 +103,15 @@
         </view>
         <view class="cu-item">
           <view class="content">
+            <text class="cuIcon-remind text-red"></text>
+            <text class="text-grey">报名截止</text>
+          </view>
+          <view class="action" style="max-width:66%;">
+            <text class="text-blue text-sm">{{activity_info.addendtimeweek}}</text>
+          </view>
+        </view>
+        <view class="cu-item">
+          <view class="content">
             <view class="text-blue text-sm" style="">
               <text>
                 <text style="color: red;">最新公告：{{new_announcement==""?"无":"\n"+new_announcement}}
@@ -112,14 +120,17 @@
             </view>
           </view>
         </view>
+        <view style="position: fixed;top: 200rpx;pointer-events:none;">
+        <text class="iconfont icon-yumaoqiu1" style="color: rgba(255, 0, 0, 0.034);font-size: 800rpx;"></text>
+        </view>
       </view>
 
-      <view class="cu-list menu card-menu margin-top">
+      <view class="cu-list menu card-menu margin-top" wx:if="{{partinfo.length > 0}}">
         <view style="text-align: center;" class="bg-white">
-        <text class="text-grey text-sm"><text class="cuIcon-remind lg text-red"></text>{{activity_info.addendtimeweek}}报名截止</text>
-      </view>
+          <text class="text-grey text-sm"><text class="cuIcon-remind lg text-red"></text>{{activity_info.cancelendtimeweek}}前可以取消报名</text>
+        </view>
         <view class="cu-item" wx:if="{{partinfo.length > 0}}">
-          
+
           <view class="content">
             <text class="cuIcon-newsfill text-green"></text>
             <text class="text-grey">报名信息</text>
@@ -152,7 +163,7 @@
             </view>
           </block>
         </form>
-        <view class="cu-item" wx:if="{{partinfo.length > 0}}" style="flex-direction: column;align-items: flex-start;">
+        <view class="cu-item" wx:if="{{activity_info.group_tag_dict_notempty}}" style="flex-direction: column;align-items: flex-start;">
           <view class="content">
             <text class="iconfont icon-fenzu text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
             <text class="text-grey">报名预分组</text>
@@ -173,11 +184,11 @@
           </form>
         </radio-group>
       </view>
-      <view class="cu-list menu card-menu margin-top" wx:if="{{activity_info.detail.length>0}}">
+      <view class="cu-list menu card-menu" wx:if="{{activity_info.detail.length>0}}" style="margin-top: 0rpx;">
         <view style="text-align: center;" class="bg-white">
-        <text class="text-grey text-sm"><text class="cuIcon-form lg text-green"></text>活动详情</text>
-      </view>
-      <view class="cu-item">
+          <text class="text-grey text-sm"><text class="cuIcon-form lg text-green"></text>活动详情</text>
+        </view>
+        <view class="cu-item">
           <view class="content">
             <view class="text-grey text-sm" style="">
               <text>{{activity_info.detail}}
@@ -186,6 +197,7 @@
           </view>
         </view>
       </view>
+
     </scroll-view>
     <view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
       <view class="cu-dialog" style="width: fit-content;max-width: 680rpx;">
@@ -267,7 +279,10 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
+
+
 <view class="flex bg-white" style="padding:0rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-top:15rpx;" wx:if="{{!is_end}}">
+
   <!--父组件已经判断：未结束-->
   <!--已报名，未开始，取消未截止hidden=is_cancelend，要显示-->
   <view class="" style="flex:1;margin-right: 10rpx;" bindtap="cancel_part" wx:if="{{login_user_part_list.length > 0}}" hidden="{{is_cancelend}}">

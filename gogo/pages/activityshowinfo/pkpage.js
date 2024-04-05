@@ -13,6 +13,7 @@ Page({
     modalName: "",
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
     group_users: [],//这是当前分组的成员，数组形式
+    admin_users:[],
     show_member_info_flag:false,
     boy_num:0,
     boy_member_num_list:[],
@@ -47,9 +48,19 @@ Page({
 
     //初始化成员的字典形式数据，方便wxml获取
     var member_users = {}
+    var admin_users = [];
+
     group_users.forEach(item=>{
       var member_num = item.member_num;
       member_users[member_num] = item;
+      if(item.admin_status == 1){
+        admin_users.push(item);
+        if(item.user_id == app.globalData.login_userInfo["user_id"]){
+          this.setData({
+            admin_flag : true
+          })
+        }
+      }
       if(item.gender == "0"){
         girl_num = girl_num + 1;
         girl_member_num_list.push(item.member_num)
@@ -58,6 +69,11 @@ Page({
         boy_member_num_list.push(item.member_num)
       }
     })
+    if(admin_users.length == 0 || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]){
+      this.setData({
+        admin_flag : true
+      })
+    }
     this.setData({
       group_users:group_users,
       boy_num:boy_num,
@@ -67,7 +83,8 @@ Page({
       group_tag:group_tag,
       member_users:member_users,
       activity_id:options.activity_id,
-      activity_info:JSON.parse(decodeURIComponent(options.activity_info))
+      activity_info:JSON.parse(decodeURIComponent(options.activity_info)),
+      admin_users:admin_users
     })
     //获取已存储的对阵列表
     score.get_pk_groups(app.globalData.hosturl,this,options.activity_id,group_tag);
@@ -79,10 +96,12 @@ Page({
     console.log("onshow加载");
     var edit_group_user = app.globalData.edit_group_user;
     var edit_index = app.globalData.edit_index;
+    console.log(edit_index);
     var custom_pk_group = this.data.custom_pk_group;
     custom_pk_group[edit_index] = edit_group_user;
     app.globalData.edit_group_user = [];
     console.log(edit_group_user)
+    console.log(custom_pk_group)
     this.setData({
       custom_pk_group
     })
@@ -100,13 +119,14 @@ Page({
     })
   },
   show_modal(e) {
+    console.log(e.currentTarget.dataset.target)
     this.setData({
       modalName: e.currentTarget.dataset.target
     })
   },
   hideModal(e) {
     this.setData({
-      modalName: null
+      modalName: ""
     })
   },
   getvs(sample){
@@ -215,6 +235,14 @@ Page({
     
   },
   get_boygirl_pk(){
+    if(this.data.activity_info["activity_status"] > 1){
+      wx.showToast({
+        title: this.data.activity_info["activity_status_comment"],
+        icon:"error",
+        duration:3000
+      })
+      return
+    }
     if(this.data.boy_num >= 2 && this.data.girl_num >= 2){
       if(this.data.boy_num + this.data.girl_num > 6){
         wx.showToast({
@@ -334,6 +362,14 @@ Page({
   },
 
   update_pk_group(){
+    if(this.data.activity_info["activity_status"] > 1){
+      wx.showToast({
+        title: this.data.activity_info["activity_status_comment"],
+        icon:"error",
+        duration:3000
+      })
+      return
+    }
     //新增，更新
     var pk_groups = this.data.pk_groups;
     var activity_id = this.data.activity_id;
@@ -365,6 +401,14 @@ Page({
   },
   clear_pk_group2(){
     //新增，更新
+    if(this.data.activity_info["activity_status"] > 1){
+      wx.showToast({
+        title: this.data.activity_info["activity_status_comment"],
+        icon:"error",
+        duration:3000
+      })
+      return
+    }
     var activity_id = this.data.activity_id;
     var group_tag = this.data.group_tag;
     wx.request({
@@ -395,16 +439,18 @@ Page({
   save_custom_pk_group(){
     var pk_groups = this.data.pk_groups;
     var custom_pk_group = this.data.custom_pk_group;
+    console.log(custom_pk_group)
     var len = custom_pk_group.length;
     var score = new Array(len).fill(0);
-    custom_pk_group.push(score);
+    custom_pk_group.push(score);//比分
+    custom_pk_group.push([]);//标签
     pk_groups.push(this.data.custom_pk_group);
     app.globalData.edit_group_user = [];
     app.globalData.edit_index = 0;
     console.log(pk_groups);
     this.setData({
       pk_groups:pk_groups,
-      modalName:null,
+      modalName:"",
       custom_pk_group:[]
     })
   },
@@ -420,6 +466,22 @@ Page({
     this.setData({
       hidden_score_list
     })
+  },
+  sigle_recored(){
+    var pk_groups = this.data.pk_groups;
+    var member_users = this.data.member_users;
+    for(var member_num in member_users){
+      var item = [];
+      item.push([member_num])
+      item.push([0])
+      item.push([])
+      pk_groups.push(item)
+    }
+    this.setData({
+      pk_groups:pk_groups,
+      modalName:""
+    })
+
   }
 
 

@@ -79,9 +79,8 @@
               </view>
             </view>
             <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
-              <view class="text-black">{{item.nickName}}
-                <view style="font-size: 20rpx;" wx:if="{{item.is_queue == 1}}">[排队中]</view>
-              </view>
+              <view class="text-black">{{item.nickName}}</view>
+               
               <view class="text-black flex" style="font-size: 20rpx;">
                 <view class="" style="word-break: break-all;">
                   <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
@@ -98,9 +97,11 @@
             <view class="action" style="width: 120rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
               <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;">踢出</button>
             </view>
-            <view class="action" style="width: fit-content;" hidden="{{!admin_flag}}" bind:tap="update_member_admin" data-membernum="{{item.member_num}}">
-              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
+            <view class="action" style="width: 180rpx;" hidden="{{!admin_flag}}" >
+              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;" bind:tap="update_member_admin" data-membernum="{{item.member_num}}" wx:if="{{item.is_queue != 1}}">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
+              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;" bind:tap="update_member_admin" data-membernum="{{item.member_num}}" wx:else>排队中</button>
             </view>
+
           </view>
         </view>
       </block>

@@ -181,6 +181,14 @@ Page({
     console.log(this.data.activity_create_list.length);
     var activity_info = this.data.activity_create_list[index];
     var activity_id = activity_info["activity_id"];
+    if(new Date(activity_info["endtime"]) - new Date() > 0){
+      wx.showToast({
+        title: '活动结束才可结算',
+        icon:'error',
+        duration:3000
+      })
+      return;
+    }
     wx.request({
       url: app.globalData.hosturl + 'calculate_close_activity', //仅为示例，并非真实的接口地址
       data: {

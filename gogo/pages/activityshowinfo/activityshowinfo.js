@@ -99,8 +99,8 @@ Page({
       member: activity_info["member"],
       addendtime: addendtime,
       activity_user_info: activity_user_info,
-      partinfo: activity_info.partinfo == "" ? [] : activity_info.partinfo.split(","),
-      title_tags: activity_info.title_tags == "" ? [] : activity_info.title_tags.split(","),
+      partinfo: activity_info.partinfo,
+      title_tags: activity_info.title_tags,
       share_res_limit: activity_info["part_limit"]
     });
     var that = this;
@@ -108,7 +108,7 @@ Page({
       that.setData({
         current_swiper_item_index:new Date(activity_info["begintime"]) - new Date() <= 0?1:0,
       })
-    },1500)
+    },2000)
     console.log(new Date(addendtime).getTime());
     console.log(new Date().getTime());
 
@@ -161,7 +161,7 @@ Page({
   },
   set_button_status(activity_info){
     //报名按钮
-    
+
 
     //取消报名按钮
 
@@ -535,10 +535,10 @@ Page({
       return;
     }
     var info = this.data.partinfoinput;
-    info["自评等级"] = this.data.picker[this.data.picker_index];
-    this.setData({
-      partinfoinput: info
-    });
+    //info["自评等级"] = this.data.picker[this.data.picker_index];
+    //this.setData({
+      //partinfoinput: info
+    //});
     console.log(info)
     if (Object.keys(info).length != this.data.partinfo.length) {
       wx.showToast({

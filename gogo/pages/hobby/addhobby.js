@@ -20,7 +20,7 @@ Page({
     hobby_freq:"请选择",
     hobby_freq_index:-1,
 
-    hobby_live_tags:["初级", "中级", "高级", "专业级"],
+    hobby_live_tags:["1", "2", "3", "4","5", "6", "7", "8","9", "10"],
     hobby_live:"请选择",
     hobby_live_index:-1,
 
@@ -147,7 +147,7 @@ Page({
     console.log("计算积分"+this.data.hobby_point);
     console.log("计算积分"+typeof(this.data.hobby_live_index));
     var point = this.data.hobby_point;
-    point = 20 * (this.data.hobby_time_index + 1)+ 20 * (this.data.hobby_freq_index + 1)+20 * (this.data.hobby_live_index + 1);
+    point = 50 * (this.data.hobby_time_index + 1)+ 50 * (this.data.hobby_freq_index + 1)+1000 * (this.data.hobby_live_index + 1)/2;
     console.log("计算积分"+point);
     this.setData({
       hobby_point:point
@@ -264,7 +264,7 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'createhobby', //仅为示例，并非真实的接口地址
       data: {
-        "openid": app.globalData.openid,
+        "user_id": app.globalData.login_userInfo["user_id"],
         "hobby_tag": this.data.hobby_tag,
         "hobby_title": this.data.hobby_title,
         "hobby_time": this.data.hobby_time,

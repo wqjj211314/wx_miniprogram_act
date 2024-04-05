@@ -90,7 +90,7 @@
   <view class="cu-item">
     <view class="content">
       <text class="iconfont icon-vsrili text-green" style="width: 1.5em;margin-right: 10rpx;text-align: center;margin-left: 10rpx;"></text>
-      <text class="">实战表现</text>
+      <text class="">自我评级(1-10级)</text>
     </view>
     <view class="action">
       <text class="">{{hobby_live}}</text>
@@ -172,8 +172,3 @@
 <view style="height: 150rpx;">
 </view>
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;">
-  <view class="" style="width: 100%;">
-    <button class="cu-btn bg-green round" bindtap='create_hobby'  style="width: 100%;">提交</button>
-  </view>
-</view>

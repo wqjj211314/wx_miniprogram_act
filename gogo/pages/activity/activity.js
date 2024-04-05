@@ -13,7 +13,7 @@ function getDateString() {
   return {
     year: dateTime.getFullYear(),
     month: formatdate(dateTime.getMonth() + 1),
-    day: formatdate(dateTime.getDate())
+    day: formatdate(dateTime.getDate()+1)
   }
 }
 const { year, month, day } = getDateString();

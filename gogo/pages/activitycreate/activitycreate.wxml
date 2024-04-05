@@ -17,7 +17,7 @@
                 <view class="desc" style="margin-top: 10rpx;margin-bottom: 0rpx;">
                   <view class="text-content" style="width:100%;color:black;font-size:13px;height: fit-content;">
                     <view>
-                      <text class="{{item.activity_status == 1?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'}}"></text>{{item.activity_status_comment}}
+                      <text class="{{item.activity_status != -1?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'}}"></text>{{item.activity_status_comment}}
                     </view>
                     <view>
                       <text class="cuIcon-locationfill text-green"></text>{{item.show_activityaddress}}
@@ -34,12 +34,12 @@
 
                 </view>
               </view>
-              <view class="flex" style="margin-top: 30rpx;justify-content: space-around;">
+              <view class="flex" style="margin-top: 30rpx;justify-content: space-around;" hidden="{{item.activity_status > 1}}">
                 <button class="cu-btn bg-red sm" style="" bindtap="delete_activity" data-index="{{index}}">删除</button>
                 <button class="cu-btn bg-red sm" style="" bindtap="cancel_activity" data-index="{{index}}">取消</button>
                 <button class="cu-btn bg-red sm" style="" bindtap="delete_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0}}">全部退款</button>
                 <button class="cu-btn bg-green sm" style="" bindtap="update_activity_info" data-index="{{index}}">编辑</button>
-                <button class="cu-btn bg-green sm" style="" bindtap="calculate_close_activity" data-index="{{index}}" wx:if="{{item.pay_price != 0}}" hidden="{{item.activity_status > 1}}">结算</button>
+                <button class="cu-btn bg-green sm" style="" bindtap="calculate_close_activity" data-index="{{index}}" hidden="{{item.activity_status > 1}}">统计结算</button>
               </view>
             </view>
           </view>
