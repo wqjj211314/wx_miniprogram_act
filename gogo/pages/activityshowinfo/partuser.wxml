@@ -1,43 +1,47 @@
 <!--报名人员页面-->
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-x="false" scroll-y="true" style="height: 95vh;">
-<checkbox-group bindchange="listenCheckboxChange">
-  <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
-    <view class="cu-list menu-avatar" style="margin:0rpx;">
-      <view class="cu-item">
-        <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
-        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});"></view>
-        <view class="content" style="left: 170rpx;">
-          <view class="text-grey">{{item.nickName}}</view>
-          <view class="text-black flex" style="font-size: 20rpx;">
-            <view class="text-cut">
-              <view class="flex">
-                <text class="cuIcon-tagfill text-red  margin-right-xs"></text>
-                <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">{{key}}:{{value}}<text style="color: red;">|</text>
-                </block>
+  <checkbox-group bindchange="listenCheckboxChange">
+    <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+      <view class="cu-list menu-avatar" style="margin:0rpx;">
+        <view class="cu-item">
+          <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
+          <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
+              <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
               </view>
             </view>
+            <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
+              <view class="text-black">{{item.nickName}}</view>
+               
+              <view class="text-black flex" style="font-size: 20rpx;">
+                <view class="" style="word-break: break-all;">
+                  <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
+                    <text class="cuIcon-tagfill text-red"></text>
+                    <text class="margin-right-xs">{{key}}:{{value}}</text>
+                  </block>
+                </view>
+              </view>
+            </view>
+          <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
+              <view class="text-black text-xs">{{item.hobby_info.hobby_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
+              <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
+            </view>
+          <view class="action">
+            <checkbox value="{{item.member_num}}" />
           </view>
         </view>
-        <view class="action">
-          <view class="text-grey text-xs">羽毛球积分</view>
-          <view class="cu-tag round bg-grey sm">{{100}}</view>
-        </view>
-        <view class="action">
-          <checkbox value="{{item.member_num}}" />
-        </view>
       </view>
-    </view>
-  </block>
-   
-</checkbox-group>
+    </block>
+
+  </checkbox-group>
 </scroll-view>
-<view class="flex" style="padding:0rpx;width: 100%; margin-bottom: 10rpx;position: absolute;bottom: 0rpx;align-items: center;height:60rpx;background-color: red;align-content: center;justify-content: center;">
-  <view class="bg-grey" style="flex:1;height: 100%;display:flex;align-items: center;flex-direction: row;justify-content: space-around; " bindtap="tabSelect" data-id="0">
-    取消
+
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;">
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="tabSelect">
+    <button class="cu-btn bg-grey round" style="width: 100%;height: 85rpx;">取消</button>
   </view>
-  <view class="bg-green" style="flex:1;height: 100%;display:flex;align-items: center;flex-direction: row;justify-content: space-around; " data-id="0" bindtap="save_group">
-    保存
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="save_group">
+    <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">确定</button>
   </view>
 </view>
-

@@ -1,8 +1,8 @@
 <!--pages/user/user.wxml-->
-<scroll-view>
-  <view class="img">
+<view class="img">
     <image class='img' src="/2.jpg" mode="widthFix"></image>
   </view>
+<scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <view class="main">
     <view class="flex userinfo">
       <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">

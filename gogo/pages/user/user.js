@@ -14,7 +14,8 @@ Page({
     t_length: 0,
     new_nickName:"",
     friend_chat_msg_display:false,
-    url:"pages/user/user"
+    url:"pages/user/user",
+    triggered: false,
 
   },
 
@@ -204,11 +205,86 @@ Page({
 
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+  onScrollRefresh:function(){
+    setTimeout(function () {
+      that.setData({
+        triggered: false,
+      })
+    }, 2000);
+    try {
+      console.log("用户登录");
+      //直接获取缓存保存的
+      var openid = wx.getStorageSync('openid');
+      console.log(openid)
+      if (openid == "" || openid == undefined) {
+        //this.globalData.login_userInfo["user_id"] = openid;
+        console.log("需要登录获取openid")
+        this.user_login();
+      }else{
+        //发起网络请求
+        var that = this;
+        wx.request({
+          url: app.globalData.hosturl + 'get_userinfo',
+          data: {
+            "user_id": openid
+          },
+          success: (res) => {
+            app.globalData.openid = res.data.user_id;
+            app.globalData.checking_flag = res.data.checking_flag;
+            app.globalData.login_userInfo = res.data;
+            app.globalData.hasUserInfo = true;
+          }
+        })
+      }
+      //this.user_login();
+    } catch (e) {
+      console.log("持久化登录信息获取失败");
+      console.log(e);
+      //this.user_login();
+    }
+  },
+  user_login() {
+    //return;
+    var that = this;
+    wx.login({
+      success(res) {
+        console.log("登录授权结果")
+        console.log(res)
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: app.globalData.hosturl + 'getopenid',
+            data: {
+              code: res.code
+            },
+            success: (res) => {
+             
+              app.globalData.openid = res.data.openid;
+              app.globalData.checking_flag = res.data.checking_flag;
+              app.globalData.login_userInfo["user_id"] = res.data.openid;
+              app.globalData.login_userInfo["nickName"] = res.data.nickName;
+              app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
+              app.globalData.login_userInfo["gender"] = res.data.gender;
+              app.globalData.login_userInfo["signature"] = res.data.signature;
+              try {
+                wx.setStorageSync('openid', res.data.openid);
+                app.globalData.hasUserInfo = true;
+                //wx.setStorageSync('nickName', res.data.nickName);
+              } catch (e) { }
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      },
+      fail(res){
+        console.log("登录失败")
+      },
+      complete(res){
+        console.log("登录完成")
+        console.log(res)
+      }
+    });
   },
 
   /**

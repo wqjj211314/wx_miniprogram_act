@@ -140,12 +140,8 @@ Page({
     if (this.data.activity_user_info["user_id"] == app.globalData.login_userInfo["user_id"])
       return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
-    
-    //wx.navigateTo({
-      //url: '../chat/chat?friend_user_info=' + friend_user_info,
-    //});
     wx.navigateTo({
-      url: '../user/userinfo?userinfo=' + friend_user_info,
+      url: '../chat/chat?friend_user_info=' + friend_user_info,
     });
   },
   navigateToactivityinfo() {
@@ -374,6 +370,12 @@ Page({
   sendMsg() {
     console.log(this.data.inputMsg);
     var send = this.data.inputMsg.trim();
+    if(send == ""){
+      this.setData({
+        inputMsg: ""
+      });
+      return;
+    }
     var activity_id = this.data.activity_id;
     onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: activity_id, user_id: app.globalData.login_userInfo["user_id"],nickName:app.globalData.login_userInfo["nickName"]});
 

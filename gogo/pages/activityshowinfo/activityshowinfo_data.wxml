@@ -1,4 +1,4 @@
-<scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+<scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <view wx:for="{{moods}}" class="" wx:key="{{item.id}}" bindtap="ViewImage" data-url="{{item.img_url}}" wx:if="{{sort_users_score_empty_flag}}" class="bg-white padding-sm" style="margin-bottom: 40rpx;">
     <view style="margin-top: 20rpx;" >
       <view class="cu-avatar square sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">

@@ -3,12 +3,12 @@
 </cu-custom>
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <include src="activityshowinfo_topscrollbar.wxml" />
-<swiper style="height:calc(100% - 45rpx);;" current="{{current_swiper_item_index}}" bindchange="swiper_change">
+<swiper style="height:calc(100% - 155rpx);;" current="{{current_swiper_item_index}}" bindchange="swiper_change">
   <!--活动页面-->
   <swiper-item style="width: 100%;height:100%;overflow: auto;">
     <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
       <!--这个创建活动页面基本完整，UI上正常-->
-      <view style="width:100vw;height:30vh;">
+      <view style="width:100vw;height:25vh;">
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
       </view>
@@ -85,7 +85,7 @@
             <text class="cuIcon-activityfill text-green"></text>
             <text class="text-grey">发起人</text>
           </view>
-          <view class="action" style="max-width:70%;">
+          <view class="action" style="max-width:70%;" bind:tap="chat_with_creater">
             <view class="cu-avatar round sm" style="background-image:url({{activity_info.createuser.avatarUrl}});margin-right: 8rpx;"></view>
             <text class="text-blue text-sm">{{activity_user_info.nickName}}</text>
           </view>
@@ -120,9 +120,7 @@
             </view>
           </view>
         </view>
-        <view style="position: fixed;top: 200rpx;pointer-events:none;">
-        <text class="iconfont icon-yumaoqiu1" style="color: rgba(255, 0, 0, 0.034);font-size: 800rpx;"></text>
-        </view>
+        
       </view>
 
       <view class="cu-list menu card-menu margin-top" wx:if="{{partinfo.length > 0}}">
@@ -197,74 +195,10 @@
           </view>
         </view>
       </view>
+      <view style="height: 200rpx;"></view>
 
     </scroll-view>
-    <view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
-      <view class="cu-dialog" style="width: fit-content;max-width: 680rpx;">
-        <view class="cu-bar bg-white justify-end">
-          <view class="content text-bold" style="font-size: 30rpx;color: #070707;">报名(限{{activity_info.max_part_number}}名)</view>
-          <view class="action" bindtap="hideModal">
-            <text class="cuIcon-close text-red"></text>
-          </view>
-        </view>
-        <view class="">
-          <view class="su-table-box">
-            <view class="su-table">
-              <!-- 表格标题 -->
-              <view class="su-tr">
-                <view class="su-th text-bold">
-                  序号
-                </view>
-                <block wx:if="{{checking_flag}}">
-                  <view class="su-th text-bold">
-                    审核
-                  </view>
-                </block>
-                <view class="su-th text-bold" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
-              </view>
-              <!-- 表格内容 -->
-              <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item" wx:for-index="index1">
-                <view class="su-td">
-                  {{index1+1>activity_info.max_part_number?"排队中":index1+1}}
-                </view>
 
-                <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
-                  <block wx:if="{{index==0}}">
-                    <view class="cu-avatar round sm" style="background-image:url({{info}});" bindtap="chat_with" data-index="{{index1}}">
-                    </view>
-                  </block>
-                  <block wx:else>
-                    {{info}}
-                  </block>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="cu-modal {{modalName=='Modal_update_activity_info'?'show':''}}">
-      <view class="cu-dialog">
-        <view class="cu-bar bg-white justify-end">
-          <view class="content">发布公告</view>
-          <view class="action" bindtap="hideModal">
-            <text class="cuIcon-close text-red"></text>
-          </view>
-        </view>
-        <view class="{{modalName=='Modal_update_activity_info'?'show':''}}">
-          <view class="cu-form-group solid" style="margin: 10rpx;">
-            <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
-          </view>
-        </view>
-        <view class="cu-bar bg-white justify-end">
-          <view class="action">
-
-            <button class="cu-btn bg-green margin-left" bindtap="update_activity_announcement">发布</button>
-
-          </view>
-        </view>
-      </view>
-    </view>
   </swiper-item>
   <!--分组，提供分组功能，对阵选项，踢出成员选项-->
   <swiper-item style="width: 100%;">
@@ -279,9 +213,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-
-
-<view class="flex bg-white" style="padding:0rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-top:15rpx;" wx:if="{{!is_end}}">
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{!is_end}}">
 
   <!--父组件已经判断：未结束-->
   <!--已报名，未开始，取消未截止hidden=is_cancelend，要显示-->
@@ -344,6 +276,70 @@
     <view class="cu-bar bg-white justify-end">
       <view class="action">
         <button class="cu-btn bg-green margin-left" bindtap="confirm_cancel_part">确认</button>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-modal {{modalName=='DialogModal-partinfo'?'show':''}}" style="padding:0px;">
+  <view class="cu-dialog" style="width: fit-content;max-width: 680rpx;">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content text-bold" style="font-size: 30rpx;color: #070707;">报名(限{{activity_info.max_part_number}}名)</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="">
+      <view class="su-table-box">
+        <view class="su-table">
+          <!-- 表格标题 -->
+          <view class="su-tr">
+            <view class="su-th text-bold">
+              序号
+            </view>
+            <block wx:if="{{checking_flag}}">
+              <view class="su-th text-bold">
+                审核
+              </view>
+            </block>
+            <view class="su-th text-bold" wx:for="{{partinfo_keys}}" wx:for-item="item">{{item}}</view>
+          </view>
+          <!-- 表格内容 -->
+          <view class="su-tr" wx:for="{{partinfo_values}}" wx:for-item="item" wx:for-index="index1">
+            <view class="su-td">
+              {{index1+1>activity_info.max_part_number?"排队中":index1+1}}
+            </view>
+
+            <view class="su-td" wx:for="{{item}}" wx:for-item="info" wx:for-index="index">
+              <block wx:if="{{index==0}}">
+                <view class="cu-avatar round sm" style="background-image:url({{info}});" data-index="{{index1}}">
+                </view>
+              </block>
+              <block wx:else>
+                {{info}}
+              </block>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-modal {{modalName=='Modal_update_activity_info'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">发布公告</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="{{modalName=='Modal_update_activity_info'?'show':''}}">
+      <view class="cu-form-group solid" style="margin: 10rpx;">
+        <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
+      </view>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn bg-green margin-left" bindtap="update_activity_announcement">发布</button>
       </view>
     </view>
   </view>

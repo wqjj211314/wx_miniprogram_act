@@ -10,7 +10,7 @@ Page({
   data: {
     activity_info: [],
     is_begin: false,
-    is_end: false,
+    is_end: true,
     is_addend: false,
     is_cancelend:false,
     activity_user_info: [],
@@ -34,6 +34,7 @@ Page({
     member: 0,
     hosturl: app.globalData.hosturl,
     admin_flag: false,//是否是发布者，超级权限：编辑活动，删除成员
+    edit_group_flag:false,
     announcement: "",
     new_announcement: "",
     partinfo_sex: "",
@@ -303,6 +304,20 @@ Page({
       login_user_part_list: login_user_part_list
     });
     that.update_part_status();
+  },
+  chat(e){
+    console.log(e.currentTarget.dataset.membernum);
+    var membernum = e.currentTarget.dataset.membernum;
+    if (this.data.member_users[membernum]["user_id"] == app.globalData.login_userInfo["user_id"])
+      return;
+    var friend_user_info = {};
+    friend_user_info["user_id"] = this.data.member_users[membernum]["user_id"]
+    friend_user_info["avatarUrl"] = this.data.member_users[membernum]["avatarUrl"]
+    friend_user_info["nickName"] = this.data.member_users[membernum]["nickName"]
+    wx.navigateTo({
+      url: '../chat/chat?friend_user_info=' + encodeURIComponent(JSON.stringify(friend_user_info)),
+    });
+
   },
   chat_with(e) {
     console.log(e.currentTarget.dataset.index);
@@ -607,13 +622,14 @@ Page({
             icon:"success",
             duration:2000
           })
+          console.log("免费报名")
           //返回首页的活动页。
           setTimeout(function(){
-            app.globalData.current_activity_id = this.data.activity_info.activity_id;
+            app.globalData.current_activity_id = that.data.activity_info.activity_id;
             wx.switchTab({
               url: '../index/index'
             })
-          },3000)
+          },1000)
         }else{
           wx.showToast({
             title: res.data.result,
@@ -799,6 +815,11 @@ Page({
     this.setData({
       current_edit_group: new_current_edit_group,
       ungroup_partinfo_list: ungroup_partinfo_list
+    })
+  },
+  edit_group(){
+    this.setData({
+      edit_group_flag:!this.data.edit_group_flag
     })
   },
   update_member_admin(e) {
@@ -1122,5 +1143,13 @@ Page({
     this.setData({
       select_group_tag: sel_value
     })
-  }
+  },
+  chat_with_creater() {
+    if (this.data.activity_user_info["user_id"] == app.globalData.login_userInfo["user_id"])
+      return;
+    let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
+    wx.navigateTo({
+      url: '../chat/chat?friend_user_info=' + friend_user_info,
+    });
+  },
 })

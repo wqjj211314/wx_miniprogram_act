@@ -1,6 +1,6 @@
 <view wx:if="{{activity_list.length==0}}" class="flex solid-bottom justify-center" style="height:100vh;width: 100wh;">
   <image class='background2' src="/default_index_bg.png" mode="aspectFill"></image>
-  <button class="cu-btn lines-white margin-tb-sm padding lg" style="margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">重新加载</button>
+  <button class="cu-btn lines-white margin-tb-sm padding lg" style="margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">异常重新加载</button>
 </view>
 <!---->
 <!--circular-->
@@ -50,7 +50,7 @@
             </block>
           </scroll-view>
           <view class="bottomPos">
-            <view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:15rpx;">
+            <view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:5rpx;">
               <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
                 <view class="title" style="line-height:0px;padding-left:5rpx;">
                   <view class="customer-title-cu-btn bg-touming" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
@@ -63,10 +63,10 @@
                 </view>
                 <view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
                   <view class="desc">
-                    <view class="text-content" style="color:white;font-size: 25rpx;height:auto;max-height:6em;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;" wx:if="{{item.show_activityaddress != ''}}"><text>{{item.show_activityaddress==""?"": item.show_activityaddress}}</text>
-                    </view>
-                    <view style="{{item.show_activityaddress == ''?'margin-top:20rpx;':''}}">
-                      <view class="cu-tag bg-touming light lg round">{{item.activity_live}}</view>
+                   
+                    <view class="bg-touming flex padding-sm" style="flex-direction: column;align-items: flex-start;border-radius: 20rpx;margin-top: 20rpx;margin-bottom: 0rpx;max-width: 350rpx;">
+                      <view>{{item.show_activityaddress}}</view>
+                      <view>{{item.activity_live}}</view>
                     </view>
                   </view>
                 </view>
