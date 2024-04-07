@@ -1,7 +1,7 @@
 <!--pages/user/user.wxml-->
 <view class="img">
-    <image class='img' src="/2.jpg" mode="widthFix"></image>
-  </view>
+  <image class='img' src="/2.jpg" mode="widthFix"></image>
+</view>
 <scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height: 100vh;">
   <view class="main">
     <view class="flex userinfo">
@@ -14,7 +14,7 @@
           <!--class="rightarrow"-->
           <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text><text class="cuIcon-triangledownfill text-black" style="font-size: 40rpx;margin-left:-2rpx;"></text>
         </button>
-        <view bindtap="showModal-none" data-target="DialogModal-tag">
+        <view>
           <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
         </view>
       </view>
@@ -97,7 +97,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.1</text>
+          <text class="text-grey text-sm">v1.0.3</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">
@@ -106,72 +106,26 @@
           <text class="text-grey">客服咨询</text>
         </view>
       </view>
-
-
-
-    </view>
-
-  </view>
-
-  <view class="cu-modal {{modalName=='DialogModal-userinfo'?'show':''}}">
-    <view class="cu-dialog">
-      <view class="cu-bar bg-white justify-end">
-        <view class="content">个人信息</view>
-        <view class="action" bindtap="hideModal">
-          <text class="cuIcon-close text-red"></text>
-        </view>
-      </view>
-      <view class="padding-xl">
-        暂未开放
-      </view>
-      <view class="cu-bar bg-white justify-end">
-        <view class="action">
-          <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-          <button class="cu-btn bg-green margin-left" bindtap="hideModal">提交</button>
-
-        </view>
-      </view>
     </view>
   </view>
-  <view class="cu-modal {{modalName=='DialogModal-tag'?'show':''}}">
-    <view class="cu-dialog">
-      <view class="cu-bar bg-white justify-end">
-        <view class="content">添加标签</view>
-        <view class="action" bindtap="hideModal">
-          <text class="cuIcon-close text-red"></text>
-        </view>
-      </view>
-      <view class="padding-xl">
-        联系微信：growthwang30
-      </view>
-      <view class="cu-bar bg-white justify-end">
-        <view class="action">
-          <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
-          <button class="cu-btn bg-green margin-left" bindtap="hideModal">提交</button>
-
-        </view>
-      </view>
-    </view>
-  </view>
-  <view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
-    <view class="cu-dialog">
-      <view class="cu-bar bg-white justify-end">
-        <view class="content">微信电话联系</view>
-        <view class="action" bindtap="hideModal">
-          <text class="cuIcon-close text-red"></text>
-        </view>
-      </view>
-      <view class="padding-xl">
-        <text>向开发者反馈，微信：growthwang30\n</text>
-        <text>收费提现问题申诉,电话：18018757991</text>
-      </view>
-      <view class="cu-bar bg-white justify-end">
-        <view class="action">
-          <button class="cu-btn line-green text-green" bindtap="hideModal">确认</button>
-
-        </view>
-      </view>
-    </view>
-  </view>
-  
 </scroll-view>
+<view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">微信电话联系</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      <text>向开发者反馈，微信：growthwang30\n</text>
+      <text>收费提现问题申诉,电话：18018757991</text>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="hideModal">确认</button>
+
+      </view>
+    </view>
+  </view>
+</view>

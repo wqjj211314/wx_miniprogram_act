@@ -63,7 +63,8 @@ Page({
     group_tag_dict:{},
     pay_type:"免费",
     pay_price:"0.00",
-    custom_part:false
+    custom_part:false,
+    scroll_flag:true
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
@@ -703,9 +704,23 @@ Page({
   },
   add_partinfo: function () {
     this.setData({
-      custom_part: !this.data.custom_part
+      custom_part: !this.data.custom_part,
+      scroll_flag:false
+      //modalName:"partinfo_modal"
     });
 
+  },
+  onbindblur(){
+    this.setData({
+      scroll_flag:true
+      //modalName:"partinfo_modal"
+    });
+  },
+  onbindfocus(){
+    this.setData({
+      scroll_flag:false
+      //modalName:"partinfo_modal"
+    });
   },
   add_part_tag: function () {
     console.log("add_part_tag:" + this.data.add_new_partinfo);
@@ -725,7 +740,8 @@ Page({
     this.setData({
       partinfo_all_options,
       modalName: "",
-      add_new_partinfo: ""
+      add_new_partinfo: "",
+      custom_part:false
     });
   },
   inputMsg: function (e) {

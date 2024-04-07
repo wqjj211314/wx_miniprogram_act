@@ -44,7 +44,7 @@
             <block wx:for="{{chat_msgs}}">
               <view>
                 <view class="customer-msg-cu-btn bg-touming">
-                  <text class="text-blue text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
+                  <text class="text-white text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
                 </view>
               </view>
             </block>

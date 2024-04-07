@@ -1,4 +1,6 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-y="true" style="height: 100%;">
+
 <block wx:for-index="idx" wx:for='{{hobby_list}}' wx:key="index">
   <view class="cu-card case no-card" style="margin-bottom: 8rpx;">
     <view class="cu-item">
@@ -29,23 +31,29 @@
         </view>
       -->
       </view>
-      <view class="cu-list menu-avatar" style="margin: 5rpx 30rpx 0;">
+      <view class="cu-list menu-avatar" style="margin: 0rpx 30rpx 0;">
         <view class="cu-item" style="justify-content: space-between;align-items: center;">
           <view class="content flex-sub" style="width: 100%;left: 0rpx;">
             <view class="text-black margin-lr-xs">{{item.hobby_title}}</view>
             <view class="text-blue text-sm" style="display:flex;justify-content:space-between;">
-              <view>
-                <text class="cuIcon-tagfill margin-lr-xs">{{item.hobby_live}}|{{item.hobby_time}}|{{item.hobby_freq}}</text>
+              <view class="" style="margin-left: 15rpx;" data-index="{{idx}}" bindtap="edit_hobby_info">
+                {{item.hobby_time}}|{{item.hobby_freq}}<text class="cuIcon-right"></text>
               </view>
+              
               <view>
-                <text class="cuIcon-roundclosefill margin-lr-xs text-red" data-index="{{idx}}" bindtap="delete_hobby" wx:if="{{self_flag}}">删除</text>
+                <!--<text class="cuIcon-roundclosefill margin-lr-xs text-red" data-index="{{idx}}" bindtap="delete_hobby" wx:if="{{self_flag}}">删除</text>-->
                 <!--<text class="cuIcon-messagefill margin-lr-xs text-green" bindtap="">留言</text>-->
-                <text class="cuIcon-edit margin-lr-xs text-black" data-index="{{idx}}" bindtap="edit_hobby_info" wx:if="{{self_flag}}">编辑</text>
+                <view style="font-size: 28rpx;">
+                  参与活动{{item.part_activity_num==undefined?"0":item.part_activity_num}}场 |
+                  总对局{{item.all_win+item.all_fail+item.all_peace}} |
+                  胜率{{tools.win_rate(item.all_win,item.all_peace,item.all_fail)}}
+                </view>
 
               </view>
             </view>
           </view>
         </view>
+        
       </view>
     </view>
   </view>

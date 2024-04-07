@@ -41,7 +41,7 @@
     <view class="flex bg-white text-black" style="justify-content:space-between;padding: 20rpx 20rpx;margin-top: 20rpx;">
       <view class="cu-btn line-green round">{{item0.group_tag}}({{item0.group_users.length}}/{{activity_info["group_tag_dict"][item0.group_tag]["limit"]}})</view>
       <view class="cu-btn line-green round">男{{item0.boy_num}} 女{{item0.girl_num}}</view>
-      <view class="cu-btn line-green round">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
+      <view class="cu-btn line-green round">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
     </view>
     <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:20rpx;padding-left:20rpx;border:none;">
       <block wx:for="{{item0.group_users}}" wx:for-item="user">

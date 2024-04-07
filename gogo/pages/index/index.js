@@ -53,7 +53,7 @@ Page({
     }
     
     server.get_activity_list(this, app);
-    server.get_friend_newest_chat_msg(this, app);
+    //server.get_friend_newest_chat_msg(this, app);
   },
   socketinit() {
     var that = this;
@@ -311,7 +311,7 @@ Page({
     if (app.globalData.current_activity_id != "") {
       server.get_activity_list(this, app,app.globalData.current_activity_id);
       app.globalData.current_activity_id = "";
-      server.get_friend_newest_chat_msg(this, app);
+      //server.get_friend_newest_chat_msg(this, app);
     }
     
   },
@@ -326,7 +326,7 @@ Page({
   },
   refresh() {
     server.get_activity_list(this, app, "refresh");
-    server.get_friend_newest_chat_msg(this, app);
+    //server.get_friend_newest_chat_msg(this, app);
   },
   //划动切换
   slide(e) {
@@ -399,7 +399,7 @@ Page({
     console.log(item.text)//首页
     if(item.pagePath == app.globalData.tab_page_path){
       server.get_activity_list(this, app, "refresh");
-      server.get_friend_newest_chat_msg(this, app);
+      //server.get_friend_newest_chat_msg(this, app);
     }
     app.globalData.tab_page_path = item.pagePath;
   },

@@ -1,16 +1,18 @@
 //app.js
 App({
   onLaunch: function () {
+    this.autoUpdate();
+    this.get_friend_newest_chat_msg();
     wx.getSystemInfo({
       success: e => {
         this.globalData.StatusBar = e.statusBarHeight;
         let capsule = wx.getMenuButtonBoundingClientRect();
-		if (capsule) {
-		 	this.globalData.Custom = capsule;
-			this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
-		} else {
-			this.globalData.CustomBar = e.statusBarHeight + 50;
-		}
+        if (capsule) {
+          this.globalData.Custom = capsule;
+          this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
+        } else {
+          this.globalData.CustomBar = e.statusBarHeight + 50;
+        }
       }
     })
     try {
@@ -22,7 +24,7 @@ App({
         //this.globalData.login_userInfo["user_id"] = openid;
         console.log("需要登录获取openid")
         this.user_login();
-      }else{
+      } else {
         //发起网络请求
         var that = this;
         wx.request({
@@ -79,7 +81,7 @@ App({
   globalData: {
     hosturl: "https://www.2week.club:5000/",
     current_activity_id: "",
-    activity_info:"",//跳转TAB activity.js页面要使用的，
+    activity_info: "",//跳转TAB activity.js页面要使用的，
     activity_user_info: "",
     login_userInfo: {},
     hasUserInfo: false,
@@ -95,15 +97,15 @@ App({
     edit_group_user: [],
     edit_index: 0,
     edit_group_tag: "",
-    tab_page_path:"pages/index/index",
-    reload_activity_share_moods:false,//在分享见闻界面返回活动界面时需要重新加载
-    custom_group_tag_dict:{}//创建活动页的自定义分组信息
+    tab_page_path: "pages/index/index",
+    reload_activity_share_moods: false,//在分享见闻界面返回活动界面时需要重新加载
+    custom_group_tag_dict: {}//创建活动页的自定义分组信息
   },
   user_login() {
     //return;
     var that = this;
     wx.login({
-      timeout:3000,
+      timeout: 3000,
       success(res) {
         console.log("登录授权结果")
         console.log(res)
@@ -137,14 +139,108 @@ App({
           console.log('登录失败！' + res.errMsg)
         }
       },
-      fail(res){
+      fail(res) {
         console.log("登录失败")
       },
-      complete(res){
+      complete(res) {
         console.log("登录完成")
         console.log(res)
       }
     });
   },
-  
+  autoUpdate: function () {
+    var self = this
+    // 获取小程序更新机制兼容
+    if (wx.canIUse('getUpdateManager')) {
+      const updateManager = wx.getUpdateManager()
+      //1. 检查小程序是否有新版本发布
+      updateManager.onCheckForUpdate(function (res) {
+        // 请求完新版本信息的回调
+        if (res.hasUpdate) {
+          //检测到新版本，需要更新，给出提示
+          wx.showModal({
+            title: '更新提示',
+            content: '检测到新版本，是否下载新版本并重启小程序？',
+            success: function (res) {
+              if (res.confirm) {
+                //2. 用户确定下载更新小程序，小程序下载及更新静默进行
+                self.downLoadAndUpdate(updateManager)
+              }
+            }
+          })
+        }
+      })
+    } else {
+      // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+      })
+    }
+  },
+  /**
+   * 下载小程序新版本并重启应用
+   */
+  downLoadAndUpdate: function (updateManager) {
+    var self = this
+    wx.showLoading();
+    //静默下载更新小程序新版本
+    updateManager.onUpdateReady(function () {
+      wx.hideLoading()
+      //新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+      updateManager.applyUpdate()
+    })
+    updateManager.onUpdateFailed(function () {
+      // 新的版本下载失败
+      wx.showModal({
+        title: '已经有新版本了哟~',
+        content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开哟~',
+      })
+    })
+  },
+  get_friend_newest_chat_msg: function () {
+    console.log("get_friend_newest_chat_msg");
+    try {
+      var user_id = "";
+      user_id = wx.getStorageSync('openid');
+    } catch (e) { }
+    wx.request({
+      url: this.globalData.hosturl + 'get_friend_newest_chat_msg', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": user_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log("get_friend_newest_chat_msg");
+        console.log(res);
+        console.log(wx.getStorageSync('newest_friend_chat_msg_time'));
+        if (res.data != null) {
+          var msg_time = res.data.msgtime;
+          var msg_time_date = new Date(msg_time);
+          var last_time_date = new Date("2022-01-01 23:17:51");
+          try {
+            console.log(wx.getStorageSync('newest_friend_chat_msg_time'));
+            if (wx.getStorageSync('newest_friend_chat_msg_time') != "") {
+              last_time_date = new Date(wx.getStorageSync('newest_friend_chat_msg_time'));
+              if (msg_time_date > last_time_date) {
+                wx.setStorageSync('newest_friend_chat_msg_time', msg_time);
+                wx.showTabBarRedDot({
+                  index: 2,
+                });
+              }
+            } else {
+              wx.setStorageSync('newest_friend_chat_msg_time', msg_time);
+              wx.showTabBarRedDot({
+                index: 2,
+              });
+              
+            }
+          } catch (e) { }
+        }
+      }
+    });
+  }
+
 })

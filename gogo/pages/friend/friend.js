@@ -34,7 +34,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    app.globalData.friend_chat_msg_display = false;
+    wx.hideTabBarRedDot({
+      index: 2,
+    });
     if(!util.check_login(app)){
       return;
     }

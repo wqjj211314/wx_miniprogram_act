@@ -13,6 +13,14 @@ var hobby_point = function(hobby_point){
   var point = parseInt(hobby_point/1000);
   return "L"+point
 }
+var win_rate = function(win,peace,fail){
+  var total = win+peace+fail;
+  if(total == 0){
+    return "0"
+  }
+  var point = parseInt(win/total*100);
+  return point+"%"
+}
 
 var show_member_num = function (member_num_str) {
   member_num_str = ""+member_num_str;
@@ -41,6 +49,7 @@ module.exports = {
   show_member_num: show_member_num,
   show_vs_scores:show_vs_scores,
   iscontain:iscontain,
-  hobby_point:hobby_point
+  hobby_point:hobby_point,
+  win_rate:win_rate
 };
 module.exports.msg = "some msg";

@@ -45,12 +45,20 @@
             <text class="text-blue text-sm">{{activity_info.show_activityaddress}}</text>
           </view>
         </view>
+
+        <view class="cu-item">
+          <view class="content">
+            <text class="cuIcon-locationfill text-green"></text>
+
+            <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
+          </view>
+        </view>
         <view class="cu-item arrow" bindtap="showModal" data-target="DialogModal-partinfo">
           <view class="content" style="width:30%;">
             <text class="cuIcon-circlefill text-green"></text>
-            <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 30rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">{{activity_info.pay_price}}
-            </text>
-            参与{{avatarUrl_list.length+"/"+activity_info.max_part_number}}
+            <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 20rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">
+            </text><text wx:if="{{activity_info.pay_price != 0}}" style="color: red;" class="text-bold">{{activity_info.pay_price}}</text>
+            参与({{avatarUrl_list.length+"/"+activity_info.max_part_number}})
 
           </view>
           <view class="action" style="max-width:70%;">
@@ -60,14 +68,6 @@
               </block>
 
             </view>
-          </view>
-        </view>
-
-        <view class="cu-item">
-          <view class="content">
-            <text class="cuIcon-locationfill text-green"></text>
-
-            <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
           </view>
         </view>
         <view class="cu-item">

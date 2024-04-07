@@ -10,7 +10,7 @@ Page({
     user_id: "",
     reload_options: "",
     hosturl: app.globalData.hosturl,
-    self_flag:false
+    self_flag:true
   },
 
   /**
