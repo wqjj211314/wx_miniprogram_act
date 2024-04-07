@@ -161,7 +161,7 @@ Page({
         if (res.code) {
           //发起网络请求
           wx.request({
-            url: that.globalData.hosturl + 'getopenid',
+            url: app.globalData.hosturl + 'getopenid',
             data: {
               code: res.code
             },

@@ -891,6 +891,7 @@ Page({
       data: {
         "activity_id": this.data.activity_info.activity_id,
         "group_users": group_users,
+        "activity_tag":this.data.activity_info.activity_tag
       },
       header: {
         'content-type': 'application/json' // 默认值

@@ -63,8 +63,7 @@
                 </view>
                 <view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
                   <view class="desc">
-                   
-                    <view class="bg-touming flex padding-sm" style="flex-direction: column;align-items: flex-start;border-radius: 20rpx;margin-top: 20rpx;margin-bottom: 0rpx;max-width: 350rpx;">
+                    <view class="bg-touming flex padding-sm" style="flex-direction: column;align-items: flex-start;border-radius: 20rpx;margin-top: 20rpx;margin-bottom: 0rpx;max-width: 360rpx;font-size: 28rpx;">
                       <view>{{item.show_activityaddress}}</view>
                       <view>{{item.activity_live}}</view>
                     </view>

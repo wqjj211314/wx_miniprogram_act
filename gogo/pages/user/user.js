@@ -206,6 +206,7 @@ Page({
   },
 
   onScrollRefresh:function(){
+    var that = this;
     setTimeout(function () {
       that.setData({
         triggered: false,
@@ -222,7 +223,7 @@ Page({
         this.user_login();
       }else{
         //发起网络请求
-        var that = this;
+        
         wx.request({
           url: app.globalData.hosturl + 'get_userinfo',
           data: {
@@ -233,6 +234,10 @@ Page({
             app.globalData.checking_flag = res.data.checking_flag;
             app.globalData.login_userInfo = res.data;
             app.globalData.hasUserInfo = true;
+            that.setData({
+              userinfo: res.data,
+              checking_flag: res.data.checking_flag,
+            });
           }
         })
       }
@@ -266,6 +271,10 @@ Page({
               app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
               app.globalData.login_userInfo["gender"] = res.data.gender;
               app.globalData.login_userInfo["signature"] = res.data.signature;
+              that.setData({
+                userinfo: res.data,
+                checking_flag: res.data.checking_flag,
+              });
               try {
                 wx.setStorageSync('openid', res.data.openid);
                 app.globalData.hasUserInfo = true;
