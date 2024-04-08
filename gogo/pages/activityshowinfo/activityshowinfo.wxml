@@ -123,7 +123,7 @@
         
       </view>
 
-      <view class="cu-list menu card-menu margin-top" wx:if="{{partinfo.length > 0}}">
+      <view class="cu-list menu card-menu margin-top" wx:if="{{partinfo.length > 0 || activity_info.group_tag_dict_notempty}}">
         <view style="text-align: center;" class="bg-white">
           <text class="text-grey text-sm"><text class="cuIcon-remind lg text-red"></text>{{activity_info.cancelendtimeweek}}前可以取消报名</text>
         </view>
