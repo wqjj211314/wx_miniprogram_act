@@ -705,20 +705,20 @@ Page({
   add_partinfo: function () {
     this.setData({
       custom_part: !this.data.custom_part,
-      scroll_flag:false
+      //scroll_flag:!this.data.scroll_flag
       //modalName:"partinfo_modal"
     });
 
   },
   onbindblur(){
     this.setData({
-      scroll_flag:true
+      //scroll_flag:true
       //modalName:"partinfo_modal"
     });
   },
   onbindfocus(){
     this.setData({
-      scroll_flag:false
+      //scroll_flag:false
       //modalName:"partinfo_modal"
     });
   },

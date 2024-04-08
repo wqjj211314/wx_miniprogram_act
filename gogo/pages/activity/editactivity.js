@@ -481,7 +481,7 @@ Page({
       })
       activity_info = JSON.parse(decodeURIComponent(options.activity_info));
       console.log(activity_info);
-      console.log(activity_info.partinfo.split(","));
+      
       this.setData({
         "activity_id":activity_info.activity_id,
         "title": activity_info.title,
@@ -497,7 +497,7 @@ Page({
         "activityaddress":activity_info.activityaddress,
         "roomlist": activity_info.room.split(","),
         "max_part_number": activity_info.max_part_number,
-        "partinfo": activity_info.partinfo.split(","),
+        "partinfo": activity_info.partinfo,
         "part_limit_index": activity_info.part_limit,
         "edit_activity_flag":true,
         "group_tag_dict":activity_info.group_tag_dict,

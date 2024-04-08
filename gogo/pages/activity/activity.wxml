@@ -1,5 +1,5 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">
+<!--<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">-->
   <view class="cu-list menu card-menu margin-top shadow-warp">
     <form>
       <view class="cu-form-group text-bold text-center">
@@ -186,7 +186,7 @@
   <!--空白站位，保证以上内容能全部显示-->
   <view style="height: 150rpx;">
   </view>
-</scroll-view>
+<!--</scroll-view>-->
 
 <!--加载框-->
 <view class='cu-load load-modal' wx:if="{{loadModal}}">

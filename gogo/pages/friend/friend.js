@@ -8,7 +8,8 @@ Page({
    */
   data: {
     session_list:[],
-    url:"pages/friend/friend"
+    url:"pages/friend/friend",
+    triggered:false
   },
   
   /**
@@ -22,7 +23,16 @@ Page({
     app.globalData.friend_chat_msg_display = false;
     this.init_friend_chat_list();
   },
-
+  onScrollRefresh(){
+    console.log("下拉刷新")
+    var that = this;
+    setTimeout(function () {
+      that.setData({
+        triggered: false,
+      })
+    }, 2000);
+    this.init_friend_chat_list();
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -75,12 +85,7 @@ Page({
 
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
+  
   onTabItemTap(item) {
     console.log(item.index)//0
     console.log(item.pagePath)//pages/index/index
@@ -140,7 +145,7 @@ Page({
             'msgtime': '2022-06-18 13:51:27'
           }]
          */
-        var list = _this.data.session_list;
+        var list = [];//_this.data.session_list;
         console.log("获取list");
         console.log(res.data);
         res.data.forEach(element => {

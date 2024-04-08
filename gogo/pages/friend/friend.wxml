@@ -1,20 +1,22 @@
 <!--pages/friend/friend.wxml-->
-<block wx:for="{{session_list}}">
-  <view class="flex p-xs bg-white padding-sm align-center" bindtap="navigateToChat" data-index="{{index}}">
-    <view class="flex-sub bg-white radius">
-      <view class="cu-avatar xl radius" style="background-image:url({{item.friend_avatarUrl}});">
+<scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+  <block wx:for="{{session_list}}">
+    <view class="flex p-xs bg-white padding-sm align-center" bindtap="navigateToChat" data-index="{{index}}">
+      <view class="flex-sub bg-white radius">
+        <view class="cu-avatar xl radius" style="background-image:url({{item.friend_avatarUrl}});">
 
+        </view>
+      </view>
+
+      <view class="flex-treble bg-white padding-sm solid-bottom">
+        <view class="text-lg margin-bottom">
+          <text class="text-black text-bold">{{item.friend_nickName}}</text>
+        </view>
+        <view class="text-sm flex justify-between">
+          <text class="text-black text-grey">{{item.chatmsg}}</text>
+          <text class="text-black text-grey">{{item.msgtime}}</text>
+        </view>
       </view>
     </view>
-
-    <view class="flex-treble bg-white padding-sm solid-bottom">
-      <view class="text-lg margin-bottom">
-        <text class="text-black text-bold">{{item.friend_nickName}}</text>
-      </view>
-      <view class="text-sm flex justify-between">
-        <text class="text-black text-grey">{{item.chatmsg}}</text>
-        <text class="text-black text-grey">{{item.msgtime}}</text>
-      </view>
-    </view>
-  </view>
-</block>
+  </block>
+</scroll-view>
