@@ -14,6 +14,7 @@ Page({
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
     group_users: [],//这是当前分组的成员，数组形式
     admin_users:[],
+    admin_flag:false,
     show_member_info_flag:false,
     boy_num:0,
     boy_member_num_list:[],
@@ -29,9 +30,12 @@ Page({
     pk_group_score_tags:[],
     sort_users_score: {},
     sort_users_score_list:[],
+    sort_users_score_empty_flag:true,
     sort_groups_score: {},
     hidden_pk_group:false,
-    hidden_score_list:false
+    hidden_score_list:false,
+    triggered:false,
+    submit_flag:false
   },
 
   /**
@@ -69,11 +73,12 @@ Page({
         boy_member_num_list.push(item.member_num)
       }
     })
-    if(admin_users.length == 0 || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]){
+    if(admin_users.length == 0 && this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]){
       this.setData({
         admin_flag : true
       })
     }
+    var activity_tag = JSON.parse(decodeURIComponent(options.activity_info)).activity_tag;
     this.setData({
       group_users:group_users,
       boy_num:boy_num,
@@ -83,11 +88,12 @@ Page({
       group_tag:group_tag,
       member_users:member_users,
       activity_id:options.activity_id,
+      room:options.room,
       activity_info:JSON.parse(decodeURIComponent(options.activity_info)),
       admin_users:admin_users
     })
     //获取已存储的对阵列表
-    score.get_pk_groups(app.globalData.hosturl,this,options.activity_id,group_tag);
+    score.get_pk_groups(app.globalData.hosturl,this,options.activity_id,group_tag,activity_tag);
   },
   /**
    * 生命周期函数--监听页面显示
@@ -107,12 +113,7 @@ Page({
     })
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  },
+ 
   show_user_detail(){
     this.setData({
       show_member_info_flag:!this.data.show_member_info_flag
@@ -192,7 +193,8 @@ Page({
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
     this.setData({
       pk_groups: new_pk_groups,
-      modalName: ""
+      modalName: "",
+      submit_flag:true
     })
   },
   get1v1() {
@@ -230,7 +232,8 @@ Page({
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
     this.setData({
       pk_groups: new_pk_groups,
-      modalName: ""
+      modalName: "",
+      submit_flag:true
     })
     
   },
@@ -286,15 +289,19 @@ Page({
     var index = e.currentTarget.dataset.index;
     var new_pk_groups = this.data.pk_groups;
     new_pk_groups.splice(index, 1);
-    this.setData({ pk_groups: new_pk_groups });
+    this.setData({ pk_groups: new_pk_groups,submit_flag:true });
 
   },
   new_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;
     var new_pk_groups = this.data.pk_groups;
-    new_pk_groups.push(JSON.parse(JSON.stringify(new_pk_groups[index])));//深度拷贝
-    this.setData({ pk_groups: new_pk_groups });
+    var newobj = JSON.parse(JSON.stringify(new_pk_groups[index]));//深度拷贝
+    //比分要清零
+    newobj[newobj.length -2] = new Array(newobj.length -2).fill(0)
+    newobj[newobj.length -1][0] = "";//标签也清楚
+    new_pk_groups.push(newobj);
+    this.setData({ pk_groups: new_pk_groups,submit_flag:true });
   },
   score_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
@@ -356,7 +363,8 @@ Page({
       pk_groups: pk_groups,
       modalName: "",
       pk_group_score: [],//清空比分记录
-      pk_group_score_tags:[]
+      pk_group_score_tags:[],
+      submit_flag:true
     });
     score.get_score(pk_groups);
   },
@@ -397,7 +405,7 @@ Page({
     });
   },
   clear_pk_group(){
-    this.setData({pk_groups:[]})
+    this.setData({pk_groups:[],submit_flag:true})
   },
   clear_pk_group2(){
     //新增，更新
@@ -451,7 +459,8 @@ Page({
     this.setData({
       pk_groups:pk_groups,
       modalName:"",
-      custom_pk_group:[]
+      custom_pk_group:[],
+      submit_flag:true
     })
   },
   expand_pk_group(){
@@ -479,9 +488,23 @@ Page({
     }
     this.setData({
       pk_groups:pk_groups,
-      modalName:""
+      modalName:"",
+      submit_flag:true
     })
 
+  },
+  onScrollRefresh(){
+    console.log("下拉刷新" + this.data.triggered)
+    var that = this;
+    setTimeout(function () {
+      that.setData({
+        triggered: false,
+        submit_flag:false
+      })
+    }, 2000);
+    //获取已存储的对阵列表
+    var activity_tag = that.data.activity_info.activity_tag;
+    score.get_pk_groups(app.globalData.hosturl,that,that.data.activity_id,that.data.group_tag,activity_tag);
   }
 
 

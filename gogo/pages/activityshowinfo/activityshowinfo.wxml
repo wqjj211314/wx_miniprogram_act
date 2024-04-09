@@ -3,7 +3,7 @@
 </cu-custom>
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <include src="activityshowinfo_topscrollbar.wxml" />
-<swiper style="height:calc(100% - 200rpx);;" current="{{current_swiper_item_index}}" bindchange="swiper_change">
+<swiper style="height:calc(100% - 200rpx);" current="{{current_swiper_item_index}}" bindchange="swiper_change">
   <!--活动页面-->
   <swiper-item style="width: 100%;height:100%;overflow: auto;">
     <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
@@ -217,12 +217,12 @@
 
   <!--父组件已经判断：未结束-->
   <!--已报名，未开始，取消未截止hidden=is_cancelend，要显示-->
-  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="cancel_part" wx:if="{{login_user_part_list.length > 0}}" hidden="{{is_cancelend}}">
-    <button class="cu-btn bg-red round" style="width: 100%;height: 85rpx;" bindtap="cancel_part" disabled="{{is_begin}}">取消报名</button>
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="cancel_part" wx:if="{{login_user_part_list.length > 0 && !is_begin && !is_cancelend}}">
+    <button class="cu-btn bg-red round" style="width: 100%;height: 85rpx;" bindtap="cancel_part">取消报名</button>
   </view>
   <!--父组件已经判断：未结束-->
   <!--未截止wx:if="{{!is_addend}}"，要显示-->
-  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="part_activity" wx:if="{{!is_addend}}">
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="part_activity" wx:if="{{!is_addend && !is_begin}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
     <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">报名</button>
   </view>

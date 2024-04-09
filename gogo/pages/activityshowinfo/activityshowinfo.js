@@ -105,11 +105,7 @@ Page({
       share_res_limit: activity_info["part_limit"]
     });
     var that = this;
-    setTimeout(function(){
-      that.setData({
-        current_swiper_item_index:new Date(activity_info["begintime"]) - new Date() <= 0?1:0,
-      })
-    },2000)
+   
     console.log(new Date(addendtime).getTime());
     console.log(new Date().getTime());
 
@@ -242,6 +238,7 @@ Page({
         ungroup_partinfo_list.push(item);
       }
       if (item["user_id"] == app.globalData.login_userInfo["user_id"]) {
+        console.log("是否参与")
         login_user_part_list.push(item)
       }
       //初始化成员的字典形式数据，方便wxml获取
@@ -1036,16 +1033,19 @@ Page({
     console.log(e.currentTarget.dataset.tag);
     var group_tag = e.currentTarget.dataset.tag;
     var groups = "";
+    var room = "暂定"
     if (group_tag == "") {
       groups = this.data.ungroup_partinfo_list;
+      room = this.data.activity_info.room==""?"暂定":this.data.activity_info.room
     } else {
       groups = this.data.all_group_tag_dict[group_tag];
+      room = this.data.activity_info.group_tag_dict["room"]==""?"暂定":this.data.activity_info.group_tag_dict["room"]
     }
     //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(groups));
 
     wx.navigateTo({
-      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))+'&&room='+room
     })
   },
   swiper_change(event) {

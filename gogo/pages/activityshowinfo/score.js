@@ -10,6 +10,7 @@ function get_like_list(hosturl,that,activity_id){
     },
     success(res) {
       var like_dict = res.data;
+      like_dict = is_like(that.data.part_member_num,like_dict);
       that.setData({
         like_dict:like_dict
       })
@@ -32,13 +33,14 @@ function is_like(part_member_num,like_dict){
   }
   return like_dict;
 }
-function get_pk_groups(hosturl,that,activity_id,group_tag){
+function get_pk_groups(hosturl,that,activity_id,group_tag,activity_tag){
   var pkinfo = null;
   wx.request({
     url: hosturl + 'get_activity_member_pk_list_for_group_tag', //仅为示例，并非真实的接口地址
     data: {
       "activity_id": activity_id,
-      "group_tag":group_tag
+      "group_tag":group_tag,
+      "hobby_tag":activity_tag
     },
     header: {
       'content-type': 'application/json' // 默认值
@@ -52,10 +54,16 @@ function get_pk_groups(hosturl,that,activity_id,group_tag){
       var users_score = get_score(pkinfo.pk_groups);
       win_rate(users_score);
       users_score = sort_dict(users_score);
+      var sort_users_score_empty_flag = true;
+      for(var key in users_score){
+        sort_users_score_empty_flag = false;
+        break;
+      }
       that.setData({
         all_pk_info:pkinfo,
         pk_groups:pkinfo.pk_groups,
-        sort_users_score:users_score
+        sort_users_score:users_score,
+        sort_users_score_empty_flag:sort_users_score_empty_flag
       })
     },
     fail(res) {
