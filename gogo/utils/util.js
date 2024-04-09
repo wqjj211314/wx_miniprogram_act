@@ -3,14 +3,7 @@
 function convert_date(date){
   var activity_date = new Date(date);
   var now_date = new Date();
-  console.log(activity_date.getFullYear());
-  console.log(now_date.getFullYear());
-  console.log(activity_date.getMonth());
-  console.log(now_date.getMonth());
-  console.log(activity_date.getDate());
-  console.log(now_date.getDate());
-  console.log(now_date.getDay());
-  console.log(activity_date.getDay());
+  
   //计算时间差值，两个时间之间相差的毫秒数
   //1000/3600/24 ==> 换算成天数
   var d=parseInt((activity_date-now_date)/1000/3600/24);

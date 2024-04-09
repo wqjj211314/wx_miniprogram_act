@@ -53,7 +53,7 @@ function get_pk_groups(hosturl,that,activity_id,group_tag,activity_tag){
       //初始化分数胜负场，胜率，得分等
       var users_score = get_score(pkinfo.pk_groups);
       win_rate(users_score);
-      users_score = sort_dict(users_score);
+      users_score = sort_dict2(users_score);
       var sort_users_score_empty_flag = true;
       for(var key in users_score){
         sort_users_score_empty_flag = false;
@@ -63,7 +63,8 @@ function get_pk_groups(hosturl,that,activity_id,group_tag,activity_tag){
         all_pk_info:pkinfo,
         pk_groups:pkinfo.pk_groups,
         sort_users_score:users_score,
-        sort_users_score_empty_flag:sort_users_score_empty_flag
+        sort_users_score_empty_flag:sort_users_score_empty_flag,
+        submit_flag:false
       })
     },
     fail(res) {
@@ -252,6 +253,24 @@ function sort_dict(data) {
       return -(data[a]["grade_win"] - data[b]["grade_win"])
     }
     return -(data[a]["all_win"] - data[b]["all_win"]);//降序
+  });
+  console.log(keys);
+  var new_data = {};
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    new_data[key] = data[key];
+  }
+  return new_data;
+}
+function sort_dict2(data) {
+  var keys = Object.keys(data).sort((a, b) => {
+    if(data[a]["win"] == data[b]["win"]){
+      if(data[a]["win_rate"] == data[b]["win_rate"]){
+        return -(data[a]["score"] - data[b]["score"])
+      }
+      return -(data[a]["win_rate"] - data[b]["win_rate"])
+    }
+    return -(data[a]["win"] - data[b]["win"]);//降序
   });
   console.log(keys);
   var new_data = {};

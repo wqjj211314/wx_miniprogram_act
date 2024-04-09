@@ -552,6 +552,12 @@ Page({
       //partinfoinput: info
     //});
     console.log(info)
+    console.log(this.data.partinfo)
+    if(this.data.partinfo.indexOf("自评等级") != -1){
+      if(!info.hasOwnProperty("自评等级")){
+        info["自评等级"] =  this.data.picker[0]
+      }
+    }
     if (Object.keys(info).length != this.data.partinfo.length) {
       wx.showToast({
         title: '请填写报名信息',
@@ -838,17 +844,51 @@ Page({
       },
       success(res) {
         wx.hideLoading();
-        wx.showToast({
-          title: res.data.result,
-          icon:"none",
-          duration:1000
-        })
+        if(res.data.code == 200){
+          wx.showToast({
+            title: res.data.result,
+            icon:"success",
+            duration:1000
+          })
+        }else{
+          wx.showToast({
+            title: res.data.result,
+            icon:"error",
+            duration:1000
+          })
+        }
+        
         that.init_activity_all_info(that.data.activity_info);
+        that.show_admin_modal();
       },
       fail(res){
         wx.hideLoading();
       }
     });
+  },
+  show_admin_modal(){
+    var timestamp = new Date().getTime();
+    console.log(timestamp)
+    timestamp = Math.floor(timestamp / 1000)
+    console.log(typeof(timestamp))
+    var store_admin_timestamp = wx.getStorageSync("set_admin_timestamp");
+   
+    console.log(store_admin_timestamp)
+    if(store_admin_timestamp == "" || store_admin_timestamp == undefined||(timestamp-Number(store_admin_timestamp) > 7776000)){
+      wx.showModal({
+        title: '操作说明',
+        content: '管理员可以在分组对阵页面，操作新增对阵和记录比分等信息；如果分组未指定管理员，则所有分组成员均可以操作新增对阵和记录比分！',
+        complete: (res) => {
+          if (res.cancel) {
+            
+          }
+      
+          if (res.confirm) {
+            wx.setStorageSync('set_admin_timestamp', timestamp);
+          }
+        }
+      })
+    }
   },
   delete_member(e) {
     console.log("移除成员");
@@ -1007,7 +1047,8 @@ Page({
       group_tag: "",
       group_room: "",
       group_limit: "",
-      disable_save_group: true
+      disable_save_group: true,
+      edit_group_flag:false
     })
   },
   edit_completed_group(e) {

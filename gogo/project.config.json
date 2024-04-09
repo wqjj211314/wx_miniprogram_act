@@ -1,11 +1,5 @@
 {
-  "appid": "wx49f26073da6c15f9",
-  "projectname": "gogo",
   "compileType": "miniprogram",
-  "packOptions": {
-    "ignore": [],
-    "include": []
-  },
   "condition": {},
   "setting": {
     "urlCheck": false,
@@ -23,11 +17,18 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "useIsolateContext": true
+    "useIsolateContext": true,
+    "enhance": false
   },
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "libVersion": "3.3.4"
+  "libVersion": "3.3.4",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "appid": "wx49f26073da6c15f9",
+  "projectname": "gogo"
 }

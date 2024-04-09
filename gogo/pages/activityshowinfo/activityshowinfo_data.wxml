@@ -87,7 +87,7 @@
           <view class="action flex" style="width:300rpx;justify-content: center;">
 
 <button class="{{member_users[index].gender==0?'line-pink':'line-blue'}} cu-btn" style="background-color: white;height: 50rpx;padding:10rpx 10rpx;">{{item["hobby_point"]}}</button>
-<text style="color: red;font-size: 30rpx;">+{{item["all_add_point"]}}</text>
+<text style="color: red;font-size: 30rpx;">{{item["all_add_point"]>=0?"+":""}}{{item["all_add_point"]}}</text>
 </view>
           <view class="action flex" style="width: 200rpx;justify-content: center;" bind:tap="like" data-likemembergroup="{{index}}">
           <!--点赞功能-->

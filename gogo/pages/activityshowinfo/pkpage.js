@@ -73,7 +73,7 @@ Page({
         boy_member_num_list.push(item.member_num)
       }
     })
-    if(admin_users.length == 0 && this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]){
+    if(admin_users.length == 0 || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]){
       this.setData({
         admin_flag : true
       })
@@ -100,6 +100,7 @@ Page({
    */
   onShow() {
     console.log("onshow加载");
+    
     var edit_group_user = app.globalData.edit_group_user;
     var edit_index = app.globalData.edit_index;
     console.log(edit_index);
@@ -111,6 +112,28 @@ Page({
     this.setData({
       custom_pk_group
     })
+    var timestamp = new Date().getTime();
+    console.log(timestamp)
+    timestamp = Math.floor(timestamp / 1000)
+    console.log(typeof(timestamp))
+    var store_admin_timestamp = wx.getStorageSync("pk_admin_timestamp");
+   
+    console.log(store_admin_timestamp)
+    if(store_admin_timestamp == "" || store_admin_timestamp == undefined||(timestamp-Number(store_admin_timestamp) > 7776000)){
+      wx.showModal({
+        title: '操作说明',
+        content: '当前分组有几位管理员，仅管理员可以操作新增对阵和记录比分等信息，可以联系活动发起人设置管理员',
+        complete: (res) => {
+          if (res.cancel) {
+            
+          }
+      
+          if (res.confirm) {
+            wx.setStorageSync('pk_admin_timestamp', timestamp);
+          }
+        }
+      })
+    }
   },
 
  
