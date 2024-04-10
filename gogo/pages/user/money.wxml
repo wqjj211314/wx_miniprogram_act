@@ -1,8 +1,10 @@
 <view class="cu-form-group bg-green" style="height: 200rpx;">
   <view class="title bg-blue round" style="padding: 30rpx;height: fit-content;">余额 {{userinfo.total_money}}元</view>
+  
   <button class="cu-btn bg-blue round" disabled="{{!can_get || userinfo.total_money == 0}}" bind:tap="getallmoney">全部提现</button>
 </view>
-<view style="margin-top: 30rpx;margin-bottom: 10rpx;">提现信息</view>
+
+<view style="margin-top: 30rpx;margin-bottom: 10rpx;">提现信息(免手续费)</view>
 <form>
   <view class="cu-form-group">
     <view class="title" style="min-width: 180rpx;">银行开户人</view>
@@ -15,7 +17,7 @@
 </form>
 <view style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{money_list.length > 0}}">交易记录</view>
 <form>
-  <block wx:for="{{money_list}}">
+  <block wx:for="{{money_list}}" wx:key="id">
     <view class="flex bg-white" style="height: fit-content;justify-content: space-between;padding:20rpx;margin-bottom: 20rpx;">
      <view class="flex" style="width: fit-content;justify-content: space-around;flex-direction: column;align-content: center;align-items: center;height: 150rpx;">
      <view class="bg-blue round flex" style="width: 100rpx;height: 100rpx;align-items: center;justify-content: center;"><view style="width: fit-content;height: fit-content;font-size: 30rpx;">{{item.trade_desc}}</view></view>

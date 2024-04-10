@@ -1,7 +1,7 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-y="true" style="height: 100%;">
 
-<block wx:for-index="idx" wx:for='{{hobby_list}}' wx:key="index">
+<block wx:for-index="idx" wx:for='{{hobby_list}}' wx:key="hobby_tag">
   <view class="cu-card case no-card" style="margin-bottom: 8rpx;">
     <view class="cu-item">
       <view class="image" style="height:400rpx;" data-index="{{idx}}" bind:tap="edit_hobby_info">

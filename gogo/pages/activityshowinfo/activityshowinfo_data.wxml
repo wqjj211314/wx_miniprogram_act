@@ -1,5 +1,5 @@
 <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
-  <view wx:for="{{moods}}" class="" wx:key="{{item.id}}" bindtap="ViewImage" data-url="{{item.img_url}}" wx:if="{{sort_users_score_empty_flag}}" class="bg-white padding-sm" style="margin-bottom: 40rpx;">
+  <view wx:for="{{moods}}" class="" wx:key="id" bindtap="ViewImage" data-url="{{item.img_url}}" wx:if="{{sort_users_score_empty_flag}}" class="bg-white padding-sm" style="margin-bottom: 40rpx;">
     <view style="margin-top: 20rpx;" >
       <view class="cu-avatar square sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">
       </view>
@@ -11,7 +11,7 @@
     <image src="{{item.img_url}}" mode="aspectFill" style="height: 800rpx;width: 100%;" lazy-load="true"></image>
   </view>
   <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:600rpx" autoplay="true" wx:if="{{moods.length > 0 && !sort_users_score_empty_flag}}">
-    <swiper-item wx:for="{{moods}}" class="" wx:key="{{item.id}}" bindtap="ViewImage" data-url="{{item.img_url}}">
+    <swiper-item wx:for="{{moods}}" class="" wx:key="id" bindtap="ViewImage" data-url="{{item.img_url}}">
       <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
       <view class="" style="position: absolute;bottom: 0;width: 100%;">
         <view class="cu-card article" style="width:80%;margin-bottom:15rpx;">

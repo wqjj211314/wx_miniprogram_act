@@ -1,7 +1,7 @@
 <!--pages/activityadd/activityadd.wxml-->
 <scroll-view scroll-y="true" style="height: 100%;">
   <view style="width:100vw;height:100vh;background-color: white;">
-    <block wx:for="{{activity_create_list}}" wx:key="id" wx:for-index="index">
+    <block wx:for="{{activity_create_list}}" wx:key="activity_id" wx:for-index="index">
       <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
         <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}</view>
         <view class="cu-item text-blue">

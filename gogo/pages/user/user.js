@@ -184,7 +184,8 @@ Page({
     console.log("用户页 user onShow");
     this.setData({
       
-      friend_chat_msg_display:app.globalData.friend_chat_msg_display
+      friend_chat_msg_display:app.globalData.friend_chat_msg_display,
+      userinfo:app.globalData.login_userInfo
     });
   },
   copy_weixin(){

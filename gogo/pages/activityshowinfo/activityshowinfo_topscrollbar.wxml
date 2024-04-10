@@ -1,11 +1,11 @@
 <view class="bg-white nav text-center flex" style="height:45rpx;margin: 0;padding: 0;justify-content:space-around;align-items: center;">
-  <view class="cu-item {{0==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;">
+  <view class="cu-item {{0==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;" bind:tap="change_tab" data-tab="0">
     <text class="cuIcon-activityfill"></text> 活动
   </view>
-  <view class="cu-item {{1==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;">
+  <view class="cu-item {{1==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;" bind:tap="change_tab" data-tab="1">
     <text class="cuIcon-circlefill"></text> 分组
   </view>
-  <view class="cu-item {{2==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;">
+  <view class="cu-item {{2==current_swiper_item_index?'text-green border-swiper':''}}" style="height: fit-content;line-height: normal;flex:1;margin: 0;padding: 0;" bind:tap="change_tab" data-tab="2">
     <text class="cuIcon-upstagefill"></text> 记录
   </view>
 </view>

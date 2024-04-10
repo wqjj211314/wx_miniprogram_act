@@ -1,6 +1,6 @@
 <!--pages/activityadd/activityadd.wxml-->
 <view style="width:100vw;height:100vh;background-color: white;">
-<block wx:for="{{activity_part_list}}" wx:key="id" wx:for-index="index">
+<block wx:for="{{activity_part_list}}" wx:key="activity_id" wx:for-index="index">
 <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
   <view class="cu-time" style="width: fit-content;">{{item.activity_live}}</view>
   <view class="cu-item text-blue">

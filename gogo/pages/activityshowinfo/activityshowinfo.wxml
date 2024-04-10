@@ -11,6 +11,7 @@
       <view style="width:100vw;height:25vh;">
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
+        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}</view>
       </view>
       <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
         <view class="cu-item" style="padding-right:5rpx;border-top-right-radius: 20rpx;">
@@ -20,7 +21,7 @@
               <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
                 <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{activity_info.pay_type}}<text style="color: red;">{{activity_info.pay_price==0?"":activity_info.pay_price+"元"}}</text></button>
               </view>
-              <view class="text-center" wx:for="{{title_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+              <view class="text-center" wx:for="{{title_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;" wx:key="*this">
                 <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
               </view>
             </view>
@@ -138,7 +139,7 @@
           </view>
         </view>
         <form>
-          <block wx:for="{{partinfo}}">
+          <block wx:for="{{partinfo}}" wx:key="*this">
             <view class="cu-form-group">
               <view class="title" style="margin-left:60rpx;" wx:if="{{item!='性别'}}">{{item}}</view>
               <view class="title" style="margin-left:60rpx;" wx:if="{{item=='性别'}}">选择{{item}}</view>
@@ -169,7 +170,7 @@
         </view>
         <radio-group style="width: 100%;" bindchange="listenRadioChange">
           <form>
-            <block wx:for="{{activity_info.group_tag_dict}}">
+            <block wx:for="{{activity_info.group_tag_dict}}" wx:key="name">
               <view class="cu-form-group">
                 <view class="title flex" style="margin-left:60rpx;align-items: center;">
                   <radio value="{{index}}" style="zoom:80%;margin-right:20rpx;" />{{index}}({{all_group_tag_dict[index].length == undefined?"0":all_group_tag_dict[index].length}}/{{activity_info.group_tag_dict[index]["limit"]}})

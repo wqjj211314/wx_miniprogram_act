@@ -2,8 +2,8 @@
 <!--<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">-->
   <view class="cu-list menu card-menu margin-top shadow-warp">
     <form>
-      <view class="cu-form-group text-bold text-center">
-        <input placeholder="活动标题" bindinput='titleInput' style="color:black;" value="{{title}}"></input>
+      <view class="cu-form-group {{title==''?'':'text-bold'}} text-center" style="">
+        <input placeholder="请填写活动标题" bindinput='titleInput' style="{{title==''?'color:gray;':'color:black;'}}" value="{{title}}"></input>
       </view>
       <view class="cu-form-group">
         <view class="title">活动类型</view>

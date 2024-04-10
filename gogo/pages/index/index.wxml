@@ -41,7 +41,7 @@
           </view>
         </block>
         -->
-            <block wx:for="{{chat_msgs}}">
+            <block wx:for="{{chat_msgs}}" wx:key="id">
               <view>
                 <view class="customer-msg-cu-btn bg-touming">
                   <text class="text-white text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
@@ -97,7 +97,7 @@
               <view class="cu-avatar round bg-green lg" style="display:flex;flex-flow:column;" bindtap="navigateToactivityinfo">
                 <text class="cuIcon-group xl text-white"></text>
                 <view class="cu-tag badge" style="top:-5rpx;right:-5rpx;">{{member}}人</view>
-                <text class="text-white" style="font-size:25rpx;margin-top:-10rpx;">报名</text>
+                <text class="text-white" style="font-size:19rpx;margin-top:-10rpx;">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}</text>
               </view>
               <!--
           <view class="cu-avatar round lg" style="background-image:url({{login_userInfo.avatarUrl}});" bindtap='getUserProfile' wx:if="{{hasUserInfo}}">
@@ -110,7 +110,7 @@
             </view>
           </view>
         </swiper-item>
-        <swiper-item wx:for="{{moods}}" class="" wx:key="{{item.id}}">
+        <swiper-item wx:for="{{moods}}" class="" wx:key="id">
           <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;width: 100%;" lazy-load="true" bindload="lazyload"></image>
           <view class="" style="position: absolute;bottom: 0;width: 100%;">
             <view class="cu-card article" style="width:80%;margin-bottom:15rpx;">

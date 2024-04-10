@@ -51,7 +51,11 @@ function get_activity_list(that,app,activity_id="") {
         first_activity_id: first[0].activity_id,
         activity_id: first[0].activity_id,
         member: first[0].member,
-        server_request_count:_that.data.server_request_count + 1
+        server_request_count:_that.data.server_request_count + 1,
+        is_begin: new Date(first[0]["begintime"]) - new Date() <= 0,
+      is_end: new Date(first[0]["endtime"]) - new Date() <= 0,
+      is_addend: new Date(first[0]["addendtime"]) - new Date() <= 0,
+      is_cancelend:new Date(first[0]["cancelendtime"]) - new Date() <= 0,
       });
       console.log("初始化第一个activity id = " + first[0].activity_id);
       _that.socketinit();

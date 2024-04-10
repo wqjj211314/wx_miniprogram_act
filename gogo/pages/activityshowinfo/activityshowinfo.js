@@ -109,10 +109,7 @@ Page({
     console.log(new Date(addendtime).getTime());
     console.log(new Date().getTime());
 
-    var activity_date = util.convert_date(activity_info.activity_date);
-    that.setData({
-      activity_date: activity_date
-    });
+   
     wx.setNavigationBarTitle({
       title: activity_info.title
     })
@@ -1058,6 +1055,7 @@ Page({
     var edit_group_tag_dict = this.data.activity_info["group_tag_dict"][group_tag]
     console.log(current);
     this.setData({
+      edit_group_flag:!this.data.edit_group_flag,
       current_edit_group: current,
       pre_edit_group: current,
       edit_group_tag_dict: edit_group_tag_dict,
@@ -1194,4 +1192,10 @@ Page({
       url: '../chat/chat?friend_user_info=' + friend_user_info,
     });
   },
+  change_tab(e){
+    var tab = e.currentTarget.dataset.tab;
+    this.setData({
+      current_swiper_item_index:tab
+    })
+  }
 })

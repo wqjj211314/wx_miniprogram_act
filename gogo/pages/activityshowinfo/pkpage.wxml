@@ -25,12 +25,12 @@
   -->
   <!--当前分组或者未分组成员展示-->
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
-    <view class="cu-btn line-green round">{{group_tag==""?"未分组":group_tag}}({{group_users.length}})</view>
+    <view class="cu-btn line-green round">{{group_tag==""?"未分组":group_tag}}</view>
     <view class="cu-btn line-green round">男{{boy_num}} 女{{girl_num}}</view>
-    <view class="cu-btn line-green round">场地:{{group_tag==""?activity_info.room:""}}{{activity_info["group_tag_dict"][group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][group_tag]["room"]}}</view>
+    <view class="cu-btn line-green round">场地:{{group_tag==""?activity_info.room:activity_info["group_tag_dict"][group_tag]["room"]}}{{activity_info.room==""?"暂定":""}}</view>
   </view>
   <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-left:20rpx;border-bottom: 10rpx;">
-    <block wx:for="{{group_users}}" wx:for-item="user">
+    <block wx:for="{{group_users}}" wx:for-item="user" wx:key="member_num">
       <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
         <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
           <view class="cu-tag badge {{user.gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
@@ -45,7 +45,7 @@
   </view>
   <!--详情展示-->
   <block wx:if="{{show_member_info_flag}}">
-    <block wx:for="{{group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
+    <block wx:for="{{group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="member_num">
       <view class="cu-list menu-avatar bg-white text-black" style="padding-left:15rpx;margin:0rpx;">
         <view class="cu-item">
           <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
@@ -164,9 +164,13 @@
             {{tools.show_vs_scores(pk_group[pk_group.length - 2])}}
             <text class="cuIcon-right lg text-blue"></text>
           </view>
-          <view class="cu-tag radius sm bg-red" style="margin-top: 10rpx;" wx:if="{{pk_group[pk_group.length - 1][0]!=undefined && pk_group[pk_group.length - 1][0]!=''}}">{{pk_group[pk_group.length - 1][0]}}</view>
+          <view style="">
+          <block wx:for="{{pk_group[pk_group.length - 1]}}" wx:key="*this">
+          <view class="cu-tag radius sm line-red" style="margin-top: 10rpx;" wx:if="{{item!=undefined && item!=''}}">{{item}}</view>
+          </block>
+          </view>
         </view>
-        <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);" wx:if="{{admin_flag||admin_users.length==0}}"></view>
+        <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);margin-left: 10rpx;" wx:if="{{admin_flag||admin_users.length==0}}"></view>
       </view>
       <view style="width: fit-content;display: flex;flex-direction:column;margin:0 20rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center" wx:if="{{admin_flag||admin_users.length==0}}">
         <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">
@@ -283,7 +287,7 @@
     <view class="" style="padding: 20rpx;">
       <view class="flex" style="align-items: center;background-color: white;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
         <view style="margin-right:20rpx;min-width: 85rpx;"><text style="color:red;">*</text>队伍1</view>
-        <block wx:for="{{custom_pk_group[0]}}" wx:for-item="group_member_num">
+        <block wx:for="{{custom_pk_group[0]}}" wx:for-item="group_member_num" wx:key="*this">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
             <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
@@ -300,7 +304,7 @@
       </view>
       <view class="flex" style="align-items: center;background-color: white;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
         <view style="margin-right:20rpx;min-width: 85rpx;">队伍2</view>
-        <block wx:for="{{custom_pk_group[1]}}" wx:for-item="group_member_num">
+        <block wx:for="{{custom_pk_group[1]}}" wx:for-item="group_member_num" wx:key="*this">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
             <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
@@ -317,7 +321,7 @@
       </view>
       <view class="flex" style="align-items: center;background-color: white;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
         <view style="margin-right:20rpx;min-width: 85rpx;">队伍3</view>
-        <block wx:for="{{custom_pk_group[2]}}" wx:for-item="group_member_num">
+        <block wx:for="{{custom_pk_group[2]}}" wx:for-item="group_member_num" wx:key="*this">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
             <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
@@ -334,7 +338,7 @@
       </view>
       <view class="flex" style="align-items: center;background-color: white;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
         <view style="margin-right:20rpx;min-width: 85rpx;">队伍4</view>
-        <block wx:for="{{custom_pk_group[3]}}" wx:for-item="group_member_num">
+        <block wx:for="{{custom_pk_group[3]}}" wx:for-item="group_member_num" wx:key="*this">
           <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
             <!--最后一组是比分-->
             <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">

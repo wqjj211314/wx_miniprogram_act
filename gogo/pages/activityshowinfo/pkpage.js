@@ -291,8 +291,13 @@ Page({
             console.log(res);
             if(res.data.code == 200){
               var new_pk_groups = that.data.pk_groups;
-              new_pk_groups.push(res.data.pk_groups);
-              that.setData({ pk_groups: new_pk_groups });
+              console.log(res.data)
+              var pk_groups_res = res.data.pk_groups;
+              for(let i in pk_groups_res) {
+                new_pk_groups.push(pk_groups_res[i]);
+              }
+              //new_pk_groups.push(res.data.pk_groups);
+              that.setData({ pk_groups: new_pk_groups,modalName:"",submit_flag:true });
             }
           }
         });

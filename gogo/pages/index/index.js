@@ -41,7 +41,11 @@ Page({
     share_use_id:"",
     friend_chat_msg_display:false,
     moods:[],
-    mood_img_list:[]
+    mood_img_list:[],
+    is_begin: false,
+    is_end: true,
+    is_addend: false,
+    is_cancelend:false,
   },
   onLoad: function (options) {
     console.log("onload函数");
@@ -108,19 +112,15 @@ Page({
         console.log("更新参与人数" + element.member);
         that.setData({
           activity_info: element,
-          member: element.member
+          member: element.member,
+          is_begin: new Date(element["begintime"]) - new Date() <= 0,
+      is_end: new Date(element["endtime"]) - new Date() <= 0,
+      is_addend: new Date(element["addendtime"]) - new Date() <= 0,
+      is_cancelend:new Date(element["cancelendtime"]) - new Date() <= 0,
         });
         this.setData({
           activity_user_info: element.createuser
         });
-        //var activity_date = new Date(element.activity_date);
-        var activity_date = util.convert_date(element.activity_date);
-        that.setData({
-          activity_date:activity_date
-        });
-
-
-
         return;
       }
 
