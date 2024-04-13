@@ -1,0 +1,98 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<view class="bg-white flex" style="align-items: center;justify-content: center;margin-top: 20rpx;color: black;padding:20rpx;">搭档列表(可删除后重新搭配)</view>
+<block wx:for="{{member_num_partner_list}}" wx:for-item="partner_list" wx:for-index="index1">
+  <view class="flex" style="align-items: center;background-color: white;border-radius: 10rpx;padding: 20rpx 20rpx;justify-content: flex-start;width: 100%;flex-wrap:wrap;align-content: center;border-bottom-style: solid;border-bottom-width: 1rpx;border-bottom-color: gainsboro;">
+    <view style="margin-right:20rpx;min-width: 85rpx;">搭档{{index1+1}}</view>
+    <block wx:for="{{partner_list}}" wx:for-item="member_num" wx:key="*this" wx:for-index="index2">
+      <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+        <!--最后一组是比分-->
+        <view class="cu-avatar radius" style="background-image:url({{member_users[member_num].avatarUrl}});">
+          <view class="cu-tag badge" style="right:-10rpx;left:auto;padding:0rpx;border-radius:0rpx;height:24rpx;width: 28rpx;" bindtap="del_group_member" data-num="{{member_num}}" data-index="{{index1}}">
+            <text class="cuIcon-move text-bold" style="font-size: 25rpx;"></text>
+          </view>
+          <view class="cu-tag badge {{member_users[member_num].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_num)}}</view>
+        </view>
+        <view style="font-size: 18rpx;height: fit-content;">{{member_users[member_num].nickName}}</view>
+      </view>
+    </block>
+    
+    <view class="cu-avatar radius margin-right margin-bottom {{disable_save_group?'bg-white':'bg-green'}}" style="width: 128rpx;">
+      <button class="cu-btn bg-green" style="font-size:25rpx;height:50rpx;padding:0rpx;height:64rpx;width:128rpx;" bindtap="save_partner" data-index="{{index1}}" >确认选择</button>
+    </view>
+
+  </view>
+
+</block>
+<!--未分配搭档的成员列表-->
+<view class="bg-white flex" style="align-items: center;justify-content: center;margin-top: 30rpx;color: black;" wx:if="{{member_num_nonpartner_list.length > 0}}">待分配搭档成员</view>
+<checkbox-group bindchange="listenCheckboxChange">
+  <block wx:for="{{member_num_nonpartner_list}}" wx:for-index="index" wx:for-item="member_num" wx:key="*this">
+    <view class="cu-list menu-avatar" style="margin:0rpx;">
+      <view class="cu-item">
+        <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(member_num)}}号</view>
+        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{member_users[member_num].avatarUrl}});">
+          <view class="cu-tag badge {{member_users[member_num].gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+          </view>
+        </view>
+        <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
+          <view class="text-black">{{member_users[member_num].nickName}}</view>
+
+          <view class="text-black flex" style="font-size: 20rpx;">
+            <view class="" style="word-break: break-all;">
+              <block wx:for="{{member_users[member_num].partinfo}}" wx:for-index="key" wx:for-item="value">
+                <text class="cuIcon-tagfill text-red"></text>
+                <text class="margin-right-xs">{{key}}:{{value}}</text>
+              </block>
+            </view>
+          </view>
+        </view>
+        <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
+          <view class="text-black text-xs">{{member_users[member_num].hobby_info.hobby_tag}}<text class="text-blue" style="">{{tools.hobby_point(member_users[member_num].hobby_info.hobby_point)}}级</text></view>
+          <view class="cu-tag line-blue">积分{{member_users[member_num].hobby_info.hobby_point}}</view>
+        </view>
+        <view class="action">
+          <checkbox value="{{member_num}}" />
+        </view>
+      </view>
+    </view>
+  </block>
+
+</checkbox-group>
+
+<view class="flex bg-white text-black" style="justify-content:center;margin-top: 25rpx;padding: 20rpx;" wx:if="{{pk_groups.length > 0}}">
+    <view>预览对阵列表</view>
+  </view>
+  <block wx:for="{{pk_groups}}" wx:for-item="pk_group" wx:for-index="pk_group_index">
+    <view class="" style="display: flex;background-color: white;border-radius: 10rpx;border-bottom: 1px solid rgb(236, 235, 235);justify-content: space-between;padding: 10rpx 10rpx;{{pk_group_index==pk_groups.length -1 ?'border-bottom-width:0rpx;':''}}" wx:if="{{!hidden_pk_group}}">
+      <!--对阵方显示，可能是1,1V1，1V1V1，1V1V1V1，2V2，3V3，4V4,5V5-->
+      <view style="display: flex;align-items: center;flex:1;flex-direction:row; flex-wrap: wrap;{{pk_group.length > 4?'justify-content:flex-start;':'justify-content:center;'}}">
+        <block wx:for="{{pk_group}}" wx:for-item="group" wx:for-index="group_index">
+          <block wx:for="{{group}}" wx:for-item="group_member_num">
+            <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;margin-bottom: 10rpx;margin-right:15rpx;" wx:if="{{group_index < pk_group.length -2}}">
+              <!--最后一组是比分-->
+              <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
+                <view class="cu-tag badge {{member_users[group_member_num].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
+              </view>
+              <view style="font-size: 18rpx;height: fit-content;">{{member_users[group_member_num].nickName}}</view>
+            </view>
+          </block>
+          <!--PK的icon显示，最多到倒数第三项-->
+          <text class="iconfont icon-PK" style="font-size: 30rpx;color: blue;margin-right:15rpx;" wx:if="{{group_index < pk_group.length -3}}" />
+        </block>
+      </view>
+     
+    </view>
+  </block>
+
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;">
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="random_partner">
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">随机搭档</button>
+  </view>
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="preview_pk">
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">预览对阵</button>
+  </view>
+  <view class="" style="flex:1;margin-right: 10rpx;" bindtap="back_pkpage">
+    <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">保存</button>
+  </view>
+</view>

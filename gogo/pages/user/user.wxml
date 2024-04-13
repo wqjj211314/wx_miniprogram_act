@@ -4,21 +4,22 @@
 </view>
 <scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height: 100vh;">
   <view class="main">
-    <view class="flex userinfo">
+    <view class="flex userinfo" style="align-items: center;">
       <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
         <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
         </view>
       </view>
       <view class="column-sidebar">
-        <button class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;" bindtap="modify_user_info">
+        <view class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;padding-left:0rpx;">
           <!--class="rightarrow"-->
-          <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text><text class="cuIcon-triangledownfill text-black" style="font-size: 40rpx;margin-left:-2rpx;"></text>
-        </button>
-        <view>
+          <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text>
+        </view>
+        <view style="margin-top: 15rpx;">
           <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
         </view>
       </view>
-      <view class="cuIcon-emoji text-yellow" style="margin-left: auto;font-size:90rpx;">
+      <view class="cuIcon-edit cu-btn line-green round" style="margin-left: auto;" bindtap="modify_user_info">
+      编辑资料
       </view>
     </view>
 
@@ -97,7 +98,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.6</text>
+          <text class="text-grey text-sm">v1.0.8</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">

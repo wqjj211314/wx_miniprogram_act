@@ -53,17 +53,15 @@
             <view class="cu-card article {{isCard?'no-card':''}}" style="width:75%;margin-bottom:5rpx;">
               <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
                 <view class="title" style="line-height:0px;padding-left:5rpx;">
-                  <view class="customer-title-cu-btn bg-touming" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
-                    <view>
+                  <view class="customer-title-cu-btn bg-touming flex" style="background-color: rgba(51,51,51,0.3);color:white;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;flex-direction: column;white-space:nowrap;flex-direction: row;border-radius: 20rpx;width: fit-content;max-width: 100%;">
                     <view class="cu-avatar round sm" style="background-image:url({{activity_user_info.avatarUrl}});margin-right:10rpx;" bindtap="show_activityuser_info"></view>
-                    <text class="text-white text-cut" style="max-width:200px;font-size: 30rpx;padding-right:10rpx;" bindtap="navigateToactivityinfo">{{item.title}}
-                    </text>
-                  </view>
+                    <view class="text-bold" style="font-size: 30rpx;margin-right: 10rpx;white-space:nowrap;overflow: hidden;word-break: break-all;text-overflow: clip;flex:1;" bindtap="navigateToactivityinfo">{{item.title}}
+                    </view>
                   </view>
                 </view>
-                <view class="content" style="padding-left:5rpx;" bindtap="navigateToactivityinfo">
+                <view class="content" style="padding-left:5rpx;width: fit-content;" bindtap="navigateToactivityinfo">
                   <view class="desc">
-                    <view class="bg-touming flex padding-sm" style="flex-direction: column;align-items: flex-start;border-radius: 20rpx;margin-top: 20rpx;margin-bottom: 0rpx;max-width: 360rpx;font-size: 28rpx;">
+                    <view class="bg-touming flex padding-sm" style="flex-direction: column;align-items: flex-start;border-radius: 20rpx;margin-top: 20rpx;margin-bottom: 0rpx;font-size: 26rpx;">
                       <view>{{item.show_activityaddress}}</view>
                       <view>{{item.activity_live}}</view>
                     </view>

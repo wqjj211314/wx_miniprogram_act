@@ -51,12 +51,12 @@ Page({
     var girl_member_num_list = [];
 
     //初始化成员的字典形式数据，方便wxml获取
-    var member_users = {}
+    //var member_users = {}
     var admin_users = [];
 
     group_users.forEach(item=>{
       var member_num = item.member_num;
-      member_users[member_num] = item;
+      //member_users[member_num] = item;
       if(item.admin_status == 1){
         admin_users.push(item);
         if(item.user_id == app.globalData.login_userInfo["user_id"]){
@@ -86,7 +86,7 @@ Page({
       girl_num:girl_num,
       girl_member_num_list:girl_member_num_list,
       group_tag:group_tag,
-      member_users:member_users,
+      member_users:JSON.parse(decodeURIComponent(options.member_users)),
       activity_id:options.activity_id,
       room:options.room,
       activity_info:JSON.parse(decodeURIComponent(options.activity_info)),
@@ -122,7 +122,7 @@ Page({
     if(store_admin_timestamp == "" || store_admin_timestamp == undefined||(timestamp-Number(store_admin_timestamp) > 7776000)){
       wx.showModal({
         title: '操作说明',
-        content: '当前分组有几位管理员，仅管理员可以操作新增对阵和记录比分等信息，可以联系活动发起人设置管理员',
+        content: '当前分组有'+this.data.admin_users.length+'位管理员，仅管理员可以操作新增对阵和记录比分等信息，可以联系活动发起人设置管理员',
         complete: (res) => {
           if (res.cancel) {
             
@@ -133,6 +133,13 @@ Page({
           }
         }
       })
+    }
+    if(app.globalData.fix_partner_pk_groups.length > 0){
+      this.setData({
+        pk_groups:this.data.pk_groups.concat(app.globalData.fix_partner_pk_groups),
+        submit_flag:true
+      })
+      app.globalData.fix_partner_pk_groups = []
     }
   },
 
@@ -533,6 +540,31 @@ Page({
     //获取已存储的对阵列表
     var activity_tag = that.data.activity_info.activity_tag;
     score.get_pk_groups(app.globalData.hosturl,that,that.data.activity_id,that.data.group_tag,activity_tag);
+  },
+  get_fixed_partner_pk(){
+    console.log("固定搭档")
+    this.setData({
+      modalName:""
+    })
+    if(this.data.group_users.length < 3){
+      wx.showToast({
+        title: '人数最少3人，当前分组无法使用此功能',
+        icon:"none",
+        duration:3000
+      })
+      return
+    }
+    if(this.data.group_users.length > 8){
+      wx.showToast({
+        title: '人数最多8人，当前分组无法使用此功能',
+        icon:"none",
+        duration:3000
+      })
+      return
+    }
+    wx.navigateTo({
+      url: 'fixpartner?'+'member_users='+encodeURIComponent(JSON.stringify(this.data.member_users))+'&&group_users='+encodeURIComponent(JSON.stringify(this.data.group_users)),
+    })
   }
 
 

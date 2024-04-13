@@ -3,5 +3,6 @@
     "DatetimePicker": "../components/datetimepicker"
 
   },
-  "navigationBarTitleText": "创建活动"
+  "navigationBarTitleText": "创建活动",
+  "navigationStyle":"custom"
 }

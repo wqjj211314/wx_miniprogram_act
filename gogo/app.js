@@ -99,7 +99,8 @@ App({
     edit_group_tag: "",
     tab_page_path: "pages/index/index",
     reload_activity_share_moods: false,//在分享见闻界面返回活动界面时需要重新加载
-    custom_group_tag_dict: {}//创建活动页的自定义分组信息
+    custom_group_tag_dict: {},//创建活动页的自定义分组信息
+    fix_partner_pk_groups:[]
   },
   user_login() {
     //return;

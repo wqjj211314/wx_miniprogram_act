@@ -13,7 +13,7 @@
       <input placeholder="人数限制" value="{{group_limit}}" bindinput='edit_group_limit' style="margin-right: 20rpx;"></input>
     </view>
     <view style="margin: 10rpx 10rpx;">分组成员</view>
-    <view class="grid padding-sm" style="background-color: white;padding:20rpx;flex-wrap: wrap;padding:0rpx;padding-left:13rpx;padding-top: 30rpx;margin-bottom: 20rpx;">
+    <view class="grid" style="background-color: white;flex-wrap: wrap;padding-left:35rpx;padding-top: 30rpx;margin-bottom: 20rpx;">
       <block wx:for="{{current_edit_group}}">
         <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
           <view class="cu-avatar radius" style="background-image:url({{item.avatarUrl}});">
@@ -28,7 +28,7 @@
       <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="add_group_member">
         <text class="cuIcon-add" style="font-size: 45rpx;color: grey;"></text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group_member">
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group_member" wx:if="{{current_edit_group.length > 1}}">
         <text class="cuIcon-move " style="font-size: 45rpx;color: grey;"></text>
       </view>
       <view class="cu-avatar radius margin-right margin-bottom {{disable_save_group?'bg-white':'bg-green'}}">
@@ -43,7 +43,7 @@
       <view class="cu-btn line-green round">男{{item0.boy_num}} 女{{item0.girl_num}}</view>
       <view class="cu-btn line-green round">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
     </view>
-    <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:20rpx;padding-left:20rpx;border:none;">
+    <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding-top:20rpx;padding-left:35rpx;border:none;">
       <block wx:for="{{item0.group_users}}" wx:for-item="user" wx:key="member_num">
         <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;" bind:tap="chat" data-membernum="{{user.member_num}}">
           <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
@@ -112,7 +112,7 @@
       </block>
     </block>
   </block>
-  <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:20rpx;padding-left:20rpx;border-bottom: 10rpx;margin-top: 20rpx;" wx:if="{{ungroup_partinfo_list.length > 0}}">
+  <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:20rpx;padding-left:25rpx;border-bottom: 10rpx;margin-top: 20rpx;" wx:if="{{ungroup_partinfo_list.length > 0}}">
     <view style="width: 100%;margin-bottom: 25rpx;">
       <view class="cu-btn line-green round">未分组({{ungroup_partinfo_list.length}})</view>
     </view>

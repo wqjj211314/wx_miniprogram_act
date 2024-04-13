@@ -411,11 +411,16 @@ Page({
         console.log("成功创建活动：" + res.data);
         let result = res.data;
         if (result["activity_id"] == "") {
-          
           wx.showToast({
             title: result["result"],
-            icon: "none",
-            duration: 4000
+            icon: "error",
+            duration: 3000
+          });
+        }else{
+          wx.showToast({
+            title: result["result"],
+            icon: "success",
+            duration: 3000
           });
         }
         if (result["activity_id"] == "") {
@@ -447,9 +452,12 @@ Page({
           });
         }
         //后台上传背景图片，创建活动成功后直接跳转至用户页
-        wx.switchTab({
-          url: '../user/user'
-        })
+        setTimeout(function(){
+          wx.switchTab({
+            url: '../user/user'
+          })
+        },3000)
+       
       },
       fail: function (error) {
         wx.hideLoading();

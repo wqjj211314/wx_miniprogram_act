@@ -27,7 +27,7 @@
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
     <view class="cu-btn line-green round">{{group_tag==""?"未分组":group_tag}}</view>
     <view class="cu-btn line-green round">男{{boy_num}} 女{{girl_num}}</view>
-    <view class="cu-btn line-green round">场地:{{group_tag==""?activity_info.room:activity_info["group_tag_dict"][group_tag]["room"]}}{{activity_info.room==""?"暂定":""}}</view>
+    <view class="cu-btn line-green round">场地:{{group_tag==""?activity_info.room:activity_info["group_tag_dict"][group_tag]["room"]}}</view>
   </view>
   <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-left:20rpx;border-bottom: 10rpx;">
     <block wx:for="{{group_users}}" wx:for-item="user" wx:key="member_num">
@@ -173,12 +173,18 @@
         <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);margin-left: 10rpx;" wx:if="{{admin_flag||admin_users.length==0}}"></view>
       </view>
       <view style="width: fit-content;display: flex;flex-direction:column;margin:0 20rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center" wx:if="{{admin_flag||admin_users.length==0}}">
-        <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">
-          <text class="cuIcon-roundclosefill lg text-red" style="font-size: 45rpx;"></text>
+        <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;">
+        删除
+        <!--
+          <text class="cuIcon-roundclosefill lg text-red" style="font-size: 45rpx;">删除</text>
+          -->
         </view>
 
-        <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;border-radius:2rpx;" wx:if="{{admin_flag||admin_users.length==0}}">
-          <text class="cuIcon-roundaddfill lg text-green" style="font-size: 45rpx;"></text>
+        <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;border-radius:2rpx;width: 130rpx;margin-top: 25rpx;" wx:if="{{admin_flag||admin_users.length==0}}">
+        再来一局
+        <!--
+          <text class="cuIcon-roundaddfill lg text-green" style="font-size: 45rpx;">再来一局</text>
+          -->
         </view>
       </view>
     </view>
@@ -197,7 +203,7 @@
     </view>
 
     <view class="" style="flex:1;" bindtap="update_pk_group">
-      <button class="cu-btn bg-red round" style="width: 100%;height: 85rpx;" disabled="{{!submit_flag}}">提交</button>
+      <button class="cu-btn bg-blue round" style="width: 100%;height: 85rpx;" disabled="{{!submit_flag}}">提交</button>
     </view>
   </view>
 </view>
@@ -219,7 +225,7 @@
             <block wx:for="{{item}}" wx:for-item="item2">
               <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
                 <view class="cu-avatar radius" style="background-image:url({{member_users[item2].avatarUrl}});">
-                  <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[item2].member_num)}}</view>
+                  <view class="cu-tag badge {{member_users[item2].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[item2].member_num)}}</view>
                 </view>
                 <view style="font-size: 18rpx;height: fit-content;">{{member_users[item2].name}}</view>
               </view>
@@ -256,6 +262,10 @@
       <view class="cu-item" bindtap="get_boygirl_pk">
         <view class="iconfont icon-nannvhunhe1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
         <text>4-6人混双对阵</text>
+      </view>
+      <view class="cu-item" bindtap="get_fixed_partner_pk">
+        <view class="iconfont icon-hezuowoshouhezi text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>固定搭档对阵</text>
       </view>
       <view class="cu-item" bindtap="sigle_recored">
         <view class="iconfont icon-wode3 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>

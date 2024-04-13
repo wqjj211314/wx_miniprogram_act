@@ -2,10 +2,12 @@
   <view class="container">
     <view class="userinfo">
       <block>
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <view style="font-size: 30rpx;">点击修改头像<text class="cuIcon-refresharrow lg text-gray" style="font-size: 34rpx;"></text></view>
+        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" style="margin-top:20rpx">
           <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
           <view class="cu-tag badge {{userInfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
           </view>
+          
         </button>
         <view style="margin-bottom: 40rpx;color: black;">
           <radio-group bindchange="listenRadioChange">
@@ -18,7 +20,7 @@
           </radio-group>
         </view>
         <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
+          <text class="nickname-label">修改昵称</text>
           <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" value="{{userInfo.nickName}}"/>
         </view>
         <view class="nickname-wrapper">

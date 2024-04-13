@@ -6,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    group_tag_list:new Array(1),
+    group_tag_list:[],
     group_room_list:[],
     group_limit_list:[],
     group_tag_dict:{},
@@ -19,6 +19,9 @@ Page({
     var group_limit_list = JSON.parse(decodeURIComponent(options.group_limit_list));
     var group_tag_list = JSON.parse(decodeURIComponent(options.group_tag_list));
     var group_room_list = JSON.parse(decodeURIComponent(options.group_room_list));
+    if(group_tag_list.length == 0){
+      group_tag_list.push(null)
+    }
     this.setData({
       group_limit_list:group_limit_list,
       group_tag_list:group_tag_list,

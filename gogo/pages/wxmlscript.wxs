@@ -10,7 +10,7 @@ var iscontain = function(arraylist,item){
 }
 
 var hobby_point = function(hobby_point){
-  var point = parseInt(hobby_point/1000);
+  var point = (hobby_point/1000).toFixed(1);
   return "L"+point
 }
 var win_rate = function(win,peace,fail){

@@ -26,7 +26,8 @@
     "pages/components/datetimepicker",
     "pages/activity/editactivity",
     "pages/activity/customgroup",
-    "pages/user/money"
+    "pages/user/money",
+    "pages/activityshowinfo/fixpartner"
   ],
   "tabBar": {
     "color": "#2c2c2c",

@@ -1,9 +1,8 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-
   <view class="cu-list menu card-menu margin-top shadow-warp">
     <form>
       <view class="cu-form-group text-bold text-center">
-        <input placeholder="活动标题" bindinput='titleInput' style="color:black;" value="{{title}}"></input>
+        <input placeholder="活动标题" bindinput='titleInput' style="color:black;" value="{{title}}" maxlength="30"></input>
       </view>
       <view class="cu-form-group">
         <view class="title">活动类型</view>
@@ -101,7 +100,7 @@
     </view>
     <view class="cu-form-group" style="">
       <view class="title">场地</view>
-      <input placeholder="选择或输入" bindinput='roomInput' style="color:black;" value="{{roomlist}}"></input>
+      <input placeholder="选择或输入" bindinput='roomInput' style="color:black;" value="{{roomlist}}" maxlength="100"></input>
     </view>
     <view class="cu-form-group">
       <view class="flex justify-around" style="justify-content: space-around;width: 100%;">

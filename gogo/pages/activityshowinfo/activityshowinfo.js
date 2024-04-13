@@ -819,8 +819,17 @@ Page({
   },
   edit_group(){
     this.setData({
-      edit_group_flag:!this.data.edit_group_flag
+      edit_group_flag:!this.data.edit_group_flag,
+      current_edit_group: [],
+      pre_edit_group: [],
+      edit_group_tag_dict: {},
+      group_tag: "",
+      group_room: "",
+      group_limit: "",
+      disable_save_group: true,
+      hidden_del_tag: true
     })
+    app.globalData.edit_group_user = []
   },
   update_member_admin(e) {
     console.log("移除成员");
@@ -1084,7 +1093,7 @@ Page({
     let group_users = encodeURIComponent(JSON.stringify(groups));
 
     wx.navigateTo({
-      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))+'&&room='+room
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))+'&&room='+room+'&&member_users='+encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
   swiper_change(event) {
@@ -1167,6 +1176,14 @@ Page({
     this.init_activity_all_info(this.data.activity_info);
   },
   recore_mood() {
+    if(this.data.moods.length > 20){
+      wx.showToast({
+        title: '最多支持20条见闻分享',
+        icon:"none",
+        duration:3000
+      })
+      return;
+    }
     wx.navigateTo({
       url: 'share_mood?activity_id=' + this.data.activity_info["activity_id"],
     })
