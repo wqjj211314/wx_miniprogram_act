@@ -1,7 +1,7 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <!--<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">-->
 <view class="" style="height: 35vh;width: 100vw;">
-  <view class="bg-grey" style="width: 100%;height: 35vh;background-color: rgb(236, 243, 236);" wx:if="{{imgList.length < 1}}"></view>
+  <view class="bg-grey" style="width: 100%;height: 100%;background-color: rgb(236, 243, 236);" wx:if="{{imgList.length < 1}}"></view>
   
   <view class="" wx:for="{{imgList}}" wx:key="index" data-url="{{imgList[index]}}" style="width: 100%;height: 100%;">
     <image src='{{imgList[index]}}' mode='aspectFill' style="width: 100%;height: 100%;"></image>

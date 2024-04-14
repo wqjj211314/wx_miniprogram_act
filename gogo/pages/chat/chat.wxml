@@ -26,7 +26,7 @@
   <view class="action">
     <text class="cuIcon-write text-grey"></text>
   </view>
-  <input class="solid-bottom" bindinput="inputMsg" value="{{inputMsg}}" maxlength="300"></input>
+  <input class="solid-bottom" bindinput="inputMsg" value="{{inputMsg}}" maxlength="300" cursor-spacing="10"></input>
  
   <button class="cu-btn bg-green shadow" bindtap="sendMsg">发送</button>
 </view>

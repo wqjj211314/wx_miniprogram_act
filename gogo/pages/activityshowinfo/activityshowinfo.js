@@ -67,7 +67,9 @@ Page({
     triggered: false,
     moods: [],
     mood_img_list: [],
-    select_group_tag: ""//报名所选择的分组
+    select_group_tag: "",//报名所选择的分组
+    pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑"],
+    is_pk_hobby:true,
   },
 
   /**
@@ -102,7 +104,8 @@ Page({
       activity_user_info: activity_user_info,
       partinfo: activity_info.partinfo,
       title_tags: activity_info.title_tags,
-      share_res_limit: activity_info["part_limit"]
+      share_res_limit: activity_info["part_limit"],
+      is_pk_hobby:this.data.pk_hobby_list.indexOf(activity_info.activity_tag)!= -1
     });
     var that = this;
    
@@ -308,8 +311,9 @@ Page({
     friend_user_info["user_id"] = this.data.member_users[membernum]["user_id"]
     friend_user_info["avatarUrl"] = this.data.member_users[membernum]["avatarUrl"]
     friend_user_info["nickName"] = this.data.member_users[membernum]["nickName"]
+    friend_user_info["signature"] = this.data.member_users[membernum]["signature"]
     wx.navigateTo({
-      url: '../chat/chat?friend_user_info=' + encodeURIComponent(JSON.stringify(friend_user_info)),
+      url: '../user/userinfo?userinfo=' + encodeURIComponent(JSON.stringify(friend_user_info)),
     });
 
   },
@@ -369,7 +373,8 @@ Page({
       data: {
         "activity_id": that.data.activity_info.activity_id,
         "cancel_part_members": that.data.cancel_part_members,
-        "begintime": that.data.activity_info["begintime"]
+        "begintime": that.data.activity_info["begintime"],
+        "activity_tag":that.data.activity_info["activity_tag"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -501,7 +506,7 @@ Page({
     }
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     return {
-      title: this.data.activity_info["title"]+"("+this.data.activity_info.member+"/"+this.data.activity_info.max_part_number+")",
+      title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
       path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id,
       //imageUrl:bgurl,
@@ -899,6 +904,16 @@ Page({
   delete_member(e) {
     console.log("移除成员");
     var that = this;
+    wx.showModal({
+      title: '删除成员',
+      content: '确定要取消所选人员的报名资格吗？如果成员有在线支付费用，会自动进行退款！',
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          
     var membernum = e.currentTarget.dataset.membernum;
     var cancel_part_members = [membernum]
     wx.request({
@@ -906,7 +921,8 @@ Page({
       data: {
         "activity_id": that.data.activity_info.activity_id,
         "cancel_part_members": cancel_part_members,
-        "begintime":that.data.activity_info.begintime
+        "begintime":that.data.activity_info.begintime,
+        "activity_tag":that.data.activity_info["activity_tag"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -915,6 +931,10 @@ Page({
         that.update_part_info(that, res);
       }
     });
+        }
+      }
+    })
+    
   },
   clear_group(e) {
     var that = this;
@@ -1214,5 +1234,19 @@ Page({
     this.setData({
       current_swiper_item_index:tab
     })
-  }
+  },
+  show_userinfo(e) {
+    var member_num = e.currentTarget.dataset.membernum;
+    var userinfo = {}
+    userinfo["nickName"] = this.data.member_users[member_num]["nickName"]
+    userinfo["signature"] = this.data.member_users[member_num]["signature"]
+    userinfo["user_id"] = this.data.member_users[member_num]["user_id"]
+    userinfo["gender"] = this.data.member_users[member_num]["gender"]
+    if (this.data.member_users[member_num]["user_id"] == app.globalData.login_userInfo["user_id"])
+      return;
+    let friend_user_info = encodeURIComponent(JSON.stringify(userinfo));
+    wx.navigateTo({
+      url: '../user/userinfo?userinfo=' + friend_user_info,
+    });
+  },
 })

@@ -34,7 +34,7 @@
 
                 </view>
               </view>
-              <view class="flex" style="margin-top: 30rpx;justify-content: space-around;" hidden="{{item.activity_status > 1}}">
+              <view class="flex" style="margin-top: 30rpx;justify-content: space-around;" hidden="{{item.activity_status > 1}}" wx:if="{{is_login_user}}">
                 <button class="cu-btn bg-red sm" style="" bindtap="delete_activity" data-index="{{index}}">删除</button>
                 <button class="cu-btn bg-red sm" style="" bindtap="cancel_activity" data-index="{{index}}">取消</button>
                 <button class="cu-btn bg-red sm" style="" bindtap="delete_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0}}">全部退款</button>

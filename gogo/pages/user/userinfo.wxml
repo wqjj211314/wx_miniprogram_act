@@ -1,47 +1,51 @@
 <!--pages/user/user.wxml-->
 <view class="img">
-  <image class='img' src="/logo.png" mode="aspectFill"></image>
+  <image class='img' src="/2.jpg" mode="widthFix"></image>
 </view>
-
-<view class="main">
-  <view class="flex userinfo">
-      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;">
+<scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height: 100vh;">
+  <view class="main">
+    <view class="flex userinfo" style="align-items: center;">
+      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
         <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
         </view>
       </view>
       <view class="column-sidebar">
-        <button class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;">
+        <view class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;padding-left:0rpx;">
           <!--class="rightarrow"-->
           <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text>
-        </button>
-        <view>
+        </view>
+        <view style="margin-top: 15rpx;">
           <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
         </view>
       </view>
       <view class="cuIcon-mark text-green" style="margin-left: auto;font-size:60rpx;margin-top: 10rpx;" bindtap="chat">
     </view>
     </view>
-  <view class="cu-list menu sm-border card-menu margin-top" style="margin:0rpx;border-radius: 0cm;margin-top: 25rpx;">
-    <view class="cu-item arrow" bindtap="navigateToActivitycreate">
-      <view class="content">
-        <text class="cuIcon-circle text-red"></text>
-        <text class="text-grey">TA创建的活动</text>
+
+    <view class="cu-list menu sm-border card-menu margin-top">
+      <view class="cu-item arrow" bindtap="navigateToActivitycreate">
+        <view class="content">
+          <text class="cuIcon-circle text-red"></text>
+          <text class="text-grey">TA创建的活动</text>
+        </view>
       </view>
+
+      
+      <view class="cu-item arrow" bindtap="navigateToActivitypart">
+        <view class="content">
+          <text class="cuIcon-favorfill text-red"></text>
+          <text class="text-grey">TA参加的活动</text>
+        </view>
+      </view>
+
+      <view class="cu-item arrow" bindtap="navigateTohobbylist">
+        <view class="content">
+          <text class="cuIcon-likefill text-red"></text>
+          <text class="text-grey">TA的兴趣列表</text>
+        </view>
+      </view>
+     
     </view>
 
-    <view class="cu-item arrow" bindtap="navigateToActivityadd">
-      <view class="content">
-        <text class="cuIcon-favorfill text-red"></text>
-        <text class="text-grey">TA参加的活动</text>
-      </view>
-    </view>
-
-    <view class="cu-item arrow" bindtap="navigateToAbility">
-      <view class="content">
-        <text class="cuIcon-likefill text-red"></text>
-        <text class="text-grey">TA的兴趣列表</text>
-      </view>
-    </view>
   </view>
-
-</view>
+</scroll-view>

@@ -148,11 +148,11 @@ Page({
       sample = sample4;
     } 
     var pk_groups = this.getvs(sample,new_member_num_partner_list);
-    var new_pk_groups = this.data.pk_groups.concat(pk_groups);
-    if(new_pk_groups.length < 10){
-      new_pk_groups = new_pk_groups.concat(new_pk_groups)
+    //var new_pk_groups = pk_groups.concat(pk_groups);
+    if(pk_groups.length < 10){
+      pk_groups = pk_groups.concat(pk_groups)
     }
-    return new_pk_groups;
+    return pk_groups;
     
   },
   getvs(sample,member_num_partner_list){
@@ -192,6 +192,7 @@ Page({
   },
   back_pkpage(){
     var pk_groups = this.get1v1();
+    console.log(pk_groups)
     app.globalData.fix_partner_pk_groups = pk_groups;
     wx.navigateBack({
       delta: 1

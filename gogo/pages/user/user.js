@@ -114,13 +114,13 @@ Page({
   },
   navigateToActivitycreate() {
     wx.navigateTo({
-      url: '../activitycreate/activitycreate'
+      url: '../activitycreate/activitycreate?user_id='+this.data.userinfo.user_id
     })
 
   },
-  navigateToActivityadd() {
+  navigateToActivitypart() {
     wx.navigateTo({
-      url: '../activitypart/activitypart'
+      url: '../activitypart/activitypart?user_id='+this.data.userinfo.user_id
     })
   },
   navigateToActivitychecking() {
@@ -183,10 +183,10 @@ Page({
   onShow: function () {
     console.log("用户页 user onShow");
     this.setData({
-      
       friend_chat_msg_display:app.globalData.friend_chat_msg_display,
       userinfo:app.globalData.login_userInfo
     });
+    this.getuserinfo();
   },
   copy_weixin(){
     
@@ -205,7 +205,6 @@ Page({
   onUnload: function () {
 
   },
-
   onScrollRefresh:function(){
     var that = this;
     setTimeout(function () {
@@ -213,6 +212,9 @@ Page({
         triggered: false,
       })
     }, 2000);
+    this.getuserinfo()
+  },
+  getuserinfo(){
     try {
       console.log("用户登录");
       //直接获取缓存保存的
@@ -224,7 +226,6 @@ Page({
         this.user_login();
       }else{
         //发起网络请求
-        
         wx.request({
           url: app.globalData.hosturl + 'get_userinfo',
           data: {
@@ -249,6 +250,7 @@ Page({
       //this.user_login();
     }
   },
+
   user_login() {
     //return;
     var that = this;

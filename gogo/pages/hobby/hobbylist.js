@@ -10,7 +10,7 @@ Page({
     user_id: "",
     reload_options: "",
     hosturl: app.globalData.hosturl,
-    self_flag:true
+    self_flag:false
   },
 
   /**
@@ -31,14 +31,7 @@ Page({
         self_flag:true 
       });
       
-    }else{
-      wx.showToast({
-        title: "兴趣列表为空",
-        icon: 'success',
-        duration: 3000
-      })
     }
-
     this.setData({
       user_id: user_id,
       reload_options: options

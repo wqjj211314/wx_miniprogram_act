@@ -7,7 +7,8 @@ Page({
    */
   data: {
     activity_create_list: [],
-    hosturl: app.globalData.hosturl
+    hosturl: app.globalData.hosturl,
+    is_login_user:false
   },
 
   /**
@@ -17,14 +18,22 @@ Page({
     wx.showLoading({
       title: '数据获取中...',
     });
-    this.navigateToActivitycreate();
+    this.setData({
+      user_id:options.user_id
+    })
+    if(app.globalData.login_userInfo["user_id"] == options.user_id){
+      this.setData({
+        is_login_user:true
+      })
+    }
+    this.navigateToActivitycreate(options.user_id);
   },
-  navigateToActivitycreate() {
+  navigateToActivitycreate(user_id) {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_create_actlist', //仅为示例，并非真实的接口地址
       data: {
-        "user_id": app.globalData.openid
+        "user_id": user_id
       },
       header: {
         'content-type': 'application/json' // 默认值

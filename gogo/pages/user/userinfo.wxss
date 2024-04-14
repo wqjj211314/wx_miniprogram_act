@@ -1,6 +1,7 @@
 /* pages/user/user.wxss */
 @import "/colorui/main.wxss";
 @import "/colorui/icon.wxss";
+@import "/colorui/iconfont.wxss";
 .rightarrow::after{
   color: black;
   content: "\e6a3";
@@ -42,15 +43,14 @@
 }
 .img{
   width:100vw;
-  height: 30vh;
+  height: 50vh;
   z-index: -1;
   position:absolute; 
   top:0px;
 }
 
 .main{
-  margin-top:30vh;
-  padding: 0rpx;
+  margin-top:23vh;
 }
 .nickname::after{
 	border: none;

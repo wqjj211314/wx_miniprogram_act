@@ -439,12 +439,6 @@ Page({
               'activity_id': result["activity_id"]
             },
             success: function (res) {
-              wx.showToast({
-                title: res.data,
-                icon: "none",
-                duration: 3000
-              });
-  
             },
             fail: function (error) {
               console.log(error);

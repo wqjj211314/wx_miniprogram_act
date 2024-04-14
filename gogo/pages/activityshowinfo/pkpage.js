@@ -119,10 +119,10 @@ Page({
     var store_admin_timestamp = wx.getStorageSync("pk_admin_timestamp");
    
     console.log(store_admin_timestamp)
-    if(store_admin_timestamp == "" || store_admin_timestamp == undefined||(timestamp-Number(store_admin_timestamp) > 7776000)){
+    if(this.data.admin_users.length > 0 && (store_admin_timestamp == "" || store_admin_timestamp == undefined||(timestamp-Number(store_admin_timestamp) > 7776000))){
       wx.showModal({
         title: '操作说明',
-        content: '当前分组有'+this.data.admin_users.length+'位管理员，仅管理员可以操作新增对阵和记录比分等信息，可以联系活动发起人设置管理员',
+        content: '当前分组已指定管理员，仅管理员可以操作新增修改对阵列表和比分等信息！',
         complete: (res) => {
           if (res.cancel) {
             
@@ -135,6 +135,7 @@ Page({
       })
     }
     if(app.globalData.fix_partner_pk_groups.length > 0){
+      console.log(app.globalData.fix_partner_pk_groups)
       this.setData({
         pk_groups:this.data.pk_groups.concat(app.globalData.fix_partner_pk_groups),
         submit_flag:true
@@ -440,7 +441,7 @@ Page({
     });
   },
   clear_pk_group(){
-    this.setData({pk_groups:[],submit_flag:true})
+    this.setData({pk_groups:[],submit_flag:true,modalName:""})
   },
   clear_pk_group2(){
     //新增，更新

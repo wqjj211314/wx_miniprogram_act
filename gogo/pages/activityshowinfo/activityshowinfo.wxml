@@ -11,7 +11,7 @@
       <view style="width:100vw;height:25vh;">
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
-        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}</view>
+        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
       </view>
       <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
         <view class="cu-item" style="padding-right:5rpx;border-top-right-radius: 20rpx;">
@@ -32,7 +32,7 @@
         </view>
         <view class="cu-item">
           <view class="content" style="flex:0;">
-            <text class="cuIcon-timefill text-green"></text>
+            <text class="cuIcon-timefill text-green" style="font-size: 30rpx;"></text>
           </view>
           <view class="action" style="flex:1;">
             <text class="text-blue text-sm">{{activity_info.activity_live}}</text>
@@ -41,7 +41,7 @@
         </view>
         <view class="cu-item">
           <view class="content">
-            <text class="iconfont icon-changguanyuyue text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
+            <text class="iconfont icon-changguanyuyue text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: 30rpx;font-style: normal;"></text>
 
             <text class="text-blue text-sm">{{activity_info.show_activityaddress}}</text>
           </view>
@@ -49,16 +49,18 @@
 
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-locationfill text-green"></text>
+            <text class="cuIcon-locationfill text-green" style="font-size: 30rpx;"></text>
 
             <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
           </view>
         </view>
         <view class="cu-item arrow" bindtap="showModal" data-target="DialogModal-partinfo">
-          <view class="content" style="width:30%;">
-            <text class="cuIcon-circlefill text-green"></text>
-            <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 20rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">
-            </text><text wx:if="{{activity_info.pay_price != 0}}" style="color: red;" class="text-bold">{{activity_info.pay_price}}</text>
+          <view class="content text-blue" style="width:30%;font-size: 24rpx;">
+            <text class="cuIcon-circlefill text-green lg" style="width: 1.6em;margin-right: 10rpx;font-size: 30rpx;"></text>
+            <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 30rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">
+            </text>
+            <text wx:if="{{activity_info.pay_price != 0}}" style="color: red;" class="text-bold">{{activity_info.pay_price}}
+            </text>
             参与({{avatarUrl_list.length+"/"+activity_info.max_part_number}})
 
           </view>
@@ -73,7 +75,7 @@
         </view>
         <view class="cu-item">
           <view class="content">
-            <text class="iconfont icon-changdi text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
+            <text class="iconfont icon-changdi text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: 30rpx;font-style: normal;"></text>
             <text class="text-grey">场地</text>
           </view>
           <view class="action" style="max-width:70%;">
@@ -83,7 +85,7 @@
 
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-activityfill text-green"></text>
+            <text class="cuIcon-activityfill text-green" style="font-size: 30rpx;"></text>
             <text class="text-grey">发起人</text>
           </view>
           <view class="action" style="max-width:70%;" bind:tap="chat_with_creater">
@@ -95,7 +97,7 @@
         </view>
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-infofill text-green"></text>
+            <text class="cuIcon-infofill text-green" style="font-size: 30rpx;"></text>
             <text class="text-grey">报名限制</text>
           </view>
           <view class="action" style="max-width:66%;">
@@ -109,6 +111,15 @@
           </view>
           <view class="action" style="max-width:66%;">
             <text class="text-blue text-sm">{{activity_info.addendtimeweek}}</text>
+          </view>
+        </view>
+        <view class="cu-item">
+          <view class="content">
+            <text class="cuIcon-remind text-red"></text>
+            <text class="text-grey">取消报名截止</text>
+          </view>
+          <view class="action" style="max-width:66%;">
+            <text class="text-blue text-sm">{{activity_info.cancelendtimeweek}}</text>
           </view>
         </view>
         <view class="cu-item">
@@ -295,7 +306,7 @@
           <!-- 表格标题 -->
           <view class="su-tr">
             <view class="su-th text-bold">
-              序号
+              排序号
             </view>
             <block wx:if="{{checking_flag}}">
               <view class="su-th text-bold">

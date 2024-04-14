@@ -141,7 +141,7 @@ Page({
       return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     wx.navigateTo({
-      url: '../chat/chat?friend_user_info=' + friend_user_info,
+      url: '../user/userinfo?userinfo=' + friend_user_info,
     });
   },
   navigateToactivityinfo() {

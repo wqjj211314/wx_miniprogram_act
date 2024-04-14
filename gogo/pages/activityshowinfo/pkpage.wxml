@@ -47,7 +47,7 @@
   <block wx:if="{{show_member_info_flag}}">
     <block wx:for="{{group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="member_num">
       <view class="cu-list menu-avatar bg-white text-black" style="padding-left:15rpx;margin:0rpx;">
-        <view class="cu-item">
+        <view class="cu-item" style="height: fit-content;padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);">
           <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
           <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
             <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
@@ -64,6 +64,10 @@
               </view>
             </view>
           </view>
+          <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace) != '0'}}">
+              <view class="text-black text-xs">胜率</view>
+              <view class="cu-tag line-blue">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
+            </view>
           <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
           <view class="text-black text-xs">{{activity_info.activity_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
           <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>

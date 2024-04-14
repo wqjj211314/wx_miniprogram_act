@@ -20,7 +20,7 @@
             <view class="cu-tag badge" style="left:-10rpx;right:auto;padding:0rpx;border-radius:0rpx;height:24rpx;width: 28rpx;" bindtap="del_group_member" data-num="{{item.member_num}}" hidden="{{hidden_del_tag}}">
               <text class="cuIcon-move text-bold" style="font-size: 25rpx;"></text>
             </view>
-            <view class="cu-tag badge bg-green" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(item.member_num)}}</view>
+            <view class="cu-tag badge {{item.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(item.member_num)}}</view>
           </view>
           <view style="font-size: 18rpx;height: fit-content;">{{item.nickName}}</view>
         </view>
@@ -60,7 +60,7 @@
       <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="clear_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}">
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}" wx:if="{{is_pk_hobby}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
       </view>
       <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
@@ -70,12 +70,11 @@
 
     <block wx:if="{{item0.show_flag}}">
       <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
-        <view class="cu-list menu-avatar" style="margin:0rpx;">
-          <view class="cu-item">
+        <view class="cu-list menu-avatar bg-white" style="margin:0rpx;">
+          <view class="cu-item" style="height: fit-content;padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);">
             <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号
-
             </view>
-            <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
+            <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});" bind:tap="chat" data-membernum="{{item.member_num}}">
               <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
               </view>
             </view>
@@ -95,16 +94,21 @@
                 </view>
               </view>
             </view>
-            <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
+            <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace) != '0' && is_pk_hobby}}">
+              <view class="text-black text-xs">胜率</view>
+              <view class="cu-tag line-blue">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
+            </view>
+            <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{is_pk_hobby}}">
               <view class="text-black text-xs">{{activity_info.activity_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
               <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
             </view>
-            <view class="action" style="width: 120rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
-              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;">踢出</button>
+            <view class="flex" style="flex-direction: column;justify-content: center;align-content: center;align-items: center;">
+            <view class="action" style="width: 160rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
+              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;width: 100%;">踢出</button>
             </view>
-            <view class="action" style="width: 180rpx;" hidden="{{!admin_flag}}">
-              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;" bind:tap="update_member_admin" data-membernum="{{item.member_num}}" wx:if="{{item.is_queue != 1}}">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
-              
+            <view class="action" style="width: 160rpx;margin-top: 20rpx;" hidden="{{!admin_flag}}" wx:if="{{is_pk_hobby}}">
+              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;width: 100%;" bind:tap="update_member_admin" data-membernum="{{item.member_num}}" wx:if="{{item.is_queue != 1}}">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
+            </view>
             </view>
 
           </view>
@@ -118,14 +122,14 @@
     </view>
     <block wx:for="{{ungroup_partinfo_list}}" wx:for-item="user" wx:key="member_num">
       <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;" bind:tap="chat" data-membernum="{{user.member_num}}">
-        <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
+        <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});" >
           <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
         </view>
         <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
         <view style="font-size: 18rpx;height: fit-content;color: red;" wx:if="{{user.is_queue == 1}}">[排队中]</view>
       </view>
     </block>
-    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="">
+    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="" wx:if="{{is_pk_hobby}}">
       <text style="color: black;font-size: 30rpx;font-weight: 200;">对阵</text>
     </view>
     <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group" data-tag="" wx:if="{{admin_flag&&!is_begin}}">
@@ -134,11 +138,11 @@
   </view>
   <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
     <view class="cu-list menu-avatar" style="margin:0rpx;">
-      <view class="cu-item" style="height: fit-content;min-height: 140rpx;">
+      <view class="cu-item" style="height: fit-content;padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);">
         <view style="position: absolute;left: 10rpx;width: 50rpx;">{{tools.show_member_num(item.member_num)}}号
 
         </view>
-        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
+        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});" bind:tap="chat" data-membernum="{{item.member_num}}">
           <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
           </view>
         </view>
@@ -152,17 +156,22 @@
             </view>
           </view>
         </view>
-        <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
-          <view class="text-black text-xs">{{activity_info.activity_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
-          <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
-        </view>
-        <view class="action" style="width: 120rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
-          <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;">踢出</button>
-        </view>
-        <view class="action" style="width: fit-content;" hidden="{{!admin_flag}}">
-          <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;" bind:tap="update_member_admin" data-membernum="{{item.member_num}}" wx:if="{{item.is_queue != 1}}">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
-          
-        </view>
+        <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace) != '0' && is_pk_hobby}}">
+              <view class="text-black text-xs">胜率</view>
+              <view class="cu-tag line-blue">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
+            </view>
+            <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{is_pk_hobby}}">
+              <view class="text-black text-xs">{{activity_info.activity_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
+              <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
+            </view>
+            <view class="flex" style="flex-direction: column;justify-content: center;align-content: center;align-items: center;">
+            <view class="action" style="width: 160rpx;" hidden="{{!admin_flag}}" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin}}">
+              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;width: 100%;">踢出</button>
+            </view>
+            <view class="action" style="width: 160rpx;margin-top: 20rpx;" hidden="{{!admin_flag}}" wx:if="{{is_pk_hobby}}">
+              <button class="cu-btn line-blue" style="padding-left: 10rpx;padding-right:10rpx;width: 100%;" bind:tap="update_member_admin" data-membernum="{{item.member_num}}" wx:if="{{item.is_queue != 1}}">{{item.admin_status==0?"设为管理员":"取消管理员"}}</button>
+            </view>
+            </view>
       </view>
     </view>
   </block>
