@@ -65,53 +65,74 @@ Page({
     });
   },
   getallmoney(){
+    if(this.data.bank_account_name == ''||this.data.bank_num == ''){
+      wx.showToast({
+        title: '银行信息有误',
+        icon:'error',
+        duration:3000
+      })
+      return
+    }
     var that = this;
-    wx.showLoading({
-      title: '',
-    })
-    wx.request({
-      url: app.globalData.hosturl + 'get_all_money',
-      data: {
-        "user_id":app.globalData.login_userInfo["user_id"],
-        "bank_num":that.data.bank_num,
-        "bank_account_name":that.data.bank_account_name
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          var result = res.data.result;
-          var money_list = result["money_result"]
-          var can_get = result["can_get"]
-          var userinfo = result["userinfo"]
-          var bank_num = "";
-          var bank_account_name = "";
-          if(money_list.length > 0){
-            bank_num = money_list[0]["bank_num"]
-            bank_account_name = money_list[0]["bank_account_name"]
-          }
-          that.setData({
-            money_list:money_list,
-            can_get:can_get,
-            userinfo:userinfo,
-            bank_num:bank_num,
-            bank_account_name:bank_account_name
-          })
-        }else if(res.data.code == -1){
-          wx.showToast({
-            title: res.data.result,
-            icon:"error",
-            duration:3000
-          })
+    wx.showModal({
+      title: '提现确认',
+      content: '请核对清楚提现银行账户信息！！！',
+      complete: (res) => {
+        if (res.cancel) {
+          
         }
-       
-      },
-      fail(res){
-        wx.hideLoading()
+    
+        if (res.confirm) {
+          wx.showLoading({
+            title: '',
+          })
+          wx.request({
+            url: app.globalData.hosturl + 'get_all_money',
+            data: {
+              "user_id":app.globalData.login_userInfo["user_id"],
+              "bank_num":that.data.bank_num,
+              "bank_account_name":that.data.bank_account_name
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            success(res) {
+              wx.hideLoading()
+              if(res.data.code == 200){
+                var result = res.data.result;
+                var money_list = result["money_result"]
+                var can_get = result["can_get"]
+                var userinfo = result["userinfo"]
+                var bank_num = "";
+                var bank_account_name = "";
+                if(money_list.length > 0){
+                  bank_num = money_list[0]["bank_num"]
+                  bank_account_name = money_list[0]["bank_account_name"]
+                }
+                that.setData({
+                  money_list:money_list,
+                  can_get:can_get,
+                  userinfo:userinfo,
+                  bank_num:bank_num,
+                  bank_account_name:bank_account_name
+                })
+              }else if(res.data.code == -1){
+                wx.showToast({
+                  title: res.data.result,
+                  icon:"error",
+                  duration:3000
+                })
+              }
+             
+            },
+            fail(res){
+              wx.hideLoading()
+            }
+          });
+        }
       }
-    });
+    })
+   
   },
   banknumInput(e) {
     console.log(typeof(e.detail.value))

@@ -220,8 +220,8 @@ Page({
       //直接获取缓存保存的
       var openid = wx.getStorageSync('openid');
       console.log(openid)
+      var that = this;
       if (openid == "" || openid == undefined) {
-        //this.globalData.login_userInfo["user_id"] = openid;
         console.log("需要登录获取openid")
         this.user_login();
       }else{
@@ -232,6 +232,8 @@ Page({
             "user_id": openid
           },
           success: (res) => {
+            console.log("获取用户信息")
+            console.log(res.data)
             app.globalData.openid = res.data.user_id;
             app.globalData.checking_flag = res.data.checking_flag;
             app.globalData.login_userInfo = res.data;
@@ -243,11 +245,9 @@ Page({
           }
         })
       }
-      //this.user_login();
     } catch (e) {
       console.log("持久化登录信息获取失败");
       console.log(e);
-      //this.user_login();
     }
   },
 

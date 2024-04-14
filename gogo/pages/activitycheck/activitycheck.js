@@ -48,17 +48,17 @@ Page({
   },
   update_activity_bg_issue(e){
     var activity_id = e.currentTarget.dataset.id;
-    this.update_activity_status(activity_id,0,"已审核，图片敏感");
+    this.update_activity_status(activity_id,201,"已审核，图片敏感");
     this.get_checking_activity_list();
   },
   update_activity_pass(e){
     var activity_id = e.currentTarget.dataset.id;
-    this.update_activity_status(activity_id,1,"已审核，正常");
+    this.update_activity_status(activity_id,200,"已审核，正常");
     this.get_checking_activity_list();
   },
   update_activity_invalid(e){
     var activity_id = e.currentTarget.dataset.id;
-    this.update_activity_status(activity_id,-2,"活动违规");
+    this.update_activity_status(activity_id,101,"活动违规");
     this.get_checking_activity_list();
   },
   update_activity_status(activity_id,activity_status,activity_status_comment){

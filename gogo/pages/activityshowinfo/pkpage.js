@@ -269,7 +269,7 @@ Page({
     
   },
   get_boygirl_pk(){
-    if(this.data.activity_info["activity_status"] > 1){
+    if(this.data.activity_info["activity_status"] >= 800){
       wx.showToast({
         title: this.data.activity_info["activity_status_comment"],
         icon:"error",
@@ -406,7 +406,7 @@ Page({
   },
 
   update_pk_group(){
-    if(this.data.activity_info["activity_status"] > 1){
+    if(this.data.activity_info["activity_status"] >= 800){
       wx.showToast({
         title: this.data.activity_info["activity_status_comment"],
         icon:"error",
@@ -445,7 +445,7 @@ Page({
   },
   clear_pk_group2(){
     //新增，更新
-    if(this.data.activity_info["activity_status"] > 1){
+    if(this.data.activity_info["activity_status"] >= 800){
       wx.showToast({
         title: this.data.activity_info["activity_status_comment"],
         icon:"error",

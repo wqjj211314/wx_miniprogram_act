@@ -71,6 +71,30 @@ Page({
     this.setData({
       hobby_tag: hobbytagvalue
     })
+    this.get_activity_info(hobbytagvalue);
+
+  },
+  get_activity_info(hobbytagvalue) {
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_activity_info', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "activity_tag":hobbytagvalue
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if (res.data.hasOwnProperty("detail")) {
+          
+          that.setData({
+            detail: res.data["detail"]
+          });
+        }
+      }
+    });
   },
   choose_pay_type(event) {
     var pay_type = event.target.dataset.paytype;

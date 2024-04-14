@@ -11,7 +11,8 @@
       <view style="width:100vw;height:25vh;">
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
-        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
+        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status >= 800}}">{{activity_info.activity_status_comment}}</view>
+        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
       </view>
       <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
         <view class="cu-item" style="padding-right:5rpx;border-top-right-radius: 20rpx;">
@@ -225,7 +226,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{!is_end}}">
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{!is_end && activity_info.activity_status < 800}}">
 
   <!--父组件已经判断：未结束-->
   <!--已报名，未开始，取消未截止hidden=is_cancelend，要显示-->

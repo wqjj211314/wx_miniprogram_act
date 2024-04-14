@@ -28,7 +28,7 @@ Page({
     }
     this.navigateToActivitycreate(options.user_id);
   },
-  navigateToActivitycreate(user_id) {
+  navigateToActivitycreate(user_id=app.globalData.login_userInfo["user_id"]) {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_create_actlist', //仅为示例，并非真实的接口地址
@@ -111,7 +111,7 @@ Page({
       url: app.globalData.hosturl + 'update_activity_status', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": activity_id,
-        "activity_status": 3//取消活动
+        "activity_status": 801//取消活动
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -192,7 +192,7 @@ Page({
     var activity_id = activity_info["activity_id"];
     if(new Date(activity_info["endtime"]) - new Date() > 0){
       wx.showToast({
-        title: '活动结束才可结算',
+        title: '活动还未结束',
         icon:'error',
         duration:3000
       })

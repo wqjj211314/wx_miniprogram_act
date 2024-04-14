@@ -76,8 +76,10 @@
         </view>
       </picker>
     </view>
-    <view class="cu-form-group">
-      <textarea placeholder="活动详情：如活动费用，活动场地，也可在创建活动后发布公告" auto-height maxlength="-1" bindinput='detailInput' style="max-height:10em;min-height: 3em;" value="{{detail}}"></textarea>
+    
+    <view class="cu-form-group flex" style="flex-direction: column;height: fit-content;">
+    <view style="padding-top:15rpx;">活动详情</view>
+      <textarea placeholder="活动详情：如活动费用，活动场地，也可在创建活动后发布公告" auto-height maxlength="3000" bindinput='detailInput' style="max-height:15em;min-height: 5em;" value="{{detail}}"></textarea>
     </view>
   </form>
 </view>

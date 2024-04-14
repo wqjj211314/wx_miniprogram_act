@@ -276,26 +276,6 @@ Page({
     }
   },
 
-  get_activity_info(activity_id) {
-    var that = this;
-    wx.request({
-      url: app.globalData.hosturl + 'get_activity_info', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": activity_id
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        if (res.data.hasOwnProperty("activity_id")) {
-          console.log("更新参与人数" + res.data["member"]);
-          that.setData({
-            member: res.data["member"]
-          });
-        }
-      }
-    });
-  },
 
   onShow: function () {
     console.log("首页onShow");
