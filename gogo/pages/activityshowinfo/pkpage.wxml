@@ -1,6 +1,6 @@
 <!--pages/activityshowinfo/pkpage.wxml-->
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-<scroll-view scroll-y="true" style="height:calc(100vh - {{admin_flag?'140rpx':'0rpx'}});" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+<scroll-view scroll-y="true" style="height:calc(100vh - {{(admin_flag||admin_users.length==0)&&!is_end?'140rpx':'0rpx'}});" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <!--管理员显示
   <view class="bg-white" style="margin-bottom: 20rpx;" wx:if="{{admin_users.length > 0}}">
     <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
@@ -69,7 +69,9 @@
               <view class="cu-tag line-blue">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
             </view>
           <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
-          <view class="text-black text-xs">{{activity_info.activity_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
+          <view class="text-black text-xs">{{activity_info.activity_tag}}积分
+          <!--<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text>-->
+          </view>
           <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
         </view>
         </view>
@@ -90,13 +92,12 @@
         </view>
       </view>
       <view class="flex" style="justify-content: space-between;width: 80%;">
-        <view class="flex" style="width: 200rpx;justify-content: center;">
-          <view class="">负场</view>
-
-        </view>
+        
         <view class="action flex" style="width: 200rpx;justify-content: center;">
           <view class="">总得分</view>
-
+        </view>
+        <view class="flex" style="width: 200rpx;justify-content: center;">
+          <view class="">净胜分</view>
         </view>
         <view class="action flex" style="width: 200rpx;justify-content: center;">
           <view class="">胜率</view>
@@ -122,11 +123,11 @@
         </view>
         <view class="flex" style="justify-content: space-between;width: 80%;">
           <view class="action flex" style="width: 200rpx;justify-content: center;">
-            <view class="{{member_users[index].gender==0?'line-pink':'line-blue'}} cu-btn" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["fail"]}}场</view>
+            <view class="{{member_users[index].gender==0?'line-pink':'line-blue'}} cu-btn" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["score"]}}</view>
           </view>
           <view class="action flex" style="width: 200rpx;justify-content: center;">
 
-            <view class="{{member_users[index].gender==0?'line-pink':'line-blue'}} cu-btn" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["score"]}}</view>
+            <view class="{{member_users[index].gender==0?'line-pink':'line-blue'}} cu-btn" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["score_diff"]}}</view>
           </view>
           <view class="action flex" style="width: 200rpx;justify-content: center;">
 
@@ -174,9 +175,9 @@
           </block>
           </view>
         </view>
-        <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);margin-left: 10rpx;" wx:if="{{admin_flag||admin_users.length==0}}"></view>
+        <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);margin-left: 10rpx;" wx:if="{{(admin_flag||admin_users.length==0)&&!is_end}}"></view>
       </view>
-      <view style="width: fit-content;display: flex;flex-direction:column;margin:0 20rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center" wx:if="{{admin_flag||admin_users.length==0}}">
+      <view style="width: fit-content;display: flex;flex-direction:column;margin:0 20rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center" wx:if="{{(admin_flag||admin_users.length==0)&&!is_end}}">
         <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;">
         删除
         <!--
@@ -196,7 +197,7 @@
 <view style="height: 200rpx;"></view>
 
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;" wx:if="{{admin_flag}}">
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;" wx:if="{{(admin_flag||admin_users.length==0)&&!is_end}}">
   <view class="flex" style="align-content: flex-start;font-size: 20rpx;">
     <text class="cuIcon-warn" style="font-size: 20rpx;color: red;"></text>
     本地编辑完成后需要提交更新

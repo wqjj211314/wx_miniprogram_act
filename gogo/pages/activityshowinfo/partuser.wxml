@@ -23,7 +23,9 @@
               </view>
             </view>
           <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
-              <view class="text-black text-xs">{{item.hobby_info.hobby_tag}}<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text></view>
+              <view class="text-black text-xs">{{item.hobby_info.hobby_tag}}积分
+              <!--<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text>-->
+              </view>
               <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
             </view>
           <view class="action">

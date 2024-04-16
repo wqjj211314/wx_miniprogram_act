@@ -9,7 +9,7 @@
     <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
       <!--这个创建活动页面基本完整，UI上正常-->
       <view style="width:100vw;height:25vh;">
-        <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
+        <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;"  bindtap="ViewImagebg" data-url="{{hosturl}}static/{{activity_info.activity_id}}.jpg"></image>
         <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status >= 800}}">{{activity_info.activity_status_comment}}</view>
         <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
@@ -165,7 +165,7 @@
                   </text>
                 </view>
               </view>
-              <input wx:if="{{item != '自评等级' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}"></input>
+              <input wx:if="{{item != '自评等级' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}" cursor-spacing="10"></input>
               <picker wx:if="{{item == '自评等级'}}" bindchange="PickerChange" value="0" range="{{picker}}">
                 <view class="picker">
                   {{picker[picker_index]}}
@@ -237,7 +237,7 @@
   <!--未截止wx:if="{{!is_addend}}"，要显示-->
   <view class="" style="flex:1;margin-right: 10rpx;" bindtap="part_activity" wx:if="{{!is_addend && !is_begin}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">报名</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">{{login_user_part_list.length > 0?"替人报名":"报名"}}</button>
   </view>
   <!--父组件已经判断：已开始未结束-->
   <!--已报名，要显示-->
@@ -347,7 +347,7 @@
     </view>
     <view class="{{modalName=='Modal_update_activity_info'?'show':''}}">
       <view class="cu-form-group solid" style="margin: 10rpx;">
-        <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;"></textarea>
+        <textarea placeholder="填写最新公告..." maxlength="800" bindinput='detailInput' style="max-height:10em;min-height:5em;text-align: left;" cursor-spacing="10"></textarea>
       </view>
     </view>
     <view class="cu-bar bg-white justify-end">

@@ -905,8 +905,8 @@ Page({
     console.log("移除成员");
     var that = this;
     wx.showModal({
-      title: '删除成员',
-      content: '确定要取消所选人员的报名资格吗？如果成员有在线支付费用，会自动进行退款！',
+      title: '删除取消所选人员的报名资格',
+      content: '如果人员产生费用将自动退款。\r\n并且涉及的数据记录将自动删除。',
       complete: (res) => {
         if (res.cancel) {
           
@@ -1174,6 +1174,13 @@ Page({
       }
     });
 
+  },
+  ViewImagebg(e) {
+    console.log(e.currentTarget.dataset.url)
+    wx.previewImage({
+      urls: [e.currentTarget.dataset.url],
+      current: e.currentTarget.dataset.url
+    });
   },
   update_activity_info() {
     //直接跳转到创建activity的界面

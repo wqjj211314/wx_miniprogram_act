@@ -115,8 +115,8 @@
               <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
                 <view class="title" style="padding:0rpx;">
                   <view class="customer-title-cu-btn flex" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
-                    <view>
-                      <view class="cu-avatar round sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">
+                    <view style="width: 100%;display: flex;align-items: flex-start;">
+                      <view class="cu-avatar round sm" style="background-image:url({{item.user_info.avatarUrl}});" bindtap="">
                       </view>
                       <text class="text-white" style="max-width:200px;font-size:30rpx;padding-right:10rpx;" bindtap="">{{item["user_info"].nickName}}
                       </text>
