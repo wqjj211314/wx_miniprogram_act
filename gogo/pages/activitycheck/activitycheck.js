@@ -7,7 +7,8 @@ Page({
    */
   data: {
     activity_create_list:[],
-    hosturl:app.globalData.hosturl
+    hosturl:app.globalData.hosturl,
+    imgs:[]
   },
   get_checking_activity_list(){
     var that = this;
@@ -40,11 +41,60 @@ Page({
       }
     });
   },  
+  get_all_img(){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl+'get_all_img', //仅为示例，并非真实的接口地址
+      data: {
+        
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        if(res.data.length > 0){
+          
+          that.setData({
+            imgs:res.data
+          });
+         
+          
+        }
+        
+      }
+    });
+  }, 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     this.get_checking_activity_list();
+    this.get_all_img();
+  },
+  ViewImagebg(e) {
+    console.log(e.currentTarget.dataset.url)
+    wx.previewImage({
+      urls: [e.currentTarget.dataset.url],
+      current: e.currentTarget.dataset.url
+    });
+  },
+  delete_img(e){
+    var img_path = e.currentTarget.dataset.url;
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl+'delete_img', //仅为示例，并非真实的接口地址
+      data: {
+        "img_path":img_path
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        
+         
+        
+      }
+    });
   },
   update_activity_bg_issue(e){
     var activity_id = e.currentTarget.dataset.id;
@@ -56,7 +106,7 @@ Page({
     this.update_activity_status(activity_id,200,"已审核，正常");
     this.get_checking_activity_list();
   },
-  update_activity_invalid(e){
+  update_activity_unvalid(e){
     var activity_id = e.currentTarget.dataset.id;
     this.update_activity_status(activity_id,101,"活动违规");
     this.get_checking_activity_list();

@@ -49,11 +49,22 @@ Page({
   },
   onLoad: function (options) {
     console.log("onload函数");
+    console.log(options)
     if (options.hasOwnProperty("share_use_id")){
       let share_use_id = decodeURIComponent(options.share_use_id);
         this.setData({
           share_use_id:share_use_id
         });
+    }
+    if (options.hasOwnProperty("activity_id")){
+      let activity_id = decodeURIComponent(options.activity_id);
+      
+      if(activity_id != "" && activity_id != undefined){
+        console.log("有分享的互动id")
+        server.get_activity_list(this, app,activity_id);
+        return;
+      }
+
     }
     
     server.get_activity_list(this, app);
@@ -260,7 +271,7 @@ Page({
     return {
       title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      path: '/pages/index/index?activity_id=' + encodeURIComponent(JSON.stringify({ "activity_id": this.data.activity_id }))+'&share_use_id='+share_use_id,
+      path: '/pages/index/index?activity_id=' + this.data.activity_id+'&share_use_id='+share_use_id,
       //imageUrl:bgurl,
       success: function (res) {
 

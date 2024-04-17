@@ -27,7 +27,8 @@
     "pages/activity/editactivity",
     "pages/activity/customgroup",
     "pages/user/money",
-    "pages/activityshowinfo/fixpartner"
+    "pages/activityshowinfo/fixpartner",
+    "pages/activityshowinfo/pointdesc"
   ],
   "tabBar": {
     "color": "#2c2c2c",

@@ -131,7 +131,7 @@
   <view class="cu-item">
     <view class="content">
       <text class="cuIcon-upstagefill text-green"></text>
-      <text class="">初始能力积分</text>
+      <text class="">初始兴趣积分</text>
     </view>
     <view class="action">
 

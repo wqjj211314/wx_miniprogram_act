@@ -18,7 +18,7 @@
     </view>
     <view class="cu-form-group">
       <view class="title">活动类型<text style="color: red;">*</text></view>
-      <input placeholder="选择或输入" bindinput='tagInput' style="color:black;" value="{{hobby_tag}}" maxlength="10"></input>
+      <input placeholder="选择或自定义输入" bindinput='tagInput' style="color:black;" value="{{hobby_tag}}" maxlength="10"></input>
     </view>
     <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
       <view class="flex justify-start" style="flex-flow: wrap;">

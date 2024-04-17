@@ -87,7 +87,7 @@
   <view class="cu-item">
     <view class="content">
       <text class="iconfont icon-vsrili text-green" style="width: 1.5em;margin-right: 10rpx;text-align: center;margin-left: 10rpx;"></text>
-      <text class="">自我评级</text>
+      <text class="">自我评价/评级</text>
     </view>
     <view class="action">
       <text class="">{{hobby_live}}</text>
@@ -128,7 +128,7 @@
   <view class="cu-item">
     <view class="content">
       <text class="cuIcon-upstagefill text-green"></text>
-      <text class="">初始能力积分</text>
+      <text class="">初始兴趣积分</text>
     </view>
     <view class="action">
 

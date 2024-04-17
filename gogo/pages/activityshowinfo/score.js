@@ -16,10 +16,7 @@ function get_like_list(hosturl, that, activity_id) {
       })
     },
     fail(res) {
-      wx.showToast({
-        title: "服务器异常",
-        icon: "error"
-      })
+     
     }
   });
 }

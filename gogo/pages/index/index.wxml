@@ -9,7 +9,6 @@
     <swiper-item>
       <swiper style="height: 100%;width: 100%;">
         <swiper-item>
-          <image class='background' src="{{hosturl}}static/blur_{{item.activity_id}}.jpg" mode="scaleToFill" wx:if="{{item.bg_img_exist}}" lazy-load="true"></image>
           <image class='background2' src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
           <!--默认的背景图片显示-->
           <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>

@@ -72,7 +72,7 @@
     <block wx:if="{{item0.show_flag}}">
       <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
         <view class="cu-list menu-avatar bg-white" style="margin:0rpx;">
-          <view class="cu-item" style="height: fit-content;padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);">
+          <view class="cu-item" style="padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);min-height: 140rpx;">
             <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号
             </view>
             <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});" bind:tap="chat" data-membernum="{{item.member_num}}">
@@ -124,7 +124,7 @@
       <view class="cu-btn line-green round">未分组({{ungroup_partinfo_list.length}})</view>
     </view>
     <block wx:for="{{ungroup_partinfo_list}}" wx:for-item="user" wx:key="member_num">
-      <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;" bind:tap="chat" data-membernum="{{user.member_num}}">
+      <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;align-content:center;align-items: center;height: fit-content;" bind:tap="chat" data-membernum="{{user.member_num}}">
         <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
           <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
         </view>
@@ -142,9 +142,8 @@
   </view>
   <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
     <view class="cu-list menu-avatar" style="margin:0rpx;">
-      <view class="cu-item" style="height: fit-content;padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);">
+      <view class="cu-item" style="padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);min-height: 140rpx;">
         <view style="position: absolute;left: 10rpx;width: 50rpx;">{{tools.show_member_num(item.member_num)}}号
-
         </view>
         <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});" bind:tap="chat" data-membernum="{{item.member_num}}">
           <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">

@@ -8,7 +8,7 @@
         <image src="{{hosturl}}static/{{item.user_id}}{{item.hobby_tag}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}"></image>
         <image src="/logo.png" mode="aspectFill" wx:else></image>
         <view class="cu-tag bg-blue" style="position: absolute;left:0;right:auto;margin-left:0rpx;">{{item.hobby_tag}}</view>
-        <view class="cu-tag bg-blue">{{item.hobby_tag}}积分：{{item.hobby_point}}</view>
+        <view class="cu-tag bg-blue" wx:if="{{item.is_pk_hobby}}">{{item.hobby_tag}}积分：{{item.hobby_point}}</view>
         <!--留言功能-->
         <!--
         <view class="cu-bar" style="height:50%;" wx:if="{{false}}">
@@ -44,10 +44,11 @@
                 <!--<text class="cuIcon-roundclosefill margin-lr-xs text-red" data-index="{{idx}}" bindtap="delete_hobby" wx:if="{{self_flag}}">删除</text>-->
                 <!--<text class="cuIcon-messagefill margin-lr-xs text-green" bindtap="">留言</text>-->
                 <view style="font-size: 28rpx;">
-                  参与活动{{item.part_activity_num==undefined?"0":item.part_activity_num}}场 |
-                  总对局{{item.all_win+item.all_fail+item.all_peace}} |
-                  胜率{{tools.win_rate(item.all_win,item.all_peace,item.all_fail)}}
+                  参与活动{{item.part_activity_num==undefined?"0":item.part_activity_num}}场
+                  {{item.all_win+item.all_fail+item.all_peace > 0?"|总对局"+(item.all_win+item.all_fail+item.all_peace):""}}
+                  {{tools.win_rate(item.all_win,item.all_peace,item.all_fail)==0?"":"|胜率"+tools.win_rate(item.all_win,item.all_peace,item.all_fail)}}
                 </view>
+                
 
               </view>
             </view>

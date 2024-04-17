@@ -50,11 +50,11 @@
         <view class="action flex" style="width: 200rpx;justify-content: center;">
           <view class="">胜场</view>
         </view>
-        <view class="flex" style="width: 300rpx;justify-content: center;">
-          <view class="">积分+</view>
+        <view class="flex text-blue" style="width: 300rpx;justify-content: center;" bind:tap="show_point_desc">
+          <view class="">积分<text class="cuIcon-right lg"></text></view>
         </view>
         <view class="action flex" style="width: 200rpx;justify-content: center;">
-          <view class="">评价</view>
+          <view class="">赞一下</view>
         </view>
       </view>
     </view>

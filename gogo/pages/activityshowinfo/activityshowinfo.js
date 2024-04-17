@@ -410,7 +410,7 @@ Page({
     console.log("onshow加载");
     console.log(app.globalData.login_userInfo["user_id"])//可能会慢
     console.log(this.data.activity_user_info["user_id"])
-    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"] || app.globalData.checking_flag) {
+    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"]|| app.globalData.checking_flag) {// || app.globalData.checking_flag
       this.setData({
         admin_flag: true
       });
@@ -1167,10 +1167,7 @@ Page({
         console.log("点赞了")
       },
       fail(res) {
-        wx.showToast({
-          title: "服务器异常",
-          icon: "error"
-        })
+        
       }
     });
 
@@ -1256,4 +1253,11 @@ Page({
       url: '../user/userinfo?userinfo=' + friend_user_info,
     });
   },
+  show_point_desc(){
+    var activity_tag = this.data.activity_info.activity_tag;
+    //var hobby_point = this.data.member_users[this.data.part_member_num].hobby_info.hobby_point;
+    wx.navigateTo({
+      url: 'pointdesc',
+    })
+  }
 })

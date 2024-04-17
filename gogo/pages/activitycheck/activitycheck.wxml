@@ -1,7 +1,18 @@
 <!--pages/activityadd/activityadd.wxml-->
 <scroll-view scroll-y="true" style="height: 100%;">
-  <view style="width:100vw;height:100vh;background-color: white;">
-    <block wx:for="{{activity_create_list}}" wx:key="id">
+
+  <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:1200rpx" wx:if="{{imgs.length > 0}}">
+    <swiper-item wx:for="{{imgs}}" class="" wx:key="*this">
+    
+      <image src="{{item}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
+      
+      <view class="" style="position: absolute;bottom: 0;width: 100%;" data-url="{{item}}" bind:tap="delete_img">
+        <button> 删除图片 </button>
+      </view>
+    </swiper-item>
+  </swiper>
+  <view style="width:100vw;background-color: white;">
+    <block wx:for="{{activity_create_list}}" wx:key="activity_id">
       <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
         <view class="cu-time" style="width: fit-content;">{{item.begintime}}</view>
         <view class="cu-item text-blue">
@@ -17,6 +28,7 @@
                   <view>
                     <view class="cu-tag bg-red light round" bindtap="update_activity_bg_issue" data-id="{{item.activity_id}}">图片敏感</view>
                     <view class="cu-tag bg-red light round" bindtap="update_activity_pass" data-id="{{item.activity_id}}">审核通过</view>
+                   
                   </view>
                 </view>
               </view>
@@ -28,7 +40,6 @@
         </view>
       </view>
     </block>
-    <!--pages/activityadd/activityadd.wxml-->
   </view>
 </scroll-view>
 <!--空白站位，保证以上内容能全部显示-->
