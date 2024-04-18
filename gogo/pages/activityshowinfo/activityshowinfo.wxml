@@ -56,21 +56,19 @@
           </view>
         </view>
         <view class="cu-item arrow" bindtap="showModal" data-target="DialogModal-partinfo">
-          <view class="content text-blue" style="width:30%;font-size: 24rpx;">
+          <view class="content text-blue flex" style="width:fit-content;font-size: 24rpx;flex-direction: row;">
             <text class="cuIcon-circlefill text-green lg" style="width: 1.6em;margin-right: 10rpx;font-size: 30rpx;"></text>
-            <text class="iconfont icon-fl-renminbi lg text-red text-bold" style="font-size: 30rpx;width: fit-content;display:inline-flex" wx:if="{{activity_info.pay_price != 0}}">
+            
+            <text wx:if="{{activity_info.pay_price != 0}}" style="color: red;" class="text-bold">{{activity_info.pay_price}}元
             </text>
-            <text wx:if="{{activity_info.pay_price != 0}}" style="color: red;" class="text-bold">{{activity_info.pay_price}}
-            </text>
-            参与({{avatarUrl_list.length+"/"+activity_info.max_part_number}})
+            <text>参与({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</text>
 
           </view>
           <view class="action" style="max-width:70%;">
             <view class="cu-avatar-group">
               <block wx:for="{{avatarUrl_list}}" wx:key="user_id">
-                <view class="cu-avatar round sm" style="background-image:url({{item}});"></view>
+                <view class="cu-avatar round sm" style="background-image:url({{item}});" wx:if="{{index < 8}}"></view>
               </block>
-
             </view>
           </view>
         </view>
@@ -237,7 +235,7 @@
   <!--未截止wx:if="{{!is_addend}}"，要显示-->
   <view class="" style="flex:1;margin-right: 10rpx;" bindtap="part_activity" wx:if="{{!is_addend && !is_begin}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">{{login_user_part_list.length > 0?"替人报名":"报名"}}</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">{{activity_info.pay_price!=0?"付费":""}}{{login_user_part_list.length > 0?"替人报名":"报名"}}</button>
   </view>
   <!--父组件已经判断：已开始未结束-->
   <!--已报名，要显示-->

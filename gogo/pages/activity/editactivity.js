@@ -125,16 +125,30 @@ Page({
   },
   roomInput(e) {
     this.setData({
-      room: e.detail.value
+      roomlist: e.detail.value
     })
   },
 
   chooseroom(e) {
     var roomvalue = e.currentTarget.dataset.room;
     var roomlist = this.data.roomlist;
+    console.log(roomlist)
+    console.log(typeof(roomlist))
+    if(!Array.isArray(roomlist)){
+      if(roomlist == ""){
+        roomlist = []
+      }else{
+        roomlist = roomlist.split(",")
+      }
+      
+    }
+    console.log(roomlist)
     if (roomlist.indexOf(roomvalue) != -1) {
       roomlist.splice(roomlist.indexOf(roomvalue), 1)
-    } else {
+    } else if(roomlist.indexOf(roomvalue+"") != -1){
+      roomlist.splice(roomlist.indexOf(roomvalue+""), 1)
+    }
+     else {
       roomlist.push(roomvalue);
     }
     this.setData({
@@ -494,14 +508,15 @@ Page({
         "cancelendtime": activity_info.cancelendtime,
         "latitude": activity_info.latitude,
         "longitude": activity_info.longitude,
-        "activityaddress":activity_info.activityaddress,
-        "roomlist": activity_info.room.split(","),
+        "activityaddress":activity_info.show_activityaddress + "--" +activity_info.activityaddress,
+        "roomlist": activity_info.room,
         "max_part_number": activity_info.max_part_number,
         "partinfo": activity_info.partinfo,
         "part_limit_index": activity_info.part_limit,
         "edit_activity_flag":true,
         "group_tag_dict":activity_info.group_tag_dict,
-        "pay_price":activity_info.pay_price
+        "pay_price":activity_info.pay_price,
+        "pay_type":activity_info.pay_type
       })
     }
     var that = this;

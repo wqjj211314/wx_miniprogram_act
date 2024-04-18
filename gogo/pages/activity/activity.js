@@ -150,16 +150,29 @@ Page({
   },
   roomInput(e) {
     this.setData({
-      room: e.detail.value
+      roomlist: e.detail.value
     })
   },
-
   chooseroom(e) {
     var roomvalue = e.currentTarget.dataset.room;
     var roomlist = this.data.roomlist;
+    console.log(roomlist)
+    console.log(typeof(roomlist))
+    if(!Array.isArray(roomlist)){
+      if(roomlist == ""){
+        roomlist = []
+      }else{
+        roomlist = roomlist.split(",")
+      }
+      
+    }
+    console.log(roomlist)
     if (roomlist.indexOf(roomvalue) != -1) {
       roomlist.splice(roomlist.indexOf(roomvalue), 1)
-    } else {
+    } else if(roomlist.indexOf(roomvalue+"") != -1){
+      roomlist.splice(roomlist.indexOf(roomvalue+""), 1)
+    }
+     else {
       roomlist.push(roomvalue);
     }
     this.setData({
