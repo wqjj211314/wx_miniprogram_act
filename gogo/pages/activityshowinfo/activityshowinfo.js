@@ -3,6 +3,7 @@ const app = getApp();
 const util = require("../../utils/util.js");
 const score = require("score.js");
 const share = require("share.js");
+const manage_activity = require("manage_activity.js");
 Page({
   /**
    * 页面的初始数据
@@ -12,9 +13,9 @@ Page({
     is_begin: false,
     is_end: true,
     is_addend: false,
-    is_cancelend:false,
+    is_cancelend: false,
     activity_user_info: [],
-    title_tags:[],
+    title_tags: [],
     partinfo: [],
     partinfo_list: [],
     partinfoinput: {},
@@ -34,7 +35,7 @@ Page({
     member: 0,
     hosturl: app.globalData.hosturl,
     admin_flag: false,//是否是发布者，超级权限：编辑活动，删除成员
-    edit_group_flag:false,
+    edit_group_flag: false,
     announcement: "",
     new_announcement: "",
     partinfo_sex: "",
@@ -69,7 +70,10 @@ Page({
     mood_img_list: [],
     select_group_tag: "",//报名所选择的分组
     pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑"],
-    is_pk_hobby:true,
+    is_pk_hobby: true,
+    show_part_flag:false,
+    show_admin_flag:false,
+    empty_group_tag_dict:true,//用来显示报名预分组的
   },
 
   /**
@@ -78,6 +82,7 @@ Page({
   onLoad: function (options) {
     var that = this;
     console.log("加载用户活动详情页");
+    console.log(options)
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
     if (options.hasOwnProperty("share_use_id")) {
@@ -97,7 +102,7 @@ Page({
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
-      is_cancelend:new Date(activity_info["cancelendtime"]) - new Date() <= 0,
+      is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
       new_announcement: activity_info["announcement"],
       member: activity_info["member"],
       addendtime: addendtime,
@@ -105,20 +110,33 @@ Page({
       partinfo: activity_info.partinfo,
       title_tags: activity_info.title_tags,
       share_res_limit: activity_info["part_limit"],
-      is_pk_hobby:this.data.pk_hobby_list.indexOf(activity_info.activity_tag)!= -1
+      is_pk_hobby: this.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
     });
     var that = this;
-   
+
     console.log(new Date(addendtime).getTime());
     console.log(new Date().getTime());
 
-   
+
     wx.setNavigationBarTitle({
       title: activity_info.title
     })
     this.init_activity_all_info(activity_info);
   },
+  show_all_part(){
+    this.setData({
+      show_part_flag:!this.data.show_part_flag
+    })
+  },
+  show_admin_options(){
+    this.setData({
+      show_admin_flag:!this.data.show_admin_flag
+    })
+  },
   init_activity_all_info(activity_info) {
+    wx.showLoading({
+      title: '加载中',
+    })
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
@@ -134,18 +152,20 @@ Page({
         var activity_info = that.data.activity_info;
         console.log(res.data["activity_info"])
         var new_activity_info = res.data["activity_info"]
-        for(var key in new_activity_info){
-          if(activity_info.hasOwnProperty(key)){
+        for (var key in new_activity_info) {
+          if (activity_info.hasOwnProperty(key)) {
             activity_info[key] = new_activity_info[key]
           }
         }
         that.setData({
-          activity_info:activity_info
+          activity_info: activity_info
         })
         that.update_part_info(that, res);
         that.set_part_limit();
+        wx.hideLoading()
       },
       fail(res) {
+        wx.hideLoading()
         wx.showToast({
           title: "活动异常",
           icon: "error"
@@ -156,7 +176,7 @@ Page({
     score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
     share.get_activity_moods(app.globalData.hosturl, that, activity_info.activity_id)
   },
-  set_button_status(activity_info){
+  set_button_status(activity_info) {
     //报名按钮
 
 
@@ -164,7 +184,7 @@ Page({
 
     //记录见闻按钮
 
-    
+
   },
   show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
@@ -208,8 +228,19 @@ Page({
     console.log(user_info_list.length);
     var num = user_info_list.length;
     //这么搞才能刷新绑定的数据，不然不会刷新，似乎跟当初渲染的方式有关
-    var info = that.data.activity_info;
-    info["member"] = num;
+    var activity_info = that.data.activity_info;
+    activity_info["member"] = num;
+    var partinfo = activity_info.partinfo.concat([]);
+    console.log(partinfo)
+    var empty_group_tag_dict = true;
+    for(var key in activity_info.group_tag_dict){
+      empty_group_tag_dict = false;
+      break
+    }
+    that.setData({
+      partinfo: partinfo,
+      empty_group_tag_dict:empty_group_tag_dict
+    })
 
     var avatarUrl_list = result["avatarUrl_list"];
     var partinfo_keys = result["partinfo_keys"];
@@ -220,7 +251,7 @@ Page({
     var all_group_tag_dict = {};
     var ungroup_partinfo_list = [];
     var member_users = {};
-    var part_member_num = that.data.part_member_num;
+    var part_member_num = "";
     var login_user_part_list = [];
     console.log(info);
     //提取分组信息
@@ -244,12 +275,16 @@ Page({
       //初始化成员的字典形式数据，方便wxml获取
       var member_num = item.member_num;
       member_users[member_num] = item;
+
       //对于重复报名的人，选择第一个member_num作为其member_num,当然首先会保证报名按照member_num或者报名时间升序排列
       //都能保证重复的报名时靠后的
       console.log("找到当前参加的编号")
+      console.log(partinfo)
+      console.log(part_member_num)
       if (item["user_id"] == app.globalData.login_userInfo["user_id"] && part_member_num == "") {
+        console.log("已参与")
         part_member_num = item["member_num"];
-        var partinfo = that.data.partinfo;
+        //var partinfo = that.data.partinfo;
         //有参与编号代表已参与，已参与如果重复报名需要提供姓名，性别
         if (partinfo.indexOf("姓名") == -1) {//没找到
           partinfo.push("姓名")
@@ -260,7 +295,7 @@ Page({
         that.setData({
           part_flag: true,
           part_member_num: item["member_num"],
-          partinfo:partinfo
+          partinfo: partinfo
         })
       }
 
@@ -298,11 +333,12 @@ Page({
       all_group_tag_list: all_group_tag_list,
       all_group_tag_dict: all_group_tag_dict,
       member_users: member_users,
-      login_user_part_list: login_user_part_list
+      login_user_part_list: login_user_part_list,
+      activity_info: activity_info
     });
     that.update_part_status();
   },
-  chat(e){
+  chat(e) {
     console.log(e.currentTarget.dataset.membernum);
     var membernum = e.currentTarget.dataset.membernum;
     if (this.data.member_users[membernum]["user_id"] == app.globalData.login_userInfo["user_id"])
@@ -310,6 +346,7 @@ Page({
     var friend_user_info = {};
     friend_user_info["user_id"] = this.data.member_users[membernum]["user_id"]
     friend_user_info["avatarUrl"] = this.data.member_users[membernum]["avatarUrl"]
+    friend_user_info["gender"] = this.data.member_users[membernum]["gender"]
     friend_user_info["nickName"] = this.data.member_users[membernum]["nickName"]
     friend_user_info["signature"] = this.data.member_users[membernum]["signature"]
     wx.navigateTo({
@@ -374,7 +411,7 @@ Page({
         "activity_id": that.data.activity_info.activity_id,
         "cancel_part_members": that.data.cancel_part_members,
         "begintime": that.data.activity_info["begintime"],
-        "activity_tag":that.data.activity_info["activity_tag"]
+        "activity_tag": that.data.activity_info["activity_tag"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -410,7 +447,7 @@ Page({
     console.log("onshow加载");
     console.log(app.globalData.login_userInfo["user_id"])//可能会慢
     console.log(this.data.activity_user_info["user_id"])
-    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"]|| app.globalData.checking_flag) {// || app.globalData.checking_flag
+    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"] || app.globalData.checking_flag) {// || app.globalData.checking_flag
       this.setData({
         admin_flag: true
       });
@@ -551,13 +588,13 @@ Page({
     var info = this.data.partinfoinput;
     //info["自评等级"] = this.data.picker[this.data.picker_index];
     //this.setData({
-      //partinfoinput: info
+    //partinfoinput: info
     //});
     console.log(info)
     console.log(this.data.partinfo)
-    if(this.data.partinfo.indexOf("自评等级") != -1){
-      if(!info.hasOwnProperty("自评等级")){
-        info["自评等级"] =  this.data.picker[0]
+    if (this.data.partinfo.indexOf("自评等级") != -1) {
+      if (!info.hasOwnProperty("自评等级")) {
+        info["自评等级"] = this.data.picker[0]
       }
     }
     if (Object.keys(info).length != this.data.partinfo.length) {
@@ -568,6 +605,9 @@ Page({
       })
       return;
     }
+    wx.showLoading({
+      title: '报名中...',
+    })
     wx.request({
       url: app.globalData.hosturl + 'pay_miniprog', //仅为示例，并非真实的接口地址
       data: {
@@ -588,10 +628,10 @@ Page({
         //that.update_part_info(that,res);
         console.log("商户server调用支付统一下单")
         console.log(res.data.result);
-        
-        if(res.data.code == 0){
+wx.hideLoading();
+        if (res.data.code == 0) {
           wx.requestPayment({
-            'timeStamp':res.data.result.timeStamp,
+            'timeStamp': res.data.result.timeStamp,
             'nonceStr': res.data.result.nonceStr,
             'package': res.data.result.package,
             'signType': res.data.result.signType,
@@ -601,16 +641,16 @@ Page({
               console.log("成功支付")
               wx.showToast({
                 title: '报名成功',
-                icon:"success",
-                duration:2000
+                icon: "success",
+                duration: 2000
               })
               //返回首页的活动页。
-              setTimeout(function(){
+              setTimeout(function () {
                 app.globalData.current_activity_id = that.data.activity_info.activity_id;
                 wx.switchTab({
                   url: '../index/index'
                 })
-              },2000)
+              }, 2000)
             },
             'fail': function (res) {
               console.log("取消支付")
@@ -621,25 +661,25 @@ Page({
               console.log("支付")
             }
           })
-        }else if(res.data.code == 1){
+        } else if (res.data.code == 1) {
           wx.showToast({
             title: '报名成功',
-            icon:"success",
-            duration:2000
+            icon: "success",
+            duration: 2000
           })
           console.log("免费报名")
           //返回首页的活动页。
-          setTimeout(function(){
+          setTimeout(function () {
             app.globalData.current_activity_id = that.data.activity_info.activity_id;
             wx.switchTab({
               url: '../index/index'
             })
-          },1000)
-        }else{
+          }, 1000)
+        } else {
           wx.showToast({
             title: res.data.result,
-            icon:"error",
-            duration:2000
+            icon: "error",
+            duration: 2000
           })
         }
 
@@ -655,8 +695,10 @@ Page({
     /*
     app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag, "group_tag": this.data.select_group_tag });
     */
+    this.setData({
+      modalName: ""
+    })
 
-    
 
   },
   showModal(e) {
@@ -673,6 +715,12 @@ Page({
     })
   },
   show_info_modal(e) {
+
+    this.setData({
+      modalName: e.currentTarget.dataset.target
+    })
+  },
+  show_more_options_modal(e) {
 
     this.setData({
       modalName: e.currentTarget.dataset.target
@@ -822,9 +870,9 @@ Page({
       ungroup_partinfo_list: ungroup_partinfo_list
     })
   },
-  edit_group(){
+  edit_group() {
     this.setData({
-      edit_group_flag:!this.data.edit_group_flag,
+      edit_group_flag: !this.data.edit_group_flag,
       current_edit_group: [],
       pre_edit_group: [],
       edit_group_tag_dict: {},
@@ -855,45 +903,45 @@ Page({
       },
       success(res) {
         wx.hideLoading();
-        if(res.data.code == 200){
+        if (res.data.code == 200) {
           wx.showToast({
             title: res.data.result,
-            icon:"success",
-            duration:1000
+            icon: "success",
+            duration: 1000
           })
-        }else{
+        } else {
           wx.showToast({
             title: res.data.result,
-            icon:"error",
-            duration:1000
+            icon: "error",
+            duration: 1000
           })
         }
-        
+
         that.init_activity_all_info(that.data.activity_info);
         that.show_admin_modal();
       },
-      fail(res){
+      fail(res) {
         wx.hideLoading();
       }
     });
   },
-  show_admin_modal(){
+  show_admin_modal() {
     var timestamp = new Date().getTime();
     console.log(timestamp)
     timestamp = Math.floor(timestamp / 1000)
-    console.log(typeof(timestamp))
+    console.log(typeof (timestamp))
     var store_admin_timestamp = wx.getStorageSync("set_admin_timestamp");
-   
+
     console.log(store_admin_timestamp)
-    if(store_admin_timestamp == "" || store_admin_timestamp == undefined||(timestamp-Number(store_admin_timestamp) > 7776000)){
+    if (store_admin_timestamp == "" || store_admin_timestamp == undefined || (timestamp - Number(store_admin_timestamp) > 7776000)) {
       wx.showModal({
         title: '操作说明',
         content: '管理员可以在分组对阵页面，操作新增对阵和记录比分等信息；如果分组未指定管理员，则所有分组成员均可以操作新增对阵和记录比分！',
         complete: (res) => {
           if (res.cancel) {
-            
+
           }
-      
+
           if (res.confirm) {
             wx.setStorageSync('set_admin_timestamp', timestamp);
           }
@@ -909,32 +957,32 @@ Page({
       content: '如果人员产生费用将自动退款。\r\n并且涉及的数据记录将自动删除。',
       complete: (res) => {
         if (res.cancel) {
-          
+
         }
-    
+
         if (res.confirm) {
-          
-    var membernum = e.currentTarget.dataset.membernum;
-    var cancel_part_members = [membernum]
-    wx.request({
-      url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": that.data.activity_info.activity_id,
-        "cancel_part_members": cancel_part_members,
-        "begintime":that.data.activity_info.begintime,
-        "activity_tag":that.data.activity_info["activity_tag"]
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        that.update_part_info(that, res);
-      }
-    });
+
+          var membernum = e.currentTarget.dataset.membernum;
+          var cancel_part_members = [membernum]
+          wx.request({
+            url: app.globalData.hosturl + 'delete_member', //仅为示例，并非真实的接口地址
+            data: {
+              "activity_id": that.data.activity_info.activity_id,
+              "cancel_part_members": cancel_part_members,
+              "begintime": that.data.activity_info.begintime,
+              "activity_tag": that.data.activity_info["activity_tag"]
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            success(res) {
+              that.update_part_info(that, res);
+            }
+          });
         }
       }
     })
-    
+
   },
   clear_group(e) {
     var that = this;
@@ -954,7 +1002,7 @@ Page({
       data: {
         "activity_id": this.data.activity_info.activity_id,
         "group_users": group_users,
-        "activity_tag":this.data.activity_info.activity_tag
+        "activity_tag": this.data.activity_info.activity_tag
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -1027,6 +1075,8 @@ Page({
     })
     console.log(group_users);
     console.log(params);
+
+    console.log("编辑分组")
     //更新成员对应的分组标签
     wx.request({
       url: app.globalData.hosturl + 'edit_part_user_group', //仅为示例，并非真实的接口地址
@@ -1074,7 +1124,7 @@ Page({
       group_room: "",
       group_limit: "",
       disable_save_group: true,
-      edit_group_flag:false
+      edit_group_flag: false
     })
   },
   edit_completed_group(e) {
@@ -1084,7 +1134,7 @@ Page({
     var edit_group_tag_dict = this.data.activity_info["group_tag_dict"][group_tag]
     console.log(current);
     this.setData({
-      edit_group_flag:!this.data.edit_group_flag,
+      edit_group_flag: !this.data.edit_group_flag,
       current_edit_group: current,
       pre_edit_group: current,
       edit_group_tag_dict: edit_group_tag_dict,
@@ -1104,16 +1154,29 @@ Page({
     var room = "暂定"
     if (group_tag == "") {
       groups = this.data.ungroup_partinfo_list;
-      room = this.data.activity_info.room==""?"暂定":this.data.activity_info.room
+      room = this.data.activity_info.room == "" ? "暂定" : this.data.activity_info.room
     } else {
       groups = this.data.all_group_tag_dict[group_tag];
-      room = this.data.activity_info.group_tag_dict["room"]==""?"暂定":this.data.activity_info.group_tag_dict["room"]
+      room = this.data.activity_info.group_tag_dict["room"] == "" ? "暂定" : this.data.activity_info.group_tag_dict["room"]
     }
     //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(groups));
+    this.setData({
+      modalName: ""
+    })
+    wx.navigateTo({
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
+    })
+  },
+  all_pk_page() {
+
+    var group_tag = "";
+    var room = "暂定"
+    //all_group_tag_dict
+    let group_users = encodeURIComponent(JSON.stringify(this.data.entire_part_info));
 
     wx.navigateTo({
-      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))+'&&room='+room+'&&member_users='+encodeURIComponent(JSON.stringify(this.data.member_users))
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
   swiper_change(event) {
@@ -1167,7 +1230,7 @@ Page({
         console.log("点赞了")
       },
       fail(res) {
-        
+
       }
     });
 
@@ -1200,11 +1263,11 @@ Page({
     this.init_activity_all_info(this.data.activity_info);
   },
   recore_mood() {
-    if(this.data.moods.length > 20){
+    if (this.data.moods.length > 20) {
       wx.showToast({
         title: '最多支持20条见闻分享',
-        icon:"none",
-        duration:3000
+        icon: "none",
+        duration: 3000
       })
       return;
     }
@@ -1230,13 +1293,14 @@ Page({
       return;
     let friend_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     wx.navigateTo({
-      url: '../chat/chat?friend_user_info=' + friend_user_info,
+      //url: '../chat/chat?friend_user_info=' + friend_user_info,
+      url: '../user/userinfo?userinfo=' + friend_user_info,
     });
   },
-  change_tab(e){
+  change_tab(e) {
     var tab = e.currentTarget.dataset.tab;
     this.setData({
-      current_swiper_item_index:tab
+      current_swiper_item_index: tab
     })
   },
   show_userinfo(e) {
@@ -1253,11 +1317,48 @@ Page({
       url: '../user/userinfo?userinfo=' + friend_user_info,
     });
   },
-  show_point_desc(){
+  show_point_desc() {
     var activity_tag = this.data.activity_info.activity_tag;
     //var hobby_point = this.data.member_users[this.data.part_member_num].hobby_info.hobby_point;
     wx.navigateTo({
       url: 'pointdesc',
+    })
+  },
+  delete_activity() {
+    this.setData({
+      modalName: ""
+    })
+    manage_activity.delete_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl)
+  },
+  cancel_activity(e) {
+    this.setData({
+      modalName: ""
+    })
+    manage_activity.cancel_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl)
+  },
+  delete_all_member(e) {
+    this.setData({
+      modalName: ""
+    })
+    manage_activity.delete_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl)
+  },
+  update_activity_info(e) {
+    this.setData({
+      modalName: ""
+    })
+    manage_activity.update_activity_info(this.data.activity_info)
+
+  },
+  calculate_close_activity(e) {
+    this.setData({
+      modalName: ""
+    })
+    manage_activity.calculate_close_activity(that, this.data.activity_info["activity_id"], app.globalData.login_userInfo["user_id"], this.data.activity_info["activity_tag"], app.globalData.hosturl)
+  },
+  pkrank(){
+    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+    wx.navigateTo({
+      url: 'pkrank?activity_info='+activity_info,
     })
   }
 })

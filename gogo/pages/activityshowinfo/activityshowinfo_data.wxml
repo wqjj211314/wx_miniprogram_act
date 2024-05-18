@@ -100,6 +100,6 @@
     </view>
   </block>
   
-  <view wx:if="{{sort_users_score_empty_flag && moods.length <= 0}}" style="margin-top: 40vh;font-size: 50rpx;margin-left: 18vw;color: gray;">开始对阵记录见闻吧</view>
+  <view wx:if="{{sort_users_score_empty_flag && moods.length <= 0}}" style="margin-top: 40vh;font-size: 50rpx;margin-left: 32vw;color: gray;">还没有记录...</view>
   <view style="height: 200rpx;"></view>
 </scroll-view>

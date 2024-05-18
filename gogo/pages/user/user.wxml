@@ -89,7 +89,7 @@
           <text class="text-grey">微信电话联系</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-green">growthwang30</text>
+          <text class="text-green"></text>
         </view>
       </view>
       <view class="cu-item">
@@ -98,13 +98,13 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.11</text>
+          <text class="text-grey text-sm">v1.0.20</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">
         <view class="content">
           <text class="cuIcon-service text-green" style="font-size:40rpx;"></text>
-          <text class="text-grey">客服咨询</text>
+          <text class="text-grey">留言咨询</text>
         </view>
       </view>
     </view>
@@ -119,8 +119,8 @@
       </view>
     </view>
     <view class="padding-xl">
-      <text>向开发者反馈，微信：growthwang30\n</text>
-      <text>收费提现问题申诉,电话：18018757991</text>
+      <text>向开发者反馈建议，微信growthwang30\n</text>
+      <text>收费提现问题申诉，电话18018757991</text>
     </view>
     <view class="cu-bar bg-white justify-end">
       <view class="action">

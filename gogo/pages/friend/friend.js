@@ -47,9 +47,9 @@ Page({
     wx.hideTabBarRedDot({
       index: 2,
     });
-    if(!util.check_login(app)){
-      return;
-    }
+    //if(!util.check_login(app)){
+      //return;
+    //}
   },
   navigateToActivity() {
     wx.navigateTo({

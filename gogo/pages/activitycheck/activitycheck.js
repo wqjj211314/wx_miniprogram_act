@@ -130,6 +130,33 @@ Page({
       }
     });
   },
+  calculate_close_all_activity(){
+    wx.request({
+      url: app.globalData.hosturl+'calculate_close_all_activity', //仅为示例，并非真实的接口地址
+      data: {
+        
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        if(res.data.code==200){
+          wx.showToast({
+            title: res.data.result,
+            icon:'none',
+            duration:3000
+          })
+        }else{
+          wx.showToast({
+            title: '服务器异常',
+            icon:'none',
+            duration:3000
+          })
+        }
+        
+      }
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

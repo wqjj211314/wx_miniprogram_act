@@ -1,7 +1,7 @@
 <!--pages/activityadd/activityadd.wxml-->
 <scroll-view scroll-y="true" style="height: 100%;">
 
-  <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:1200rpx" wx:if="{{imgs.length > 0}}">
+  <swiper class="screen-swiper square-dot" indicator-dots="true" interval="5000" duration="500" style="height:1200rpx" wx:if="{{imgs.length > 0}}">
     <swiper-item wx:for="{{imgs}}" class="" wx:key="*this">
     
       <image src="{{item}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
@@ -11,6 +11,7 @@
       </view>
     </swiper-item>
   </swiper>
+  <button class="btn bg-green margin-top" bind:tap="calculate_close_all_activity">统计结算所有活动</button>
   <view style="width:100vw;background-color: white;">
     <block wx:for="{{activity_create_list}}" wx:key="activity_id">
       <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
@@ -24,7 +25,7 @@
               <view class="content" style="padding:0px;">
                 <image src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
                 <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
-                  <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.detail}}</view>
+                  <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.activity_status_comment}}</view>
                   <view>
                     <view class="cu-tag bg-red light round" bindtap="update_activity_bg_issue" data-id="{{item.activity_id}}">图片敏感</view>
                     <view class="cu-tag bg-red light round" bindtap="update_activity_pass" data-id="{{item.activity_id}}">审核通过</view>

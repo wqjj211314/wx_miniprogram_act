@@ -28,7 +28,9 @@
     "pages/activity/customgroup",
     "pages/user/money",
     "pages/activityshowinfo/fixpartner",
-    "pages/activityshowinfo/pointdesc"
+    "pages/activityshowinfo/pointdesc",
+    "pages/activityshowinfo/pkrank",
+    "pages/index/listindex"
   ],
   "tabBar": {
     "color": "#2c2c2c",
@@ -41,6 +43,12 @@
         "iconPath": "image/index.png",
         "selectedIconPath": "image/index_select.png",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/index/listindex",
+        "iconPath": "image/find.png",
+        "selectedIconPath": "image/find_select.png",
+        "text": "发现"
       },
       {
         "pagePath": "pages/activity/activity",

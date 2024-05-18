@@ -228,13 +228,13 @@ App({
               if (msg_time_date > last_time_date) {
                 wx.setStorageSync('newest_friend_chat_msg_time', msg_time);
                 wx.showTabBarRedDot({
-                  index: 2,
+                  index: 3,
                 });
               }
             } else {
               wx.setStorageSync('newest_friend_chat_msg_time', msg_time);
               wx.showTabBarRedDot({
-                index: 2,
+                index: 3,
               });
               
             }

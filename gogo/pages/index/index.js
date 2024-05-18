@@ -73,21 +73,40 @@ Page({
   socketinit() {
     var that = this;
     if (onSockettest != "") {
+      console.log("断开socket")
       onSockettest.close();//关闭连接
     }
-    onSockettest = iotest(app.globalData.hosturl)// 连接 socket
+    onSockettest = iotest(app.globalData.hosturl,{
+      pingInterval:25000,
+      pingTimeout:60000
+    })// 连接 socket
+    console.log("socket")
+    console.log(onSockettest)
     app.globalData.onSockettest = onSockettest
     onSockettest.on('connect', function (res) { // 监听socket 是否连接成功
       console.log("监听成功");
+      onSockettest.emit("join_act_room", { activity_id: that.data.activity_id });
     });
 
     //房间聊天消息，还未添加用户头像等信息，待添加
-    onSockettest.on('new_chat_msg', (res) => {
-      console.log(res);
+    onSockettest.on('new_chat_msg', (new_chat_msg) => {
+      console.log(new_chat_msg);
       console.log(this.data.chat_msgs);
       var chat_msgs = this.data.chat_msgs;
+     
+      //消息是本人发的不显示，因为本地发的时候已经加上了
+      //消息的room:activity_id，不是当前activity_id也不显示
+      if(new_chat_msg.user_id == app.globalData.login_userInfo["user_id"]||new_chat_msg.activity_id != this.data.activity_id){
+        return
+      }
+      console.log("消息room"+new_chat_msg.activity_id)
+      if(new_chat_msg.activity_id != this.data.activity_id){
+        console.log("收到不是本room的消息")
+      }
+
+      
       //chat_msgs.push(res.new_chat_msg);
-      chat_msgs.push(res);
+      chat_msgs.push(new_chat_msg);
       var top = chat_msgs.length * 100;
       this.setData({
         chat_msgs: chat_msgs,
@@ -106,7 +125,7 @@ Page({
 
     });
     //这个是为了将socket加入房间，不然其他人发送消息，无法更新，收不到
-    onSockettest.emit("connect_first", { activity_id: this.data.activity_id });
+    //onSockettest.emit("joinroom", { activity_id: this.data.activity_id });
   },
 
 
@@ -324,7 +343,11 @@ Page({
     //this.socketinit();
     console.log("slide切换至" + e.detail.current);
     swiper.update_swiper(this,e.detail.current,this.data.swiper_current_index,this.data.data_current_index,this.data.activity_list,this.data.recyler_list);
-
+    //离开原来的房间，加入新的房间
+   
+    onSockettest.emit("leave_act_room", { activity_id: this.data.activity_id });
+    onSockettest.emit("join_act_room", { activity_id: this.data.recyler_list[e.detail.current].activity_id });
+   
     this.setData({
       activity_id: this.data.recyler_list[e.detail.current].activity_id,
       current:e.detail.current,
@@ -368,7 +391,29 @@ Page({
       return;
     }
     var activity_id = this.data.activity_id;
-    onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: activity_id, user_id: app.globalData.login_userInfo["user_id"],nickName:app.globalData.login_userInfo["nickName"]});
+    var chat_msgs = this.data.chat_msgs;
+    chat_msgs.push({"activity_id":activity_id,"chatmsg":send,"id":1,"msgtime":new Date().getTime()+"","nickName":app.globalData.login_userInfo["nickName"],"user_id":app.globalData.login_userInfo["user_id"]});
+      var top = chat_msgs.length * 100;
+      this.setData({
+        chat_msgs: chat_msgs,
+        scrollTop: top
+      });
+    //onSockettest.emit('pushmsg', { new_chat_msg: send, activity_id: activity_id, user_id: app.globalData.login_userInfo["user_id"],nickName:app.globalData.login_userInfo["nickName"]});
+    wx.request({
+      url: app.globalData.hosturl + 'push_activity_chat_msg', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "nickName":app.globalData.login_userInfo["nickName"],
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "new_chat_msg":send
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        
+      }
+    });
 
     this.setData({
       inputMsg: ""
@@ -396,5 +441,13 @@ Page({
   },
   lazyload(){
     console.log("加载图片")
-  }
+  },
+   /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+    onSockettest.emit("leave_act_room", { activity_id: this.data.activity_id });
+    onSockettest.close()
+  },
+  
 })

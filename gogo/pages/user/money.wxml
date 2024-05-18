@@ -20,11 +20,12 @@
   <block wx:for="{{money_list}}" wx:key="id">
     <view class="flex bg-white" style="height: fit-content;justify-content: space-between;padding:20rpx;margin-bottom: 20rpx;">
      <view class="flex" style="width: fit-content;justify-content: space-around;flex-direction: column;align-content: center;align-items: center;height: 150rpx;">
-     <view class="bg-blue round flex" style="width: 100rpx;height: 100rpx;align-items: center;justify-content: center;"><view style="width: fit-content;height: fit-content;font-size: 30rpx;">{{item.trade_desc}}</view></view>
+     <view class="bg-blue flex" style="width: 120rpx;height: 100rpx;align-items: center;justify-content: center;border-radius: 30rpx;padding:10rpx;"><view style="font-size: 30rpx;">{{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}</view></view>
+     <view>{{item.trade_desc}}</view>
      <view>时间：{{item.submit_time}}</view>
      </view>
      <view class="flex" style="width: fit-content;justify-content: space-around;flex-direction: column;align-content: center;align-items: center;height: 150rpx;">
-     <view class="bg-green flex round" style="width: fit-content;height: 50rpx;align-items: center;justify-content: center;padding:20rpx;"><view style="width: fit-content;height: fit-content;font-size: 30rpx;">{{item.trade_money}}</view></view>
+     <view class="bg-green flex" style="width: fit-content;height: 50rpx;align-items: center;justify-content: center;padding:20rpx;border-radius: 20rpx;"><view style="width: fit-content;height: fit-content;font-size: 30rpx;">{{item.trade_money}}</view></view>
      <view>余额：{{item.current_money}}</view>
      </view>
     </view>

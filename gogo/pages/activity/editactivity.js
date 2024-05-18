@@ -63,7 +63,9 @@ Page({
     group_tag_dict:{},
     pay_type:"免费",
     pay_price:"0.00",
-    custom_part:false
+    custom_part:false,
+    activity_info:{},
+    hosturl:app.globalData.hosturl
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
@@ -516,7 +518,8 @@ Page({
         "edit_activity_flag":true,
         "group_tag_dict":activity_info.group_tag_dict,
         "pay_price":activity_info.pay_price,
-        "pay_type":activity_info.pay_type
+        "pay_type":activity_info.pay_type,
+        "activity_info":activity_info
       })
     }
     var that = this;

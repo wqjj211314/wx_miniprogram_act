@@ -1,0 +1,24 @@
+<view class="cu-bar search bg-white">
+    <view class="search-form round">
+      <text class="cuIcon-search"></text>
+      <input type="text" placeholder="搜索活动或场馆" confirm-type="search" bindinput="searchword" value="{{search_word}}"></input>
+    </view>
+    <view class="action">
+      <button class="cu-btn bg-green shadow-blur round" bind:tap="search_activity_list">搜索</button>
+    </view>
+  </view>
+<view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;">
+<blcok wx:for="{{activity_list}}" wx:for-item="activity_info">
+<view style="width: 100%;height: fit-content;display:inline-block;padding:5rpx;padding-bottom: 20rpx;" bind:tap="navigateToactivityinfo" data-index="{{index}}">
+<image style="height:400rpx;width:100%;" mode="aspectFill" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg"></image>
+
+<view class="" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 2;overflow: hidden;">
+{{activity_info.title}}
+</view>
+<view style="font-size: 20rpx;margin-top: 10rpx;">
+  <view class="cu-avatar round" style="background-image:url({{activity_info.createuser.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;margin-top:0rpx;">
+</view> {{activity_info.begintimeweek}} 
+{{activity_info.show_activityaddress}}</view>
+</view>
+</blcok>
+</view>

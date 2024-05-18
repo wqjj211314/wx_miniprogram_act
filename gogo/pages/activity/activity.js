@@ -90,7 +90,8 @@ Page({
         if (res.data.hasOwnProperty("detail")) {
           
           that.setData({
-            detail: res.data["detail"]
+            detail: res.data["detail"],
+            max_part_number:res.data["max_part_number"]
           });
         }
       }

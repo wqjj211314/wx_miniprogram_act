@@ -72,9 +72,11 @@ Page({
   },
   onInputChange: function (e) {
     const nickName = e.detail.value;
-    if(nickName == ""||nickName == "匿名"){
+    if(nickName == ""||nickName == "匿名"||nickName == "微信用户"){
       wx.showToast({
         title: '请填写合法昵称',
+        icon:'error',
+        duration:3000
       })
       return;
     }
@@ -93,6 +95,70 @@ Page({
     });
   },
   submit_userinfo:function(){
+    console.log("提交个人信息");
+    console.log(this.data.userInfo)
+    var flag = false;
+    for(var key in this.data.userInfo){
+      flag = true;
+    }
+    if(!flag){
+      console.log("没及时刷新userInfo")
+      wx.showToast({
+        title: '信息异常请重试',
+        icon:'error',
+        duration:3000
+      })
+      var that = this;
+      wx.login({
+        success(res) {
+          if (res.code) {
+            //发起网络请求
+            wx.request({
+              url: app.globalData.hosturl + 'getopenid',
+              data: {
+                code: res.code
+              },
+              success: (res) => {
+                console.log("appjs用户openid");
+                console.log(res.data);
+                console.log(res.data.openid);
+                that.setData({
+                  userInfo:res.data
+                })
+                //that.data.userInfo = res.data;
+              }
+            })
+          } else {
+            console.log('登录失败！' + res.errMsg)
+          }
+        }
+      });
+      return
+    }
+    if(this.data.userInfo["nickName"] == ""||this.data.userInfo["nickName"] == "匿名"||this.data.userInfo["nickName"] == "微信用户"){
+      wx.showToast({
+        title: '请填写昵称',
+        icon:'error',
+        duration:3000
+      })
+      return
+    }
+    if(this.data.userInfo["gender"] == "-1"){
+      wx.showToast({
+        title: '请选择性别',
+        icon:'error',
+        duration:3000
+      })
+      return
+    }
+    if(this.data.userInfo["avatarUrl"] =="https://www.2week.club:5000/static/avatar/avatar.png"||this.data.userInfo["avatarUrl"] == ""){
+      wx.showToast({
+        title: '请重新设置头像',
+        icon:'error',
+        duration:3000
+      })
+      return
+    }
     console.log(this.data.userInfo["avatarUrl"])
     var that = this;
     //重新登录获取openid
@@ -103,7 +169,7 @@ Page({
       filePath: that.data.userInfo["avatarUrl"],
       name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
       formData: {
-        'user_id': app.globalData.login_userInfo["user_id"],
+        'user_id': that.data.userInfo["user_id"],
       },
       success: function (res) {
       },
@@ -148,35 +214,41 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    var userInfo = {}
     if(options.hasOwnProperty("userInfo")){
-      let userInfo = JSON.parse(decodeURIComponent(options.userInfo))
+      console.log("携带了userInfo")
+      userInfo = JSON.parse(decodeURIComponent(options.userInfo))
       if(userInfo.avatarUrl == ""){
         userInfo.avatarUrl = defaultAvatarUrl;
       }
       this.setData({userInfo:userInfo})
     }
-    var that = this;
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-              console.log("appjs用户openid");
-              console.log(res.data);
-              console.log(res.data.openid);
-              app.globalData.login_userInfo["user_id"] = res.data.openid;
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
+    if(!userInfo.hasOwnProperty("user_id")){
+      console.log("刷新登录")
+      var that = this;
+      wx.login({
+        success(res) {
+          if (res.code) {
+            //发起网络请求
+            wx.request({
+              url: app.globalData.hosturl + 'getopenid',
+              data: {
+                code: res.code
+              },
+              success: (res) => {
+                console.log("appjs用户openid");
+                console.log(res.data);
+                console.log(res.data.openid);
+                app.globalData.login_userInfo["user_id"] = res.data.openid;
+              }
+            })
+          } else {
+            console.log('登录失败！' + res.errMsg)
+          }
         }
-      }
-    });
+      });
+    }
+    
     
   },
 
