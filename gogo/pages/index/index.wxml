@@ -1,5 +1,5 @@
 <view wx:if="{{activity_list.length==0}}" class="flex solid-bottom justify-center" style="height:100vh;width: 100wh;">
-  <image class='background2' src="/default_index_bg.png" mode="aspectFill"></image>
+  <image class='background2' src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill"></image>
   <button class="cu-btn lines-white margin-tb-sm padding lg" style="margin:30rpx;width: 100%;align-self: flex-end;border-radius:50px;" bindtap="refresh">异常重新加载</button>
 </view>
 <!---->
@@ -9,9 +9,11 @@
     <swiper-item>
       <swiper style="height: 100%;width: 100%;">
         <swiper-item>
-          <image class='background2' src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
+          <!--<image class='background2' src="{{item.bg_url}}" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true" style="filter:blur(20rpx);"></image>
+          -->
+          <image class='background2' src="{{item.bg_url}}" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
           <!--默认的背景图片显示-->
-          <image class='background2' src="/default_index_bg.png" mode="aspectFill" wx:else></image>
+          <image class='background2' src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" wx:else></image>
           <!--视频媒体播放
       <video class='background2'
       id="myVideo" 

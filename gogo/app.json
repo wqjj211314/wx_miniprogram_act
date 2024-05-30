@@ -30,7 +30,8 @@
     "pages/activityshowinfo/fixpartner",
     "pages/activityshowinfo/pointdesc",
     "pages/activityshowinfo/pkrank",
-    "pages/index/listindex"
+    "pages/index/listindex",
+    "pages/activityshowinfo/partactivity"
   ],
   "tabBar": {
     "color": "#2c2c2c",
@@ -89,5 +90,6 @@
   "requiredPrivateInfos": [
     "chooseLocation",
     "getFuzzyLocation"
-  ]
+  ],
+  "__usePrivacyCheck__": true
 }

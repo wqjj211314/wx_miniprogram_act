@@ -23,7 +23,7 @@
                 <view class="text-cut">{{item.title}}</view>
               </view>
               <view class="content" style="padding:0px;">
-                <image src="{{hosturl}}static/{{item.activity_id}}.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
+                <image src="{{item.bg_url}}" mode="aspectFill" style="width:40%;height:200rpx;"></image>
                 <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
                   <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.activity_status_comment}}</view>
                   <view>

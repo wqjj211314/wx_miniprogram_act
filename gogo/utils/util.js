@@ -83,7 +83,7 @@ function check_login(app){
     console.log(info["nickName"])
     console.log("比较不出来吗？")
   }
-  if(app.globalData.login_userInfo["user_id"] == ""||app.globalData.login_userInfo["user_id"] == undefined||app.globalData.login_userInfo["nickName"] == ""||app.globalData.login_userInfo["gender"] == -1||app.globalData.login_userInfo["avatarUrl"] == ""||app.globalData.login_userInfo["nickName"] == "微信用户"||app.globalData.login_userInfo["avatarUrl"] == "https://www.2week.club:5000/static/avatar/avatar.png"){
+  if(app.globalData.login_userInfo["user_id"] == ""||app.globalData.login_userInfo["user_id"] == undefined||app.globalData.login_userInfo["nickName"] == ""||app.globalData.login_userInfo["gender"] == -1||app.globalData.login_userInfo["nickName"] == "微信用户"/**||app.globalData.login_userInfo["avatarUrl"] == ""||app.globalData.login_userInfo["avatarUrl"] == "https://www.2week.club:5000/static/avatar/avatar.png"*/){
     console.log("跳转到登录界面")
     wx.navigateTo({
       url: '/pages/user/login?userInfo='+encodeURIComponent(JSON.stringify(app.globalData.login_userInfo)),

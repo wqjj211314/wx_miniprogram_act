@@ -20,7 +20,20 @@ Page({
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
   },
   onChooseAvatar:function(e){
-    console.log(e);
+    wx.getPrivacySetting({
+      success: res => {
+        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+        console.log(res)
+        if (res.needAuthorization) {
+          console.log("需要授权")
+          // 需要弹出隐私协议
+          this.setData({
+            showPrivacy: true
+          })
+        } else {
+          // 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用隐私接口
+          console.log("已同意过")
+		  console.log(e);
     var avatarUrl = e.detail.avatarUrl;
     var userInfo = this.data.userInfo;
     userInfo["avatarUrl"] = avatarUrl;
@@ -41,6 +54,11 @@ Page({
       }
     });
 
+        }
+      },
+      fail: () => {},
+      complete: () => {}
+    })
   },
   listenRadioChange:function(e){
     console.log('radio发生change事件，携带value值为：', e.detail.value)
@@ -98,6 +116,7 @@ Page({
     console.log("提交个人信息");
     console.log(this.data.userInfo)
     var flag = false;
+    var that = this;
     for(var key in this.data.userInfo){
       flag = true;
     }
@@ -108,7 +127,7 @@ Page({
         icon:'error',
         duration:3000
       })
-      var that = this;
+      
       wx.login({
         success(res) {
           if (res.code) {
@@ -151,6 +170,7 @@ Page({
       })
       return
     }
+    /** 
     if(this.data.userInfo["avatarUrl"] =="https://www.2week.club:5000/static/avatar/avatar.png"||this.data.userInfo["avatarUrl"] == ""){
       wx.showToast({
         title: '请重新设置头像',
@@ -177,6 +197,7 @@ Page({
         console.log(error);
       }
     });
+    */
     //修改个人信息
     wx.request({
       url: app.globalData.hosturl + 'update_user_info',

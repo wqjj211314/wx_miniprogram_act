@@ -50,7 +50,7 @@
 }
 
 .main{
-  margin-top:23vh;
+  margin-top:20vh;
 }
 .nickname::after{
 	border: none;

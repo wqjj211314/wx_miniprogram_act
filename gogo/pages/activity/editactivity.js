@@ -703,23 +703,7 @@ Page({
 
       }
     });
-    var group_tag_dict = app.globalData.custom_group_tag_dict;
     
-    var group_tag_list = [];
-    var group_room_list = [];
-    var group_limit_list = [];
-    for(var key in group_tag_dict){
-      group_tag_list.push(group_tag_dict[key]["name"])
-      group_room_list.push(group_tag_dict[key]["room"])
-      group_limit_list.push(group_tag_dict[key]["limit"])
-    }
-    this.setData({
-      group_tag_dict:app.globalData.custom_group_tag_dict,
-      group_tag_list:group_tag_list,
-      group_room_list:group_room_list,
-      group_limit_list:group_limit_list
-    })
-    app.globalData.custom_group_tag = {}
   },
   add_partinfo: function () {
     this.setData({

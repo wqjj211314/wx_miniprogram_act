@@ -26,6 +26,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showPrivacy:false,
     activity_id:"",
     begintime: year + "-" + month + "-" + day + " 20:00",
     endtime: year + "-" + month + "-" + day + " 22:00",
@@ -88,14 +89,22 @@ Page({
       success(res) {
         console.log(res.data)
         if (res.data.hasOwnProperty("detail")) {
-          
           that.setData({
             detail: res.data["detail"],
-            max_part_number:res.data["max_part_number"]
+            max_part_number:res.data["max_part_number"],
+            modalName:"bgurl_modal",
+            bg_url:res.data["bg_url"]
           });
         }
+       
       }
     });
+  },
+  use_exited_bg_url(){
+    this.setData({
+      "imgList[0]":this.data.bg_url,
+      modalName:""
+    })
   },
   choose_pay_type(event) {
     var pay_type = event.target.dataset.paytype;
@@ -126,7 +135,8 @@ Page({
     })
   },
   priceInputBlur(){
-    var price = parseFloat(this.data.pay_price).toFixed(2);
+    var price = Math.abs(parseFloat(this.data.pay_price)).toFixed(2);
+    //price = parseFloat(this.data.pay_price).toFixed(2);
     console.log(typeof(price))
     console.log(price)
     if(price == "NaN"){
@@ -256,26 +266,63 @@ Page({
     })
   },
   ChooseImage() {
-    wx.chooseMedia({
-      count: 1, //默认9
-      mediaType: ["image"],
-      sourceType: ["album"],
-      sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album'], //从相册选择
-      success: (res) => {
-        console.log("选择图片结果");
-        console.log(res.tempFiles);
-        var temp = res.tempFiles;
-        var path = temp[0].tempFilePath;
-        var imgpaths = [];
-        imgpaths.push(path);
-        console.log(imgpaths);
-        this.setData({
-          imgList: imgpaths
-        })
-
-      }
-    });
+    wx.getPrivacySetting({
+      success: res => {
+        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+        console.log(res)
+        if (res.needAuthorization) {
+          console.log("需要授权")
+          // 需要弹出隐私协议
+          this.setData({
+            showPrivacy: true
+          })
+        } else {
+          // 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用隐私接口
+          console.log("已同意过")
+          wx.chooseMedia({
+            count: 1, //默认9
+            mediaType: ["image"],
+            sourceType: ["album"],
+            sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album'], //从相册选择
+            success: (res) => {
+              
+              console.log("选择图片成功，选择图片结果");
+              console.log(res.tempFiles);
+              var temp = res.tempFiles;
+              var path = temp[0].tempFilePath;
+              var size = temp[0].size;
+              if(size > 1024 * 1024 * 10){
+                wx.showToast({
+                  title: '图片过大,需要小于10M',
+                  icon:"none",
+                  duration:3000
+                })
+                return;
+              }
+              var imgpaths = [];
+              imgpaths.push(path);
+              console.log(imgpaths);
+              this.setData({
+                imgList: imgpaths
+              })
+      
+            },
+            fail(res){
+              console.log("选择图片失败")
+              console.log(res)
+            },
+            complete(res){
+              console.log("选择图片完成")
+              console.log(res)
+            }
+          });
+        }
+      },
+      fail: () => {},
+      complete: () => {}
+    })
+    
   },
   ViewImage(e) {
     wx.previewImage({
@@ -418,6 +465,10 @@ Page({
     });
     var that = this;
     console.log(typeof(that.data.edit_activity_flag))
+    var bg_url = this.data.imgList[0];
+    //if(!bg_url.startsWith(app.globalData.hosturl)){
+      //bg_url = ""
+    //}
     wx.request({
       url: app.globalData.hosturl + 'createactivity', //仅为示例，并非真实的接口地址
       data: {
@@ -439,7 +490,8 @@ Page({
         "part_limit": this.data.part_limit_index,
         "edit_activity_flag":this.data.edit_activity_flag,
         "pay_type":this.data.pay_type,
-        "pay_price":this.data.pay_price
+        "pay_price":this.data.pay_price,
+        "bg_url":bg_url
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -467,7 +519,8 @@ Page({
         }
         //app.globalData.activity_id = response_activity_id;
         //上传图片
-        if(!that.data.edit_activity_flag){
+        if(!bg_url.startsWith(app.globalData.hosturl)){
+          console.log("否复用之前的背景图")
           wx.uploadFile({
             url: app.globalData.hosturl + 'upload', //接口
             filePath: that.data.imgList[0],
@@ -576,6 +629,25 @@ Page({
         }
       }
     });
+    wx.getPrivacySetting({
+      success: res => {
+        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+        console.log(res)
+        if (res.needAuthorization) {
+          console.log("需要授权")
+          // 需要弹出隐私协议
+          this.setData({
+            showPrivacy: true
+          })
+        } else {
+          // 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用隐私接口
+          console.log("已同意过")
+         
+        }
+      },
+      fail: () => {},
+      complete: () => {}
+    })
 
   },
   getUserProfile: function (res) {

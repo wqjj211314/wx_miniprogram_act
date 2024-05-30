@@ -1,6 +1,6 @@
-<!--pages/user/user.wxml-->
+<!--pages/user/user.wxmlhttps://www.2week.club:5000/static/userbg.jpg-->
 <view class="img">
-  <image class='img' src="/2.jpg" mode="widthFix"></image>
+  <image class='img' src="https://www.2week.club:5000/static/userbg.jpg" mode="widthFix" style="width: 100%;"></image>
 </view>
 <scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height: 100vh;">
   <view class="main">
@@ -98,7 +98,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.20</text>
+          <text class="text-grey text-sm">v1.0.25</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">

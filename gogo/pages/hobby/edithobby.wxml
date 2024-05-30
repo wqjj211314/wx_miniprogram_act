@@ -1,7 +1,7 @@
 <scroll-view scroll-y="true" style="height: 100%;">
 <view class="" style="width:100vw;height:30vh;z-index:-1;position:absolute;top:0px;">
   <image class='img' style="height:30vh" wx:if="{{hobby_info.bg_img_exist}}" src="{{hosturl}}static/{{hobby_info.user_id+hobby_info.hobby_tag}}.jpg" mode="aspectFill"></image>
-  <image class='img' style="height:30vh" wx:else src="/default_index_bg.png" mode="aspectFill"></image>
+  <image class='img' style="height:30vh" wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill"></image>
 </view>
 <view class="cu-list menu" style="margin-top:350rpx;">
   <view class="cu-form-group">

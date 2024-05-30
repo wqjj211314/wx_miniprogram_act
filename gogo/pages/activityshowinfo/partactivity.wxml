@@ -1,0 +1,90 @@
+<view class="cu-list menu card-menu margin-top" style="height: fit-content;padding-bottom: 0rpx;width: 100%;margin: 0rpx;">
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-infofill text-green" style="font-size: 30rpx;"></text>
+      <text class="text-grey">报名限制</text>
+    </view>
+    <view class="action" style="max-width:66%;">
+      <text class="text-blue text-sm">{{activity_info.part_limit_dec}}</text>
+    </view>
+  </view>
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-remind text-green"></text>
+      <text class="text-grey">报名截止</text>
+    </view>
+    <view class="action" style="max-width:66%;">
+      <text class="text-blue text-sm">{{activity_info.addendtimeweek}}</text>
+    </view>
+  </view>
+  <view class="cu-item">
+    <view class="content">
+      <text class="cuIcon-remind text-green"></text>
+      <text class="text-grey">取消报名截止</text>
+    </view>
+    <view class="action" style="max-width:66%;">
+      <text class="text-blue text-sm">{{activity_info.cancelendtimeweek}}</text>
+    </view>
+  </view>
+  <view class="cu-item" wx:if="{{partinfo.length > 0}}">
+
+    <view class="content">
+      <text class="cuIcon-newsfill text-green"></text>
+      <text class="text-grey">报名信息</text>
+    </view>
+    <view class="action" style="max-width:70%;">
+      <text class="text-blue text-sm">{{activity_info.partinfo.length==0&&partinfo.length == 2?"替人报名须填写姓名、性别":activity_info.partinfo}}</text>
+    </view>
+  </view>
+  <form>
+    <block wx:for="{{partinfo}}" wx:key="*this">
+      <view class="cu-form-group">
+        <view class="title" style="margin-left:60rpx;" wx:if="{{item!='性别'}}">{{item}}</view>
+        <view class="title" style="margin-left:60rpx;" wx:if="{{item=='性别'}}">选择{{item}}</view>
+        <view wx:if="{{item=='性别'}}">
+          <view class="cu-tag round {{partinfo_sex=='0'?'bg-pink':''}}" style="width: 80rpx;height:50rpx" bind:tap="choosesex" data-sex="0">女
+            <text class="cuIcon-female">
+            </text>
+          </view>
+          <view class="cu-tag round {{partinfo_sex=='1'?'bg-blue':''}}" style="width: 80rpx;height:50rpx;margin-left:40rpx;" bind:tap="choosesex" data-sex="1">男
+            <text class="cuIcon-male">
+            </text>
+          </view>
+        </view>
+        <input wx:if="{{item != '自评等级' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}" cursor-spacing="10"></input>
+        <picker wx:if="{{item == '自评等级'}}" bindchange="PickerChange" value="0" range="{{picker}}">
+          <view class="picker">
+            {{picker[picker_index]}}
+          </view>
+        </picker>
+      </view>
+    </block>
+  </form>
+  <view class="cu-item" wx:if="{{activity_info.group_tag_dict_notempty}}" style="flex-direction: column;align-items: flex-start;">
+    <view class="content flex" style="align-items: center;">
+      <text class="iconfont icon-fenzu text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: inherit;font-style: normal;"></text>
+      <text class="text-grey">报名预分组</text>
+    </view>
+  </view>
+  <radio-group style="width: 100%;min-height: 0rpx;" bindchange="listenRadioChange" wx:if="{{!empty_group_tag_dict}}">
+    <block wx:for="{{activity_info.group_tag_dict}}" wx:key="name">
+      <view class="cu-form-group" style="height: fit-content;">
+        <view class="title flex" style="margin-left:60rpx;align-items: center;height: fit-content;">
+          <radio value="{{index}}" style="zoom:80%;margin-right:20rpx;" />{{index}}({{all_group_tag_dict[index].length == undefined?"0":all_group_tag_dict[index].length}}/{{activity_info.group_tag_dict[index]["limit"]}})
+        </view>
+        <view class="title" style="margin-left:60rpx;">场地:{{activity_info.group_tag_dict[index]["room"]}}</view>
+      </view>
+    </block>
+  </radio-group>
+</view>
+
+<!--底部导航栏-->
+<!--未结束wx:if="!is_end"要显示-->
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;">
+  <!--父组件已经判断：未结束-->
+  <!--未截止wx:if="{{!is_addend}}"，要显示-->
+  <view class="" style="flex:1;margin-right: 20rpx;" bindtap="part_activity">
+    <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">{{activity_info.pay_price!=0?"付费":""}}报名</button>
+  </view>
+</view>

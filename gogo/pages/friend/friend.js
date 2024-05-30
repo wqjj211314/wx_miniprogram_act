@@ -45,7 +45,7 @@ Page({
    */
   onShow() {
     wx.hideTabBarRedDot({
-      index: 2,
+      index: 3,
     });
     //if(!util.check_login(app)){
       //return;

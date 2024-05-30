@@ -1,14 +1,14 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <view class="" style="height: 35vh;width: 100vw;">
   <view class="" style="width: 100%;height: 100%;">
-    <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{hosturl}}static/{{activity_info.activity_id}}.jpg" mode="aspectFill" style="width: 100%;height: 100%;" bindtap="ViewImagebg" data-url="{{hosturl}}static/{{activity_info.activity_id}}.jpg"></image>
-    <image class='' wx:else src="/default_index_bg.png" mode="aspectFill" style="width: 100%;height: 100%;"></image>
+    <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{activity_info.bg_url}}" mode="aspectFill" style="width: 100%;height: 100%;" bindtap="ViewImagebg" data-url="{{activity_info.bg_url}}"></image>
+    <image class='' wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
   </view>
 </view>
 <view class="cu-list menu card-menu shadow-warp" style="margin-top: -150rpx;">
   <form>
-    <view class="cu-form-group text-bold text-center">
-      <input placeholder="活动标题" bindinput='titleInput' style="color:grey;" value="{{title}}" maxlength="30"></input>
+    <view class="cu-form-group text-center">
+      <input placeholder="活动标题" bindinput='titleInput' style="color:black;" value="{{title}}" maxlength="30"></input>
     </view>
     <view class="cu-form-group">
       <view class="title">活动类型</view>

@@ -150,7 +150,8 @@ Page({
     var pk_groups = this.getvs(sample,new_member_num_partner_list);
     //var new_pk_groups = pk_groups.concat(pk_groups);
     if(pk_groups.length < 10){
-      pk_groups = pk_groups.concat(pk_groups)
+      let new_pk_groups = JSON.parse(JSON.stringify(pk_groups));
+      pk_groups = pk_groups.concat(new_pk_groups)
     }
     return pk_groups;
     

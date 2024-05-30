@@ -71,9 +71,9 @@ Page({
     select_group_tag: "",//报名所选择的分组
     pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑"],
     is_pk_hobby: true,
-    show_part_flag:false,
-    show_admin_flag:false,
-    empty_group_tag_dict:true,//用来显示报名预分组的
+    show_part_flag: false,
+    show_admin_flag: false,
+    empty_group_tag_dict: true,//用来显示报名预分组的
   },
 
   /**
@@ -123,14 +123,14 @@ Page({
     })
     this.init_activity_all_info(activity_info);
   },
-  show_all_part(){
+  show_all_part() {
     this.setData({
-      show_part_flag:!this.data.show_part_flag
+      show_part_flag: !this.data.show_part_flag
     })
   },
-  show_admin_options(){
+  show_admin_options() {
     this.setData({
-      show_admin_flag:!this.data.show_admin_flag
+      show_admin_flag: !this.data.show_admin_flag
     })
   },
   init_activity_all_info(activity_info) {
@@ -233,13 +233,13 @@ Page({
     var partinfo = activity_info.partinfo.concat([]);
     console.log(partinfo)
     var empty_group_tag_dict = true;
-    for(var key in activity_info.group_tag_dict){
+    for (var key in activity_info.group_tag_dict) {
       empty_group_tag_dict = false;
       break
     }
     that.setData({
       partinfo: partinfo,
-      empty_group_tag_dict:empty_group_tag_dict
+      empty_group_tag_dict: empty_group_tag_dict
     })
 
     var avatarUrl_list = result["avatarUrl_list"];
@@ -571,6 +571,27 @@ Page({
   },
 
   part_activity() {
+
+    //提前判断报名限制再跳转
+    if (this.data.part_limit != 0 && this.data.activity_user_info["user_id"] != app.globalData.login_userInfo["user_id"]) {
+      wx.showToast({
+        title: '请通过分享报名',
+        icon: 'error',
+        duration: 2000
+      });
+      return;
+    }
+    //如果是简单的不需要填写信息，直接报名不跳转,要填写报名信息那就跳转到报名页面
+    if (this.data.partinfo.length != 0) {
+      var activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+      var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
+      var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
+      wx.navigateTo({
+        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict,
+      })
+      return;
+    }
+
     //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
     var that = this;
     if (!util.check_login(app)) {
@@ -628,7 +649,7 @@ Page({
         //that.update_part_info(that,res);
         console.log("商户server调用支付统一下单")
         console.log(res.data.result);
-wx.hideLoading();
+        wx.hideLoading();
         if (res.data.code == 0) {
           wx.requestPayment({
             'timeStamp': res.data.result.timeStamp,
@@ -1355,10 +1376,10 @@ wx.hideLoading();
     })
     manage_activity.calculate_close_activity(that, this.data.activity_info["activity_id"], app.globalData.login_userInfo["user_id"], this.data.activity_info["activity_tag"], app.globalData.hosturl)
   },
-  pkrank(){
+  pkrank() {
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     wx.navigateTo({
-      url: 'pkrank?activity_info='+activity_info,
+      url: 'pkrank?activity_info=' + activity_info,
     })
   }
 })

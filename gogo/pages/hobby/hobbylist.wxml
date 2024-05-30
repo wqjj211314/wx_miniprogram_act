@@ -6,7 +6,7 @@
     <view class="cu-item">
       <view class="image" style="height:400rpx;" data-index="{{idx}}" bind:tap="{{self_flag?'edit_hobby_info':''}}">
         <image src="{{hosturl}}static/{{item.user_id}}{{item.hobby_tag}}.jpg" mode="aspectFill" wx:if="{{item.bg_img_exist}}"></image>
-        <image src="/logo.png" mode="aspectFill" wx:else></image>
+        <image src="https://www.2week.club:5000/static/userbg.jpg" mode="aspectFill" wx:else></image>
         <view class="cu-tag bg-blue" style="position: absolute;left:0;right:auto;margin-left:0rpx;">{{item.hobby_tag}}</view>
         <view class="cu-tag bg-blue" wx:if="{{item.is_pk_hobby}}">{{item.hobby_tag}}积分：{{item.hobby_point}}</view>
         <!--留言功能-->

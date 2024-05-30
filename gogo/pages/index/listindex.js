@@ -65,7 +65,7 @@ Page({
   get_activity_list(){
     var _that = this;
     wx.showLoading({
-      title: '...',
+      title: '加载中...',
     })
     wx.request({
       url: app.globalData.hosturl + 'get_activity_list', //仅为示例，并非真实的接口地址
