@@ -1,5 +1,6 @@
 // pages/activitycreate/activitycreate.js
 const app = getApp();
+const manage_activity = require("../activityshowinfo/manage_activity.js");
 Page({
 
   /**
@@ -80,6 +81,7 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'delete_activity', //仅为示例，并非真实的接口地址
       data: {
+        "user_id":app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id
       },
       header: {
@@ -110,6 +112,7 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'update_activity_status', //仅为示例，并非真实的接口地址
       data: {
+        "user_id":app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id,
         "activity_status": 801//取消活动
       },
@@ -136,7 +139,7 @@ Page({
       }
     });
   },
-  delete_all_member(e) {
+  refund_all_member(e) {
     var that = this;
     var index = parseInt(e.currentTarget.dataset.index);
     console.log(typeof index);
@@ -144,8 +147,9 @@ Page({
     var activity_info = this.data.activity_create_list[index];
     var activity_id = activity_info["activity_id"];
     wx.request({
-      url: app.globalData.hosturl + 'delete_all_member', //仅为示例，并非真实的接口地址
+      url: app.globalData.hosturl + 'refund_all_member', //仅为示例，并非真实的接口地址
       data: {
+        "user_id":app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id
       },
       header: {

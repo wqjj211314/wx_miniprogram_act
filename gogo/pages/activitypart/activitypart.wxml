@@ -11,7 +11,7 @@
         </view>
         <view class="content" style="padding:0px;">
           <image wx:if="{{item.bg_img_exist}}" src="{{item.bg_url}}" mode="aspectFill" style="width:40%;height:200rpx;"></image>
-          <image wx:else src="/default_showlist_bg.png" mode="aspectFill" style="width:40%;height:200rpx;"></image>
+          <image wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
           <view class="desc" style="margin-top: 10rpx;margin-bottom: 0rpx;">
                   <view class="text-content" style="width:100%;color:black;font-size:13px;height: fit-content;">
                     

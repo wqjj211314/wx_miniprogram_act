@@ -1,0 +1,51 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<view class="cu-list menu card-menu" style="margin:0rpx;margin-top: 20rpx;margin-bottom: 20rpx;">
+  <form>
+    <view class="cu-form-group">
+      <view class="title">请求事项<text style="color: red;">*</text></view>
+      <input placeholder="选择或简要描述" bindinput='itemInput' style="color:black;" value="{{req_item}}" maxlength="20"></input>
+    </view>
+    <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
+      <view class="flex justify-start" style="flex-flow: wrap;">
+        <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+          <button class="cu-btn round {{req_item == '分配在同组'?'bg-green':''}}" bindtap="chooseitem" data-value="分配在同组" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">分配在同组</button>
+        </view>
+        <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+          <button class="cu-btn round {{req_item == '固定搭档'?'bg-green':''}}" bindtap="chooseitem" data-value="固定搭档" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">固定搭档</button>
+        </view>
+      </view>
+    </view>
+  </form>
+</view>
+<view class="bg-white" style="height: fit-content;border-radius: 20rpx;margin-bottom: 20rpx;">
+  <view class="flex" style="flex-direction: column;height: fit-content;align-items: center;justify-content: center;">
+
+    <textarea placeholder="请求事项说明，请求固定搭档或者同组队友请在下方选择成员" bindinput='detailInput' auto-height="true" maxlength="3000" style="min-height: 200rpx;line-height: unset;height: fit-content;width: 100%;padding:20rpx 20rpx;" value="{{req_detail}}"></textarea>
+  </view>
+</view>
+<view class="bg-white padding" style="font-size: 30rpx;">涉及成员({{sel_partner_member_list.length < 2?"至少选择2名成员":"已选"+sel_partner_member_list.length + "名成员"}})</view>
+<checkbox-group bindchange="listenCheckboxChange">
+  <view class="cu-list grid col-4" style="padding:20rpx;">
+    <block wx:for="{{member_users}}" wx:for-item="user" wx:for-index="member_num">
+      <view class="cu-item flex" style="flex-direction: column;justify-content: center;align-items: center;">
+        <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;margin-bottom: 20rpx;">
+          <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
+            <view class="cu-tag badge {{user.gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
+          </view>
+          <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
+        </view>
+        <checkbox value="{{user.member_num}}" checked="{{user.member_num == part_member_num}}"/>
+      </view>
+    </block>
+
+
+
+  </view>
+</checkbox-group>
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;">
+  <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
+    <view class="" style="flex:1;" bindtap="request_item">
+      <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">提交</button>
+    </view>
+  </view>
+</view>

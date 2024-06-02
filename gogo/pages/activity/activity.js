@@ -6,14 +6,14 @@ function formatdate(datestr) {
 }
 function getDateString() {
   var dateTime = new Date();
-  dateTime = dateTime.setDate(dateTime.getDate());
-  dateTime = new Date(dateTime);
-  dateTime = dateTime.setMonth(dateTime.getMonth());
-  dateTime = new Date(dateTime);
+  //dateTime = dateTime.setDate(dateTime.getDate());
+  //dateTime = new Date(dateTime);
+  //dateTime = dateTime.setMonth(dateTime.getMonth());
+  //dateTime = new Date(dateTime);
   return {
     year: dateTime.getFullYear(),
-    month: formatdate(dateTime.getMonth() + 1),
-    day: formatdate(dateTime.getDate()+1)
+    month: formatdate(dateTime.getMonth()+1),
+    day: formatdate(dateTime.getDate())
   }
 }
 const { year, month, day } = getDateString();
@@ -92,8 +92,8 @@ Page({
           that.setData({
             detail: res.data["detail"],
             max_part_number:res.data["max_part_number"],
-            modalName:"bgurl_modal",
-            bg_url:res.data["bg_url"]
+            modalName:res.data["bg_img_exist"]?"bgurl_modal":"",
+            bg_url:res.data["bg_img_exist"]?res.data["bg_url"]:"",
           });
         }
        

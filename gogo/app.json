@@ -31,7 +31,8 @@
     "pages/activityshowinfo/pointdesc",
     "pages/activityshowinfo/pkrank",
     "pages/index/listindex",
-    "pages/activityshowinfo/partactivity"
+    "pages/activityshowinfo/partactivity",
+    "pages/activityshowinfo/requestpartner"
   ],
   "tabBar": {
     "color": "#2c2c2c",

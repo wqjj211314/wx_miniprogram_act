@@ -74,6 +74,7 @@ Page({
     show_part_flag: false,
     show_admin_flag: false,
     empty_group_tag_dict: true,//用来显示报名预分组的
+    request_partner_list:[]
   },
 
   /**
@@ -175,17 +176,9 @@ Page({
     score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
     score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
     share.get_activity_moods(app.globalData.hosturl, that, activity_info.activity_id)
+    this.get_request_partner_list()
   },
-  set_button_status(activity_info) {
-    //报名按钮
-
-
-    //取消报名按钮
-
-    //记录见闻按钮
-
-
-  },
+  
   show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
     var group_tag = e.currentTarget.dataset.tag;
@@ -418,6 +411,7 @@ Page({
       },
       success(res) {
         that.update_part_info(that, res);
+        that.get_request_partner_list()
         wx.hideLoading();
       }
     });
@@ -531,6 +525,15 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    console.log(this.data.activity_info.activity_status)
+    console.log(typeof(this.data.activity_info.activity_status))
+    if(this.data.activity_info.activity_status < 200){
+      console.log("没进来？")
+      return {
+        title: this.data.activity_info.activity_status_comment,
+        path: '/pages/index/index',
+        }
+    }
     var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareAppMessage");
@@ -998,6 +1001,7 @@ Page({
             },
             success(res) {
               that.update_part_info(that, res);
+              that.get_request_partner_list()
             }
           });
         }
@@ -1189,6 +1193,52 @@ Page({
       url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
+  requestpartner(){
+    wx.navigateTo({
+      url: 'requestpartner?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num='+this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+    })
+  },
+  get_request_partner_list(){
+    console.log("获取搭档请求列表get_request_partner_list")
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_request_partner_list',
+      data: {
+        "activity_id": this.data.activity_info.activity_id,
+        "user_id": app.globalData.login_userInfo["user_id"]
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if(res.data.code==200){
+          var result = res.data.result;
+          var request_partner_list = [];
+          if(that.data.admin_flag){
+            request_partner_list = result;
+          }else{
+            for(var index in result){
+              var item = result[index]
+              if(item["req_partner"].indexOf(that.data.part_member_num)!=-1||item["user_id"] == app.globalData.login_userInfo["user_id"]){
+                request_partner_list.push(item)
+              }
+            }
+          }
+          that.setData({
+            request_partner_list
+          })
+        }else{
+          wx.showToast({
+            title: res.data.result,
+            icon:'error',
+            duration:3000
+          })
+        }
+
+      }
+    })
+  },
   all_pk_page() {
 
     var group_tag = "";
@@ -1349,19 +1399,19 @@ Page({
     this.setData({
       modalName: ""
     })
-    manage_activity.delete_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl)
+    manage_activity.delete_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
   },
   cancel_activity(e) {
     this.setData({
       modalName: ""
     })
-    manage_activity.cancel_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl)
+    manage_activity.cancel_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
   },
-  delete_all_member(e) {
+  refund_all_member(e) {
     this.setData({
       modalName: ""
     })
-    manage_activity.delete_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl)
+    manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
   },
   update_activity_info(e) {
     this.setData({

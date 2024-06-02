@@ -23,7 +23,7 @@ Page({
       success (res) {
         if(res.data.length>=0){
           console.log("待审核的活动")
-          console.log(JSON.stringify(res.data))
+          //console.log(JSON.stringify(res.data))
           //JSON.stringify(this.data.activity_info);
           that.setData({
             activity_create_list:res.data
@@ -99,23 +99,27 @@ Page({
   update_activity_bg_issue(e){
     var activity_id = e.currentTarget.dataset.id;
     this.update_activity_status(activity_id,201,"已审核，图片敏感");
-    this.get_checking_activity_list();
+    //this.get_checking_activity_list();
   },
   update_activity_pass(e){
     var activity_id = e.currentTarget.dataset.id;
     this.update_activity_status(activity_id,200,"已审核，正常");
-    this.get_checking_activity_list();
+    //this.get_checking_activity_list();
   },
-  update_activity_unvalid(e){
+  update_activity_invalid(e){
     var activity_id = e.currentTarget.dataset.id;
     this.update_activity_status(activity_id,101,"活动违规");
-    this.get_checking_activity_list();
+    //this.get_checking_activity_list();
   },
   update_activity_status(activity_id,activity_status,activity_status_comment){
+    console.log(activity_status)
+    console.log(activity_status_comment)
+    var that = this;
     wx.request({
       url: app.globalData.hosturl+'update_activity_status', //仅为示例，并非真实的接口地址
       data: {
         "activity_id":activity_id,
+        "user_id":app.globalData.login_userInfo["user_id"],
         "activity_status":activity_status,
         "activity_status_comment":activity_status_comment
       },
@@ -123,9 +127,12 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success (res) {
-        if(res.data.length>=0){
-          
-        }
+        wx.showToast({
+          title: res.data.result,
+          icon:'none',
+          duration:3000
+        })
+        that.get_checking_activity_list();
         
       }
     });

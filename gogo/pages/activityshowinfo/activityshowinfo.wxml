@@ -12,7 +12,7 @@
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{activity_info.bg_url}}" mode="aspectFill" style="width: 100%;height: 100%;" bindtap="ViewImagebg" data-url="{{activity_info.bg_url}}"></image>
         <image class='' wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status >= 800}}">{{activity_info.activity_status_comment}}</view>
-        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
+        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{activity_info.part_status}}<!--{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}-->({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
       </view>
       
       <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
@@ -304,7 +304,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{(!is_addend && !is_begin && login_user_part_list.length == 0)||(login_user_part_list.length > 0)}}">
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{(!is_addend && !is_begin && activity_info.activity_status >= 200 && activity_info.activity_status < 800 )}}">
 
   <!--父组件已经判断：未结束-->
   <!--未截止wx:if="{{!is_addend}}"，要显示-->
@@ -318,7 +318,7 @@
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
     <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">记录美好</button>
   </view>
-  <view class="flex" style="margin-right: 10rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{login_user_part_list.length > 0 && !is_end}}">
+  <view class="flex" style="margin-right: 10rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_end)||(admin_flag)}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
     <text class="cuIcon-more lg text-gray text-bold" style="font-size: 46rpx;"></text>
     <text>更多</text>
@@ -460,7 +460,7 @@
       <view class="cu-item" bindtap="delete_activity" style="justify-content: center;" wx:if="{{admin_flag}}">
         <text>删除活动</text>
       </view>
-      <view class="cu-item" bindtap="delete_all_member" style="justify-content: center;" wx:if="{{admin_flag && activity_info.pay_price != 0}}">
+      <view class="cu-item" bindtap="refund_all_member" style="justify-content: center;" wx:if="{{admin_flag && activity_info.pay_price != 0}}">
         <text>全部退款</text>
       </view>
       <view class="cu-item" bindtap="calculate_close_activity" style="justify-content: center;" wx:if="{{admin_flag && is_end && activity_info.activity_status < 800}}">

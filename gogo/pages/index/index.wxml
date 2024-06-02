@@ -11,9 +11,8 @@
         <swiper-item>
           <!--<image class='background2' src="{{item.bg_url}}" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true" style="filter:blur(20rpx);"></image>
           -->
-          <image class='background2' src="{{item.bg_url}}" mode="aspectFill" wx:if="{{item.bg_img_exist}}" lazy-load="true" show-menu-by-longpress="true"></image>
-          <!--默认的背景图片显示-->
-          <image class='background2' src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" wx:else></image>
+          <image class='background2' src="{{item.bg_img_exist?item.bg_url:'https://www.2week.club:5000/static/defaultbg.jpg'}}" mode="aspectFill" lazy-load="true" show-menu-by-longpress="true"></image>
+          
           <!--视频媒体播放
       <video class='background2'
       id="myVideo" 
