@@ -32,7 +32,8 @@
     "pages/activityshowinfo/pkrank",
     "pages/index/listindex",
     "pages/activityshowinfo/partactivity",
-    "pages/activityshowinfo/requestpartner"
+    "pages/activityshowinfo/requestpartner",
+    "pages/activityshowinfo/refund"
   ],
   "tabBar": {
     "color": "#2c2c2c",
@@ -56,7 +57,7 @@
         "pagePath": "pages/activity/activity",
         "iconPath": "image/add.png",
         "selectedIconPath": "image/add_select.png",
-        "text": "创建"
+        "text": "发布"
       },
       {
         "pagePath": "pages/friend/friend",

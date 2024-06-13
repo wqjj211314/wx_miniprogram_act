@@ -41,16 +41,17 @@
 
   </view>
   <block wx:for="{{all_group_tag_list}}" wx:for-item="item0" wx:key="group_tag">
-    <view class="flex bg-white text-black" style="justify-content:space-between;padding: 20rpx 20rpx;margin-top: 0rpx;">
-      <view class="cu-btn line-green round">{{item0.group_tag}}({{item0.group_users.length}}/{{activity_info["group_tag_dict"][item0.group_tag]["limit"]}})</view>
-      <view class="cu-btn line-green round">男{{item0.boy_num}} 女{{item0.girl_num}}</view>
-      <view class="cu-btn line-green round">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
+    <view class="flex bg-white text-black" style="justify-content:space-between;padding: 20rpx 20rpx;margin-top: 0rpx;align-items: center;">
+      <view class="cu-btn line-green round" style="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{item0.group_tag}}({{item0.group_users.length}}/{{activity_info["group_tag_dict"][item0.group_tag]["limit"]}})</view>
+      <!--
+      <view class="cu-btn line-green round " style="word-break:break-all;max-width: 160rpx;">男{{item0.boy_num}} 女{{item0.girl_num}}</view>
+      -->
+      <view class="cu-btn line-green round " style="overflow:hidden;word-break: break-all;text-align:left;max-width: 300rpx;">场地:{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?"暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
     </view>
     <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding-top:20rpx;padding-left:35rpx;border:none;">
       <block wx:for="{{item0.group_users}}" wx:for-item="user" wx:key="member_num">
         <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;" bind:tap="chat" data-membernum="{{user.member_num}}">
           <view class="cu-avatar radius" style="background-image:url({{user.avatarUrl}});">
-
             <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
           </view>
           <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
@@ -59,7 +60,7 @@
         </view>
       </block>
       <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
-        <text class="cuIcon-edit" style="font-size: 45rpx;color: grey;"></text>
+        <text style="color: black;font-size: 30rpx;font-weight: 200;">编辑</text>
       </view>
       <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="clear_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
@@ -181,7 +182,7 @@
     </view>
   </block>
   <view wx:if="{{entire_part_info.length <= 0}}">
-    <view style="margin-top: 40vh;font-size: 50rpx;margin-left: 30vw;color: gray;">还没人报名</view>
+    <view style="margin-top: 25vh;font-size: 50rpx;margin-left: 30vw;color: gray;">还没人报名...</view>
   </view>
 
   <view class="padding-sm bg-white margin-top" style="padding-bottom: 0rpx;" wx:for="{{request_partner_list}}" wx:key="id">
@@ -200,7 +201,7 @@
     <view class="flex" style="flex-direction: row;margin-top:15rpx">
 
       <view style="flex:1;">
-        <view>涉及成员</view>
+        <view>涉及成员{{item.req_partner.length==0?"：无":""}}</view>
         <view class="grid col-3" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-top:20rpx;padding-left:10rpx;border-bottom: 10rpx;margin-top: 0rpx;">
           <block wx:for="{{item.req_partner}}" wx:for-item="member_num" wx:key="*this">
             <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;align-content:center;align-items: center;height: fit-content;">
@@ -224,6 +225,6 @@
 
   </view>
 
-  <view class="cu-btn bg-white margin" bind:tap="requestpartner" style="position: absolute;right: 0rpx;border-radius: 15rpx;border: 1px dashed rgb(211, 208, 208);" wx:if="{{!is_end && part_member_num != '' && entire_part_info.length > 6}}">我的搭档要求<text class="cuIcon-write text-grey"></text></view>
+  <view class="cu-btn bg-white margin" bind:tap="requestpartner" style="position: absolute;right: 0rpx;border-radius: 15rpx;border: 1px dashed rgb(211, 208, 208);" wx:if="{{!is_end && part_member_num != '' && entire_part_info.length > 3}}">搭档要求<text class="cuIcon-write text-grey"></text></view>
   <view style="height: 200rpx;"></view>
 </scroll-view>

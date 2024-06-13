@@ -222,9 +222,7 @@ Page({
           try {
             wx.setStorageSync('openid', res.data.openid);
           } catch (e) { }
-          wx.switchTab({
-            url: '../user/user'
-          })
+          wx.navigateBack()
         }
       }
     });

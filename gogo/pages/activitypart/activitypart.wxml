@@ -4,7 +4,7 @@
 <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
   <view class="cu-time" style="width: fit-content;">{{item.activity_live}}</view>
   <view class="cu-item text-blue">
-    <view class="cu-card article" style="" bindtap="navigateToActivityIndex" data-index="{{index}}">
+    <view class="cu-card article" style="" bindtap="navigateToActivityInfo" data-index="{{index}}">
       <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;background-color: var(--ghostWhite);color: var(--black);">
         <view class="title" style="padding:0px;">
           <view class="text-cut">{{item.title}}</view>

@@ -69,7 +69,21 @@ Page({
       url: '../index/index'
     })
   },
-  
+  navigateToActivityInfo(e){
+    var index = parseInt(e.currentTarget.dataset.index);
+    console.log(typeof index);
+    console.log(this.data.activity_part_list.length);
+    var activity_info = this.data.activity_part_list[index];
+    let activity_user_info = encodeURIComponent(JSON.stringify(activity_info.createuser));
+    activity_info = encodeURIComponent(JSON.stringify(activity_info));
+    console.log("跳转至活动报名界面")
+    console.log(activity_info);
+    console.log(activity_user_info)
+    wx.navigateTo({
+      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
+    })
+    
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

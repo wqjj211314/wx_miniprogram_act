@@ -21,7 +21,7 @@
             <view class="text-black text-lg" style="flex-flow: wrap;margin-bottom: 10rpx;margin-top: 15rpx;font-size: 45rpx;">{{activity_info.title}}</view>
             <view class="flex justify-start" style="flex-flow: wrap;">
               <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
-                <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{activity_info.pay_type}}<text style="color: red;">{{activity_info.pay_price==0?"":activity_info.pay_price+"元"}}</text></button>
+                <button class="cu-btn round bg-blue" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{activity_info.pay_type}}<text style="font-size: 32rpx;" class="text-white text-bold">{{activity_info.pay_price==0?"":activity_info.pay_price+"元"}}</text></button>
               </view>
               <view class="text-center" wx:for="{{title_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;" wx:key="*this">
                 <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
@@ -29,7 +29,7 @@
             </view>
           </view>
           <button class="cu-btn icon bg-white" open-type="share">
-            <text class="cuIcon-share text-green" style="font-size: 45rpx;"><text style="font-size: 25rpx;">分享</text></text>
+            <text class="cuIcon-share text-blue" style="font-size: 45rpx;"><text style="font-size: 25rpx;">分享</text></text>
 
           </button>
         </view>
@@ -73,9 +73,10 @@
         <view class="cu-item">
           <view class="content text-blue flex" style="width:fit-content;font-size: 24rpx;flex-direction: row;">
             <text class="cuIcon-circlefill text-green lg" style="width: 1.6em;margin-right: 10rpx;font-size: 30rpx;"></text>
-
+            <!--
             <text wx:if="{{activity_info.pay_price != 0}}" style="color: red;" class="text-bold">{{activity_info.pay_price}}元
             </text>
+            -->
             <text>参与({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</text>
 
           </view>
@@ -92,9 +93,9 @@
           <view class="content" style="">
             <block wx:for="{{all_group_tag_list}}" wx:for-item="item0" wx:key="group_tag">
               <view class="flex" style="justify-content:space-between;padding:10rpx 25rpx;background-color: rgba(139, 245, 69, 0.03);font-size: 25rpx;">
-                <view class="">{{item0.group_tag}}({{item0.group_users.length}}/{{activity_info["group_tag_dict"][item0.group_tag]["limit"]}})</view>
-                <view class="">男{{item0.boy_num}} 女{{item0.girl_num}}</view>
-                <view class="">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
+                <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{item0.group_tag}}({{item0.group_users.length}}/{{activity_info["group_tag_dict"][item0.group_tag]["limit"]}})</view>
+                <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{item0.boy_num}}男{{item0.girl_num}}女</view>
+                <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
               </view>
 
 
@@ -137,7 +138,7 @@
               <view style="padding:10rpx 20rpx;">
                 <view class="cu-list menu-avatar" style="margin:0rpx;height: fit-content;">
                   <view class="cu-item flex" style="border-bottom:1rpx solid rgb(228, 228, 228);min-height:10rpx;height: fit-content;border:none;justify-content: flex-start;">
-                    <view style="width: 50rpx;margin-right: 10rpx;font-size: 25rpx;">{{tools.show_member_num(item.member_num)}}号
+                    <view style="width: 70rpx;margin-right: 10rpx;font-size: 25rpx;">{{tools.show_member_num(item.member_num)}}号
                     </view>
                     <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;" bind:tap="chat" data-membernum="{{item.member_num}}">
                     </view>
@@ -264,7 +265,7 @@
                 <text class="text-black" style="font-size: 35rpx;">{{activity_user_info.nickName}}</text>
 
               </view>
-              <view class="flex" style="align-items: center;justify-content: center;" bind:tap="pkrank">
+              <view class="flex text-blue" style="align-items: center;justify-content: center;" bind:tap="pkrank">
                 成员排名
                 <text class="cuIcon-right" style="font-size: 60rpx;color: rgba(230, 227, 224, 0.753);"></text>
               </view>
@@ -304,7 +305,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{(!is_addend && !is_begin && activity_info.activity_status >= 200 && activity_info.activity_status < 800 )}}">
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{(activity_info.activity_status >= 200 && activity_info.activity_status < 800&&((!is_addend && !is_begin)||login_user_part_list.length > 0||admin_flag))}}">
 
   <!--父组件已经判断：未结束-->
   <!--未截止wx:if="{{!is_addend}}"，要显示-->
@@ -314,11 +315,11 @@
   </view>
   <!--父组件已经判断：已开始未结束-->
   <!--已报名，要显示-->
-  <view class="" style="flex:1;margin-right: 20rpx;" bindtap="recore_mood" wx:if="{{login_user_part_list.length > 0}}">
+  <view class="" style="flex:1;margin-right: 20rpx;" bindtap="recore_mood" wx:if="{{login_user_part_list.length > 0||admin_flag}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">记录美好</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">记录活动瞬间</button>
   </view>
-  <view class="flex" style="margin-right: 10rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_end)||(admin_flag)}}">
+  <view class="flex" style="margin-right: 10rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin)||(admin_flag)}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
     <text class="cuIcon-more lg text-gray text-bold" style="font-size: 46rpx;"></text>
     <text>更多</text>
@@ -346,8 +347,7 @@
                   <view class="text-black flex" style="font-size: 20rpx;">
                     <view class="text-cut">
                       <view class="flex">
-                        
-                        <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value" wx:key="*this">{{key}}:{{value}}<text style="color: red;">|</text>
+                        <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value" wx:key="*this">{{key}}:{{value}}
                         </block>
                       </view>
                     </view>
@@ -447,21 +447,25 @@
         <text>{{activity_info.pay_price!=0?"付费":""}}替人报名</text>
       </view>
       -->
-
       <view class="cu-item" bindtap="all_pk_page" style="justify-content: center;" wx:if="{{!is_end&&entire_part_info.length > 0&&is_pk_hobby}}">
         <text>全员自由组合对阵</text>
       </view>
-      <view class="cu-item" bindtap="update_activity_info" style="justify-content: center;" wx:if="{{admin_flag}}">
+      <view class="cu-item" bindtap="update_activity_info" style="justify-content: center;" wx:if="{{admin_flag&&!is_end}}">
         <text>编辑活动</text>
       </view>
-      <view class="cu-item" bindtap="cancel_activity" style="justify-content: center;" wx:if="{{admin_flag}}">
+      <view class="cu-item" bindtap="cancel_activity" style="justify-content: center;" wx:if="{{admin_flag && !is_end && activity_info.activity_status < 800 && activity_info.activity_status >= 200}}">
         <text>取消活动</text>
       </view>
+      <!--
       <view class="cu-item" bindtap="delete_activity" style="justify-content: center;" wx:if="{{admin_flag}}">
         <text>删除活动</text>
       </view>
-      <view class="cu-item" bindtap="refund_all_member" style="justify-content: center;" wx:if="{{admin_flag && activity_info.pay_price != 0}}">
-        <text>全部退款</text>
+      -->
+      <view class="cu-item" bindtap="refund_some" style="justify-content: center;" wx:if="{{admin_flag && activity_info.pay_price != 0 && entire_part_info.length > 0}}">
+        <text>部分退款</text>
+      </view>
+      <view class="cu-item" bindtap="refund_all_member" style="justify-content: center;" wx:if="{{admin_flag && activity_info.pay_price != 0&&entire_part_info.length > 0}}">
+        <text>全员全额退款</text>
       </view>
       <view class="cu-item" bindtap="calculate_close_activity" style="justify-content: center;" wx:if="{{admin_flag && is_end && activity_info.activity_status < 800}}">
         <text>统计结算活动(积分或费用)</text>

@@ -12,6 +12,19 @@
     </swiper-item>
   </swiper>
   <button class="btn bg-green margin-top" bind:tap="calculate_close_all_activity">统计结算所有活动</button>
+  <block wx:for="{{expanding_money_record_list}}" wx:key="id">
+    <view class="flex bg-white margin-sm padding" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
+        <view class="bg-blue padding" style="border-radius: 20rpx;">
+          {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}
+        </view>
+        <view style="margin-left: 25rpx;">
+          <view>交易详情：{{item.trade_desc}}</view>
+          <view>操作时间：{{item.submit_time}}</view>
+          <view class="text-blue">余额：{{item.current_money}}</view>
+        </view>
+    </view>
+    <view class="cu-btn" bind:tap="confirm_expanding_money" data-id="{{item.id}}">审核通过</view>
+  </block>
   <view style="width:100vw;background-color: white;">
     <block wx:for="{{activity_create_list}}" wx:key="activity_id">
       <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">

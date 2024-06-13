@@ -38,7 +38,7 @@ var show_vs_scores = function(scores){
     }
   }
   if(flag){
-    return "未开始";
+    return "待记录";
   }else {
     return scores.join(" : ");
   }

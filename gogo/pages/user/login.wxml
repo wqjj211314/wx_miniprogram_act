@@ -25,7 +25,7 @@
         </view>
         <view class="nickname-wrapper">
           <text class="nickname-label">个性签名</text>
-          <input type="string" class="nickname-input" placeholder="请填写个性签名" maxlength="20" bind:change="onsignatureChange" value="{{userInfo.signature=='个性签名'?'':userInfo.signature}}"/>
+          <input type="string" class="nickname-input" placeholder="选填个性签名" maxlength="20" bind:change="onsignatureChange" value="{{userInfo.signature=='个性签名'?'':userInfo.signature}}"/>
         </view>
       </block>
     </view>

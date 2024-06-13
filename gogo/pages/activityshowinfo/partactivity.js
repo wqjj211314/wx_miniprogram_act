@@ -29,6 +29,7 @@ Page({
     var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     var partinfo = JSON.parse(decodeURIComponent(options.partinfo));
     var all_group_tag_dict = JSON.parse(decodeURIComponent(options.all_group_tag_dict));
+    var part_limit = options.part_limit;
     var empty_group_tag_dict = true;
     for(var key in activity_info.group_tag_dict){
       empty_group_tag_dict = false;
@@ -38,7 +39,8 @@ Page({
       partinfo: partinfo,
       activity_info:activity_info,
       empty_group_tag_dict:empty_group_tag_dict,
-      all_group_tag_dict:all_group_tag_dict
+      all_group_tag_dict:all_group_tag_dict,
+      part_limit:part_limit
     })
 
   },

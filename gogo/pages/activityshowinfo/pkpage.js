@@ -11,14 +11,14 @@ Page({
     is_begin: false,
     is_end: true,
     is_addend: false,
-    is_cancelend:false,
+    is_cancelend: false,
     activity_id: "",
     group_tag: "",
     modalName: "",
     sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
     group_users: [],//这是当前分组的成员，数组形式
-    sel_pk_group_member_list:[],
-    sel_pk_group_user_list:[],//选择的对阵成员列表，默认是所有成员
+    sel_pk_group_member_list: [],
+    sel_pk_group_user_list: [],//选择的对阵成员列表，默认是所有成员
     admin_users: [],
     admin_flag: false,
     show_member_info_flag: false,
@@ -42,9 +42,9 @@ Page({
     hidden_score_list: false,
     triggered: false,
     submit_flag: false,
-    method:"",//对阵选项的方法调用
-    method_tip:"",
-    show_edit_flag:false
+    method: "",//对阵选项的方法调用
+    method_tip: "",
+    show_edit_flag: false
   },
 
   /**
@@ -95,8 +95,8 @@ Page({
     var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     this.setData({
       group_users: group_users,
-      sel_pk_group_member_list:sel_pk_group_member_list,
-      sel_pk_group_user_list:sel_pk_group_user_list,
+      sel_pk_group_member_list: sel_pk_group_member_list,
+      sel_pk_group_user_list: sel_pk_group_user_list,
       boy_num: boy_num,
       boy_member_num_list: boy_member_num_list,
       girl_num: girl_num,
@@ -110,10 +110,16 @@ Page({
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
-      is_cancelend:new Date(activity_info["cancelendtime"]) - new Date() <= 0,
+      is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
     })
     //获取已存储的对阵列表
     score.get_pk_groups(app.globalData.hosturl, this, options.activity_id, group_tag, activity_tag);
+    wx.showLoading({
+      title: '加载中...',
+    })
+    setTimeout(function(){
+      wx.hideLoading()
+    },2500)
   },
   /**
    * 生命周期函数--监听页面显示
@@ -211,10 +217,10 @@ Page({
   },
   get2v2() {
     var sample4 = [[[0, 1], [2, 3]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]];
-    var sample5 = [[[0, 1], [2, 3]], [[0, 1], [2, 4]], [[1, 4], [2, 3]], [[0, 1], [3, 4]], [[1, 3], [2, 4]], [[0, 2], [1, 3]], [[1, 2], [3, 4]], [[0, 2], [1, 4]], [[0, 4], [2, 3]]];
-    var sample6 = [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]];
-    var sample7 = [[[0, 1], [2, 3]], [[0, 4], [5, 6]], [[1, 2], [3, 4]], [[0, 1], [5, 6]], [[0, 2], [3, 4]], [[1, 2], [5, 6]], [[0, 1], [3, 4]], [[0, 2], [5, 6]], [[1, 3], [2, 4]]];
-    var sample8 = [[[0, 1], [2, 3]], [[4, 5], [6, 7]], [[0, 2], [1, 3]], [[4, 6], [5, 7]], [[0, 3], [1, 2]], [[4, 7], [5, 6]], [[3, 7], [5, 6]], [[0, 1], [2, 4]], [[3, 5], [6, 7]]];
+    var sample5 = [[[0, 1], [2, 3]], [[0, 2], [1, 4]], [[0, 3], [2, 4]], [[0, 4], [1, 3]], [[1, 2], [3, 4]]];
+    var sample6 = [[[0, 1], [2, 3]], [[0, 2], [4, 5]], [[1, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 4], [2, 5]], [[1, 5], [3, 4]], [[0, 5], [1, 3]], [[0, 5], [2, 4]]]
+    var sample7 = [[[0, 1], [2, 3]], [[0, 4], [5, 6]], [[1, 5], [4, 6]], [[0, 2], [1, 3]], [[2, 4], [3, 5]], [[0, 6], [4, 5]], [[1, 2], [3, 6]], [[0, 3], [1, 4]], [[0, 5], [2, 6]], [[1, 6], [2, 5]], [[0, 1], [3, 4]]]
+    var sample8 = [[[0, 1], [2, 3]], [[4, 5], [6, 7]], [[4, 6], [5, 7]], [[0, 2], [1, 3]], [[0, 3], [1, 2]], [[4, 7], [5, 6]], [[0, 4], [1, 5]], [[2, 6], [3, 7]], [[2, 7], [3, 6]], [[0, 5], [1, 4]], [[0, 6], [1, 7]], [[2, 4], [3, 5]], [[2, 5], [3, 4]], [[0, 7], [1, 6]]]
     var sample = sample6;
     if (this.data.sel_pk_group_user_list.length < 4) {
       wx.showToast({
@@ -252,7 +258,8 @@ Page({
     var sample2 = [[[0], [1]], [[0], [1]], [[0], [1]]];
     var sample3 = [[[0], [1]], [[0], [2]], [[1], [2]]];
     var sample4 = [[[0], [1]], [[2], [3]], [[1], [3]], [[0], [2]], [[1], [2]], [[0], [3]]];
-    var sample5 = [[[0], [1]], [[2], [3]], [[3], [4]], [[2], [4]], [[1], [4]], [[0], [2]], [[1], [3]], [[1], [2]], [[0], [3]]];
+    var sample5 = [[[0], [1]], [[2], [3]], [[2], [4]], [[0], [4]], [[1], [3]], [[1], [2]], [[0], [3]], [[3], [4]], [[1], [4]], [[0], [2]]]
+    var sample6 = [[[0], [1]], [[2], [3]], [[4], [5]], [[0], [4]], [[1], [2]], [[3], [5]], [[0], [3]], [[1], [4]], [[2], [5]], [[0], [2]], [[3], [4]], [[1], [5]], [[0], [5]], [[2], [4]], [[1], [3]]]
     var sample = sample4;
     if (this.data.sel_pk_group_user_list.length < 2) {
       wx.showToast({
@@ -261,7 +268,7 @@ Page({
         icon: "none"
       })
       return;
-    } else if (this.data.sel_pk_group_user_list.length > 5) {
+    } else if (this.data.sel_pk_group_user_list.length > 6) {
       wx.showToast({
         title: '人数太多,请自定义对阵',
         duration: 2000,
@@ -278,6 +285,8 @@ Page({
       sample = sample4;
     } else if (this.data.sel_pk_group_user_list.length == 5) {
       sample = sample5;
+    } else if (this.data.sel_pk_group_user_list.length == 6) {
+      sample = sample6;
     }
     var pk_groups = this.getvs(sample);
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
@@ -301,17 +310,17 @@ Page({
     var girl_num = 0;
     var boy_member_num_list = [];
     var girl_member_num_list = [];
-    for(var index in this.data.sel_pk_group_user_list){
-      if(this.data.sel_pk_group_user_list[index].gender == 1){
+    for (var index in this.data.sel_pk_group_user_list) {
+      if (this.data.sel_pk_group_user_list[index].gender == 1) {
         boy_num = boy_num + 1
         boy_member_num_list.push(this.data.sel_pk_group_user_list[index].member_num)
-      }else if(this.data.sel_pk_group_user_list[index].gender == 0){
+      } else if (this.data.sel_pk_group_user_list[index].gender == 0) {
         girl_num = girl_num + 1
         girl_member_num_list.push(this.data.sel_pk_group_user_list[index].member_num)
       }
     }
-    if (this.data.boy_num >= 2 && this.data.girl_num >= 2) {
-      if (this.data.boy_num + this.data.girl_num > 6) {
+    if (girl_num >= 2 && boy_num >= 2) {
+      if (boy_num + girl_num > 8) {
         wx.showToast({
           title: '人数太多!',
           icon: "error",
@@ -319,6 +328,8 @@ Page({
         })
       } else {
         var that = this;
+        console.log(boy_member_num_list)
+        console.log(girl_member_num_list)
         wx.request({
           url: app.globalData.hosturl + 'get_boygirl_pk_list', //仅为示例，并非真实的接口地址
           data: {
@@ -482,8 +493,8 @@ Page({
           score.get_pk_groups(app.globalData.hosturl, that, that.data.activity_id, that.data.group_tag, activity_tag);
           wx.showToast({
             title: '提交成功',
-            icon:"success",
-            duration:3000
+            icon: "success",
+            duration: 3000
           })
         }
 
@@ -617,35 +628,35 @@ Page({
       url: 'fixpartner?' + 'member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&group_users=' + encodeURIComponent(JSON.stringify(this.data.group_users)),
     })
   },
-  showpkmodal(e){
+  showpkmodal(e) {
     var method = e.currentTarget.dataset.method;
     console.log("显示成员选择")
-    var methodtip =  e.currentTarget.dataset.methodtip;
+    var methodtip = e.currentTarget.dataset.methodtip;
     this.setData({
-      modalName:"selpkusersModal",
-      method:method,
-      methodtip:methodtip
+      modalName: "selpkusersModal",
+      method: method,
+      methodtip: methodtip
     })
   },
-  listenCheckboxChange(e){
+  listenCheckboxChange(e) {
     console.log('当checkbox-group中的checkbox选中或者取消是我被调用');
-      //打印对象包含的详细信息
-      console.log(e.detail.value);
-      var sel_pk_group_member_list = e.detail.value;
-      var sel_pk_group_user_list = []
-      for(var index in sel_pk_group_member_list){
-        var member_num = sel_pk_group_member_list[index]
-        sel_pk_group_user_list.push(this.data.member_users[member_num])
-      }
-      this.setData({
-        sel_pk_group_member_list:sel_pk_group_member_list,
-        sel_pk_group_user_list:sel_pk_group_user_list
-      })
-      
-  },
-  show_edit(){
+    //打印对象包含的详细信息
+    console.log(e.detail.value);
+    var sel_pk_group_member_list = e.detail.value;
+    var sel_pk_group_user_list = []
+    for (var index in sel_pk_group_member_list) {
+      var member_num = sel_pk_group_member_list[index]
+      sel_pk_group_user_list.push(this.data.member_users[member_num])
+    }
     this.setData({
-      show_edit_flag:!this.data.show_edit_flag
+      sel_pk_group_member_list: sel_pk_group_member_list,
+      sel_pk_group_user_list: sel_pk_group_user_list
+    })
+
+  },
+  show_edit() {
+    this.setData({
+      show_edit_flag: !this.data.show_edit_flag
     })
   }
 })

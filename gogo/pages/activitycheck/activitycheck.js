@@ -8,7 +8,8 @@ Page({
   data: {
     activity_create_list:[],
     hosturl:app.globalData.hosturl,
-    imgs:[]
+    imgs:[],
+    expanding_money_record_list:[]
   },
   get_checking_activity_list(){
     var that = this;
@@ -64,6 +65,46 @@ Page({
       }
     });
   }, 
+  get_expanding_money_record(){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl+'get_expanding_money_record', //仅为示例，并非真实的接口地址
+      data: {
+        
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        if(res.data.code == 200){
+          
+          that.setData({
+            expanding_money_record_list:res.data.result
+          });
+        }
+      }
+    });
+  },
+  confirm_expanding_money(e){
+    var id = e.currentTarget.dataset.id;
+    wx.request({
+      url: app.globalData.hosturl+'confirm_expanding_money', //仅为示例，并非真实的接口地址
+      data: {
+        "id":id,
+        "user_id":app.globalData.login_userInfo["user_id"],
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        wx.showToast({
+          title: res.data.result,
+          icon:'none',
+          duration:3000
+        })
+      }
+    });
+  },
   /**
    * 生命周期函数--监听页面加载
    */

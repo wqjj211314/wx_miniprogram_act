@@ -32,7 +32,7 @@ Page({
     endtime: year + "-" + month + "-" + day + " 22:00",
     addendtime: year + "-" + month + "-" + day + " 18:00",
     cancelendtime: year + "-" + month + "-" + day + " 18:00",
-    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "美食", "电影", "旅行", "摄影", "唱歌", "乐器", "滑雪", "击剑"],
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","露营","校友会","老乡会"],
     hobby_tag: "",
     max_part_number: 10,
     title: "",
@@ -283,7 +283,7 @@ Page({
             count: 1, //默认9
             mediaType: ["image"],
             sourceType: ["album"],
-            sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+            //sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有,原图可以支持gif
             sourceType: ['album'], //从相册选择
             success: (res) => {
               

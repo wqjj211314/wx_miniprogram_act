@@ -161,15 +161,7 @@ Page({
     this.setData({
       begintime: e.detail.value
     })
-    var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
-    var begindate = new Date(this.data.begintime.replaceAll("-","/"))
-    console.log(enddate)
-    console.log(begindate)
-    if(begindate - enddate >= 0){
-      this.setData({
-        endtime: e.detail.value
-      })
-    }
+    
   },
   TimeChange_endtime(e) {
     var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
@@ -179,7 +171,7 @@ Page({
     if(begindate - enddate >= 0){
       console.log("不合理的日期")
       wx.showToast({
-        title: '不合理的日期',
+        title: '活动时间异常',
         icon:"error",
         duration:3000
       })

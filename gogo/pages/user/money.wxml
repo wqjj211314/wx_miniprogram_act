@@ -1,6 +1,6 @@
 <view class="cu-form-group bg-green" style="height: 200rpx;">
   <view class="title bg-blue round" style="padding: 30rpx;height: fit-content;">余额 {{userinfo.total_money}}元</view>
-  
+
   <button class="cu-btn bg-blue round" disabled="{{!can_get || userinfo.total_money == 0}}" bind:tap="getallmoney">全部提现</button>
 </view>
 
@@ -15,19 +15,18 @@
     <input placeholder="请输入银行卡号,仅支持数字" value="{{bank_account_name}}" bindinput='bankaccountnameInput'></input>
   </view>
 </form>
-<view style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{money_list.length > 0}}">交易记录</view>
+<view class="bg-white padding" style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{money_list.length > 0}}">交易记录</view>
 <form>
   <block wx:for="{{money_list}}" wx:key="id">
-    <view class="flex bg-white" style="height: fit-content;justify-content: space-between;padding:20rpx;margin-bottom: 20rpx;">
-     <view class="flex" style="width: fit-content;justify-content: space-around;flex-direction: column;align-content: center;align-items: center;height: 150rpx;">
-     <view class="bg-blue flex" style="width: 120rpx;height: 100rpx;align-items: center;justify-content: center;border-radius: 30rpx;padding:10rpx;"><view style="font-size: 30rpx;">{{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}</view></view>
-     <view>{{item.trade_desc}}</view>
-     <view>时间：{{item.submit_time}}</view>
-     </view>
-     <view class="flex" style="width: fit-content;justify-content: space-around;flex-direction: column;align-content: center;align-items: center;height: 150rpx;">
-     <view class="bg-green flex" style="width: fit-content;height: 50rpx;align-items: center;justify-content: center;padding:20rpx;border-radius: 20rpx;"><view style="width: fit-content;height: fit-content;font-size: 30rpx;">{{item.trade_money}}</view></view>
-     <view>余额：{{item.current_money}}</view>
-     </view>
-    </view>
+      <view class="flex bg-white margin-sm padding" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
+        <view class="bg-blue padding" style="border-radius: 20rpx;">
+          {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}
+        </view>
+        <view style="margin-left: 25rpx;">
+          <view>交易详情：{{item.trade_desc}}</view>
+          <view>操作时间：{{item.submit_time}}</view>
+          <view class="text-blue">余额：{{item.current_money}}</view>
+        </view>
+      </view>
   </block>
 </form>

@@ -441,7 +441,7 @@ Page({
     console.log("onshow加载");
     console.log(app.globalData.login_userInfo["user_id"])//可能会慢
     console.log(this.data.activity_user_info["user_id"])
-    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"] || app.globalData.checking_flag) {// || app.globalData.checking_flag
+    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"]) {// || app.globalData.checking_flag
       this.setData({
         admin_flag: true
       });
@@ -497,7 +497,6 @@ Page({
     var part_limit = 1;//限制参与
     var share_user_id = this.data.share_use_id;
     if (this.data.activity_info["part_limit"] == 1) {//"通过发起人和成员分享可以参与"
-
       this.data.user_info_list.forEach(item => {
         console.log(item);
         if (item["user_id"] == share_user_id) {//成员
@@ -585,12 +584,12 @@ Page({
       return;
     }
     //如果是简单的不需要填写信息，直接报名不跳转,要填写报名信息那就跳转到报名页面
-    if (this.data.partinfo.length != 0) {
+    if (this.data.partinfo.length != 0||!this.data.empty_group_tag_dict) {
       var activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
       var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
       var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
       wx.navigateTo({
-        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict,
+        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit='+this.data.part_limit,
       })
       return;
     }
@@ -959,8 +958,8 @@ Page({
     console.log(store_admin_timestamp)
     if (store_admin_timestamp == "" || store_admin_timestamp == undefined || (timestamp - Number(store_admin_timestamp) > 7776000)) {
       wx.showModal({
-        title: '操作说明',
-        content: '管理员可以在分组对阵页面，操作新增对阵和记录比分等信息；如果分组未指定管理员，则所有分组成员均可以操作新增对阵和记录比分！',
+        title: '管理员说明',
+        content: '管理员可以在分组对阵页面,操作新增对阵和记录比分等信息；\r\n\r\n如果分组未指定管理员,则所有分组成员均可以操作新增对阵和记录比分！',
         complete: (res) => {
           if (res.cancel) {
 
@@ -1198,6 +1197,14 @@ Page({
       url: 'requestpartner?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num='+this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
     })
   },
+  refund_some(){
+    this.setData({
+      modalName:""
+    })
+    wx.navigateTo({
+      url: 'refund?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num='+this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+    })
+  },
   get_request_partner_list(){
     console.log("获取搭档请求列表get_request_partner_list")
     var that = this;
@@ -1228,19 +1235,15 @@ Page({
           that.setData({
             request_partner_list
           })
-        }else{
-          wx.showToast({
-            title: res.data.result,
-            icon:'error',
-            duration:3000
-          })
         }
 
       }
     })
   },
   all_pk_page() {
-
+    this.setData({
+      modalName:""
+    })
     var group_tag = "";
     var room = "暂定"
     //all_group_tag_dict
@@ -1411,7 +1414,21 @@ Page({
     this.setData({
       modalName: ""
     })
-    manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
+    wx.showModal({
+      title: '全员全额退款',
+      content: '当前总共有'+this.data.entire_part_info.length+'人报名参与，确认所有人全额退款！',
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
+    setTimeout(this.init_activity_all_info(),2000)
+        }
+      }
+    })
+    
   },
   update_activity_info(e) {
     this.setData({

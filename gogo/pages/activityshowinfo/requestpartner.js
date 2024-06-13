@@ -70,14 +70,7 @@ Page({
       })
       return
     }
-    if(sel_partner_member_list.length < 2){
-      wx.showToast({
-        title: '成员不足',
-        icon:"error",
-        duration:3000
-      })
-      return
-    }
+    
     wx.request({
       url: app.globalData.hosturl + 'request_partner', //仅为示例，并非真实的接口地址
       data: {

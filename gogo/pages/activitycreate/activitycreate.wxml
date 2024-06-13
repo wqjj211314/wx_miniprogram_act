@@ -7,11 +7,11 @@
         <view class="cu-item text-blue">
           <view class="cu-card article" style="">
             <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
-              <view class="title" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
+              <view class="title" style="padding:0px;" bindtap="navigateToActivityInfo" data-index="{{index}}">
                 <view class="text-cut">{{item.title}}
                 </view>
               </view>
-              <view class="content" style="padding:0px;" bindtap="navigateToActivityIndex" data-index="{{index}}">
+              <view class="content" style="padding:0px;" bindtap="navigateToActivityInfo" data-index="{{index}}">
                 <image wx:if="{{item.bg_img_exist}}" src="{{item.bg_url}}" mode="aspectFill" style="width:40%;height:200rpx;"></image>
                 <image wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" style="width:40%;height:200rpx;"></image>
                 <view class="desc" style="margin-top: 10rpx;margin-bottom: 0rpx;">
@@ -36,8 +36,8 @@
               </view>
               <view class="flex" style="margin-top: 30rpx;justify-content: space-around;" hidden="{{item.activity_status >= 800}}" wx:if="{{is_login_user}}">
                 <button class="cu-btn bg-red sm" style="" bindtap="delete_activity"  wx:if="{{item.activity_status < 800}}" data-index="{{index}}">删除</button>
-                <button class="cu-btn bg-red sm" style="" bindtap="cancel_activity" wx:if="{{item.activity_status < 800}}" data-index="{{index}}">取消</button>
-                <button class="cu-btn bg-red sm" style="" bindtap="refund_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0}}">全部退款</button>
+                <button class="cu-btn bg-red sm" bindtap="cancel_activity" wx:if="{{item.activity_status < 800 && item.activity_status >= 200}}" data-index="{{index}}">取消</button>
+                <button class="cu-btn bg-red sm" style="" bindtap="refund_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0 && item.member > 0}}">全部退款</button>
                 <button class="cu-btn bg-green sm" style="" bindtap="update_activity_info" wx:if="{{item.activity_status < 800}}" data-index="{{index}}">编辑</button>
                 <button class="cu-btn bg-green sm" style="" bindtap="calculate_close_activity" data-index="{{index}}" hidden="{{item.activity_status >= 800||item.activity_status < 200}}">统计结算</button>
               </view>
