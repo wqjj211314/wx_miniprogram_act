@@ -19,6 +19,9 @@
                     <view>
                       <text class="{{item.activity_status >= 200?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'}}"></text>{{item.activity_status_comment}}
                     </view>
+                    <view wx:if="{{is_login_user}}"> 
+                      {{item.activity_status >= 200&&item.activity_status < 800&&item.pay_price > 0?"活动结束12h内结算费用":""}}
+                    </view>
                     <view>
                       <text class="cuIcon-locationfill text-green"></text>{{item.show_activityaddress}}
                     </view>
@@ -39,7 +42,8 @@
                 <button class="cu-btn bg-red sm" bindtap="cancel_activity" wx:if="{{item.activity_status < 800 && item.activity_status >= 200}}" data-index="{{index}}">取消</button>
                 <button class="cu-btn bg-red sm" style="" bindtap="refund_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0 && item.member > 0}}">全部退款</button>
                 <button class="cu-btn bg-green sm" style="" bindtap="update_activity_info" wx:if="{{item.activity_status < 800}}" data-index="{{index}}">编辑</button>
-                <button class="cu-btn bg-green sm" style="" bindtap="calculate_close_activity" data-index="{{index}}" hidden="{{item.activity_status >= 800||item.activity_status < 200}}">统计结算</button>
+                <!--<button class="cu-btn bg-green sm" style="" bindtap="calculate_close_activity" data-index="{{index}}" hidden="{{item.activity_status >= 800||item.activity_status < 200}}">统计结算</button>
+                -->
               </view>
             </view>
           </view>

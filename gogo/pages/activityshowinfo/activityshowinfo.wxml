@@ -467,9 +467,10 @@
       <view class="cu-item" bindtap="refund_all_member" style="justify-content: center;" wx:if="{{admin_flag && activity_info.pay_price != 0&&entire_part_info.length > 0}}">
         <text>全员全额退款</text>
       </view>
-      <view class="cu-item" bindtap="calculate_close_activity" style="justify-content: center;" wx:if="{{admin_flag && is_end && activity_info.activity_status < 800}}">
+      <!--<view class="cu-item" bindtap="calculate_close_activity" style="justify-content: center;" wx:if="{{admin_flag && is_end && activity_info.activity_status < 800}}">
         <text>统计结算活动(积分或费用)</text>
       </view>
+      -->
       <view class="cu-item" bindtap="hideModal" style="justify-content: center;margin-bottom: 20rpx;">
         <text>关闭</text>
       </view>
