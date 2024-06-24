@@ -86,7 +86,7 @@
       <view class="cu-item arrow" bind:tap="showModal" data-target="DialogModal-suggest">
         <view class="content">
           <text class="cuIcon-phone text-green" style="font-size:40rpx;"></text>
-          <text class="text-grey">微信电话联系</text>
+          <text class="text-grey">客服联系</text>
         </view>
         <view class="action" style="max-width:66%;">
           <text class="text-green"></text>
@@ -98,7 +98,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.29</text>
+          <text class="text-grey text-sm">v1.0.41</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">
@@ -113,7 +113,7 @@
 <view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
-      <view class="content">微信电话联系</view>
+      <view class="content">客服联系</view>
       <view class="action" bindtap="hideModal">
         <text class="cuIcon-close text-red"></text>
       </view>

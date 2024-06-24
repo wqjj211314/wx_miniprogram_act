@@ -86,12 +86,16 @@ Page({
     });
   },
   confirm_expanding_money(e){
+    var that = this;
     var id = e.currentTarget.dataset.id;
+    var index = e.currentTarget.dataset.index;
+    var info = this.data.expanding_money_record_list[index]
     wx.request({
       url: app.globalData.hosturl+'confirm_expanding_money', //仅为示例，并非真实的接口地址
       data: {
         "id":id,
-        "user_id":app.globalData.login_userInfo["user_id"],
+        "expand_user_id":info.user_id,
+        "admin_user_id":app.globalData.login_userInfo["user_id"],
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -102,6 +106,7 @@ Page({
           icon:'none',
           duration:3000
         })
+        that.get_expanding_money_record();
       }
     });
   },
@@ -111,6 +116,7 @@ Page({
   onLoad: function (options) {
     this.get_checking_activity_list();
     this.get_all_img();
+    this.get_expanding_money_record();
   },
   ViewImagebg(e) {
     console.log(e.currentTarget.dataset.url)
@@ -179,6 +185,9 @@ Page({
     });
   },
   calculate_close_all_activity(){
+    wx.showLoading({
+      title: '结算中...',
+    })
     wx.request({
       url: app.globalData.hosturl+'calculate_close_all_activity', //仅为示例，并非真实的接口地址
       data: {
@@ -188,6 +197,7 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success (res) {
+        
         if(res.data.code==200){
           wx.showToast({
             title: res.data.result,
@@ -201,9 +211,57 @@ Page({
             duration:3000
           })
         }
+        wx.hideLoading()
         
       }
     });
+  },
+  delete_all_activity_queue_member(){
+    wx.showLoading({
+      title: '结算中...',
+    })
+    wx.request({
+      url: app.globalData.hosturl+'delete_all_activity_queue_member', //仅为示例，并非真实的接口地址
+      data: {
+        
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        
+        if(res.data.code==200){
+          wx.showToast({
+            title: res.data.result,
+            icon:'none',
+            duration:3000
+          })
+        }else{
+          wx.showToast({
+            title: '服务器异常',
+            icon:'none',
+            duration:3000
+          })
+        }
+        wx.hideLoading()
+        
+      }
+    });
+  },
+  navigateToActivityInfo(e){
+    var index = parseInt(e.currentTarget.dataset.index);
+    console.log(typeof index);
+    console.log(this.data.activity_create_list.length);
+    var activity_info = this.data.activity_create_list[index];
+    let activity_user_info = encodeURIComponent(JSON.stringify(activity_info.createuser));
+    activity_info = encodeURIComponent(JSON.stringify(activity_info));
+    console.log("跳转至活动报名界面")
+    console.log(activity_info);
+    console.log(activity_user_info)
+    wx.navigateTo({
+      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
+    })
+    
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

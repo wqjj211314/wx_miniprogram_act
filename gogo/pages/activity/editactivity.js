@@ -127,7 +127,7 @@ Page({
   },
   roomInput(e) {
     this.setData({
-      roomlist: e.detail.value
+      roomlist: e.detail.value.split(",")
     })
   },
 

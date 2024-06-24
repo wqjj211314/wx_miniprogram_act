@@ -1,6 +1,8 @@
 //#1=>1,去除#字符
 var iscontain = function(arraylist,item){
   item = item + "";
+  console.log(typeof(arraylist))
+  
   for(var i=0;i<arraylist.length;i++){
     if(arraylist[i] == item){
       return true;

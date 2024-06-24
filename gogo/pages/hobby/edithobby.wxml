@@ -1,7 +1,7 @@
 <scroll-view scroll-y="true" style="height: 100%;">
 <view class="" style="width:100vw;height:30vh;z-index:-1;position:absolute;top:0px;">
-  <image class='img' style="height:30vh" wx:if="{{hobby_info.bg_img_exist}}" src="{{hosturl}}static/{{hobby_info.user_id+hobby_info.hobby_tag}}.jpg" mode="aspectFill"></image>
-  <image class='img' style="height:30vh" wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill"></image>
+  <image class='img' style="height:30vh" wx:if="{{hobby_info.bg_img_exist}}" src="{{hobby_info.bg_url}}" mode="aspectFill"></image>
+  <image class='img' style="height:30vh" wx:else src="https://www.2week.club:5000/static/userbg.jpg" mode="aspectFill"></image>
 </view>
 <view class="cu-list menu" style="margin-top:350rpx;">
   <view class="cu-form-group">
@@ -22,6 +22,7 @@
   <!--
     第一组运动项目图标
   -->
+  <!--
   <view class="flex justify-between text-yellow" style="padding:6rpx;color:#fdb927;">
     <text class="iconfont icon-yumaoqiu1"></text>
     <text class="iconfont icon-pingpangqiu"></text>
@@ -40,7 +41,7 @@
     <text class="iconfont icon-zuqiu"></text>
     <text class="iconfont icon-bowuguan"></text>
   </view>
-
+-->
   <view class="cu-item" style="">
     <view class="content">
       <text class="cuIcon-timefill text-green"></text>
@@ -84,7 +85,7 @@
     </view>
 
   </view>
-  <view class="cu-item">
+  <view class="cu-item" wx:if="{{hobby_info.is_pk_hobby}}">
     <view class="content">
       <text class="iconfont icon-vsrili text-green" style="width: 1.5em;margin-right: 10rpx;text-align: center;margin-left: 10rpx;"></text>
       <text class="">自我评价/评级</text>
@@ -93,7 +94,7 @@
       <text class="">{{hobby_live}}</text>
     </view>
   </view>
-  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding:0;padding-bottom: 10rpx;padding-top: 10rpx;" wx:if="{{hobby_info.hobby_lock != 'lock'}}">
+  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;padding:0;padding-bottom: 10rpx;padding-top: 10rpx;" wx:if="{{hobby_info.hobby_lock != 'lock'&&hobby_info.is_pk_hobby}}">
     <view class="" style="width: 100%;padding-left:60rpx;padding-right: 20rpx;">
       <radio-group class="flex justify-between" style="flex-flow: wrap;width: 100%;" role="radiogroup" bindchange="change_hobby_live">
         <view class="text-center" wx:for="{{hobby_live_tags}}">
@@ -107,6 +108,7 @@
   <!--
     第二组运动项目图标
   -->
+  <!--
   <view class="flex justify-between text-blue" style="padding:6rpx;color:#0f4b90;">
     <text class="iconfont icon-lvyou"></text>
     <text class="iconfont icon-HorsebackRiding"></text>
@@ -125,6 +127,7 @@
     <text class="iconfont icon-Dancing"></text>
     <text class="iconfont icon-motuoche1"></text>
   </view>
+  -->
   <view class="cu-item">
     <view class="content">
       <text class="cuIcon-upstagefill text-green"></text>

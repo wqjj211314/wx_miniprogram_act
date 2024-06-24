@@ -3,7 +3,7 @@
   <form>
     <view class="cu-form-group">
       <view class="title">退款金额<text style="color: red;">*</text></view>
-      <input placeholder="请输入金额，单位元" bindinput='priceInput' type="digit" style="color:black;text-align: right;" bindblur="priceInputBlur" value="{{refund_fee==0?'':refund_fee}}"></input>
+      <input placeholder="请输入金额，单位元" bindinput='priceInput' type="digit" style="color:black;text-align: right;" bindblur="priceInputBlur" value="{{refund_fee}}"></input>
     </view>
     
   </form>

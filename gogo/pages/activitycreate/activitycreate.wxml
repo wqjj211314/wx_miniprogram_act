@@ -3,7 +3,7 @@
   <view style="width:100vw;height:100vh;background-color: white;">
     <block wx:for="{{activity_create_list}}" wx:key="activity_id" wx:for-index="index">
       <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
-        <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}</view>
+        <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}--活动开始时间</view>
         <view class="cu-item text-blue">
           <view class="cu-card article" style="">
             <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">

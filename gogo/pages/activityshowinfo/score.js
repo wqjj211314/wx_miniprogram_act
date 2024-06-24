@@ -47,7 +47,6 @@ function get_pk_groups(hosturl, that, activity_id, group_tag, activity_tag) {
       console.log("获取当前分组的对阵情况");
       console.log(pkinfo);
       if (pkinfo == "") {
-        
         return
       }
       //初始化分数胜负场，胜率，得分等
@@ -250,7 +249,7 @@ function win_rate(users_score) {
     var total = item["peace"] + item["fail"] + item["win"];
     var rate = 0;
     if (item["win"] > 0) {
-      rate = (Math.round(item["win"] / total * 100) + "%");
+      rate = (Math.round(item["win"] / total * 100));
     }
     //var rate = (Math.round(item["win"] / total * 100) / 100 + "%");
     item["win_rate"] = rate;

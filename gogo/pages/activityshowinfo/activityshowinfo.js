@@ -69,7 +69,7 @@ Page({
     moods: [],
     mood_img_list: [],
     select_group_tag: "",//报名所选择的分组
-    pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑"],
+    pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑","棋牌"],
     is_pk_hobby: true,
     show_part_flag: false,
     show_admin_flag: false,
@@ -545,7 +545,7 @@ Page({
     }
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     return {
-      title: this.data.activity_info["title"],
+      title: "「"+this.data.activity_info["pay_type"]+"」"+this.data.activity_info["title"],
       //desc: '自定义分享描述',
       path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id,
       //imageUrl:bgurl,
@@ -959,7 +959,7 @@ Page({
     if (store_admin_timestamp == "" || store_admin_timestamp == undefined || (timestamp - Number(store_admin_timestamp) > 7776000)) {
       wx.showModal({
         title: '管理员说明',
-        content: '管理员可以在分组对阵页面,操作新增对阵和记录比分等信息；\r\n\r\n如果分组未指定管理员,则所有分组成员均可以操作新增对阵和记录比分！',
+        content: '管理员可以在对局页面,操作新增对阵和记录比分等信息；\r\n\r\n如果分组未指定管理员,则所有分组成员均可以操作新增对阵和记录比分！',
         complete: (res) => {
           if (res.cancel) {
 
@@ -1332,6 +1332,7 @@ Page({
     setTimeout(function () {
       that.setData({
         triggered: false,
+        edit_group_flag:false,
       })
     }, 2000);
     this.init_activity_all_info(this.data.activity_info);

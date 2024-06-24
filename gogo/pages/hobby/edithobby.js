@@ -52,7 +52,7 @@ Page({
       hobby_live_index: this.data.hobby_live_tags.indexOf(hobby_info.hobby_live),
       hobby_info: hobby_info,
       hobby_point: hobby_info.hobby_point,
-      imgList: hobby_info.bg_img_exist?[app.globalData.hosturl + "static/" + hobby_info.user_id + hobby_info.hobby_tag + ".jpg"]:[]
+      imgList: hobby_info.bg_img_exist?[hobby_info.bg_url]:[]
     });
     console.log(this.data.hobby_time_index);
   },
@@ -268,13 +268,12 @@ Page({
     if (this.data.img_change) {
       console.log("修改背景图");
       wx.uploadFile({
-        url: app.globalData.hosturl + 'upload', //接口
+        url: app.globalData.hosturl + 'upload_hobby_bg', //接口
         filePath: that.data.imgList[0],
         name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
         formData: {
-          'user': 'test',
-          'blur_flag':false,
-          'activity_id': app.globalData.openid + that.data.hobby_tag
+          'user_id': app.globalData.login_userInfo["user_id"],
+          'hobby_tag':this.data.hobby_tag,
         },
         success: function (res) {
           wx.showToast({
@@ -306,6 +305,9 @@ Page({
       },
       success(res) {
         console.log("成功创建活动：" + res.data);
+        wx.showToast({
+          title: 'title',
+        })
         //后台上传背景图片，创建活动成功后直接跳转至用户页
         wx.navigateTo({
           url: 'hobbylist?user_id='+app.globalData.openid

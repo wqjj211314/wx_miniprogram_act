@@ -32,7 +32,7 @@ Page({
     endtime: year + "-" + month + "-" + day + " 22:00",
     addendtime: year + "-" + month + "-" + day + " 18:00",
     cancelendtime: year + "-" + month + "-" + day + " 18:00",
-    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","露营","校友会","老乡会"],
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营","校友会","老乡会"],
     hobby_tag: "",
     max_part_number: 10,
     title: "",
@@ -74,6 +74,11 @@ Page({
     })
     this.get_activity_info(hobbytagvalue);
 
+  },
+  tagInput(e){
+    this.setData({
+      hobby_tag: e.detail.value
+    })
   },
   get_activity_info(hobbytagvalue) {
     var that = this;
@@ -161,7 +166,7 @@ Page({
   },
   roomInput(e) {
     this.setData({
-      roomlist: e.detail.value
+      roomlist: e.detail.value.split(",")
     })
   },
   chooseroom(e) {
@@ -479,7 +484,7 @@ Page({
         "gender": gender,
         "title": this.data.title,
         "title_tags":this.data.title_tags.toString(),
-        "activity_tag": this.data.hobby_tag,
+        "activity_tag": this.data.hobby_tag.trim(),
         "detail": this.data.detail,
         "location": location,
         "room": this.data.roomlist.toString(),

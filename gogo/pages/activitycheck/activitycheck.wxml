@@ -12,7 +12,11 @@
     </swiper-item>
   </swiper>
   <button class="btn bg-green margin-top" bind:tap="calculate_close_all_activity">统计结算所有活动</button>
+
+  <button class="btn bg-green margin-top" bind:tap="delete_all_activity_queue_member">删除所有排队成员</button>
+
   <block wx:for="{{expanding_money_record_list}}" wx:key="id">
+  <view class="bg-white padding-sm margin">
     <view class="flex bg-white margin-sm padding" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
         <view class="bg-blue padding" style="border-radius: 20rpx;">
           {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}
@@ -21,9 +25,13 @@
           <view>交易详情：{{item.trade_desc}}</view>
           <view>操作时间：{{item.submit_time}}</view>
           <view class="text-blue">余额：{{item.current_money}}</view>
+          <view>账户名:{{item.bank_account_name}}</view>
+          <view>账号:{{item.bank_num}}</view>
         </view>
     </view>
-    <view class="cu-btn" bind:tap="confirm_expanding_money" data-id="{{item.id}}">审核通过</view>
+    <view class="cu-btn bg-green" style="width: 100%;" bind:tap="confirm_expanding_money" data-id="{{item.id}}" data-index="{{index}}">审核通过</view>
+    </view>
+
   </block>
   <view style="width:100vw;background-color: white;">
     <block wx:for="{{activity_create_list}}" wx:key="activity_id">
@@ -36,7 +44,7 @@
                 <view class="text-cut">{{item.title}}</view>
               </view>
               <view class="content" style="padding:0px;">
-                <image src="{{item.bg_img_exist?item.bg_url:'https://www.2week.club:5000/static/defaultbg.jpg'}}" mode="aspectFill" style="width:40%;height:200rpx;"></image>
+                <image src="{{item.bg_img_exist?item.bg_url:'https://www.2week.club:5000/static/defaultbg.jpg'}}" mode="aspectFill" style="width:40%;height:200rpx;" bind:tap="navigateToActivityInfo" data-index="{{index}}"></image>
                 <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
                   <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.activity_status_comment}}</view>
                   <view>

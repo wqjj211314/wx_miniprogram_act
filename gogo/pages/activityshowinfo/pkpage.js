@@ -10,6 +10,7 @@ Page({
     activity_info: {},
     is_begin: false,
     is_end: true,
+    is_end_5h:false,
     is_addend: false,
     is_cancelend: false,
     activity_id: "",
@@ -21,6 +22,7 @@ Page({
     sel_pk_group_user_list: [],//选择的对阵成员列表，默认是所有成员
     admin_users: [],
     admin_flag: false,
+    part_member_num:"",
     show_member_info_flag: false,
     boy_num: 0,
     boy_member_num_list: [],
@@ -70,6 +72,12 @@ Page({
       sel_pk_group_member_list.push(member_num);
       sel_pk_group_user_list.push(item);
       //member_users[member_num] = item;
+      if (item.user_id == app.globalData.login_userInfo["user_id"]) {
+        this.setData({
+          part_member_num: item.member_num
+        })
+        this.data.part_member_num = item.member_num
+      }
       if (item.admin_status == 1) {
         admin_users.push(item);
         if (item.user_id == app.globalData.login_userInfo["user_id"]) {
@@ -86,7 +94,10 @@ Page({
         boy_member_num_list.push(item.member_num)
       }
     })
-    if (admin_users.length == 0 || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]) {
+    //没有管理员且是分组成员就有权限
+    //有管理员，且是管理员，那管理员就有权限
+    //活动发起人一定有权限
+    if ((admin_users.length == 0 && this.data.part_member_num != "") || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]) {
       this.setData({
         admin_flag: true
       })
@@ -108,7 +119,8 @@ Page({
       activity_info: activity_info,
       admin_users: admin_users,
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
-      is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
+      is_end: new Date(activity_info["endtime"]) - new Date() <= 0,//毫秒
+      is_end_5h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*5),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
     })
@@ -126,7 +138,34 @@ Page({
    */
   onShow() {
     console.log("onshow加载");
-
+    var admin_users = [];
+    this.data.group_users.forEach(item => {
+      //member_users[member_num] = item;
+      if (item.user_id == app.globalData.login_userInfo["user_id"]) {
+        this.setData({
+          part_member_num: item.member_num
+        })
+        this.data.part_member_num = item.member_num
+      }
+      if (item.admin_status == 1) {
+        admin_users.push(item);
+        if (item.user_id == app.globalData.login_userInfo["user_id"]) {
+          console.log("管理权限")
+          this.setData({
+            admin_flag: true
+          })
+        }
+      }
+    })
+    //没有管理员且是分组成员就有权限
+    //有管理员，且是管理员，那管理员就有权限
+    //活动发起人一定有权限
+    if ((admin_users.length == 0 && this.data.part_member_num != "") || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]) {
+      console.log("管理权限")
+      this.setData({
+        admin_flag: true
+      })
+    }
     var edit_group_user = app.globalData.edit_group_user;
     var edit_index = app.globalData.edit_index;
     console.log(edit_index);
@@ -201,7 +240,7 @@ Page({
         var each_group = [];
         console.log(each_group_sample);
         each_group_sample.forEach((num_index) => {
-          console.log(num_index);
+          //console.log(num_index);
           each_group.push(that.data.sel_pk_group_user_list[num_index].member_num)
         })
         pk_group.push(each_group);
@@ -245,6 +284,25 @@ Page({
       sample = sample7;
     } else if (this.data.sel_pk_group_user_list.length == 8) {
       sample = sample8;
+    }
+    //单独对2女4男进行特殊处理
+    var boy_num = 0;
+    var girl_num = 0;
+    var boy_list = [];
+    var girl_list = [];
+    for (var index in this.data.sel_pk_group_user_list) {
+      if (this.data.sel_pk_group_user_list[index].gender == 1) {
+        boy_num = boy_num + 1
+        boy_list.push(this.data.sel_pk_group_user_list[index])
+      } else if (this.data.sel_pk_group_user_list[index].gender == 0) {
+        girl_num = girl_num + 1
+        girl_list.push(this.data.sel_pk_group_user_list[index])
+      }
+    }
+    if(girl_num == 2 && boy_num == 4){
+      console.log(girl_list.concat(boy_list))
+      this.data.sel_pk_group_user_list = girl_list.concat(boy_list)
+      sample = [[[0,2],[1,3]],[[0,4],[1,5]],[[4,5],[2,3]],[[0,3],[1,2]],[[0,5],[1,4]],[[3,4],[2,5]]]
     }
     var pk_groups = this.getvs(sample);
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
@@ -658,5 +716,32 @@ Page({
     this.setData({
       show_edit_flag: !this.data.show_edit_flag
     })
-  }
+  },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+    
+    //all_group_tag_dict
+    let group_users = encodeURIComponent(JSON.stringify(this.data.group_users));
+
+    wx.navigateTo({
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
+    })
+    
+    return {
+      title: this.data.activity_info["title"]+"-对阵详情",
+      desc: '自定义分享描述',
+      path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)),
+      //imageUrl:bgurl,
+      success: function (res) {
+        if (res.errMsg == 'shareAppMessage:ok') {
+          console.log("成功", res)
+        }
+      },
+      fail: function (res) {
+        console.log("失败", res)
+      }
+    }
+  },
 })

@@ -55,21 +55,21 @@
             <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
           </view>
           <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
-          <view style="font-size: 18rpx;height: fit-content;color: red;" wx:if="{{user.is_queue == 1}}">排队中</view>
-          <view class="{{user.gender==0?'text-pink':'text-blue'}}" style="font-size: 18rpx;height: fit-content;" wx:if="{{user.admin_status == 1}}">[管理员]</view>
+          <view style="font-size: 18rpx;height: fit-content;color: red;" wx:if="{{user.is_queue == 1}}">「排队中」</view>
+          <view class="{{user.gender==0?'text-pink':'text-blue'}}" style="font-size: 18rpx;height: fit-content;" wx:if="{{user.admin_status == 1}}">「管理员」</view>
         </view>
       </block>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
-        <text style="color: black;font-size: 30rpx;font-weight: 200;">编辑</text>
+      <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="edit_completed_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
+        <text style="color: black;font-size: 30rpx;font-weight: 200;">分组</text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="clear_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
+      <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="clear_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}" wx:if="{{is_pk_hobby}}">
+      <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="pk_page" data-tag="{{item0.group_tag}}" wx:if="{{is_pk_hobby}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">对局
         </text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
+      <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
       </view>
     </view>
@@ -85,7 +85,7 @@
               </view>
             </view>
             <view class="content" style="left: 170rpx;flex:1;">
-              <view class="text-black">{{item.nickName}}<text style="color: red;font-size: 25rpx;">{{item.is_queue == 1?"[排队中]":""}}</text></view>
+              <view class="text-black">{{item.nickName}}<text style="color: red;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text></view>
               <view class="text-black flex" style="font-size: 20rpx;" wx:if="{{!show_admin_flag}}">
                 <view class="" style="word-break: break-all;width:250rpx;line-height: 1.2em;-webkit-line-clamp: 2;text-overflow: ellipsis;display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;">
                   <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
@@ -129,14 +129,14 @@
           <view class="cu-tag badge {{user.gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(user.member_num)}}</view>
         </view>
         <view style="font-size: 18rpx;height: fit-content;">{{user.nickName}}</view>
-        <view style="font-size: 18rpx;height: fit-content;color: red;" wx:if="{{user.is_queue == 1}}">[排队中]</view>
-        <view class="{{user.gender==0?'text-pink':'text-blue'}}" style="font-size: 18rpx;height: fit-content;" wx:if="{{user.admin_status == 1}}">[管理员]</view>
+        <view style="font-size: 18rpx;height: fit-content;color: red;" wx:if="{{user.is_queue == 1}}">「排队中」</view>
+        <view class="{{user.gender==0?'text-pink':'text-blue'}}" style="font-size: 18rpx;height: fit-content;" wx:if="{{user.admin_status == 1}}">「管理员」</view>
       </view>
     </block>
-    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="pk_page" data-tag="" wx:if="{{is_pk_hobby}}">
+    <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="pk_page" data-tag="" wx:if="{{is_pk_hobby}}">
       <text style="color: black;font-size: 30rpx;font-weight: 200;">对局</text>
     </view>
-    <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group" data-tag="" wx:if="{{admin_flag&&!is_begin}}">
+    <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="edit_group" data-tag="" wx:if="{{admin_flag&&!is_begin}}">
       <text style="color: black;font-size: 30rpx;font-weight: 200;">分组</text>
     </view>
   </view>
@@ -150,7 +150,7 @@
           </view>
         </view>
         <view class="content" style="left: 170rpx;flex:1;">
-          <view class="text-black">{{item.nickName}}<text style="color: red;font-size: 25rpx;">{{item.is_queue == 1?"[排队中]":""}}</text></view>
+          <view class="text-black">{{item.nickName}}<text style="color: red;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text></view>
           <view class="text-black flex" style="font-size: 20rpx;" wx:if="{{!show_admin_flag}}">
             <view class="" style="word-break: break-all;width:250rpx;line-height: 1.2em;-webkit-line-clamp: 2;text-overflow: ellipsis;display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;">
               <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">

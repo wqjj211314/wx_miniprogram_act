@@ -41,15 +41,15 @@
           <view class="text-black flex" style="font-size: 20rpx;">
             <view class="" style="word-break: break-all;">
               <block wx:for="{{member_users[member_num].partinfo}}" wx:for-index="key" wx:for-item="value">
-                <text class="cuIcon-tagfill text-red"></text>
+                
                 <text class="margin-right-xs">{{key}}:{{value}}</text>
               </block>
             </view>
           </view>
         </view>
         <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
-          <view class="text-black text-xs">{{member_users[member_num].hobby_info.hobby_tag}}<text class="text-blue" style="">{{tools.hobby_point(member_users[member_num].hobby_info.hobby_point)}}级</text></view>
-          <view class="cu-tag line-blue">积分{{member_users[member_num].hobby_info.hobby_point}}</view>
+          <view class="text-black text-xs">{{member_users[member_num].hobby_info.hobby_tag}}积分</view>
+          <view class="cu-tag line-blue">{{member_users[member_num].hobby_info.hobby_point}}</view>
         </view>
         <view class="action">
           <checkbox value="{{member_num}}" />

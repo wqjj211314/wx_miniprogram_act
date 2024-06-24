@@ -40,8 +40,16 @@ Page({
           var bank_num = "";
           var bank_account_name = "";
           if(money_list.length > 0){
-            bank_num = money_list[0]["bank_num"]
-            bank_account_name = money_list[0]["bank_account_name"]
+            money_list.forEach((item)=>{
+              if(item["bank_num"] != null && bank_num == ""){
+                bank_num = item["bank_num"]
+              }
+              if(item["bank_account_name"] != null && bank_account_name == ""){
+                bank_account_name = item["bank_account_name"]
+              }
+
+            })
+           
           }
           that.setData({
             money_list:money_list,
@@ -65,9 +73,11 @@ Page({
     });
   },
   getallmoney(){
+    console.log(this.data.bank_account_name)
+    console.log(this.data.bank_num)
     if(this.data.bank_account_name == ''||this.data.bank_num == ''){
       wx.showToast({
-        title: '银行信息有误',
+        title: '请填写银行信息',
         icon:'error',
         duration:3000
       })
@@ -103,18 +113,10 @@ Page({
                 var money_list = result["money_result"]
                 var can_get = result["can_get"]
                 var userinfo = result["userinfo"]
-                var bank_num = "";
-                var bank_account_name = "";
-                if(money_list.length > 0){
-                  bank_num = money_list[0]["bank_num"]
-                  bank_account_name = money_list[0]["bank_account_name"]
-                }
                 that.setData({
                   money_list:money_list,
                   can_get:can_get,
                   userinfo:userinfo,
-                  bank_num:bank_num,
-                  bank_account_name:bank_account_name
                 })
               }else if(res.data.code == -1){
                 wx.showToast({

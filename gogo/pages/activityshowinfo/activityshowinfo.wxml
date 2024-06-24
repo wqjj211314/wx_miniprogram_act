@@ -24,7 +24,7 @@
                 <button class="cu-btn round bg-blue" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{activity_info.pay_type}}<text style="font-size: 32rpx;" class="text-white text-bold">{{activity_info.pay_price==0?"":activity_info.pay_price+"元"}}</text></button>
               </view>
               <view class="text-center" wx:for="{{title_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;" wx:key="*this">
-                <button class="cu-btn round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
+                <button class="cu-btn round bg-blue" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
               </view>
             </view>
           </view>
@@ -109,7 +109,7 @@
                       <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;" bind:tap="chat" data-membernum="{{item.member_num}}">
                       </view>
                       <view class="" style="width: 200rpx;position: initial;overflow: hidden;white-space: nowrap;">
-                        {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: red;font-size: 25rpx;">{{item.is_queue == 1?"[排队中]":""}}</text>
+                        {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: red;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
                       </view>
                       <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                         <view class="text-black flex" style="font-size: 25rpx;width: fit-content;">
@@ -143,7 +143,7 @@
                     <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;" bind:tap="chat" data-membernum="{{item.member_num}}">
                     </view>
                     <view class="" style="width: 200rpx;position: initial;overflow: hidden;white-space: nowrap;">
-                      {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: red;font-size: 25rpx;">{{item.is_queue == 1?"[排队中]":""}}</text>
+                      {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: red;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
                     </view>
                     <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                       <view class="text-black flex" style="font-size: 30rpx;width: fit-content;">
@@ -447,7 +447,7 @@
         <text>{{activity_info.pay_price!=0?"付费":""}}替人报名</text>
       </view>
       -->
-      <view class="cu-item" bindtap="all_pk_page" style="justify-content: center;" wx:if="{{!is_end&&entire_part_info.length > 0&&is_pk_hobby}}">
+      <view class="cu-item" bindtap="all_pk_page" style="justify-content: center;" wx:if="{{entire_part_info.length > 0&&is_pk_hobby}}">
         <text>全员自由组合对阵</text>
       </view>
       <view class="cu-item" bindtap="update_activity_info" style="justify-content: center;" wx:if="{{admin_flag&&!is_end}}">
