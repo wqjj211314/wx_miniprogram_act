@@ -65,7 +65,15 @@ Page({
     pay_type:"免费",
     pay_price:"0.00",
     custom_part:false,
-    scroll_flag:true
+    scroll_flag:true,
+    take_flag:true,
+  },
+  takechange(e){
+    var value = e.detail.value;
+    console.log(value)
+    this.setData({
+      take_flag:value
+    })
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
@@ -496,7 +504,8 @@ Page({
         "edit_activity_flag":this.data.edit_activity_flag,
         "pay_type":this.data.pay_type,
         "pay_price":this.data.pay_price,
-        "bg_url":bg_url
+        "bg_url":bg_url,
+        "take_flag":this.data.take_flag==false?0:1
       },
       header: {
         'content-type': 'application/json' // 默认值

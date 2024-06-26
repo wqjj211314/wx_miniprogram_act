@@ -182,7 +182,10 @@
     <input placeholder="自定义数据，比如姓名" class="text-left" maxlength="10" bindinput="inputMsg" cursor-spacing="8" value="{{add_new_partinfo}}" bindblur="onbindblur" bindfocus="onbindfocus"></input>
     <button class="cu-btn bg-green shadow sm" bind:tap="add_part_tag">保存</button>
   </view>
-
+	<view class="cu-form-group">
+		<view class="title">允许带人报名</view>
+		<switch checked bindchange="takechange"></switch>
+	</view>
   <view class="cu-form-group" style="">
     <view class="title">报名预分组</view>
     <button class="cu-btn bg-green shadow sm" bind:tap="custom_group_tag">自定义</button>
