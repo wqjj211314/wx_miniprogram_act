@@ -74,7 +74,8 @@ Page({
     show_part_flag: false,
     show_admin_flag: false,
     empty_group_tag_dict: true,//用来显示报名预分组的
-    request_partner_list:[]
+    request_partner_list:[],
+    recommend_list:[]
   },
 
   /**
@@ -476,9 +477,98 @@ Page({
       app.globalData.reload_activity_share_moods = false;
       share.get_activity_moods(app.globalData.hosturl, this, this.data.activity_info.activity_id);
     }
+    this.getuserinfo()
+    var that = this;
+    setTimeout(function(){
+      that.get_recommand_list()
+    },5000)
+    
 
   },
+  getuserinfo(){
+    try {
+      console.log("用户登录");
+      //直接获取缓存保存的
+      var openid = wx.getStorageSync('openid');
+      console.log(openid)
+      var that = this;
+      if (openid == "" || openid == undefined) {
+        console.log("需要登录获取openid")
+        this.user_login();
+      }else{
+        //发起网络请求
+        wx.request({
+          url: app.globalData.hosturl + 'get_userinfo',
+          data: {
+            "user_id": openid
+          },
+          success: (res) => {
+            console.log("获取用户信息")
+            console.log(res.data)
+            app.globalData.openid = res.data.user_id;
+            app.globalData.checking_flag = res.data.checking_flag;
+            app.globalData.login_userInfo = res.data;
+            app.globalData.hasUserInfo = true;
+            that.setData({
+              userinfo: res.data,
+              checking_flag: res.data.checking_flag,
+            });
+          }
+        })
+      }
+    } catch (e) {
+      console.log("持久化登录信息获取失败");
+      console.log(e);
+    }
+  },
 
+  user_login() {
+    //return;
+    var that = this;
+    wx.login({
+      success(res) {
+        console.log("登录授权结果")
+        console.log(res)
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: app.globalData.hosturl + 'getopenid',
+            data: {
+              code: res.code
+            },
+            success: (res) => {
+             
+              app.globalData.openid = res.data.openid;
+              app.globalData.checking_flag = res.data.checking_flag;
+              app.globalData.login_userInfo["user_id"] = res.data.openid;
+              app.globalData.login_userInfo["nickName"] = res.data.nickName;
+              app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
+              app.globalData.login_userInfo["gender"] = res.data.gender;
+              app.globalData.login_userInfo["signature"] = res.data.signature;
+              that.setData({
+                userinfo: res.data,
+                checking_flag: res.data.checking_flag,
+              });
+              try {
+                wx.setStorageSync('openid', res.data.openid);
+                app.globalData.hasUserInfo = true;
+                //wx.setStorageSync('nickName', res.data.nickName);
+              } catch (e) { }
+            }
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      },
+      fail(res){
+        console.log("登录失败")
+      },
+      complete(res){
+        console.log("登录完成")
+        console.log(res)
+      }
+    });
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */
@@ -533,7 +623,7 @@ Page({
         path: '/pages/index/index',
         }
     }
-    var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
+
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareAppMessage");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与
@@ -791,7 +881,7 @@ Page({
     })
   },
   onShareTimeline() {
-    var bgurl = app.globalData.hosturl + "static/" + this.data.activity_info["id"] + ".jpg";
+    
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareTimeline");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与
@@ -1449,5 +1539,44 @@ Page({
     wx.navigateTo({
       url: 'pkrank?activity_info=' + activity_info,
     })
-  }
+  },
+  get_recommand_list(){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_recommend_list',
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"]
+      },
+      success: (res) => {
+        console.log("获取用户信息")
+        if(res.data.code == 200){
+          that.setData({
+            recommend_list:res.data.result
+          })
+        }
+      }
+    })
+  },
+  navigateToactivityinfo(e) {
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var actinfo = this.data.recommend_list[index];
+    var activity_info = encodeURIComponent(JSON.stringify(this.data.recommend_list[index]));
+    console.log(actinfo)
+    console.log(actinfo.createuser)
+    let activity_user_info = encodeURIComponent(JSON.stringify(actinfo.createuser));
+    wx.navigateTo({
+      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
+    })
+  },
+  navigateTogoodinfo(e) {
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var goodinfo = this.data.recommend_list[index];
+    var good_info = encodeURIComponent(JSON.stringify(this.data.recommend_list[index]));
+    console.log(goodinfo)
+    wx.navigateTo({
+      url: '../good/gooddetail?good_info=' + good_info
+    })
+  },
 })

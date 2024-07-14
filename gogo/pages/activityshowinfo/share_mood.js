@@ -22,26 +22,45 @@ Page({
     }
   },
   ChooseImage() {
-    wx.chooseMedia({
-      count: 1, //默认9
-      mediaType: ["image"],
-      sourceType: ["album"],
-      sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
-      sourceType: ['album'], //从相册选择
-      success: (res) => {
-        console.log("选择图片结果");
-        console.log(res.tempFiles);
-        var temp = res.tempFiles;
-        var path = temp[0].tempFilePath;
-        var imgpaths = [];
-        imgpaths.push(path);
-        console.log(imgpaths);
-        this.setData({
-          imgList: imgpaths
-        })
-
-      }
-    });
+    wx.getPrivacySetting({
+      success: res => {
+        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+        console.log(res)
+        if (res.needAuthorization) {
+          console.log("需要授权")
+          // 需要弹出隐私协议
+          this.setData({
+            showPrivacy: true
+          })
+        } else {
+          // 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用隐私接口
+          console.log("已同意过")
+          wx.chooseMedia({
+            count: 1, //默认9
+            mediaType: ["image"],
+            sourceType: ["album"],
+            sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album'], //从相册选择
+            success: (res) => {
+              console.log("选择图片结果");
+              console.log(res.tempFiles);
+              var temp = res.tempFiles;
+              var path = temp[0].tempFilePath;
+              var imgpaths = [];
+              imgpaths.push(path);
+              console.log(imgpaths);
+              this.setData({
+                imgList: imgpaths
+              })
+      
+            }
+          });
+        }
+      },
+      fail: () => {},
+      complete: () => {}
+    })
+    
   },
   ViewImage(e) {
     wx.previewImage({

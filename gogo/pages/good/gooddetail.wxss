@@ -1,0 +1,47 @@
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+@import "/colorui/iconfont.wxss";
+page{
+  width: 100%;
+  height: 100%;
+  padding:0rpx;
+  margin:0rpx;
+  background-color: white;
+}
+/*主容器*/  
+.stepper {  
+  display:flex;
+  width: 180rpx;  
+  height: 60rpx;  
+  /*给主容器设一个边框*/  
+  border: 1px solid #ccc;  
+  border-radius: 30rpx;  
+}  
+
+/*加号和减号*/  
+.stepper text {  
+  width: 50rpx;  
+  line-height:60rpx;  
+  text-align: center;  
+}  
+
+/*数值*/  
+.stepper .input {  
+  width: 80rpx;  
+  height: 60rpx;  
+  text-align: center;  
+  font-size: 12px;  
+  /*给中间的input设置左右边框即可*/  
+  border-left: 1px solid #ccc;  
+  border-right: 1px solid #ccc;  
+}  
+
+/*普通样式*/  
+.stepper .normal{  
+  color: black;  
+}  
+
+/*禁用样式*/  
+.stepper .disabled{  
+  color: #ccc;  
+}  

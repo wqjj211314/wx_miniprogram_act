@@ -54,6 +54,8 @@ Page({
    */
   onLoad(options) {
     console.log("onLoad加载");
+    var activity_tag = JSON.parse(decodeURIComponent(options.activity_info)).activity_tag;
+    var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
     let group_tag = options.group_tag;
     var boy_num = 0;
@@ -81,6 +83,7 @@ Page({
       if (item.admin_status == 1) {
         admin_users.push(item);
         if (item.user_id == app.globalData.login_userInfo["user_id"]) {
+         
           this.setData({
             admin_flag: true
           })
@@ -97,13 +100,13 @@ Page({
     //没有管理员且是分组成员就有权限
     //有管理员，且是管理员，那管理员就有权限
     //活动发起人一定有权限
-    if ((admin_users.length == 0 && this.data.part_member_num != "") || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]) {
+    if ((admin_users.length == 0 && this.data.part_member_num != "") ||activity_info["createuser"]["user_id"] == app.globalData.login_userInfo["user_id"]) {
+      
       this.setData({
         admin_flag: true
       })
     }
-    var activity_tag = JSON.parse(decodeURIComponent(options.activity_info)).activity_tag;
-    var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
+    
     this.setData({
       group_users: group_users,
       sel_pk_group_member_list: sel_pk_group_member_list,
@@ -138,34 +141,7 @@ Page({
    */
   onShow() {
     console.log("onshow加载");
-    var admin_users = [];
-    this.data.group_users.forEach(item => {
-      //member_users[member_num] = item;
-      if (item.user_id == app.globalData.login_userInfo["user_id"]) {
-        this.setData({
-          part_member_num: item.member_num
-        })
-        this.data.part_member_num = item.member_num
-      }
-      if (item.admin_status == 1) {
-        admin_users.push(item);
-        if (item.user_id == app.globalData.login_userInfo["user_id"]) {
-          console.log("管理权限")
-          this.setData({
-            admin_flag: true
-          })
-        }
-      }
-    })
-    //没有管理员且是分组成员就有权限
-    //有管理员，且是管理员，那管理员就有权限
-    //活动发起人一定有权限
-    if ((admin_users.length == 0 && this.data.part_member_num != "") || this.data.activity_info["user_id"] == app.globalData.login_userInfo["user_id"]) {
-      console.log("管理权限")
-      this.setData({
-        admin_flag: true
-      })
-    }
+    
     var edit_group_user = app.globalData.edit_group_user;
     var edit_index = app.globalData.edit_index;
     console.log(edit_index);
@@ -527,6 +503,7 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'new_update_activity_member_pk', //仅为示例，并非真实的接口地址
       data: {
+        "user_id":app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id,
         "group_tag": group_tag,
         "pk_groups": pk_groups,

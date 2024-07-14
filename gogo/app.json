@@ -33,7 +33,12 @@
     "pages/index/listindex",
     "pages/activityshowinfo/partactivity",
     "pages/activityshowinfo/requestpartner",
-    "pages/activityshowinfo/refund"
+    "pages/activityshowinfo/refund",
+    "pages/good/addgood",
+    "pages/good/gooddetail",
+    "pages/good/editgood",
+    "pages/good/address",
+    "pages/good/order"
   ],
   "tabBar": {
     "color": "#2c2c2c",

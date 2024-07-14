@@ -9,7 +9,10 @@ Page({
     activity_list:[],
     hosturl:app.globalData.hosturl,
     share_use_id:"",
-    search_word:""
+    search_word:"",
+    current_swiper_item_index:0,
+    good_list:[],
+    admin_flag:false
   },
 
   /**
@@ -17,6 +20,12 @@ Page({
    */
   onLoad(options) {
     this.get_activity_list();
+    if(app.globalData.login_userInfo["checking_flag"]){
+      this.setData({
+        admin_flag:true
+      })
+    }
+    this.get_goods()
   },
 
   /**
@@ -47,12 +56,6 @@ Page({
 
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
 
   /**
    * 页面上拉触底事件的处理函数
@@ -60,7 +63,16 @@ Page({
   onReachBottom() {
 
   },
-
+  navigateToallorder(){
+    wx.navigateTo({
+      url: '../good/order?deliver_status='+"",
+    })
+  },
+  navigateToordernotdeliver(){
+    wx.navigateTo({
+      url: '../good/order?deliver_status='+"7天内发货",
+    })
+  },
 
   get_activity_list(){
     var _that = this;
@@ -105,6 +117,53 @@ Page({
       }
     });
   },
+  swiper_change(event) {
+    console.log("swiper_change")
+    console.log(event);
+    var that = this;
+    this.setData({
+      current_swiper_item_index: event.detail.current
+    })
+    
+  },
+  get_goods(){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_all_good', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"], 
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log("成功创建活动：" + res.data);
+        let result = res.data;
+        if (result["code"] == 200) {
+          var good_list = [];
+          that.setData({
+            good_list:good_list.concat(result["result"])
+          })
+        }else{
+          wx.showToast({
+            title: result["result"],
+            icon: "error",
+            duration: 3000
+          });
+        }
+        wx.hideLoading();
+       
+      },
+      fail: function (error) {
+        wx.hideLoading();
+        wx.showToast({
+          title: '服务器异常',
+          icon: 'error',
+          duration: 3000
+        })
+      }
+    });
+  },
   navigateToactivityinfo(e) {
     var index = e.currentTarget.dataset.index;
     console.log(index)
@@ -117,10 +176,83 @@ Page({
       url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info+"&share_use_id="+this.data.share_use_id
     })
   },
+  navigateTogoodinfo(e) {
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var goodinfo = this.data.good_list[index];
+    var good_info = encodeURIComponent(JSON.stringify(this.data.good_list[index]));
+    console.log(goodinfo)
+    wx.navigateTo({
+      url: '../good/gooddetail?good_info=' + good_info
+    })
+  },
   searchword(e){
     console.log(e.detail.value.trim())
     this.setData({
       search_word: e.detail.value.trim()
+    });
+  },
+  search_main(){
+    if(this.data.current_swiper_item_index == 0){
+        this.search_good()
+    }else if(this.data.current_swiper_item_index == 1){
+        this.search_activity_list()
+    }
+  },
+  search_good(search_word){
+    if(this.data.search_word == ""){
+      wx.showToast({
+        title: '请输入搜索词',
+        icon:"error"
+      })
+      return;
+    }
+    wx.showLoading({
+      title: '搜索中...',
+    })
+    var _that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'search_good', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id":app.globalData.login_userInfo["user_id"],
+        "search_word":this.data.search_word,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        //console.log(res.data)
+        
+        console.log(res.data);
+       
+        if(res.data.result.length == 0){
+          wx.showToast({
+            title: '搜索为空',
+            icon:"error",
+            duration:3000
+          })
+        }else{
+          _that.setData({
+            good_list: res.data.result,
+          })
+        }
+        
+        
+        wx.hideLoading({
+          success: (res) => {},
+        });
+      },
+      fail(res){
+        wx.hideLoading({
+          success: (res) => {},
+        });
+        wx.showToast({
+          title: '网络可能异常...',
+          icon:"error",
+          duration:4000
+        })
+  
+      }
     });
   },
   search_activity_list(){
@@ -189,7 +321,13 @@ Page({
     console.log(item.text)//首页
     if(item.pagePath == app.globalData.tab_page_path){
       this.get_activity_list();
+      this.get_goods()
     }
     app.globalData.tab_page_path = item.pagePath;
   },
+  add_good(){
+    wx.navigateTo({
+      url:"/pages/good/addgood"
+    })
+  }
 })

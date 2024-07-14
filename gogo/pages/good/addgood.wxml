@@ -1,0 +1,94 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<view class="cu-list menu card-menu shadow-warp" style="margin: 0;">
+  <view class="cu-form-group text-bold text-center">
+    <textarea placeholder="商品标题，[特惠全网最低价]骄点5羽毛球77/76速水电费水电费" bindinput='good_title' auto-height="true" maxlength="100" style="min-height: 100rpx;line-height: unset;height: fit-content;width: 100%;padding:20rpx 20rpx;" value="{{good_title}}"></textarea>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">商品类型</view>
+    <input placeholder="品牌的多种型号产品，骄点1、2、3、4、5,英文逗号分隔" bindinput='good_type' style="color:black;" value="{{good_type}}" maxlength="100"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">商品大小</view>
+    <input placeholder="尺寸大小，码数，速度" bindinput='good_size' style="color:black;" value="{{good_size}}" maxlength="100"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">商品颜色</view>
+    <input placeholder="颜色，黑、白、绿" bindinput='good_color' style="color:black;" value="{{good_color}}" maxlength="100"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">商品标签</view>
+    <input placeholder="全网最低价、保证正品、杭州专供" bindinput='good_tag' style="color:black;" value="{{good_tag}}" maxlength="300"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">商品价格<text style="color: red;">*</text><text class="cuIcon-recharge lg text-red"></text></view>
+    <input placeholder="单位：分" bindinput='good_price' type="digit" style="color:black;text-align: right;" bindblur="good_price_blur" value="{{good_price}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">商品库存数</view>
+    <input placeholder="单位：个" bindinput='good_store' type="digit" style="color:black;text-align: right;" value="{{good_store}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">商品限购数量</view>
+    <input placeholder="单位：个" bindinput='good_limit' type="digit" style="color:black;text-align: right;" value="{{good_limit}}"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">商品配送方式</view>
+    <input placeholder="选择或自定义输入" bindinput='good_deliver' style="color:black;" value="{{good_deliver_options}}" maxlength="100"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="flex justify-around" style="justify-content: space-around;width: 100%;">
+      <view class="text-center " wx:for="{{deliver_options}}">
+        <button class="cu-btn round {{tools.iscontain(good_deliver_options,item)?'bg-green':''}}" bindtap="choose_deliver" data-deliver="{{item}}" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;">{{item}}</button>
+      </view>
+    </view>
+  </view>
+
+</view>
+<view class="" style="padding-top:0px;margin-top:0px;margin-bottom: 40rpx;">
+  <view class="radius bg-white margin-top">
+    <view class='pagecenter1' style="padding-top:20rpx;">
+      <view class="bg-white text-black" style="padding-left: 30rpx;padding-bottom: 10rpx;">
+        <view class="title">商品背景图<text style="color: red;">*</text></view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" style="">
+            <text class="cuIcon-cameraadd" style=""></text>
+          </view>
+
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-list menu card-menu shadow-warp" style="margin: 0;">
+  <view class="cu-form-group">
+    <view class="title" style="min-width: 170rpx;">自提地址</view>
+    <textarea placeholder="省-市-区-街道-门牌号" bindinput="contact_address" auto-height="true" maxlength="300" style="min-height: 100rpx;line-height: unset;height: fit-content;width: 100%;padding:20rpx 0rpx;" value="{{contact_address}}"></textarea>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title" style="min-width: 170rpx;">联系人</view>
+    <input placeholder="姓名" bindinput='contact_name' style="color:black;" value="{{contact_name}}" maxlength="100"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title" style="min-width: 170rpx;">联系电话</view>
+    <input placeholder="手机号码" bindinput='contact_tel' style="color:black;" type="number" value="{{contact_tel}}" maxlength="100"></input>
+  </view>
+</view>
+<view class="bg-white" style="height: fit-content;margin:0rpx;border-radius: 20rpx;margin-top:30rpx;">
+  <view class="flex" style="flex-direction: column;height: fit-content;align-items: center;justify-content: center;">
+    <view style="padding-top:15rpx;height: fit-content;">商品详情</view>
+    <textarea placeholder="活动详情：如活动详细介绍，组织者联系方式等信息，也可在创建活动后发布公告" bindinput='good_detail' auto-height="true" maxlength="3000" style="min-height: 200rpx;line-height: unset;height: fit-content;width: 100%;padding:20rpx 20rpx;" value="{{good_detail}}"></textarea>
+  </view>
+</view>
+<view class="cu-bar tabbar" style="padding:0rpx 20rpx;height: fit-content;justify-content: space-around;font-size: 30rpx;margin:20rpx 5rpx;">
+  <view class="" bindtap="add_good" style="width: 100%;height: fit-content;">
+    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">新增商品</button>
+  </view>
+</view>

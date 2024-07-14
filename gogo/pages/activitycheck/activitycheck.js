@@ -9,8 +9,41 @@ Page({
     activity_create_list:[],
     hosturl:app.globalData.hosturl,
     imgs:[],
-    expanding_money_record_list:[]
+    expanding_money_record_list:[],
+    order_list:[]
   },
+  get_all_order(){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl+'query_all_order', //仅为示例，并非真实的接口地址
+      data: {
+        
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        if(res.data.result.length>=0){
+          console.log("待审核的活动")
+          //console.log(JSON.stringify(res.data))
+          //JSON.stringify(this.data.activity_info);
+          that.setData({
+            order_list:res.data.result
+          });
+          if(res.data.length == 0){
+            wx.showToast({
+              title: '没有订单',
+              icon: 'success',
+              duration: 2000
+            })
+          }
+          
+        }
+        
+      }
+    });
+  },
+
   get_checking_activity_list(){
     var that = this;
     wx.request({
@@ -117,6 +150,7 @@ Page({
     this.get_checking_activity_list();
     this.get_all_img();
     this.get_expanding_money_record();
+    this.get_all_order();
   },
   ViewImagebg(e) {
     console.log(e.currentTarget.dataset.url)

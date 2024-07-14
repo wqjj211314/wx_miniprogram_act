@@ -63,6 +63,58 @@
       </view>
     </block>
   </view>
+
+
+  <view class="cu-list menu card-menu">
+    <block wx:for="{{order_list}}" wx:key="order_id" wx:for-index="index">
+      <view class="" style="width: fit-content;padding-bottom: 15rpx;margin-top:40rpx;">下单时间 {{item.modify_time}}</view>
+      <view class="cu-form-group" style="border-radius: 20rpx;">
+        <view>
+          <view class="text-cut text-bold padding-top" style="height: fit-content;" bindtap="">
+            <view class="text-cut">{{item.good_title}}
+            </view>
+          </view>
+          <view class="content bg-white flex padding-top" style="">
+            <view class="cu-btn" style="width:50%;height:300rpx;border-radius: 20rpx;padding:0rpx;" bind:tap="gooddetail" data-index="{{index}}">
+              <image src="{{item.bg_url}}" mode="aspectFill" style="width: 100%;height: 100%;"></image>
+            </view>
+            <view class="text-content" style="width:50%;margin-top: 10rpx;margin-bottom: 0rpx;margin-left: 20rpx;padding-right: 20rpx;font-size: 25rpx;">
+              <view>
+                <text class="iconfont icon-fl-renminbi text-bold text-orange" style="font-size: 32rpx;"></text>
+                <text class="text-bold text-orange" style="font-size: 45rpx;">{{item.pay_price/100}}</text>
+                <text class="text-red" style="margin-left: 20rpx;">{{item.trade_state=='SUCCESS'?'已付款':''}}{{item.trade_state=='REFUND'?'已退款':''}}</text>
+              </view>
+              <view class="flex padding-sm" style="flex-direction:row;justify-content: center;align-items: center;">
+                <view>
+                  <text class="cuIcon-goods text-green" style="margin-right: 10rpx;"></text>{{item.good_type}} {{item.good_size}} {{item.good_color}}
+                </view>
+                <view class="">
+                  <button class="cu-btn line-black" style="padding: 0 10rpx;font-size: 25rpx;height: 30rpx;border-radius: 10rpx;margin-left: 10rpx;width: fit-content;">x{{item.order_amount}}</button>
+                </view>
+              </view>
+              <view class="padding-sm" style="padding-top: 0rpx;">
+                <text class="cuIcon-deliver text-green" style="margin-right: 10rpx;"></text>{{item.good_deliver_option}}
+              </view>
+              <view class="padding-sm" style="padding-top: 0rpx;">
+                <text class="cuIcon-deliver text-green" style="margin-right: 10rpx;"></text>{{item.deliver_status}}
+              </view>
+            </view>
+
+
+          </view>
+          <view class="bg-gray padding-sm margin-top" style="border-radius: 20rpx;width: 100%;margin-right: 20rpx;">
+            <text class="cuIcon-locationfill text-green"></text>{{item.address["收件地址"]}}
+          </view>
+          <view class="flex padding-sm" style="margin-top: 30rpx;justify-content: space-between;">
+            <button class="cu-btn line-gray" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="cancel_order" wx:if="{{item.deliver_status == '7天内发货'&&item.out_trade_no==''}}" data-index="{{index}}">取消订单</button>
+           
+            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="apply_refund" data-index="{{index}}" wx:if="{{item.deliver_status == '已签收'&&item.trade_state=='SUCCESS'}}">申请退货退款</button>
+           
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
 </scroll-view>
 <!--空白站位，保证以上内容能全部显示-->
 <view style="height: 150rpx;">
