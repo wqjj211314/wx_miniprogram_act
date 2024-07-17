@@ -272,7 +272,7 @@
         </view>
       </view>
 
-      <view class="cu-list menu card-menu" wx:if="{{activity_info.detail.length>0}}" style="margin-top: 0rpx;">
+      <view class="cu-list menu card-menu" wx:if="{{activity_info.detail.length>0}}" style="margin-top: 0rpx;margin-bottom: 20rpx;">
         <view style="text-align: center;" class="bg-white">
           <text class="text-grey text-sm"><text class="cuIcon-form lg text-green"></text>活动详情</text>
         </view>
@@ -287,7 +287,7 @@
       </view>
      <view class="bg-white text-center text-gray margin-top" wx:if="{{recommend_list.length > 0}}">--推荐--</view>
      
-    <view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;">
+    <view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;" wx:if="{{recommend_list.length > 0}}">
       <blcok wx:for="{{recommend_list}}" wx:for-item="item">
         <view class="bg-white" style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTogoodinfo" data-index="{{index}}" wx:if="{{item.item_type=='good'}}">
           <image class="bg-white" style="height:400rpx;width:100%;" mode="aspectFill" src="{{item.bg_img_exist?item.bg_url:''}}">
@@ -330,7 +330,7 @@
         </view>
       </blcok>
     </view>
-    <view class="bg-white" style="height: 200rpx;"></view>
+    <view class="" style="height: 200rpx;"></view>
     </scroll-view>
 
   </swiper-item>

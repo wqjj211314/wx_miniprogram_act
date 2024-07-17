@@ -148,6 +148,10 @@
 
     </view>
   </view>
+  <view class="cu-form-group">
+    <view class="title">允许带人报名</view>
+    <switch checked bindchange="takechange"></switch>
+  </view>
   <view class="cu-form-group" wx:if="{{custom_part}}">
     <view class="title">报名标签</view>
     <input placeholder="自定义数据，比如姓名" class="text-left" maxlength="10" bindinput="inputMsg" value="{{add_new_partinfo}}"></input>

@@ -1,6 +1,6 @@
 <!--pages/activityshowinfo/pkpage.wxml-->
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-<scroll-view scroll-y="true" style="height:calc(100vh - {{(admin_flag)?'140rpx':'0rpx'}});" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+<scroll-view scroll-y="true" style="height:calc(100vh);" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <!--管理员显示
   <view class="bg-white" style="margin-bottom: 20rpx;" wx:if="{{admin_users.length > 0}}">
     <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
@@ -82,7 +82,7 @@
 
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;margin-top: 25rpx;" wx:if="{{!sort_users_score_empty_flag}}">
     <view>战绩排行</view>
-    <view style="" bind:tap="expand_score_list">展开|收起</view>
+    <view class="text-blue" style="" bind:tap="expand_score_list">{{hidden_score_list?"展开":"隐藏"}}</view>
   </view>
   <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" wx:if="{{!sort_users_score_empty_flag}}" hidden="{{hidden_score_list}}">
     <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
@@ -143,10 +143,10 @@
   </block>
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;margin-top: 25rpx;" wx:if="{{pk_groups.length > 0}}">
     <view>对阵列表{{submit_flag?"（新的修改待提交）":"（已更新至最新）"}}</view>
-    <view style="" bind:tap="expand_pk_group">展开|收起</view>
+    <view class="text-blue" style="" bind:tap="expand_pk_group">{{hidden_pk_group?"展开":"隐藏"}}</view>
   </view>
   <block wx:for="{{pk_groups}}" wx:for-item="pk_group" wx:for-index="pk_group_index">
-    <view class="bg-white padding-sm" style="padding-top:10rpx;padding-bottom: 10rpx;">第{{pk_group_index+1}}场</view>
+    <view class="bg-white padding-sm" style="padding-top:10rpx;padding-bottom: 10rpx;" wx:if="{{!hidden_pk_group}}">第{{pk_group_index+1}}场</view>
     <view class="" style="display: flex;background-color: white;border-radius: 10rpx;border-bottom: 1px solid rgb(236, 235, 235);justify-content: space-between;padding: 10rpx 10rpx;{{pk_group_index==pk_groups.length -1 ?'border-bottom-width:0rpx;':''}}" wx:if="{{!hidden_pk_group}}">
 
       <!--对阵方显示，可能是1,1V1，1V1V1，1V1V1V1，2V2，3V3，4V4,5V5-->
@@ -204,15 +204,16 @@
     </view>
   </block>
   <view style="height: 200rpx;"></view>
-
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;" wx:if="{{(admin_flag&&!is_end_5h)}}">
-
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;">
   <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
-    <view class="" style="flex:1;margin-right:20rpx;" bindtap="show_modal" data-target="bottomModal">
+    <view class="" style="flex:1;margin-right:20rpx;" bindtap="nagivateActivityInfo">
+      <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">返回活动详情</button>
+    </view>
+    <view class="" style="flex:1;margin-right:20rpx;" bindtap="show_modal" data-target="bottomModal" wx:if="{{(admin_flag&&!is_end_5h)}}">
       <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">对阵选项</button>
     </view>
-    <view class="" style="flex:1;" bindtap="update_pk_group">
+    <view class="" style="flex:1;" bindtap="update_pk_group" wx:if="{{(admin_flag&&!is_end_5h)}}">
       <button class="cu-btn bg-blue round" style="width: 100%;height: 85rpx;" disabled="{{!submit_flag}}">提交</button>
     </view>
   </view>

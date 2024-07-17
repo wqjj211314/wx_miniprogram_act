@@ -311,15 +311,6 @@ Page({
       });
       return;
     }
-    
-    else if (this.data.good_store == 0) {
-      wx.showToast({
-        title: "请填写商品库存",
-        icon: "none",
-        duration: 3000
-      });
-      return;
-    }
     else if (this.data.good_deliver_options.length == 0) {
       wx.showToast({
         title: "请填写商品配送",

@@ -69,7 +69,7 @@
     <block wx:for="{{order_list}}" wx:key="order_id" wx:for-index="index">
       <view class="" style="width: fit-content;padding-bottom: 15rpx;margin-top:40rpx;">下单时间 {{item.modify_time}}</view>
       <view class="cu-form-group" style="border-radius: 20rpx;">
-        <view>
+        <view style="width: 100%;">
           <view class="text-cut text-bold padding-top" style="height: fit-content;" bindtap="">
             <view class="text-cut">{{item.good_title}}
             </view>

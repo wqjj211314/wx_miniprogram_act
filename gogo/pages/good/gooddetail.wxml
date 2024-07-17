@@ -1,12 +1,14 @@
 <scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;">
-    <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:1000rpx;" autoplay="false">
+  <view style="background-color: rgba(226, 230, 247, 0.308);">
+    <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="max-height:1000rpx;min-height: 800rpx;" autoplay="false">
       <swiper-item wx:for="{{good_info.good_img}}" class="" wx:key="*this" bindtap="ViewImage" data-url="{{item}}">
         <image style="width:100%;" mode="widthFix" src="{{item}}">
         </image>
       </swiper-item>
      
     </swiper>
+  </view>
     <view class="text-bold" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 2;overflow: hidden;padding:20rpx;">
       {{good_info.good_title}}
     </view>

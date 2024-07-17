@@ -408,13 +408,6 @@ Page({
         icon: 'error',
         duration: 3000
       })
-    } else if(JSON.stringify(this.data.address_list[this.data.addressindex]).indexOf("杭州")==-1){
-      wx.showToast({
-        title: '只支持杭州配送',
-        icon: 'error',
-        duration: 3000
-      })
-
     }else if (this.data.sel_good_type == ""&&this.data.good_info.good_type.length > 0) {
       wx.showToast({
         title: '请选择型号',

@@ -28,14 +28,14 @@
           <view style="font-size: 18rpx;height: fit-content;">{{item.nickName}}</view>
         </view>
       </block>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="add_group_member">
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;height:80rpx;width:80rpx;" bindtap="add_group_member">
         <text class="cuIcon-add" style="font-size: 45rpx;color: grey;"></text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;" bindtap="edit_group_member" wx:if="{{current_edit_group.length > 1}}">
+      <view class="cu-avatar radius margin-right margin-bottom" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;height:80rpx;width:80rpx;" bindtap="edit_group_member" wx:if="{{current_edit_group.length > 1}}">
         <text class="cuIcon-move " style="font-size: 45rpx;color: grey;"></text>
       </view>
-      <view class="cu-avatar radius margin-right margin-bottom {{disable_save_group?'bg-white':'bg-green'}}">
-        <button class="cu-btn bg-green" style="font-size:25rpx;height:50rpx;padding:0rpx;{{disable_save_group?'height:64rpx;width:64rpx;':'height:50rpx;'}}" bindtap="save_group" disabled="{{disable_save_group}}">保存</button>
+      <view class="cu-avatar radius margin-right margin-bottom {{disable_save_group?'bg-white':'bg-green'}}" style="height:80rpx;width:80rpx;">
+        <button class="cu-btn bg-green" style="font-size:29rpx;height:50rpx;padding:0rpx;height:80rpx;width:80rpx;" bindtap="save_group" disabled="{{disable_save_group}}">保存</button>
       </view>
     </view>
 
@@ -65,12 +65,13 @@
       <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="clear_group" data-tag="{{item0.group_tag}}" wx:if="{{admin_flag&&!is_begin}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
       </view>
-      <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="pk_page" data-tag="{{item0.group_tag}}" wx:if="{{is_pk_hobby}}">
-        <text style="color: black;font-size: 30rpx;font-weight: 200;">对局
-        </text>
-      </view>
+      
       <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="show_user_detail" data-tag="{{item0.group_tag}}">
         <text style="color: black;font-size: 30rpx;font-weight: 200;">详情</text>
+      </view>
+      <view class="cu-avatar radius margin-right text-black" style="border-radius: 10rpx;border: 1px dashed #39b54a;width: 160rpx;height: 80rpx;background-color: white;" bindtap="pk_page" data-tag="{{item0.group_tag}}" wx:if="{{is_pk_hobby}}">
+        <text style="font-size: 30rpx;font-weight: 200;">对局列表
+        </text>
       </view>
     </view>
 
@@ -133,11 +134,12 @@
         <view class="{{user.gender==0?'text-pink':'text-blue'}}" style="font-size: 18rpx;height: fit-content;" wx:if="{{user.admin_status == 1}}">「管理员」</view>
       </view>
     </block>
-    <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="pk_page" data-tag="" wx:if="{{is_pk_hobby}}">
-      <text style="color: black;font-size: 30rpx;font-weight: 200;">对局</text>
-    </view>
+    
     <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="edit_group" data-tag="" wx:if="{{admin_flag&&!is_begin}}">
       <text style="color: black;font-size: 30rpx;font-weight: 200;">分组</text>
+    </view>
+    <view class="cu-avatar radius margin-right text-black" style="border-radius: 10rpx;border: 1px dashed #39b54a;width: 160rpx;height: 80rpx;background-color: white;" bindtap="pk_page" data-tag="" wx:if="{{is_pk_hobby}}">
+      <text style="color: black;font-size: 30rpx;font-weight: 200;">对局列表</text>
     </view>
   </view>
   <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">

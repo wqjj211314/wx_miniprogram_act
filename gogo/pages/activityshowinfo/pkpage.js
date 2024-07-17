@@ -202,6 +202,18 @@ Page({
       modalName: ""
     })
   },
+  nagivateActivityInfo(){
+    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+
+    let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_info["createuser"]));
+    console.log("跳转至活动报名界面")
+    console.log(activity_info);
+    console.log(activity_user_info)
+    wx.navigateTo({
+      url: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
+    })
+    
+  },
   getvs(sample) {
     //[[[0, 1], [2, 3]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]]
     //[[[0], [2]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]]

@@ -65,7 +65,8 @@ Page({
     pay_price:"0.00",
     custom_part:false,
     activity_info:{},
-    hosturl:app.globalData.hosturl
+    hosturl:app.globalData.hosturl,
+    take_flag:false
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
@@ -130,7 +131,13 @@ Page({
       roomlist: e.detail.value.split(",")
     })
   },
-
+  takechange(e){
+    var value = e.detail.value;
+    console.log(value)
+    this.setData({
+      take_flag:value
+    })
+  },
   chooseroom(e) {
     var roomvalue = e.currentTarget.dataset.room;
     var roomlist = this.data.roomlist;
@@ -408,7 +415,8 @@ Page({
         "part_limit": this.data.part_limit_index,
         "edit_activity_flag":this.data.edit_activity_flag,
         "pay_type":this.data.pay_type,
-        "pay_price":this.data.pay_price
+        "pay_price":this.data.pay_price,
+        "take_flag":this.data.take_flag==false?0:1
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -511,7 +519,8 @@ Page({
         "group_tag_dict":activity_info.group_tag_dict,
         "pay_price":activity_info.pay_price,
         "pay_type":activity_info.pay_type,
-        "activity_info":activity_info
+        "activity_info":activity_info,
+        "take_flag":activity_info.take_flag,
       })
     }
     var that = this;
