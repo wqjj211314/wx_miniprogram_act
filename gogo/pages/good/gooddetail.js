@@ -225,6 +225,21 @@ Page({
    */
   onShow() {
     console.log("gooddetail onshow")
+    var cust_addr = {}
+    if(app.globalData.contact_address != ""){
+      cust_addr["联系人"] = app.globalData.contact_name
+      cust_addr["联系方式"] = app.globalData.contact_tel
+      cust_addr["收件地址"] = app.globalData.contact_address
+      var address_list = this.data.address_list
+      address_list.unshift(cust_addr)
+      this.setData({
+        address_list:address_list
+      })
+    }
+    app.globalData.contact_name = ""
+    app.globalData.contact_tel = ""
+    app.globalData.contact_address = ""
+ 
     this.get_good_info(this.data.good_info.good_id);
   },
   ViewImage(e) {
