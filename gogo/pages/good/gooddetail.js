@@ -15,16 +15,11 @@ Page({
     sel_deliver: "",
     minusStatus: "disabled",
     address_list: [
-      
     ],
     addressindex: -1,
-    selfgetaddress:{
-      "联系人":"行乐",
-      "联系方式":"18018757991",
-      "收件地址":"杭州余杭创景路万达广场自提货到付款,时间另行预约"
-    },
-    order_amount_7day:0
-
+    choose_selfget:false,
+    order_amount_7day:0,
+    only_self_deliver:false
   },
 
   /**
@@ -202,14 +197,15 @@ Page({
       success(res) {
         wx.hideLoading();
         if (res.data.code == 200) {
+          var only_self_deliver = false;
+          if(res.data.result["good_deliver_options"].length == 1 && res.data.result["good_deliver_options"][0] == "自提"){
+            only_self_deliver = true;
+          }
           that.setData({
             good_info: res.data.result,
+            only_self_deliver:only_self_deliver
           })
-          var address_list = that.data.address_list;
-          address_list.unshift(res.data.result.selfgetaddress)
-          that.setData({
-            address_list:address_list,
-          })
+          
         }
       },
       fail: function (error) {
@@ -328,14 +324,7 @@ Page({
     })
   },
   sel_address(e) {
-    if(this.data.sel_deliver == "自提"){
-      wx.showToast({
-        title: '自提地址不可更改',
-        icon:"none",
-        duration:3000
-      })
-      return;
-    }
+    
     var addressindex = e.currentTarget.dataset.addressindex;
     this.setData({
       addressindex: addressindex
@@ -354,7 +343,7 @@ Page({
     })
     if(value == "自提"){
       this.setData({
-        addressindex:0
+        choose_selfget:true
       })
     }
   },
@@ -402,7 +391,7 @@ Page({
   buy() {
     //下单
     console.log(JSON.stringify(this.data.address_list[this.data.addressindex]))
-    if (this.data.address_list.length <= 0 || this.data.addressindex < 0 || this.data.addressindex >= this.data.address_list.length) {
+    if ((this.data.address_list.length <= 0 || this.data.addressindex < 0 || this.data.addressindex >= this.data.address_list.length)) {
       wx.showToast({
         title: '请选择地址',
         icon: 'error',

@@ -30,7 +30,9 @@
     </view>
   </view>
   <view class="padding" style="font-size: 35rpx;width: 100vw;">
-    <view>选择地址<button class="cu-btn line-black" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;border-radius: 20rpx;margin-left: 20rpx;" bind:tap="new_address">新增地址</button></view>
+    <view>选择地址
+    <button class="cu-btn line-black" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;border-radius: 20rpx;margin-left: 20rpx;" bind:tap="new_address">新增地址</button>
+    </view>
     <scroll-view scroll-x class="bg-white padding" scroll-with-animation style="white-space: nowrap;width: 100%;">
       <view class="" style="display: inline-block;margin-right: 30rpx;" wx:for="{{address_list}}" data-addressindex="{{index}}" bind:tap="sel_address">
         <view class="flex padding-sm {{index==addressindex?'bg-green text-white':'bg-gray'}}" style="width: 400rpx;justify-content: left;flex-direction: column;align-items: flex-start;font-size: 25rpx;border-radius: 20rpx;white-space: normal;">
@@ -40,8 +42,6 @@
         </view>
       </view>
     </scroll-view>
-
-
 
     <view>型号</view>
     <view class="text-center flex padding-sm" style="justify-content:left;" wx:for="{{good_info.good_type}}">
@@ -65,8 +65,16 @@
         <button class="cu-btn {{sel_deliver==item?'bg-green':''}}" bindtap="choose_deliver" data-value="{{item}}" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;border-radius: 20rpx;width: fit-content;">{{item}}</button>
       </view>
     </view>
-    
-    <view class="flex" style="justify-content: space-between;align-items: center;">
+    <view>自提地址</view>
+    <view class="padding-sm" style="display: inline-block;margin-right: 30rpx;">
+        <view class="flex padding-sm {{choose_selfget?'bg-green':'bg-gray'}}" style="width: 100%;justify-content: left;flex-direction: column;align-items: flex-start;font-size: 25rpx;border-radius: 20rpx;white-space: normal;">
+          <block wx:for="{{good_info.selfgetaddress}}" wx:for-item="value" wx:for-index="key">
+            <view class="" style="padding-bottom: 10rpx;">{{key}}:{{value}}</view>
+          </block>
+        </view>
+      </view>
+
+    <view class="flex margin-top-sm" style="justify-content: space-between;align-items: center;">
       <view>数量<text class="text-gray" style="font-size: 25rpx;margin-left: 20rpx;">7天限购{{good_info.good_limit}}件/库存{{good_info.good_store}}件</text></view>
       <!-- 主容器 -->
       <view class="stepper">

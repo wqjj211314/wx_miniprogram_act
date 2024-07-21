@@ -10,7 +10,7 @@ Page({
     activity_info: {},
     is_begin: false,
     is_end: true,
-    is_end_5h:false,
+    is_end_12h:false,
     is_addend: false,
     is_cancelend: false,
     activity_id: "",
@@ -123,7 +123,7 @@ Page({
       admin_users: admin_users,
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,//毫秒
-      is_end_5h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*5),
+      is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*12),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
     })
