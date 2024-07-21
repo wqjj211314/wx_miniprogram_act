@@ -39,7 +39,7 @@
 
           </view>
           <view class="bg-gray padding-sm margin-top" style="border-radius: 20rpx;width: 100%;margin-right: 20rpx;">
-            <text class="cuIcon-locationfill text-green"></text>{{item.good_deliver_option=="自提"?item.address["收件地址"]}}
+            <text class="cuIcon-locationfill text-green"></text>{{item.good_deliver_option=="自提"?item.good_info.selfgetaddress["收件地址"]:item.address["收件地址"]}}
           </view>
           <view class="flex padding-sm" style="margin-top: 30rpx;justify-content: space-between;">
             <button class="cu-btn line-gray" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="cancel_order" wx:if="{{item.deliver_status == '7天内发货'&&item.out_trade_no==''}}" data-index="{{index}}">取消订单</button>
