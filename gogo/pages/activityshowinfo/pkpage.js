@@ -35,7 +35,9 @@ Page({
     edit_pk_group_index: 0,
     score_pk_group: [[0, 1], [2, 3]],
     pk_group_score: [],
+    temp_edit_pk_group_score:[],
     pk_group_score_tags: [],
+    temp_edit_pk_group_score_tags:[],
     sort_users_score: {},
     sort_users_score_list: [],
     sort_users_score_empty_flag: true,
@@ -146,7 +148,12 @@ Page({
     var edit_index = app.globalData.edit_index;
     console.log(edit_index);
     var custom_pk_group = this.data.custom_pk_group;
-    custom_pk_group[edit_index] = edit_group_user;
+    if(Array.isArray(custom_pk_group[edit_index])){
+      custom_pk_group[edit_index] = custom_pk_group[edit_index].concat(edit_group_user);
+    }else{
+      custom_pk_group[edit_index] = edit_group_user;  
+    }
+    //custom_pk_group[edit_index] = edit_group_user;
     app.globalData.edit_group_user = [];
     console.log(edit_group_user)
     console.log(custom_pk_group)
@@ -446,40 +453,65 @@ Page({
       edit_pk_group_index: index,
       score_pk_group: score_pk_group,
       pk_group_score: pk_group_score,
+      temp_edit_pk_group_score:JSON.parse(JSON.stringify(pk_group_score)),
       pk_group_score_tags: score_pk_group[score_pk_group.length - 1],
+      temp_edit_pk_group_score_tags:JSON.parse(JSON.stringify(score_pk_group[score_pk_group.length - 1])),
       modalName: "scoreModal"
     });
 
   },
+  parse_score_num(score_num){
+    var n = String(score_num)
+  var t = n.charAt(0)
+  // 先把非数字的都替换掉，除了数字和.
+  n = n.replace(/[^\d\.]/g, '')
+  // 必须保证第一个为数字而不是.
+  n = n.replace(/^\./g, '')
+  // 保证只有出现一个.而没有多个.
+  n = n.replace(/\.{2,}/g, '.')
+  // 保证.只出现一次，而不能出现两次以上
+  n = n.replace('.', '$#$').replace(/\./g, '').replace(
+    '$#$', '.')
+  // 如果第一位是负号，则允许添加
+  if (t === '-') {
+    n = '-' + n
+  }
+  return Number(n)
+  },
   input_score(e) {
     var score = e.detail.value;
+    console.log(typeof -1)
+    console.log(Number("-10"))
+    console.log(typeof Number("-10"))
     var score_index = e.currentTarget.dataset.index;
-    score = parseInt(score.replace(/\D/g, ''));
+    //score = parseInt(score.replace(/\D/g, ''));
+    score = this.parse_score_num(score)
     console.log("比分" + score);
     console.log("index=" + score_index);
-    var pk_group_score = this.data.pk_group_score;
+    var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
     console.log(this.data.pk_groups)
-    pk_group_score[score_index] = score;
+    temp_edit_pk_group_score[score_index] = score;
     console.log(this.data.pk_groups)
     this.setData({
-      pk_group_score: pk_group_score
+      temp_edit_pk_group_score: temp_edit_pk_group_score
     })
   },
   input_score_tag(e) {
     var score_tag = e.detail.value;
     console.log("比分标签" + score_tag);
-    var pk_group_score_tags = this.data.pk_group_score_tags;
-    pk_group_score_tags[0] = score_tag;
+    var temp_edit_pk_group_score_tags = this.data.temp_edit_pk_group_score_tags;
+    temp_edit_pk_group_score_tags[0] = score_tag;
     this.setData({
-      pk_group_score_tags: pk_group_score_tags
+      temp_edit_pk_group_score_tags: temp_edit_pk_group_score_tags
     })
   },
   update_score(e) {
-    var pk_group_score = this.data.pk_group_score;
+    var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
     var score_pk_group = this.data.score_pk_group;
     var pk_groups = this.data.pk_groups;
     console.log(pk_groups);
-    score_pk_group[score_pk_group.length - 2] = pk_group_score;
+    score_pk_group[score_pk_group.length - 2] = temp_edit_pk_group_score;
+    score_pk_group[score_pk_group.length - 1] = this.data.temp_edit_pk_group_score_tags;
     pk_groups[this.data.edit_pk_group_index] = score_pk_group;
     console.log("提交比分")
     console.log(this.data.edit_pk_group_index);
@@ -489,6 +521,8 @@ Page({
       pk_groups: pk_groups,
       modalName: "",
       pk_group_score: [],//清空比分记录
+      temp_edit_pk_group_score_tags:[],
+      temp_edit_pk_group_score:[],
       pk_group_score_tags: [],
       submit_flag: true
     });

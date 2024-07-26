@@ -238,8 +238,15 @@ function get_score(pk_groups) {
 function score_diff(users_score) {
   for (var key in users_score) {
     var item = users_score[key];
-    var score_diff = item["score"] - item["score_lost"];
-    item["score_diff"] = score_diff;
+    if(item["score"]+item["score_lost"] == 0){
+      //这属于零和对局，类似棋牌，麻将之类的活动，即赢家得分是输家的输分
+      //此时的净胜分也就是总得分
+      item["score_diff"] = item["score"];
+    }else{
+      var score_diff = item["score"] - item["score_lost"];
+      item["score_diff"] = score_diff;
+    }
+    
   }
 
 }

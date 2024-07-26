@@ -241,12 +241,12 @@
               </view>
             </block>
             <view class="cu-form-group" style="height: 35rpx;flex:1;">
-              <input placeholder="记录得分等" type="number" value="{{pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" />
+              <input placeholder="记录得分等" type="text" value="{{pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" />
             </view>
           </view>
         </block>
         <view class="cu-form-group" style="height: 35rpx;flex:1;">
-          <input placeholder="为本局比赛打个标签" type="string" maxlength="4" value="{{pk_group_score_tags[0]}}" bindinput='input_score_tag' />
+          <input placeholder="为本局比赛打个标签" type="text" maxlength="4" value="{{pk_group_score_tags[0]}}" bindinput='input_score_tag' />
         </view>
 
       </view>

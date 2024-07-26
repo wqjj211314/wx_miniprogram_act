@@ -45,7 +45,7 @@
             <button class="cu-btn line-gray" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="cancel_order" wx:if="{{item.deliver_status == '7天内发货'&&item.out_trade_no==''}}" data-index="{{index}}">取消订单</button>
            
             <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="apply_refund" data-index="{{index}}" wx:if="{{item.deliver_status == '已签收'&&item.trade_state=='SUCCESS'}}">申请退货退款</button>
-            <button class="cu-btn bg-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="pay_order" wx:if="{{item.pay_price > 0&&item.trade_state!='SUCCESS'&&item.trade_state!='REFUND'}}" data-index="{{index}}">支付</button>
+            <button class="cu-btn bg-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="pay_order" wx:if="{{item.pay_price > 0&&item.trade_state!='SUCCESS'&&item.trade_state!='REFUND'&&item.deliver_status!='已取消订单'}}" data-index="{{index}}">支付</button>
           </view>
         </view>
       </view>

@@ -62,7 +62,7 @@
       </view>
       <view class="flex" style="justify-content: space-between;width: 45%;">
         <view class="action flex" style="width: 200rpx;justify-content: center;">
-          <view class="cu-btn line-black" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["total_scores"]-item["total_scores_lost"]}}</view>
+          <view class="cu-btn line-black" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["total_scores_diff"]}}</view>
         </view>
         <view class="action flex" style="width: 200rpx;justify-content: center;">
           <view class="cu-btn line-black" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{tools.win_rate(item.all_win,item.all_fail,item.all_peace)}}</view>
