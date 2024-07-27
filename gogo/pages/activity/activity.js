@@ -30,7 +30,7 @@ Page({
     activity_id:"",
     begintime: year + "-" + month + "-" + day + " 20:00",
     endtime: year + "-" + month + "-" + day + " 22:00",
-    addendtime: year + "-" + month + "-" + day + " 18:00",
+    addendtime: year + "-" + month + "-" + day + " 20:00",
     cancelendtime: year + "-" + month + "-" + day + " 18:00",
     hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营","校友会","老乡会"],
     hobby_tag: "",
@@ -211,11 +211,7 @@ Page({
     var begindate = new Date(this.data.begintime.replaceAll("-","/"))
     console.log(enddate)
     console.log(begindate)
-    if(begindate - enddate >= 0){
-      this.setData({
-        endtime: e.detail.value
-      })
-    }
+    
   },
   TimeChange_endtime(e) {
     var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式

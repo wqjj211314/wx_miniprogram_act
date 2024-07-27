@@ -21,7 +21,7 @@ var win_rate = function(win,peace,fail){
   if(total == 0){
     return "0"
   }
-  var point = parseInt(win/total*100);
+  var point = Math.round(win/total*100);
   return point+"%"
 }
 

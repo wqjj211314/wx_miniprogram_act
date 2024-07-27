@@ -81,17 +81,17 @@
 
 
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;margin-top: 25rpx;" wx:if="{{!sort_users_score_empty_flag}}">
-    <view>战绩排行</view>
+    <view>战绩排行<text class="text-grey">（总共{{pk_groups.length}}场对局）</text></view>
     <view class="text-blue" style="" bind:tap="expand_score_list">{{hidden_score_list?"展开":"隐藏"}}</view>
   </view>
   <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" wx:if="{{!sort_users_score_empty_flag}}" hidden="{{hidden_score_list}}">
     <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
-      <view class="flex" style="width: 20%;align-items: center;">
+      <view class="flex" style="width: 15%;align-items: center;">
         <view class="flex" style="flex-direction: column;width: 100%;height: fit-content;align-items: center;color: black;">
           <view style="">成员</view>
         </view>
       </view>
-      <view class="flex" style="justify-content: space-between;width: 80%;">
+      <view class="flex" style="justify-content: space-between;width: 85%;">
 
         <view class="action flex" style="width: 200rpx;justify-content: center;">
           <view class="">总得分</view>
@@ -113,7 +113,7 @@
   <block wx:for="{{sort_users_score}}">
     <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" hidden="{{hidden_score_list}}">
       <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
-        <view class="flex" style="width: 20%;align-items: center;">
+        <view class="flex" style="width: 15%;align-items: center;">
           <view class="flex" style="flex-direction: column;width: 100%;height: fit-content;align-content:center;align-items: center;">
             <view class="cu-avatar radius" style="background-image:url({{member_users[index].avatarUrl}});">
               <view class="cu-tag badge {{member_users[index].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[index].member_num)}}</view>
@@ -121,7 +121,7 @@
             <view style="font-size: 18rpx;height: fit-content;">{{member_users[index].nickName}}</view>
           </view>
         </view>
-        <view class="flex" style="justify-content: space-between;width: 80%;">
+        <view class="flex" style="justify-content: space-between;width: 85%;">
           <view class="action flex" style="width: 200rpx;justify-content: center;">
             <view class="{{member_users[index].gender==0?'line-pink':'line-blue'}} cu-btn" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["score"]}}</view>
           </view>
@@ -142,11 +142,16 @@
     </view>
   </block>
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;margin-top: 25rpx;" wx:if="{{pk_groups.length > 0}}">
-    <view>对阵列表{{submit_flag?"（新的修改待提交）":"（已更新至最新）"}}</view>
+    <view>对阵列表<text class="text-grey">{{submit_flag?"（新的修改待提交）":"（已更新至最新）"}}</text></view>
     <view class="text-blue" style="" bind:tap="expand_pk_group">{{hidden_pk_group?"展开":"隐藏"}}</view>
   </view>
   <block wx:for="{{pk_groups}}" wx:for-item="pk_group" wx:for-index="pk_group_index">
-    <view class="bg-white padding-sm" style="padding-top:15rpx;padding-bottom: 10rpx;" wx:if="{{!hidden_pk_group}}">第{{pk_group_index+1}}场</view>
+    <view class="bg-white padding-sm text-grey" style="padding-top:15rpx;padding-bottom: 10rpx;" wx:if="{{!hidden_pk_group}}">
+    第{{pk_group_index+1}}场
+    <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-red round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;font-size: 25rpx;" wx:if="{{(admin_flag)&&show_edit_flag}}">
+            删除
+          </view>
+    </view>
     <view class="" style="display: flex;background-color: white;border-radius: 10rpx;border-bottom: 1px solid rgb(236, 235, 235);justify-content: space-between;padding: 10rpx 10rpx;height: fit-content;{{pk_group_index==pk_groups.length -1 ?'border-bottom-width:0rpx;':''}}" wx:if="{{!hidden_pk_group}}">
 
       <!--对阵方显示，可能是1,1V1，1V1V1，1V1V1V1，2V2，3V3，4V4,5V5-->
@@ -182,15 +187,9 @@
         -->
       </view>
       <view class="flex" style="justify-content: center;align-items: center;" wx:if="{{admin_flag&&!is_end_12h}}">
-        <view style="width: fit-content;display: flex;flex-direction:column;margin:0 6rpx;justify-content: space-around;align-items: center;" class="margin-tb-sm text-center" wx:if="{{(admin_flag)&&show_edit_flag}}">
-          <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-red round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;font-size: 25rpx;">
-            删除
-          </view>
-          <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;border-radius:2rpx;width: 130rpx;margin-top: 15rpx;font-size: 25rpx;" wx:if="{{admin_flag}}">
+        <view style="width: fit-content;display: flex;flex-direction:column;margin:0 6rpx;justify-content: center;align-items: center;" class="margin-tb-sm text-center" wx:if="{{(admin_flag)&&show_edit_flag}}">
+          <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:15rpx;height: fit-content;width: fit-content;border-radius:2rpx;width: 130rpx;font-size: 26rpx;" wx:if="{{admin_flag}}">
             再来一局
-            <!--
-          <text class="cuIcon-roundaddfill lg text-green" style="font-size: 45rpx;">再来一局</text>
-          -->
           </view>
         </view>
         <view wx:if="{{(admin_flag)}}"><text class="cuIcon-moreandroid lg text-gray" style="font-size: 60rpx;" bind:tap="show_edit"></text></view>

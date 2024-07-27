@@ -170,7 +170,7 @@ Page({
     if (this.data.admin_users.length > 0 && (store_admin_timestamp == "" || store_admin_timestamp == undefined || (timestamp - Number(store_admin_timestamp) > 7776000))) {
       wx.showModal({
         title: '操作说明',
-        content: '当前分组已指定管理员，仅管理员可以操作新增修改对阵列表和比分等信息！',
+        content: '当前分组已指定管理员，仅管理员可以操作新增修改对局列表和比分等信息！',
         complete: (res) => {
           if (res.cancel) {
 
@@ -258,14 +258,14 @@ Page({
     var sample = sample6;
     if (this.data.sel_pk_group_user_list.length < 4) {
       wx.showToast({
-        title: '人数太少,请自定义对阵',
+        title: '人数太少,请自定义对局',
         duration: 2000,
         icon: "none"
       })
       return;
     } else if (this.data.sel_pk_group_user_list.length > 8) {
       wx.showToast({
-        title: '人数太多,请自定义对阵',
+        title: '人数太多,请自定义对局',
         duration: 2000,
         icon: "none"
       })
@@ -316,14 +316,14 @@ Page({
     var sample = sample4;
     if (this.data.sel_pk_group_user_list.length < 2) {
       wx.showToast({
-        title: '人数太少,请自定义对阵',
+        title: '人数太少,请自定义对局',
         duration: 2000,
         icon: "none"
       })
       return;
     } else if (this.data.sel_pk_group_user_list.length > 6) {
       wx.showToast({
-        title: '人数太多,请自定义对阵',
+        title: '人数太多,请自定义对局',
         duration: 2000,
         icon: "none"
       })
@@ -769,7 +769,7 @@ Page({
     })
     
     return {
-      title: this.data.activity_info["title"]+"-对阵详情",
+      title: this.data.activity_info["title"]+"-对局详情",
       desc: '自定义分享描述',
       path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)),
       //imageUrl:bgurl,

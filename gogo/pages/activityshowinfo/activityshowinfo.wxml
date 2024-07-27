@@ -175,7 +175,7 @@
             <text class="text-grey">报名限制</text>
           </view>
           <view class="action" style="max-width:66%;">
-            <text class="text-blue text-sm">{{activity_info.part_limit_dec}}{{activity_info.take_flag==1?"":"「不允许替人报名」"}}</text>
+            <text class="text-grey text-sm">{{activity_info.part_limit_dec}}{{activity_info.take_flag==1?"":"「不允许替人报名」"}}</text>
           </view>
         </view>
         <view class="cu-item">
@@ -184,7 +184,7 @@
             <text class="text-grey">报名截止</text>
           </view>
           <view class="action" style="max-width:66%;">
-            <text class="text-blue text-sm">{{activity_info.addendtimeweek}}</text>
+            <text class="text-grey text-sm">{{activity_info.addendtimeweek}}</text>
           </view>
         </view>
         <view class="cu-item">
@@ -193,7 +193,7 @@
             <text class="text-grey">取消报名截止</text>
           </view>
           <view class="action" style="max-width:66%;">
-            <text class="text-blue text-sm">{{activity_info.cancelendtimeweek}}</text>
+            <text class="text-grey text-sm">{{activity_info.cancelendtimeweek}}</text>
           </view>
         </view>
         <view class="cu-item" wx:if="{{partinfo.length > 0}}">
@@ -203,7 +203,7 @@
             <text class="text-grey">报名信息</text>
           </view>
           <view class="action" style="max-width:70%;">
-            <text class="text-blue text-sm">{{activity_info.partinfo.length==0&&partinfo.length == 2?"替人报名须填写姓名、性别":activity_info.partinfo}}</text>
+            <text class="text-grey text-sm">{{activity_info.partinfo.length==0&&partinfo.length == 2?"替人报名须填写姓名、性别":activity_info.partinfo}}</text>
           </view>
         </view>
         <!--
@@ -263,7 +263,7 @@
                 <text class="text-black" style="font-size: 35rpx;">{{activity_user_info.nickName}}</text>
 
               </view>
-              <view class="flex text-blue" style="align-items: center;justify-content: center;" bind:tap="pkrank">
+              <view class="flex text-grey" style="align-items: center;justify-content: center;" bind:tap="pkrank">
                 成员排名
                 <text class="cuIcon-right" style="font-size: 60rpx;color: rgba(230, 227, 224, 0.753);"></text>
               </view>
