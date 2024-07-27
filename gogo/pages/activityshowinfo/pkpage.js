@@ -420,9 +420,23 @@ Page({
   del_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;
+    wx.showModal({
+      title: '删除对局',
+      content: '确认删除第'+(index+1)+'场对局吗？',
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          
     var new_pk_groups = this.data.pk_groups;
     new_pk_groups.splice(index, 1);
-    this.setData({ pk_groups: new_pk_groups, submit_flag: true });
+    this.setData({ pk_groups: new_pk_groups, submit_flag: true,show_edit_flag:false });
+        }
+      }
+    })
+    
 
   },
   new_pk_group(e) {
@@ -434,7 +448,7 @@ Page({
     newobj[newobj.length - 2] = new Array(newobj.length - 2).fill(0)
     newobj[newobj.length - 1][0] = "";//标签也清楚
     new_pk_groups.push(newobj);
-    this.setData({ pk_groups: new_pk_groups, submit_flag: true });
+    this.setData({ pk_groups: new_pk_groups, submit_flag: true,show_edit_flag:false });
   },
   score_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
@@ -485,7 +499,9 @@ Page({
     console.log(typeof Number("-10"))
     var score_index = e.currentTarget.dataset.index;
     //score = parseInt(score.replace(/\D/g, ''));
+    console.log(score)
     score = this.parse_score_num(score)
+    
     console.log("比分" + score);
     console.log("index=" + score_index);
     var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;

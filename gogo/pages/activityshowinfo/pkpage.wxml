@@ -87,7 +87,7 @@
   <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" wx:if="{{!sort_users_score_empty_flag}}" hidden="{{hidden_score_list}}">
     <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
       <view class="flex" style="width: 20%;align-items: center;">
-        <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;color: black;">
+        <view class="flex" style="flex-direction: column;width: 100%;height: fit-content;align-items: center;color: black;">
           <view style="">成员</view>
         </view>
       </view>
@@ -114,7 +114,7 @@
     <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" hidden="{{hidden_score_list}}">
       <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
         <view class="flex" style="width: 20%;align-items: center;">
-          <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+          <view class="flex" style="flex-direction: column;width: 100%;height: fit-content;align-content:center;align-items: center;">
             <view class="cu-avatar radius" style="background-image:url({{member_users[index].avatarUrl}});">
               <view class="cu-tag badge {{member_users[index].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[index].member_num)}}</view>
             </view>
@@ -146,12 +146,11 @@
     <view class="text-blue" style="" bind:tap="expand_pk_group">{{hidden_pk_group?"展开":"隐藏"}}</view>
   </view>
   <block wx:for="{{pk_groups}}" wx:for-item="pk_group" wx:for-index="pk_group_index">
-    <view class="bg-white padding-sm" style="padding-top:20rpx;padding-bottom: 0rpx;" wx:if="{{!hidden_pk_group}}">第{{pk_group_index+1}}场</view>
-    <view class="" style="display: flex;background-color: white;border-radius: 10rpx;border-bottom: 1px solid rgb(236, 235, 235);justify-content: space-between;padding: 10rpx 10rpx;height: {{is_end_12h?'fit-content':'150rpx'}};{{pk_group_index==pk_groups.length -1 ?'border-bottom-width:0rpx;':''}}" wx:if="{{!hidden_pk_group}}">
+    <view class="bg-white padding-sm" style="padding-top:15rpx;padding-bottom: 10rpx;" wx:if="{{!hidden_pk_group}}">第{{pk_group_index+1}}场</view>
+    <view class="" style="display: flex;background-color: white;border-radius: 10rpx;border-bottom: 1px solid rgb(236, 235, 235);justify-content: space-between;padding: 10rpx 10rpx;height: fit-content;{{pk_group_index==pk_groups.length -1 ?'border-bottom-width:0rpx;':''}}" wx:if="{{!hidden_pk_group}}">
 
       <!--对阵方显示，可能是1,1V1，1V1V1，1V1V1V1，2V2，3V3，4V4,5V5-->
-      <view style="display: flex;align-items: center;flex:1;flex-direction:row; flex-wrap: wrap;{{pk_group.length > 4?'justify-content:flex-start;':'justify-content:center;'}}">
-
+      <view style="display: flex;align-items: center;flex:1;flex-direction:row; flex-wrap: wrap;{{pk_group.length > 4?'justify-content:space-around;':'justify-content:center;'}}">
         <block wx:for="{{pk_group}}" wx:for-item="group" wx:for-index="group_index">
           <block wx:for="{{group}}" wx:for-item="group_member_num">
             <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;margin-bottom: 10rpx;margin-right:15rpx;" wx:if="{{group_index < pk_group.length -2}}">
@@ -163,7 +162,7 @@
             </view>
           </block>
           <!--PK的icon显示，最多到倒数第三项-->
-          <text class="iconfont icon-PK" style="font-size: 30rpx;color: blue;margin-right:15rpx;" wx:if="{{group_index < pk_group.length -3}}" />
+          <text class="iconfont icon-PK" style="font-size: 30rpx;color: blue;margin-right:5rpx;" wx:if="{{group_index < pk_group.length -3}}"/>
         </block>
       </view>
       <view class="flex" style="align-items: center;" wx:if="{{!show_edit_flag}}">
@@ -232,16 +231,18 @@
       <view class="solid" style="margin: 10rpx;">
         <block wx:for="{{score_pk_group}}" wx:for-item="item" wx:for-index="index">
           <view class="left" style="display: flex;margin: 10rpx 20rpx;justify-content: center;align-items: center;" wx:if="{{index < score_pk_group.length-2}}">
+          <view class="flex" style="min-width: 150rpx;align-items: center;justify-content: center;">
             <block wx:for="{{item}}" wx:for-item="item2">
-              <view class="flex margin-right margin-top-sm" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+              <view class="flex margin-right margin-top-sm" style="flex-direction: column;width:fit-content;height: fit-content;align-content:center;align-items: center;">
                 <view class="cu-avatar radius" style="background-image:url({{member_users[item2].avatarUrl}});">
                   <view class="cu-tag badge {{member_users[item2].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[item2].member_num)}}</view>
                 </view>
                 <view style="font-size: 18rpx;height: fit-content;">{{member_users[item2].nickName}}</view>
               </view>
             </block>
+          </view>
             <view class="cu-form-group" style="height: 35rpx;flex:1;">
-              <input placeholder="记录得分等" type="text" value="{{pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" />
+              <input placeholder="记录得分等" type="{{activity_info.activity_tag=='羽毛球'?'number':'text'}}" value="{{pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" />
             </view>
           </view>
         </block>
