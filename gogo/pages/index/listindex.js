@@ -10,7 +10,7 @@ Page({
     hosturl:app.globalData.hosturl,
     share_use_id:"",
     search_word:"",
-    current_swiper_item_index:0,
+    current_swiper_item_index:1,
     good_list:[],
     admin_flag:false
   },
@@ -62,6 +62,16 @@ Page({
    */
   onReachBottom() {
 
+  },
+  navigateToplace(){
+    wx.navigateTo({
+      url: 'place',
+    })
+  },
+  navigateToclub(){
+    wx.navigateTo({
+      url:'club',
+    })
   },
   navigateToallorder(){
     wx.navigateTo({
@@ -184,6 +194,26 @@ Page({
     console.log(goodinfo)
     wx.navigateTo({
       url: '../good/gooddetail?good_info=' + good_info
+    })
+  },
+  navigateTomini(e){
+    var url = e.currentTarget.dataset.url;
+    console.log(url)
+    wx.navigateToMiniProgram({
+      shortLink: url,
+      success(res) {
+        // 打开成功
+        wx.showToast({
+          title: '打开成功',
+        })
+      },
+      fail(res) {
+        // 打开失败
+        console.log(res)
+        wx.showToast({
+          title: '打开失败',
+        })
+      },
     })
   },
   searchword(e){

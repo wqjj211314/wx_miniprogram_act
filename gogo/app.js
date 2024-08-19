@@ -97,6 +97,7 @@ App({
     edit_group_user: [],
     edit_index: 0,
     edit_group_tag: "",
+    re_group_users:{},
     tab_page_path: "pages/index/index",
     reload_activity_share_moods: false,//在分享见闻界面返回活动界面时需要重新加载
     custom_group_tag_dict: {},//创建活动页的自定义分组信息

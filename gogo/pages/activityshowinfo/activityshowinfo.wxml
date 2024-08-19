@@ -14,7 +14,6 @@
         <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status >= 800}}">{{activity_info.activity_status_comment}}</view>
         <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{activity_info.part_status}}<!--{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}-->({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
       </view>
-      
       <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
         <view class="cu-item" style="padding-right:5rpx;border-top-right-radius: 20rpx;">
           <view class="content" style="word-break: break-all;">
@@ -39,25 +38,26 @@
           </view>
           <view class="action" style="flex:1;">
             <text class="text-blue text-sm">{{activity_info.activity_live}}</text>
-
           </view>
         </view>
         <view class="cu-item">
           <view class="content">
             <text class="iconfont icon-changguanyuyue text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: 30rpx;font-style: normal;"></text>
-
             <text class="text-blue text-sm">{{activity_info.show_activityaddress}}</text>
+            
           </view>
           <view class="action" style="max-width:70%;">
             <text class="text-blue text-sm">场地:{{activity_info.room==""?"暂定":activity_info.room}}</text>
           </view>
         </view>
-
-        <view class="cu-item">
+        
+        <view class="cu-item" bind:tap="go_to_place">
           <view class="content">
-            <text class="cuIcon-locationfill text-green" style="font-size: 30rpx;"></text>
-
+            <text class="iconfont icon-luxian text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: 30rpx;font-style: normal;"></text>
             <text class="text-blue text-sm">{{activity_info.activityaddress}}</text>
+          </view>
+          <view class="action" style="max-width:70%;">
+            <text class="text-blue iconfont icon-car"></text>
           </view>
         </view>
         <view class="cu-item" wx:if="{{new_announcement!=''}}">
@@ -260,7 +260,7 @@
             <view class="flex" style="flex-direction: row;padding-bottom:20rpx;align-items: center;justify-content: space-between;">
               <view class="" style="" bind:tap="chat_with_creater">
                 <view class="cu-avatar round" style="background-image:url({{activity_info.createuser.avatarUrl}});margin-right: 8rpx;width: 100rpx;height: 100rpx;"></view>
-                <text class="text-black" style="font-size: 35rpx;">{{activity_user_info.nickName}}</text>
+                <text class="text-black" style="font-size: 35rpx;">{{activity_info.club_name==""?activity_user_info.nickName:activity_info.club_name}}</text>
 
               </view>
               <view class="flex text-grey" style="align-items: center;justify-content: center;" bind:tap="pkrank">
@@ -285,7 +285,7 @@
           </view>
         </view>
       </view>
-     <view class="bg-white text-center text-gray margin-top" wx:if="{{recommend_list.length > 0}}">--推荐--</view>
+     <view class="bg-white text-center text-blue margin-top" wx:if="{{recommend_list.length > 0}}">- - 推荐 - -</view>
      
     <view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;" wx:if="{{recommend_list.length > 0}}">
       <blcok wx:for="{{recommend_list}}" wx:for-item="item">

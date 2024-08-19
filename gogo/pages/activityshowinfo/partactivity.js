@@ -7,18 +7,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-    activity_info:{},
-    modalName:"",
+    activity_info: {},
+    modalName: "",
     partinfo: [],
-    partinfo_list: [],
     partinfoinput: {},
     partinfo_sex: "",
     picker_index: 0,
-    picker: ["1级", "2级", "3级", "4级", "5级", "6级", "7级", "8级", "9级", "10级"],
-    empty_group_tag_dict:true,//用来显示报名预分组的
+    picker: ["L1", "L1.5", "L2", "L2.5", "L3", "L3.5", "L4", "L5", "L6", "L7"],
+    empty_group_tag_dict: true,//用来显示报名预分组的
     part_limit: 1,//0不限制参与，1限制参与,
     select_group_tag: "",//报名所选择的分组
-    all_group_tag_dict:{}
+    all_group_tag_dict: {},
+    user_info: {}
 
   },
 
@@ -31,20 +31,58 @@ Page({
     var all_group_tag_dict = JSON.parse(decodeURIComponent(options.all_group_tag_dict));
     var part_limit = options.part_limit;
     var empty_group_tag_dict = true;
-    for(var key in activity_info.group_tag_dict){
+    for (var key in activity_info.group_tag_dict) {
       empty_group_tag_dict = false;
       break
     }
     this.setData({
       partinfo: partinfo,
-      activity_info:activity_info,
-      empty_group_tag_dict:empty_group_tag_dict,
-      all_group_tag_dict:all_group_tag_dict,
-      part_limit:part_limit
+      activity_info: activity_info,
+      empty_group_tag_dict: empty_group_tag_dict,
+      all_group_tag_dict: all_group_tag_dict,
+      part_limit: part_limit
     })
+    this.get_user_info()
 
   },
-
+  get_user_info() {
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_userinfo',
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"]
+      },
+      success: (res) => {
+        console.log("appjs用户openid");
+        console.log(res.data);
+        
+        var partinfoinput = that.data.partinfoinput;
+        console.log(partinfoinput)
+        for(var key in res.data.part_info){
+          console.log(key)
+          console.log(res.data.part_info[key])
+          if(that.data.partinfo.includes(key)){
+            if(key == "性别"){
+              that.setData({
+                partinfo_sex:res.data.part_info["性别"]
+              })
+            }
+            if(key == "自评等级"){
+              that.setData({
+                picker_index:that.data.picker.indexOf(res.data.part_info[key])==-1?0:that.data.picker.indexOf(res.data.part_info[key])
+              })
+            }
+            partinfoinput[key] = res.data.part_info[key]
+          }
+          
+        }
+        that.setData({
+          user_info: res.data,
+          partinfoinput:partinfoinput
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -145,7 +183,7 @@ Page({
         //that.update_part_info(that,res);
         console.log("商户server调用支付统一下单")
         console.log(res.data.result);
-wx.hideLoading();
+        wx.hideLoading();
         if (res.data.code == 0) {
           wx.requestPayment({
             'timeStamp': res.data.result.timeStamp,
@@ -248,7 +286,8 @@ wx.hideLoading();
     var partinfovalue = event.detail.value;
     //var json = {partinfokey:partinfovalue};
     var info = this.data.partinfoinput;
-    info[partinfokey] = partinfovalue
+    info[partinfokey] = partinfovalue;
+    
     this.setData({
       partinfoinput: info
     });

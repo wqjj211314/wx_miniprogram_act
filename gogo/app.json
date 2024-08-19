@@ -38,7 +38,13 @@
     "pages/good/gooddetail",
     "pages/good/editgood",
     "pages/good/address",
-    "pages/good/order"
+    "pages/good/order",
+    "pages/index/place",
+    "pages/index/club",
+    "pages/index/placedetail",
+    "pages/index/addplace",
+    "pages/index/editplace",
+    "pages/index/clubdetail"
   ],
   "tabBar": {
     "color": "#2c2c2c",

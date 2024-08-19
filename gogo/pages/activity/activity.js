@@ -67,6 +67,11 @@ Page({
     custom_part:false,
     scroll_flag:true,
     take_flag:true,
+    club_name:"",
+    add_club_flag:false,
+    sel_club_flag:false,
+    club_name_list:[],
+    location_list:[]
   },
   takechange(e){
     var value = e.detail.value;
@@ -82,6 +87,30 @@ Page({
     })
     this.get_activity_info(hobbytagvalue);
 
+  },
+  choose_cache_location(event){
+    var index = event.target.dataset.index;
+    var location = this.data.location_list[index]
+
+    this.setData({
+      latitude: location.latitude,
+      longitude:location.longitude,
+      activityaddress:location.activityaddress,
+      sel_cache_location:location.short_activityaddress,
+    })
+  },
+  choose_club_name(event) {
+    var clubname = event.target.dataset.clubname;
+    if(clubname == this.data.club_name){
+      this.setData({
+        club_name: ""
+      })
+    }else{
+      this.setData({
+        club_name: clubname
+      })
+    }
+   
   },
   tagInput(e){
     this.setData({
@@ -107,7 +136,51 @@ Page({
             max_part_number:res.data["max_part_number"],
             modalName:res.data["bg_img_exist"]?"bgurl_modal":"",
             bg_url:res.data["bg_img_exist"]?res.data["bg_url"]:"",
+            club_name:that.data.club_name==""?res.data["club_name"]:that.data.club_name
           });
+        }
+       
+      }
+    });
+  },
+  get_club_list() {
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_club_list', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if(Array.isArray(res.data)){
+          that.setData({
+            club_name_list:res.data
+          })
+        }
+       
+      }
+    });
+  },
+  get_activity_location_list() {
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_activity_location_list', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+        
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if(Array.isArray(res.data)){
+          that.setData({
+            location_list:res.data
+          })
         }
        
       }
@@ -501,7 +574,8 @@ Page({
         "pay_type":this.data.pay_type,
         "pay_price":this.data.pay_price,
         "bg_url":bg_url,
-        "take_flag":this.data.take_flag==false?0:1
+        "take_flag":this.data.take_flag==false?0:1,
+        "club_name":this.data.club_name
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -658,7 +732,8 @@ Page({
       fail: () => {},
       complete: () => {}
     })
-
+    this.get_club_list()
+    this.get_activity_location_list()
   },
   getUserProfile: function (res) {
     if(!util.check_login(app)){
@@ -826,11 +901,15 @@ Page({
   },
   add_partinfo: function () {
     this.setData({
+      custom_club: !this.data.custom_club,
+    });
+  },
+  add_partinfo: function () {
+    this.setData({
       custom_part: !this.data.custom_part,
       //scroll_flag:!this.data.scroll_flag
       //modalName:"partinfo_modal"
     });
-
   },
   onbindblur(){
     this.setData({
@@ -869,6 +948,31 @@ Page({
   inputMsg: function (e) {
     this.setData({
       add_new_partinfo: e.detail.value
+    });
+  },
+  add_club(){
+    this.setData({
+      add_club_flag:!this.data.add_club_flag
+    })
+  },
+  sel_club_flag(){
+    this.setData({
+      sel_club_flag:true
+    })
+  },
+  input_club_name: function (e) {
+    var customer_club_name = e.detail.value;
+    this.setData({
+      club_name:customer_club_name
+    });
+  },
+  add_club_name(){
+    var club_name_list = this.data.club_name_list;
+    club_name_list.unshift(this.data.customer_club_name)
+    this.setData({
+      club_name_list:club_name_list,
+      add_club_flag:false,
+      club_name:this.data.customer_club_name
     });
   },
   input_title_tag: function (e) {

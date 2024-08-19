@@ -66,7 +66,8 @@ Page({
     custom_part:false,
     activity_info:{},
     hosturl:app.globalData.hosturl,
-    take_flag:false
+    take_flag:false,
+    club_name:""
   },
   choosetag(event) {
     var hobbytagvalue = event.target.dataset.hobbytag;
@@ -416,7 +417,8 @@ Page({
         "edit_activity_flag":this.data.edit_activity_flag,
         "pay_type":this.data.pay_type,
         "pay_price":this.data.pay_price,
-        "take_flag":this.data.take_flag==false?0:1
+        "take_flag":this.data.take_flag==false?0:1,
+        "club_name":this.data.club_name
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -521,6 +523,7 @@ Page({
         "pay_type":activity_info.pay_type,
         "activity_info":activity_info,
         "take_flag":activity_info.take_flag,
+        "club_name":activity_info.club_name
       })
     }
     var that = this;
@@ -576,7 +579,13 @@ Page({
       that.create_activity(app.globalData.login_userInfo.nickName, app.globalData.login_userInfo.avatarUrl, app.globalData.login_userInfo.gender);
     }
   },
-
+  input_club_name: function (e) {
+    var customer_club_name = e.detail.value;
+    console.log(customer_club_name)
+    this.setData({
+      club_name:customer_club_name
+    });
+  },
   check_user_profile_cache() {
     var that = this;
     if (app.globalData.hasUserInfo) {

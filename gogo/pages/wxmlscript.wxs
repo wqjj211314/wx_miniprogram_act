@@ -2,7 +2,6 @@
 var iscontain = function(arraylist,item){
   item = item + "";
   console.log(typeof(arraylist))
-  
   for(var i=0;i<arraylist.length;i++){
     if(arraylist[i] == item){
       return true;
@@ -10,7 +9,9 @@ var iscontain = function(arraylist,item){
   }
   return false;
 }
-
+var indexOf = function(origintxt,indextxt){
+  return origintxt.indexOf(indextxt)
+}
 var hobby_point = function(hobby_point){
   var point = (hobby_point/1000).toFixed(1);
   //return ""
@@ -53,6 +54,7 @@ module.exports = {
   show_vs_scores:show_vs_scores,
   iscontain:iscontain,
   hobby_point:hobby_point,
-  win_rate:win_rate
+  win_rate:win_rate,
+  indexOf:indexOf
 };
 module.exports.msg = "some msg";

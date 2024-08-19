@@ -14,6 +14,10 @@
       <view class="title">活动类型</view>
       <button class="cu-btn round bg-green" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{hobby_tag}}</button>
     </view>
+    <view class="cu-form-group">
+      <view class="title">所属俱乐部<text class="text-gray" style="font-size: 20rpx;">（可选）</text></view>
+      <input placeholder="选择或自定义输入" bindinput='input_club_name' style="color:black;" value="{{club_name}}" maxlength="50"></input>
+    </view>
 
     <view class="cu-form-group">
       <view class="title">添加话题标签</view>
@@ -179,7 +183,7 @@
 
 <view class="cu-bar tabbar" style="padding:0rpx 20rpx;height: fit-content;justify-content: space-around;font-size: 30rpx;margin:20rpx 5rpx;">
   <view class="" bindtap="getUserProfile" style="width: 100%;height: fit-content;">
-    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">更新活动</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">更新发布活动</button>
   </view>
 </view>
 <!--空白站位，保证以上内容能全部显示-->
@@ -191,7 +195,7 @@
 <view class='cu-load load-modal' wx:if="{{loadModal}}">
   <!-- <view class='cuIcon-emojifill text-orange'></view> -->
   <!--<image src='/images/logo.png' class='png' mode='aspectFit'></image>-->
-  <view class='gray-text'>创建中...</view>
+  <view class='gray-text'>发布中...</view>
 </view>
 
 <view class="cu-modal {{modalName=='modal'?'show':''}}">

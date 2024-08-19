@@ -1,0 +1,75 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<view class="cu-list menu card-menu" style="margin: 0;">
+  <view class="cu-form-group text-bold text-center">
+    {{club_place_title}}
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">设施配置</view>
+    <input placeholder="场地多少块" bindinput='place_equipment' style="color:black;" value="{{club_place_equipment}}" maxlength="200"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">场地环境</view>
+    <input placeholder="温度、风速、湿滑等环境条件" bindinput='place_environment' style="color:black;" value="{{club_place_environment}}" maxlength="200"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">场地权限</view>
+    <input placeholder="是否公开，是否需要人带领" bindinput='place_limit' style="color:black;" value="{{club_place_limit}}" maxlength="200"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">场地收费情况</view>
+    <input placeholder="免费还是收费" bindinput='place_price' style="color:black;" value="{{club_place_price}}" maxlength="200"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">小程序链接</view>
+    <input placeholder="小程序跳转链接" bindinput='place_miniprogram_link' style="color:black;" value="{{club_place_miniprogram_link}}" maxlength="200"></input>
+  </view>
+  <view class="cu-form-group" style="">
+    <view class="title">其他说明</view>
+    <input placeholder="其他情况说明" bindinput='place_other_info' style="color:black;" value="{{club_place_other_info}}" maxlength="200"></input>
+  </view>
+</view>
+<view class="cu-list menu card-menu margin-top" style="width: 100%;margin:0rpx;margin-top: 40rpx;">
+  <view class="cu-form-group" bindtap="chooseposition">
+    <view class="title" style="width:22%;">场地位置</view>
+    <view class="flex" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;font-size: larger;">
+      {{club_place_address}}<text class="cuIcon-right text-grey" style="font-size: larger;"></text>
+    </view>
+  </view>
+ 
+  
+</view>
+<view class="" style="padding-top:0px;margin-top:0px;margin-bottom: 40rpx;">
+  <view class="radius bg-white margin-top">
+    <view class='pagecenter1' style="padding-top:20rpx;">
+      <view class="bg-white text-black" style="padding-left: 30rpx;padding-bottom: 10rpx;">
+        <view class="title">场地详情图或路线图</view>
+      </view>
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}" wx:if="{{tools.indexOf(imgList[index],'static')==-1}}">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" style="">
+            <text class="cuIcon-cameraadd" style=""></text>
+          </view>
+
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="bg-white" style="height: fit-content;margin:0rpx;border-radius: 20rpx;margin-top:30rpx;">
+  <view class="flex" style="flex-direction: column;height: fit-content;align-items: center;justify-content: center;">
+    <view style="padding-top:15rpx;height: fit-content;">场地详情</view>
+    <textarea placeholder="详细介绍其他情况" bindinput='place_detail' auto-height="true" maxlength="3000" style="min-height: 200rpx;line-height: unset;height: fit-content;width: 100%;padding:20rpx 20rpx;" value="{{place_detail}}"></textarea>
+  </view>
+</view>
+<view class="cu-bar tabbar" style="padding:0rpx 20rpx;height: fit-content;justify-content: space-around;font-size: 30rpx;margin:20rpx 5rpx;">
+  <view class="" bindtap="add_club_place" style="width: 100%;height: fit-content;">
+    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">更新场地信息</button>
+  </view>
+</view>

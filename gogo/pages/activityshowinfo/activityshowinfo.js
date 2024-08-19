@@ -4,6 +4,7 @@ const util = require("../../utils/util.js");
 const score = require("score.js");
 const share = require("share.js");
 const manage_activity = require("manage_activity.js");
+
 Page({
   /**
    * 页面的初始数据
@@ -12,6 +13,7 @@ Page({
     activity_info: [],
     is_begin: false,
     is_end: true,
+    is_end_12h:false,
     is_addend: false,
     is_cancelend: false,
     activity_user_info: [],
@@ -52,6 +54,8 @@ Page({
     current_edit_group: [],//当前分组成员
     all_group_tag_dict: {},
     all_group_tag_list: [],
+    all_group_tag2_dict: {},
+    all_group_tag2_list: [],
     disable_save_group: true,
     current_swiper_item_index: 0,
     sort_users_score: {},
@@ -69,13 +73,15 @@ Page({
     moods: [],
     mood_img_list: [],
     select_group_tag: "",//报名所选择的分组
-    pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑","棋牌"],
+    pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑", "棋牌"],
     is_pk_hobby: true,
     show_part_flag: false,
     show_admin_flag: false,
     empty_group_tag_dict: true,//用来显示报名预分组的
-    request_partner_list:[],
-    recommend_list:[]
+    request_partner_list: [],
+    recommend_list: [],
+    barbg_url:"https://www.2week.club:5000/static/barbg/羽毛球.jpg",
+    barbg_tags:["羽毛球","台球","篮球","棋牌","乒乓球"]
   },
 
   /**
@@ -93,6 +99,12 @@ Page({
         share_use_id: share_use_id
       });
     }
+    if (options.hasOwnProperty("current_swiper_item_index")) {
+      let current_swiper_item_index = decodeURIComponent(options.current_swiper_item_index);
+      this.setData({
+        current_swiper_item_index: current_swiper_item_index
+      });
+    }
     console.log(activity_info);
     console.log(activity_user_info);
     var addendtime = activity_info["addendtime"];
@@ -103,6 +115,7 @@ Page({
       activity_info: activity_info,
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
+      is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*12),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
       new_announcement: activity_info["announcement"],
@@ -123,11 +136,25 @@ Page({
     wx.setNavigationBarTitle({
       title: activity_info.title
     })
+    if(this.data.barbg_tags.includes(activity_info.activity_tag)){
+      this.setData({
+        barbg_url:"https://www.2week.club:5000/static/barbg/"+activity_info.activity_tag+".jpg"
+      })
+    }
     this.init_activity_all_info(activity_info);
   },
   show_all_part() {
     this.setData({
       show_part_flag: !this.data.show_part_flag
+    })
+  },
+  go_to_place(e){
+    wx.openLocation({
+      latitude: Number(this.data.activity_info.latitude),
+      longitude: Number(this.data.activity_info.longitude),
+      name: this.data.activity_info.show_activityaddress,
+      address: this.data.activity_info.activityaddress,
+      scale: 28
     })
   },
   show_admin_options() {
@@ -159,9 +186,24 @@ Page({
             activity_info[key] = new_activity_info[key]
           }
         }
+        //更新活动的时间限制信息
         that.setData({
-          activity_info: activity_info
-        })
+          activity_info: activity_info,
+          is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
+          is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
+          is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*12),
+          is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
+          is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
+          new_announcement: activity_info["announcement"],
+          member: activity_info["member"],
+          addendtime: activity_info["addendtime"],
+          activity_user_info: activity_info.createuser,
+          partinfo: activity_info.partinfo,
+          title_tags: activity_info.title_tags,
+          share_res_limit: activity_info["part_limit"],
+          is_pk_hobby: that.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
+        });
+       
         that.update_part_info(that, res);
         that.set_part_limit();
         wx.hideLoading()
@@ -179,7 +221,7 @@ Page({
     share.get_activity_moods(app.globalData.hosturl, that, activity_info.activity_id)
     this.get_request_partner_list()
   },
-  
+
   show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
     var group_tag = e.currentTarget.dataset.tag;
@@ -294,6 +336,22 @@ Page({
       }
 
     })
+
+    //提取再分组信息
+    var all_group_tag2_dict = {}
+    info.forEach(item => {
+      var group_tag2_list = item["group_tag2"]
+      group_tag2_list.forEach(group_tag2 => {
+        if (all_group_tag2_dict[group_tag2] != undefined) {
+          all_group_tag2_dict[group_tag2].push(item);
+        } else {
+          all_group_tag2_dict[group_tag2] = [item];
+        }
+      })
+    })
+    console.log("再分组数据")
+    console.log(all_group_tag2_dict)
+
     var all_group_tag_list = [];
     for (var group_tag in all_group_tag_dict) {
       //计算男女数量
@@ -308,6 +366,23 @@ Page({
       })
       all_group_tag_list.push({ "group_tag": group_tag, "group_users": all_group_tag_dict[group_tag], "show_flag": false, "boy_num": boy_num, "girl_num": girl_num });
     }
+    //再分组列表
+    var all_group_tag2_list = [];
+    for (var group_tag in all_group_tag2_dict) {
+      //计算男女数量
+      var boy_num = 0;
+      var girl_num = 0;
+      all_group_tag2_dict[group_tag].forEach(item => {
+        if (item.gender == "0") {
+          girl_num = girl_num + 1;
+        } else if (item.gender == "1") {
+          boy_num = boy_num + 1;
+        }
+      })
+      all_group_tag2_list.push({ "group_tag": group_tag, "group_users": all_group_tag2_dict[group_tag], "show_flag": false, "boy_num": boy_num, "girl_num": girl_num });
+    }
+    console.log("再分组列表")
+    console.log(all_group_tag2_list)
     console.log("分组信息");
     console.log(all_group_tag_dict);
     console.log(all_group_tag_list);
@@ -328,7 +403,9 @@ Page({
       all_group_tag_dict: all_group_tag_dict,
       member_users: member_users,
       login_user_part_list: login_user_part_list,
-      activity_info: activity_info
+      activity_info: activity_info,
+      all_group_tag2_list: all_group_tag2_list,
+      all_group_tag2_dict: all_group_tag2_dict
     });
     that.update_part_status();
   },
@@ -457,13 +534,59 @@ Page({
     console.log(typeof (edit_group_user));
     ungroup_partinfo_list.forEach(item => {
       console.log(item);
-      console.log([1, 2].includes(1));
       if (edit_group_user.includes(item["member_num"].toString())) {
         current_edit_group.push(item);
       } else {
         new_ungroup_partinfo_list.push(item);
       }
     });
+
+    //针对再分组的数据更新，从partuser页面而来
+    var re_group_users = app.globalData.re_group_users;
+    console.log(re_group_users)
+    if (re_group_users.hasOwnProperty("group_tag")) {
+      console.log("检测到了再分组数据")
+      if (this.data.all_group_tag_dict.hasOwnProperty(re_group_users.hasOwnProperty("group_tag"))) {
+        console.log("再分组的tag是重复的,这种不应该处理,刷新即可")
+        wx.showToast({
+          title: '再分组数据请刷新',
+          icon: 'none'
+        })
+      } else {
+        //要在all_group_tag_dict/all_group_tag_list中进行更新数据
+        var all_group_tag2_dict = this.data.all_group_tag2_dict;
+        var all_group_tag2_list = this.data.all_group_tag2_list;
+        var group_users_list = re_group_users["group_users"]
+        //group_users_list里面的元素都是这种
+        //temp["member_num"] = item.member_num;
+        //temp["group_tag2"] = this.data.group_tag;
+        var boy_num = 0;
+        var girl_num = 0;
+        var group_tag2 = ""
+        console.log(typeof (all_group_tag2_dict))
+        group_users_list.forEach(item => {
+          if (item["group_tag2"] in all_group_tag2_dict) {
+            all_group_tag2_dict[item["group_tag2"]].push(this.data.member_users[item["member_num"]])
+          } else {
+            group_tag2 = item["group_tag2"]
+            all_group_tag2_dict[item["group_tag2"]] = [this.data.member_users[item["member_num"]]]
+          }
+          if (this.data.member_users[item["member_num"]].gender == "0") {
+            girl_num = girl_num + 1;
+          } else if (this.data.member_users[item["member_num"]].gender == "1") {
+            boy_num = boy_num + 1;
+          }
+        })
+
+        all_group_tag2_list.push({ "group_tag": group_tag2, "group_users": all_group_tag2_dict[group_tag2], "show_flag": false, "boy_num": boy_num, "girl_num": girl_num });
+      }
+      this.setData({
+        all_group_tag2_dict: all_group_tag2_dict,
+        all_group_tag2_list: all_group_tag2_list
+      })
+      app.globalData.re_group_users = {}
+    }
+
     this.setData({
       current_edit_group: current_edit_group,
       hidden_del_tag: true,
@@ -479,13 +602,16 @@ Page({
     }
     this.getuserinfo()
     var that = this;
-    setTimeout(function(){
-      that.get_recommand_list()
-    },5000)
-    
+    if (this.data.recommend_list.length == 0) {
+      setTimeout(function () {
+        that.get_recommand_list()
+      }, 5000)
+    }
+
+
 
   },
-  getuserinfo(){
+  getuserinfo() {
     try {
       console.log("用户登录");
       //直接获取缓存保存的
@@ -495,7 +621,7 @@ Page({
       if (openid == "" || openid == undefined) {
         console.log("需要登录获取openid")
         this.user_login();
-      }else{
+      } else {
         //发起网络请求
         wx.request({
           url: app.globalData.hosturl + 'get_userinfo',
@@ -537,7 +663,7 @@ Page({
               code: res.code
             },
             success: (res) => {
-             
+
               app.globalData.openid = res.data.openid;
               app.globalData.checking_flag = res.data.checking_flag;
               app.globalData.login_userInfo["user_id"] = res.data.openid;
@@ -560,10 +686,10 @@ Page({
           console.log('登录失败！' + res.errMsg)
         }
       },
-      fail(res){
+      fail(res) {
         console.log("登录失败")
       },
-      complete(res){
+      complete(res) {
         console.log("登录完成")
         console.log(res)
       }
@@ -615,13 +741,13 @@ Page({
    */
   onShareAppMessage: function () {
     console.log(this.data.activity_info.activity_status)
-    console.log(typeof(this.data.activity_info.activity_status))
-    if(this.data.activity_info.activity_status < 200){
+    console.log(typeof (this.data.activity_info.activity_status))
+    if (this.data.activity_info.activity_status < 200) {
       console.log("没进来？")
       return {
         title: this.data.activity_info.activity_status_comment,
         path: '/pages/index/index',
-        }
+      }
     }
 
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
@@ -635,9 +761,9 @@ Page({
     }
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     return {
-      title: "「"+this.data.activity_info["pay_type"]+"」"+this.data.activity_info["title"],
+      title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id,
+      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id+"&current_swiper_item_index="+this.data.current_swiper_item_index,
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
@@ -674,12 +800,12 @@ Page({
       return;
     }
     //如果是简单的不需要填写信息，直接报名不跳转,要填写报名信息那就跳转到报名页面
-    if (this.data.partinfo.length != 0||!this.data.empty_group_tag_dict) {
+    if (this.data.partinfo.length != 0 || !this.data.empty_group_tag_dict) {
       var activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
       var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
       var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
       wx.navigateTo({
-        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit='+this.data.part_limit,
+        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit,
       })
       return;
     }
@@ -881,7 +1007,7 @@ Page({
     })
   },
   onShareTimeline() {
-    
+
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareTimeline");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与
@@ -942,6 +1068,14 @@ Page({
         disable_save_group: false
       })
     }
+  },
+  //对成员进行重复的分组，针对小组赛--晋级赛--半决赛决赛这种场景
+  //小组赛出线的成员，继续分组PK，分组完进行xx强赛直至决赛
+  re_group_member() {
+    let ungroup_partinfo_list = encodeURIComponent(JSON.stringify(this.data.entire_part_info));
+    wx.navigateTo({
+      url: 'partuser?ungroup_partinfo_list=' + ungroup_partinfo_list + '&&re_group_flag=' + true + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)),
+    })
   },
   //添加分组成员
   add_group_member() {
@@ -1151,6 +1285,48 @@ Page({
       }
     })
   },
+  clear_re_group(e) {
+    wx.showModal({
+      title: '解散分组',
+      content: '确认解散「' + e.currentTarget.dataset.tag + '」分组吗？',
+      complete: (res) => {
+        if (res.cancel) {
+
+        }
+
+        if (res.confirm) {
+          var that = this;
+          console.log(e.currentTarget.dataset.tag);
+          var group_tag = e.currentTarget.dataset.tag;
+          var current = this.data.all_group_tag2_dict[group_tag];
+          var group_users = []
+          current.forEach(item => {
+            var temp = {}
+            temp["member_num"] = item["member_num"]
+            temp["group_tag2"] = group_tag
+            group_users.push(temp)
+          })
+          //更新成员对应的分组标签
+          wx.request({
+            url: app.globalData.hosturl + 'clear_re_group_member', //仅为示例，并非真实的接口地址
+            data: {
+              "activity_id": this.data.activity_info.activity_id,
+              "group_users": group_users,
+              "activity_tag": this.data.activity_info.activity_tag
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            success(res) {
+              that.update_part_info(that, res);
+            }
+          })
+        }
+      }
+    })
+
+
+  },
   save_group() {
     console.log("保存分组");
     console.log(this.data.current_edit_group);
@@ -1282,20 +1458,38 @@ Page({
       url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
-  requestpartner(){
-    wx.navigateTo({
-      url: 'requestpartner?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num='+this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
-    })
-  },
-  refund_some(){
+  re_group_pk_page(e) {
+    console.log(e.currentTarget.dataset.tag);
+    var group_tag = e.currentTarget.dataset.tag;
+    var groups = "";
+    var room = ""
+
+    groups = this.data.all_group_tag2_dict[group_tag];
+
+
+    //all_group_tag_dict
+    let group_users = encodeURIComponent(JSON.stringify(groups));
     this.setData({
-      modalName:""
+      modalName: ""
     })
     wx.navigateTo({
-      url: 'refund?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num='+this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
-  get_request_partner_list(){
+  requestpartner() {
+    wx.navigateTo({
+      url: 'requestpartner?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num=' + this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+    })
+  },
+  refund_some() {
+    this.setData({
+      modalName: ""
+    })
+    wx.navigateTo({
+      url: 'refund?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num=' + this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+    })
+  },
+  get_request_partner_list() {
     console.log("获取搭档请求列表get_request_partner_list")
     var that = this;
     wx.request({
@@ -1309,15 +1503,15 @@ Page({
       },
       success(res) {
         console.log(res.data)
-        if(res.data.code==200){
+        if (res.data.code == 200) {
           var result = res.data.result;
           var request_partner_list = [];
-          if(that.data.admin_flag){
+          if (that.data.admin_flag) {
             request_partner_list = result;
-          }else{
-            for(var index in result){
+          } else {
+            for (var index in result) {
               var item = result[index]
-              if(item["req_partner"].indexOf(that.data.part_member_num)!=-1||item["user_id"] == app.globalData.login_userInfo["user_id"]){
+              if (item["req_partner"].indexOf(that.data.part_member_num) != -1 || item["user_id"] == app.globalData.login_userInfo["user_id"]) {
                 request_partner_list.push(item)
               }
             }
@@ -1332,7 +1526,7 @@ Page({
   },
   all_pk_page() {
     this.setData({
-      modalName:""
+      modalName: ""
     })
     var group_tag = "";
     var room = "暂定"
@@ -1422,7 +1616,7 @@ Page({
     setTimeout(function () {
       that.setData({
         triggered: false,
-        edit_group_flag:false,
+        edit_group_flag: false,
       })
     }, 2000);
     this.init_activity_all_info(this.data.activity_info);
@@ -1493,13 +1687,13 @@ Page({
     this.setData({
       modalName: ""
     })
-    manage_activity.delete_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
+    manage_activity.delete_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
   },
   cancel_activity(e) {
     this.setData({
       modalName: ""
     })
-    manage_activity.cancel_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
+    manage_activity.cancel_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
   },
   refund_all_member(e) {
     this.setData({
@@ -1507,19 +1701,18 @@ Page({
     })
     wx.showModal({
       title: '全员全额退款',
-      content: '当前总共有'+this.data.entire_part_info.length+'人报名参与，确认所有人全额退款！',
+      content: '当前总共有' + this.data.entire_part_info.length + '人报名参与，确认所有人全额退款！',
       complete: (res) => {
         if (res.cancel) {
-          
+
         }
-    
         if (res.confirm) {
-          manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl,app)
-    setTimeout(this.init_activity_all_info(),2000)
+          manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
+          setTimeout(this.init_activity_all_info(), 2000)
         }
       }
     })
-    
+
   },
   update_activity_info(e) {
     this.setData({
@@ -1540,7 +1733,7 @@ Page({
       url: 'pkrank?activity_info=' + activity_info,
     })
   },
-  get_recommand_list(){
+  get_recommand_list() {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_recommend_list',
@@ -1549,9 +1742,9 @@ Page({
       },
       success: (res) => {
         console.log("获取用户信息")
-        if(res.data.code == 200){
+        if (res.data.code == 200) {
           that.setData({
-            recommend_list:res.data.result
+            recommend_list: res.data.result
           })
         }
       }

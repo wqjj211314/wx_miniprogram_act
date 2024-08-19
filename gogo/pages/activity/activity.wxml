@@ -3,7 +3,6 @@
 
 <view class="" style="height: 35vh;width: 100vw;">
   <view class="bg-grey" style="width: 100%;height: 100%;background-color: rgb(236, 243, 236);" wx:if="{{imgList.length < 1}}"></view>
-
   <view class="" wx:for="{{imgList}}" wx:key="index" data-url="{{imgList[index]}}" style="width: 100%;height: 100%;">
     <image src='{{imgList[index]}}' mode='aspectFill' style="width: 100%;height: 100%;"></image>
   </view>
@@ -31,9 +30,22 @@
     </view>
 
     <view class="cu-form-group">
-      <view class="title">话题标签</view>
-      <input placeholder="添加话题" class="text-left" maxlength="10" bindinput="input_title_tag" value="{{new_title_tag}}"></input>
-      <button class="cu-btn bg-green shadow sm" bind:tap="add_title_tag">确认</button>
+      <view class="title">所属俱乐部<text class="text-gray" style="font-size: 20rpx;">（可选）</text></view>
+      <input placeholder="选择或自定义输入" bindinput='input_club_name' style="color:black;" value="{{club_name}}" maxlength="50"></input>
+    </view>
+    <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
+      <view class="flex justify-start" style="flex-flow: wrap;">
+        <view class="text-center" wx:for="{{club_name_list}}" style="margin-bottom: 10rpx;margin-right: 10rpx;" wx:for-item="clubname" wx:key="*this">
+          <button class="cu-btn round {{club_name == club_name_list[index]?'bg-green':''}}" bindtap="choose_club_name" data-clubname="{{clubname}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{clubname}}</button>
+        </view>
+        
+      </view>
+    </view>
+    
+    <view class="cu-form-group">
+      <view class="title">活动标签</view>
+      <input placeholder="添加活动话题或标签" class="text-left" maxlength="10" bindinput="input_title_tag" value="{{new_title_tag}}"></input>
+      <button class="cu-btn line-green sm" bind:tap="add_title_tag">确认</button>
     </view>
     <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
       <view class="flex justify-start" style="flex-flow: wrap;">
@@ -80,7 +92,7 @@
 
   </form>
 </view>
-<view class="cu-list menu card-menu margin-top shadow-warp">
+<view class="cu-list menu card-menu margin-top">
   <view class="cu-form-group">
     <view class="title">活动开始时间<text style="color: red;">*</text></view>
     <DatetimePicker mode="dateminute" value="{{begintime}}" bindchange="TimeChange_begintime">
@@ -117,20 +129,28 @@
     </DatetimePicker>
   </view>
 </view>
-<view class="cu-list menu card-menu margin-top shadow-warp">
+<view class="cu-list menu card-menu margin-top">
   <view class="cu-form-group" bindtap="chooseposition">
     <view class="title" style="width:22%;">位置<text style="color: red;">*</text></view>
     <view class="flex" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;font-size: larger;">
       {{activityaddress}}<text class="cuIcon-right text-grey" style="font-size: larger;"></text>
     </view>
   </view>
+  <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
+      <view class="flex justify-start" style="flex-flow: wrap;">
+        <view class="text-center" wx:for="{{location_list}}" style="margin-bottom: 10rpx;margin-right: 10rpx;" wx:for-item="location">
+          <button class="cu-btn round {{sel_cache_location == location_list[index]['short_activityaddress']?'bg-green':''}}" bindtap="choose_cache_location" data-index="{{index}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{location["short_activityaddress"]}}</button>
+        </view>
+        
+      </view>
+    </view>
   <view class="cu-form-group" style="">
     <view class="title">场地</view>
     <input placeholder="选择或自定义输入" bindinput='roomInput' style="color:black;" value="{{roomlist}}" maxlength="100"></input>
   </view>
-  <view class="cu-form-group">
+  <view class="cu-form-group" style="margin-top: 20rpx;">
     <view class="flex justify-around" style="justify-content: space-around;width: 100%;">
-      <view class="text-center " wx:for="{{room_items}}">
+      <view class="text-center margin-top" wx:for="{{room_items}}">
         <button class="cu-btn round {{tools.iscontain(roomlist,index+1)?'bg-green':''}}" bindtap="chooseroom" data-room="{{index+1}}" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;">{{index+1}}</button>
       </view>
     </view>
@@ -172,7 +192,7 @@
         <button class="cu-btn round {{tools.iscontain(partinfo,partinfo_all_options[index])?'bg-green':''}}" bindtap="choose_partinfo" data-partinfo="{{partinfo_all_options[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
       </view>
       <view class="text-center">
-        <button class="cu-btn sm round bg-yellow" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;" bindtap="add_partinfo">自定义</button>
+        <button class="cu-btn sm round line-green" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;" bindtap="add_partinfo">自定义</button>
       </view>
 
     </view>
@@ -188,7 +208,7 @@
   </view>
   <view class="cu-form-group" style="">
     <view class="title">报名预分组</view>
-    <button class="cu-btn bg-green shadow sm" bind:tap="custom_group_tag">自定义</button>
+    <button class="cu-btn line-green sm" bind:tap="custom_group_tag">自定义</button>
   </view>
   <block wx:for="{{group_tag_dict}}">
     <view class="cu-form-group" style="">
@@ -208,7 +228,7 @@
 
 <view class="cu-bar tabbar" style="padding:0rpx 20rpx;height: fit-content;justify-content: space-around;font-size: 30rpx;margin:20rpx 5rpx;">
   <view class="" bindtap="getUserProfile" style="width: 100%;height: fit-content;">
-    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">创建活动</button>
+    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">发布活动</button>
   </view>
 </view>
 <!--空白站位，保证以上内容能全部显示-->

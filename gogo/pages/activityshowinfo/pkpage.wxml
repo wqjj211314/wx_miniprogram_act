@@ -27,7 +27,7 @@
   <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
     <view class="cu-btn line-green round" style="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{group_tag==""?"未分组":group_tag}}</view>
     <view class="cu-btn line-green round" style="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">男{{boy_num}} 女{{girl_num}}</view>
-    <view class="cu-btn line-green round" style="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">场地:{{group_tag==""?activity_info.room==""?"暂定":activity_info.room:activity_info["group_tag_dict"][group_tag]["room"]}}</view>
+    <view class="cu-btn line-green round" style="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;" wx:if="{{room!=''}}">场地:{{group_tag==""?activity_info.room==""?"暂定":activity_info.room:activity_info["group_tag_dict"][group_tag]["room"]}}</view>
   </view>
   <view class="grid padding-sm" style="background-color: white;flex-wrap: wrap;padding:0rpx;padding-left:20rpx;border-bottom: 10rpx;">
     <block wx:for="{{group_users}}" wx:for-item="user" wx:key="member_num">
@@ -65,7 +65,7 @@
             </view>
           </view>
           <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace) != '0'}}">
-            <view class="text-black text-xs">胜率</view>
+            <view class="text-black text-xs">历史胜率</view>
             <view class="cu-tag line-blue">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
           </view>
           <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">

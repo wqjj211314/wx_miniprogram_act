@@ -51,8 +51,8 @@
             </text>
           </view>
         </view>
-        <input wx:if="{{item != '自评等级' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}" cursor-spacing="10"></input>
-        <picker wx:if="{{item == '自评等级'}}" bindchange="PickerChange" value="0" range="{{picker}}">
+        <input wx:if="{{item != '自评等级' && item != '性别'}}" maxlength="10" placeholder="请填写" bindinput='partinfoInput' data-value="{{item}}" cursor-spacing="10" value="{{partinfoinput[item]}}"></input>
+        <picker wx:if="{{item == '自评等级'}}" bindchange="PickerChange" value="{{picker_index}}" range="{{picker}}">
           <view class="picker">
             {{picker[picker_index]}}
           </view>

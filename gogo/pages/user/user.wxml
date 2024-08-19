@@ -51,7 +51,7 @@
       <view class="cu-item arrow" bindtap="navigateToActivitycreate">
         <view class="content">
           <text class="cuIcon-circle text-red"></text>
-          <text class="text-grey">创建的活动</text>
+          <text class="text-grey">发布的活动</text>
         </view>
       </view>
 
@@ -98,7 +98,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.53</text>
+          <text class="text-grey text-sm">v1.0.65</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">

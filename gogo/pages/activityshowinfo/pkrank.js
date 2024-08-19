@@ -79,7 +79,8 @@ Page({
       url: app.globalData.hosturl + 'get_club_pk_rank', //仅为示例，并非真实的接口地址
       data: {
         "user_id": user_id,
-        "hobby_tag": activity_tag
+        "hobby_tag": activity_tag,
+        "club_name":this.data.activity_info.club_name
       },
       header: {
         'content-type': 'application/json' // 默认值

@@ -567,6 +567,7 @@ Page({
       data: {
         "user_id":app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id,
+        "club_name":this.data.activity_info["club_name"],
         "group_tag": group_tag,
         "pk_groups": pk_groups,
         "begintime": this.data.activity_info["begintime"],
