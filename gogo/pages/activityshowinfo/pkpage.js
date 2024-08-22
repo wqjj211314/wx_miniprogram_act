@@ -578,7 +578,11 @@ Page({
       },
       success(res) {
         console.log(res);
-        wx.hideLoading()
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
         if (res.data.code == -1) {
           wx.showToast({
             title: res.data,
@@ -761,7 +765,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-    
+    console.log("分享对阵详情")
     //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(this.data.group_users));
 
@@ -771,9 +775,7 @@ Page({
     
     return {
       title: this.data.activity_info["title"]+"-对局详情",
-      desc: '自定义分享描述',
       path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)),
-      //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
           console.log("成功", res)

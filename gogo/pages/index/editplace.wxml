@@ -3,6 +3,17 @@
   <view class="cu-form-group text-bold text-center">
     {{club_place_title}}
   </view>
+  <view class="cu-form-group">
+      <view class="title">场地类型</view>
+      <input placeholder="可多选或手动输入" bindinput='typeInput' style="color:black;" value="{{club_place_type_list}}" maxlength="100"></input>
+    </view>
+    <view class="cu-form-group" style="border-top:0rpx;min-height: 0rpx;">
+      <view class="flex justify-start" style="flex-flow: wrap;">
+        <view class="text-center" wx:for="{{hobby_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;">
+          <button class="cu-btn round {{tools.iscontain(club_place_type_list,hobby_tags[index])?'bg-green':''}}" bindtap="choose_type" data-type="{{hobby_tags[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">{{item}}</button>
+        </view>
+      </view>
+    </view>
   <view class="cu-form-group" style="">
     <view class="title">设施配置</view>
     <input placeholder="场地多少块" bindinput='place_equipment' style="color:black;" value="{{club_place_equipment}}" maxlength="200"></input>

@@ -1,4 +1,11 @@
 <scroll-view scroll-y="true" style="height:calc(100vh);" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+  <view class="bg-white" style="overflow: scroll;padding:15rpx;">
+    <view style="white-space:nowrap;">
+      <block wx:for="{{hobby_tags}}">
+        <button class="cu-btn round {{search_word == hobby_tags[index]?'bg-green':''}}" bindtap="search_clubplace_list" data-search="{{hobby_tags[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;margin-left: 20rpx;">{{item}}</button>
+      </block>
+    </view>
+  </view>
   <block wx:for="{{place_list}}">
     <view class="cu-form-group" style="border-radius: 20rpx;width: 100%;" style="margin-top: 20rpx;">
       <view style="width: 100%;">
@@ -18,7 +25,7 @@
                 <text class="iconfont icon-xiaochengxu text-blue" style="margin-right: 10rpx;"></text>
                 进入小程序
               </view>
-              
+
               <view>
                 <text class="iconfont icon-changdi text-green" style="margin-right: 10rpx;font-size: 20rpx;"></text>
                 {{item.club_place_equipment}}
@@ -40,12 +47,12 @@
 
           </view>
         </view>
-        <view class="bg-gray padding-sm line-blue flex" style="border-radius: 20rpx;width: 100%;margin-right: 20rpx;font-size: 20rpx;margin-bottom: 10rpx;align-items: center;"  bind:tap="go_to_place" data-index="{{index}}" wx:if="{{show_address}}">
-        <view style="flex:1;">
-          <text class="iconfont icon-luxian text-blue" style="margin-right: 10rpx;font-size: 25rpx;"></text>{{item.club_place_address}}
-          
-        </view>
-        <view style="width: 40rpx;"><text class="text-blue iconfont icon-car"></text></view>
+        <view class="bg-gray padding-sm line-blue flex" style="border-radius: 20rpx;width: 100%;margin-right: 20rpx;font-size: 20rpx;margin-bottom: 10rpx;align-items: center;" bind:tap="go_to_place" data-index="{{index}}" wx:if="{{show_address}}">
+          <view style="flex:1;">
+            <text class="iconfont icon-luxian text-blue" style="margin-right: 10rpx;font-size: 25rpx;"></text>{{item.club_place_address}}
+
+          </view>
+          <view style="width: 40rpx;"><text class="text-blue iconfont icon-car"></text></view>
         </view>
 
       </view>

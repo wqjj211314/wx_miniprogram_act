@@ -39,7 +39,11 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success (res) {
-        wx.hideLoading();
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
         if(res.data.length>=0){
           console.log("参与的活动")
           console.log(JSON.stringify(res.data))

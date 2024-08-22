@@ -8,6 +8,7 @@ Page({
    */
   data: {
     club_place_title:"",
+    club_place_type_list:[],
     club_place_equipment:"",
     club_place_environment:"",
     club_place_limit:"",
@@ -19,6 +20,7 @@ Page({
     latitude: "",
     longitude: "",
     imgList:[],
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营"],
     
   },
 
@@ -45,6 +47,35 @@ Page({
   place_title(e){
     this.setData({
       club_place_title: e.detail.value
+    })
+  },
+  typeInput(e) {
+    this.setData({
+      club_place_type_list: e.detail.value.split(",")
+    })
+  },
+  choose_type(e) {
+    var typevalue = e.currentTarget.dataset.type;
+    var club_place_type_list = this.data.club_place_type_list;
+    console.log(club_place_type_list)
+    console.log(typeof(club_place_type_list))
+    if(!Array.isArray(club_place_type_list)){
+      if(club_place_type_list == ""){
+        club_place_type_list = []
+      }else{
+        club_place_type_list = club_place_type_list.split(",")
+      }
+    }
+    console.log(club_place_type_list)
+    if (club_place_type_list.indexOf(typevalue) != -1) {
+      club_place_type_list.splice(club_place_type_list.indexOf(typevalue), 1)
+    } else if(club_place_type_list.indexOf(typevalue+"") != -1){
+      club_place_type_list.splice(club_place_type_list.indexOf(typevalue+""), 1)
+    }else {
+      club_place_type_list.push(typevalue);
+    }
+    this.setData({
+      club_place_type_list: club_place_type_list
     })
   },
   place_equipment(e){
@@ -177,6 +208,13 @@ Page({
         duration: 3000
       });
       return;
+    }else if (this.data.club_place_type_list.length == 0) {
+      wx.showToast({
+        title: "请填写场地类型",
+        icon: "none",
+        duration: 3000
+      });
+      return;
     }else if (this.data.club_place_equipment == "") {
       wx.showToast({
         title: "请填写场地设施",
@@ -219,6 +257,13 @@ Page({
         duration: 3000
       });
       return;
+    }else if (this.data.imgList.length > 5) {
+      wx.showToast({
+        title: "最多支持5张图片",
+        icon: "none",
+        duration: 3000
+      });
+      return;
     }
     wx.showLoading({
       title: '新增中...',
@@ -228,6 +273,7 @@ Page({
       url: app.globalData.hosturl + 'new_club_place', //仅为示例，并非真实的接口地址
       data: {
         "club_place_title": this.data.club_place_title,
+        "club_place_type_list":this.data.club_place_type_list,
         "club_place_equipment": this.data.club_place_equipment,
         "club_place_environment": this.data.club_place_environment,
         "club_place_limit": this.data.club_place_limit,
@@ -264,7 +310,7 @@ Page({
           console.log("创建失败");
           return;
         }
-        //app.globalData.activity_id = response_activity_id;
+        
         //上传图片
         var imgList = that.data.imgList;
         imgList.forEach(item=>{

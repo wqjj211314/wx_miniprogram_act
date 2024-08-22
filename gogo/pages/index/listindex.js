@@ -110,9 +110,11 @@ Page({
           activity_list: list,
         })
         
-        wx.hideLoading({
-          success: (res) => {},
-        });
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
       },
       fail(res){
         wx.hideLoading({
@@ -266,11 +268,11 @@ Page({
             good_list: res.data.result,
           })
         }
-        
-        
-        wx.hideLoading({
-          success: (res) => {},
-        });
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },2000)
       },
       fail(res){
         wx.hideLoading({
@@ -326,11 +328,11 @@ Page({
             activity_list: list,
           })
         }
-        
-        
-        wx.hideLoading({
-          success: (res) => {},
-        });
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
       },
       fail(res){
         wx.hideLoading({

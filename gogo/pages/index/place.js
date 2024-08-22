@@ -10,7 +10,9 @@ Page({
     place_list:[],
     show_index:-1,
     show_address:false,
-    triggered:false
+    triggered:false,
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营"],
+    search_word:""
 
   },
 
@@ -175,5 +177,71 @@ Page({
         console.log("失败", res)
       }
     }
-  }
+  },
+  search_clubplace_list(e){
+    this.setData({
+      search_word:e.currentTarget.dataset.search
+    })
+    wx.showLoading({
+      title: '搜索中...',
+    })
+    var _that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'search_clubplace', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id":app.globalData.login_userInfo["user_id"],
+        "search_word":this.data.search_word,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        //console.log(res.data)
+        var list = [];
+        console.log("获取list");
+        console.log(res.data);
+        if(res.data.code == 200){
+          res.data.result.forEach(element => {
+            console.log(element.activity_id)
+            list.push(element);
+          });
+          if(list.length == 0){
+            wx.showToast({
+              title: '搜索为空',
+              icon:"error",
+              duration:3000
+            })
+          }else{
+            _that.setData({
+              place_list: list,
+            })
+          }
+        }else{
+          wx.showToast({
+            title: '服务器异常',
+            icon:"error",
+            duration:3000
+          })
+        }
+        
+        
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
+      },
+      fail(res){
+        wx.hideLoading({
+          success: (res) => {},
+        });
+        wx.showToast({
+          title: '网络可能异常...',
+          icon:"error",
+          duration:4000
+        })
+  
+      }
+    });
+  },
 })

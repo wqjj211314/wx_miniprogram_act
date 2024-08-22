@@ -424,7 +424,11 @@ Page({
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        wx.hideLoading();
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
         console.log("成功创建活动：" + res.data);
         let result = res.data;
         if (result["activity_id"] == "") {
@@ -469,7 +473,11 @@ Page({
         })
       },
       fail: function (error) {
-        wx.hideLoading();
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
         wx.showToast({
           title: '创建失败',
           icon: 'error',

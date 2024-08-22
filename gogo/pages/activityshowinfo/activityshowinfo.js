@@ -206,7 +206,11 @@ Page({
        
         that.update_part_info(that, res);
         that.set_part_limit();
-        wx.hideLoading()
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
       },
       fail(res) {
         wx.hideLoading()
