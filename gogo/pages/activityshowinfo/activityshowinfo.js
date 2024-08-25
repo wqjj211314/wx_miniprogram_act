@@ -776,7 +776,8 @@ Page({
       },
       fail: function (res) {
         console.log("失败", res)
-      }
+      },
+      
     }
   },
   //

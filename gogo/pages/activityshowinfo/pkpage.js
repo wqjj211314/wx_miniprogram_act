@@ -56,8 +56,16 @@ Page({
    */
   onLoad(options) {
     console.log("onLoad加载");
-    var activity_tag = JSON.parse(decodeURIComponent(options.activity_info)).activity_tag;
     var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
+    var activity_tag = activity_info.activity_tag;
+    var activity_id =  activity_info.activity_id;
+    if(options.hasOwnProperty("member_users")){
+      this.setData({
+        member_users: JSON.parse(decodeURIComponent(options.member_users)),
+      })
+    }else{
+      this.get_member_list(activity_info.activity_id,activity_info.activity_tag)
+    }
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
     let group_tag = options.group_tag;
     var boy_num = 0;
@@ -118,8 +126,8 @@ Page({
       girl_num: girl_num,
       girl_member_num_list: girl_member_num_list,
       group_tag: group_tag,
-      member_users: JSON.parse(decodeURIComponent(options.member_users)),
-      activity_id: options.activity_id,
+      
+      activity_id: activity_id,
       room: options.room,
       activity_info: activity_info,
       admin_users: admin_users,
@@ -130,7 +138,7 @@ Page({
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
     })
     //获取已存储的对阵列表
-    score.get_pk_groups(app.globalData.hosturl, this, options.activity_id, group_tag, activity_tag);
+    score.get_pk_groups(app.globalData.hosturl, this, activity_id, group_tag, activity_tag);
     wx.showLoading({
       title: '加载中...',
     })
@@ -192,6 +200,47 @@ Page({
     }
   },
 
+  get_member_list(activity_id,activity_tag){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "hobby_tag": activity_tag
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        //更新活动信息
+        var activity_info = that.data.activity_info;
+        var member_users = {};
+        var info = res.data["user_info_part_info_list"];
+        info.forEach(item => {
+          var member_num = item.member_num;
+          member_users[member_num] = item;
+        })
+        //更新活动的时间限制信息
+        that.setData({
+          activity_info: activity_info,
+          member_users:member_users
+        });
+       
+        setTimeout(function(){
+          wx.hideLoading({
+            success: (res) => {},
+          });
+        },3000)
+      },
+      fail(res) {
+        wx.hideLoading()
+        wx.showToast({
+          title: "活动异常",
+          icon: "error"
+        })
+      }
+    });
+  },
 
   show_user_detail() {
     this.setData({
@@ -766,24 +815,10 @@ Page({
    */
   onShareAppMessage: function () {
     console.log("分享对阵详情")
-    //all_group_tag_dict
     let group_users = encodeURIComponent(JSON.stringify(this.data.group_users));
-
-    wx.navigateTo({
-      url: 'pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
-    })
-    
     return {
       title: this.data.activity_info["title"]+"-对局详情",
-      path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)),
-      success: function (res) {
-        if (res.errMsg == 'shareAppMessage:ok') {
-          console.log("成功", res)
-        }
-      },
-      fail: function (res) {
-        console.log("失败", res)
-      }
+      path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room
     }
   },
 })
