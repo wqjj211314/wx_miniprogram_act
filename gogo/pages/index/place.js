@@ -11,17 +11,20 @@ Page({
     show_index: -1,
     show_address: false,
     triggered: false,
-    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "棋牌", "露营"],
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "棋牌", "露营","健身"],
     search_word: "",
     latitude: "",
     longitude: ""
-
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.setData({
+      latitude:app.globalData.login_userInfo["latitude"],
+      longitude:app.globalData.login_userInfo["longitude"]
+    })
     this.again_getLocation();
   },
   getLocation(that) {
@@ -143,10 +146,15 @@ Page({
         if (res.data.code == 200) {
           var place_list = res.data.result;
           place_list.forEach(item=>{
+            console.log("设置距离"+item.club_place_title)
+            console.log(that.data.latitude)
+            console.log(that.data.longitude)
             if(that.data.latitude!=""&&that.data.longitude!=""){
               item["distance"] = util.GetDistance(that.data.latitude,  that.data.longitude,  item.latitude,  item.longitude)
+              console.log("设置距离"+item["distance"])
             }else{
               item["distance"] = ""
+              console.log("设置距离"+item["distance"])
             }
             
           })
