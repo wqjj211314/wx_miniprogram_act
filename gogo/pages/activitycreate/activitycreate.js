@@ -9,7 +9,9 @@ Page({
   data: {
     activity_create_list: [],
     hosturl: app.globalData.hosturl,
-    is_login_user:false
+    is_login_user:false,
+    club_name_club_place_list:[],
+    search_word:"",
   },
 
   /**
@@ -29,6 +31,11 @@ Page({
     }
     this.navigateToActivitycreate(options.user_id);
   },
+  search_club_name_club_place_list(e){
+    this.setData({
+      search_word: e.currentTarget.dataset.search
+    })
+  },
   navigateToActivitycreate(user_id=app.globalData.login_userInfo["user_id"]) {
     var that = this;
     wx.request({
@@ -45,8 +52,23 @@ Page({
           console.log("创建的活动")
           //console.log(JSON.stringify(res.data))
           //JSON.stringify(this.data.activity_info);
+          
+          var club_name_club_place_list = [];
+          res.data.forEach(item=>{
+            if(item.club_name!=""&&club_name_club_place_list.indexOf(item.club_name)==-1){
+              club_name_club_place_list.push(item.club_name)
+            }
+            
+          })
+          res.data.forEach(item=>{
+           
+            if(item.show_activityaddress!=""&&club_name_club_place_list.indexOf(item.show_activityaddress)==-1){
+              club_name_club_place_list.push(item.show_activityaddress)
+            }
+          })
           that.setData({
-            activity_create_list: res.data
+            activity_create_list: res.data,
+            club_name_club_place_list:club_name_club_place_list
           });
           if (res.data.length == 0) {
             wx.showToast({

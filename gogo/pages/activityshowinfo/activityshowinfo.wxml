@@ -12,7 +12,9 @@
         <image class='' wx:if="{{activity_info.bg_img_exist}}" src="{{activity_info.bg_url}}" mode="aspectFill" style="width: 100%;height: 100%;" bindtap="ViewImagebg" data-url="{{activity_info.bg_url}}"></image>
         <image class='' wx:else src="https://www.2week.club:5000/static/defaultbg.jpg" mode="aspectFill" style="width: 100%;height: 100%;"></image>
         <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status >= 800}}">{{activity_info.activity_status_comment}}</view>
-        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{activity_info.part_status}}<!--{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}-->({{avatarUrl_list.length+"/"+activity_info.max_part_number}})</view>
+        <view class="cu-tag bg-blue" style="position: absolute;right:0;left:auto;margin-left:0rpx;" wx:if="{{activity_info.activity_status < 800}}">{{activity_info.part_status}}
+          <!--{{is_end==true?"已结束":""}}{{is_end!=true&&is_begin==true?"已开始":""}}{{is_end!=true&&is_begin!=true&&is_addend!=true?"报名中":""}}{{is_end!=true&&is_begin!=true&&is_addend==true?"已截止":""}}-->({{avatarUrl_list.length+"/"+activity_info.max_part_number}})
+        </view>
       </view>
       <view class="cu-list menu card-menu" style="margin-top: -140rpx;">
         <view class="cu-item" style="padding-right:5rpx;border-top-right-radius: 20rpx;">
@@ -44,13 +46,13 @@
           <view class="content">
             <text class="iconfont icon-changguanyuyue text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: 30rpx;font-style: normal;"></text>
             <text class="text-blue text-sm">{{activity_info.show_activityaddress}}</text>
-            
+
           </view>
           <view class="action" style="max-width:70%;">
             <text class="text-blue text-sm">场地:{{activity_info.room==""?"暂定":activity_info.room}}</text>
           </view>
         </view>
-        
+
         <view class="cu-item" bind:tap="go_to_place">
           <view class="content">
             <text class="iconfont icon-luxian text-green" style="display: inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;font-size: 30rpx;font-style: normal;"></text>
@@ -86,7 +88,7 @@
                 <view class="cu-avatar round sm" style="background-image:url({{item}});" wx:if="{{index < 8}}"></view>
               </block>
             </view>
-            <view class="text-blue" style="padding: 5rpx 0rpx 0 5rpx;display: inline-block;">{{show_part_flag?"收起":"展开"}}</view>
+            <view class="text-blue" style="padding: 5rpx 0rpx 0 5rpx;display: inline-block;">{{loading_tip==''?show_part_flag?"收起":"展开":loading_tip}}</view>
           </view>
         </view>
         <view class="cu-item" style="padding:0rpx" wx:if="{{show_part_flag}}">
@@ -97,19 +99,15 @@
                 <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{item0.boy_num}}男{{item0.girl_num}}女</view>
                 <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">场地{{activity_info["group_tag_dict"][item0.group_tag]["room"]==undefined?":暂定":activity_info["group_tag_dict"][item0.group_tag]["room"]}}</view>
               </view>
-
-
-
               <block wx:for="{{item0.group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="index">
                 <view style="padding:10rpx 20rpx;">
                   <view class="cu-list menu-avatar" style="margin:0rpx;height: fit-content;">
                     <view class="cu-item flex" style="border-bottom:1rpx solid rgb(228, 228, 228);min-height:10rpx;height: fit-content;border:none;justify-content: flex-start;">
-                      <view style="width: 50rpx;margin-right: 10rpx;font-size: 25rpx;">{{tools.show_member_num(item.member_num)}}号
-                      </view>
-                      <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;" bind:tap="chat" data-membernum="{{item.member_num}}">
+
+                      <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;margin-left: 20rpx;" bind:tap="chat" data-membernum="{{item.member_num}}">
                       </view>
                       <view class="" style="width: 200rpx;position: initial;overflow: hidden;white-space: nowrap;">
-                        {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: red;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
+                        {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
                       </view>
                       <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                         <view class="text-black flex" style="font-size: 25rpx;width: fit-content;">
@@ -137,13 +135,12 @@
             <block wx:for="{{ungroup_partinfo_list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
               <view style="padding:10rpx 20rpx;">
                 <view class="cu-list menu-avatar" style="margin:0rpx;height: fit-content;">
-                  <view class="cu-item flex" style="border-bottom:1rpx solid rgb(228, 228, 228);min-height:10rpx;height: fit-content;border:none;justify-content: flex-start;">
-                    <view style="width: 70rpx;margin-right: 10rpx;font-size: 25rpx;">{{tools.show_member_num(item.member_num)}}号
-                    </view>
+                  <view class="cu-item flex" style="border-bottom:1rpx solid rgb(228, 228, 228);min-height:10rpx;height: fit-content;border:none;justify-content: flex-start;margin-left: 20rpx;">
+
                     <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;" bind:tap="chat" data-membernum="{{item.member_num}}">
                     </view>
                     <view class="" style="width: 200rpx;position: initial;overflow: hidden;white-space: nowrap;">
-                      {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: red;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
+                      {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
                     </view>
                     <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                       <view class="text-black flex" style="font-size: 30rpx;width: fit-content;">
@@ -167,7 +164,7 @@
           </view>
         </view>
       </view>
-      
+
       <view class="cu-list menu card-menu margin-top" style="height: fit-content;padding-bottom: 0rpx;">
         <view class="cu-item">
           <view class="content">
@@ -285,52 +282,51 @@
           </view>
         </view>
       </view>
-     <view class="bg-white text-center text-blue margin-top" wx:if="{{recommend_list.length > 0}}">- - 推荐 - -</view>
-     
-    <view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;" wx:if="{{recommend_list.length > 0}}">
-      <blcok wx:for="{{recommend_list}}" wx:for-item="item">
-        <view class="bg-white" style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTogoodinfo" data-index="{{index}}" wx:if="{{item.item_type=='good'}}">
-          <image class="bg-white" style="height:400rpx;width:100%;" mode="aspectFill" src="{{item.bg_img_exist?item.bg_url:''}}">
-          </image>
-          
-          <view class="bg-white" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 3;overflow: hidden;">
-            {{item.good_title}}
+      <view class="bg-white text-center text-blue margin-top" wx:if="{{recommend_list.length > 0}}">- - 推荐 - -</view>
+
+      <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}" wx:if="{{recommend_list.length > 0}}">
+        <view wx:for="{{recommend_list}}">
+          <view class="bg-white" style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTogoodinfo" data-index="{{index}}" wx:if="{{item.item_type=='good'}}">
+            <image class="bg-white" style="height:400rpx;width:100%;" mode="aspectFill" src="{{item.bg_img_exist?item.bg_url:''}}">
+            </image>
+
+            <view class="bg-white" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 3;overflow: hidden;">
+              {{item.good_title}}
+            </view>
+            <view class="bg-white" style="font-size: 45rpx;margin-top: 10rpx;height: fit-content;margin-bottom: 20rpx;">
+              <text class="iconfont icon-fl-renminbi" style="font-size: 32rpx;"></text>
+              <text class="text-bold">{{item.good_price}}</text>
+              <block wx:for="{{item.good_deliver_options}}" wx:for-item="option">
+                <text class="cu-btn line-gray" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">可{{option}}</text>
+              </block>
+            </view>
+            <view class="bg-white" style="">
+              <block wx:for="{{item.good_tag}}" wx:for-item="tag">
+                <text class="cu-btn line-green" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">{{tag}}</text>
+              </block>
+            </view>
           </view>
-          <view class="bg-white" style="font-size: 45rpx;margin-top: 10rpx;height: fit-content;margin-bottom: 20rpx;">
-            <text class="iconfont icon-fl-renminbi" style="font-size: 32rpx;"></text>
-            <text class="text-bold">{{item.good_price}}</text>
-            <block wx:for="{{item.good_deliver_options}}" wx:for-item="option">
-              <text class="cu-btn line-gray" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">可{{option}}</text>
-            </block>
+          <view class="bg-white" style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateToactivityinfo" data-index="{{index}}" wx:if="{{item.item_type=='activity'}}">
+            <image style="height:400rpx;width:100%;" mode="aspectFill" src="{{item.bg_img_exist?item.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}">
+
+            </image>
+
+
+            <view class="" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 2;overflow: hidden;">
+              {{item.title}}
+            </view>
+            <view style="font-size: 20rpx;margin-top: 10rpx;height: fit-content;">
+              <view class="cu-avatar round" style="background-image:url({{item.createuser.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;margin-top:0rpx;">
+              </view> {{item.begintimeweek}}
+              {{item.show_activityaddress}}
+
+            </view>
+
           </view>
-          <view class="bg-white" style="">
-            <block wx:for="{{item.good_tag}}" wx:for-item="tag">
-              <text class="cu-btn line-green" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">{{tag}}</text>
-            </block>
-          </view>
-          
-          
         </view>
-        <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateToactivityinfo" data-index="{{index}}" wx:if="{{item.item_type=='activity'}}">
-          <image style="height:400rpx;width:100%;" mode="aspectFill" src="{{item.bg_img_exist?item.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}">
+      </grid-view>
 
-          </image>
-
-
-          <view class="" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 2;overflow: hidden;">
-            {{item.title}}
-          </view>
-          <view style="font-size: 20rpx;margin-top: 10rpx;height: fit-content;">
-            <view class="cu-avatar round" style="background-image:url({{item.createuser.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;margin-top:0rpx;">
-            </view> {{item.begintimeweek}}
-            {{item.show_activityaddress}}
-
-          </view>
-
-        </view>
-      </blcok>
-    </view>
-    <view class="" style="height: 200rpx;"></view>
+      <view class="" style="height: 200rpx;"></view>
     </scroll-view>
 
   </swiper-item>
@@ -347,7 +343,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{(activity_info.activity_status >= 200 && activity_info.activity_status < 800&&((!is_addend && !is_begin)||login_user_part_list.length > 0||admin_flag))}}">
+<view class="flex bg-white" style="padding:20rpx 20rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: 110rpx;padding-top:15rpx;" wx:if="{{(activity_info.activity_status >= 200 && activity_info.activity_status < 800&&((!is_addend && !is_begin)||login_user_part_list.length > 0||admin_flag))&&loading_tip==''}}">
 
   <!--父组件已经判断：未结束-->
   <!--未截止wx:if="{{!is_addend}}"，要显示-->

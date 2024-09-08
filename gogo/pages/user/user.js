@@ -107,6 +107,11 @@ Page({
       url: '../activity/activity'
     })
   },
+  navigateToFollowUser(){
+    wx.navigateTo({
+      url: 'followuser'
+    })
+  },
   navigateToMoney() {
     wx.navigateTo({
       url: 'money'

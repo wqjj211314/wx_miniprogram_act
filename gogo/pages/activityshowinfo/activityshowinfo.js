@@ -81,7 +81,8 @@ Page({
     request_partner_list: [],
     recommend_list: [],
     barbg_url:"https://www.2week.club:5000/static/barbg/羽毛球.jpg",
-    barbg_tags:["羽毛球","台球","篮球","棋牌","乒乓球"]
+    barbg_tags:["羽毛球","台球","篮球","棋牌","乒乓球"],
+    loading_tip:"加载中..."
   },
 
   /**
@@ -163,9 +164,7 @@ Page({
     })
   },
   init_activity_all_info(activity_info) {
-    wx.showLoading({
-      title: '加载中',
-    })
+   
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
@@ -201,16 +200,13 @@ Page({
           partinfo: activity_info.partinfo,
           title_tags: activity_info.title_tags,
           share_res_limit: activity_info["part_limit"],
-          is_pk_hobby: that.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
+          is_pk_hobby: that.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1,
+          loading_tip:""
         });
        
         that.update_part_info(that, res);
         that.set_part_limit();
-        setTimeout(function(){
-          wx.hideLoading({
-            success: (res) => {},
-          });
-        },3000)
+        
       },
       fail(res) {
         wx.hideLoading()
@@ -1293,7 +1289,7 @@ Page({
   clear_re_group(e) {
     wx.showModal({
       title: '解散分组',
-      content: '确认解散「' + e.currentTarget.dataset.tag + '」分组吗？',
+      content: '确认解散「' + e.currentTarget.dataset.tag + '」分组吗？已有对局数据将会保留！',
       complete: (res) => {
         if (res.cancel) {
 
@@ -1334,6 +1330,9 @@ Page({
   },
   save_group() {
     console.log("保存分组");
+    wx.showLoading({
+      title: '',
+    })
     console.log(this.data.current_edit_group);
     var that = this;
     var group_tag = this.data.group_tag;
@@ -1421,6 +1420,9 @@ Page({
       disable_save_group: true,
       edit_group_flag: false
     })
+    setTimeout(function(){
+      wx.hideLoading()
+    },1500)
   },
   edit_completed_group(e) {
     console.log(e.currentTarget.dataset.tag);
@@ -1698,12 +1700,27 @@ Page({
     this.setData({
       modalName: ""
     })
-    manage_activity.cancel_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
+    var that = this;
+    wx.showModal({
+      title: '取消活动',
+      content: '确认取消活动吗？',
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          manage_activity.cancel_activity(that, that.data.activity_info["activity_id"], app.globalData.hosturl, app)
+        }
+      }
+    })
+    
   },
   refund_all_member(e) {
     this.setData({
       modalName: ""
     })
+    var that = this;
     wx.showModal({
       title: '全员全额退款',
       content: '当前总共有' + this.data.entire_part_info.length + '人报名参与，确认所有人全额退款！',
@@ -1713,7 +1730,9 @@ Page({
         }
         if (res.confirm) {
           manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
-          setTimeout(this.init_activity_all_info(), 2000)
+          setTimeout(function(){
+            that.init_activity_all_info(that.data.activity_info)
+          }, 2000)
         }
       }
     })

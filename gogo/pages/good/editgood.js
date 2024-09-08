@@ -17,7 +17,7 @@ Page({
     good_limit: 0,
     good_detail: "",
     good_deliver_options: [],
-    deliver_options: ["预付配送", "上门货到付款", "自提"],
+    deliver_options: ["预付", "货到付款", "自提"],
     imgList: [],
     admin_flag:false,
     contact_address:"杭州市余杭区创景路万达广场自提，时间另行预约",

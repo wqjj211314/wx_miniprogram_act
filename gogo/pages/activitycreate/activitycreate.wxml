@@ -1,8 +1,15 @@
 <!--pages/activityadd/activityadd.wxml-->
+<view class="bg-white" style="overflow: scroll;padding:15rpx;">
+    <view style="white-space:nowrap;">
+      <block wx:for="{{club_name_club_place_list}}">
+        <button class="cu-btn round {{search_word == club_name_club_place_list[index]?'bg-green':''}}" bindtap="search_club_name_club_place_list" data-search="{{club_name_club_place_list[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;margin-left: 20rpx;">{{item}}</button>
+      </block>
+    </view>
+  </view>
 <scroll-view scroll-y="true" style="height: 100%;">
   <view style="width:100vw;height:100vh;background-color: white;">
     <block wx:for="{{activity_create_list}}" wx:key="activity_id" wx:for-index="index">
-      <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;">
+      <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;" wx:if="{{search_word==''||search_word==item.club_name||search_word==item.show_activityaddress}}">
         <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}--活动开始时间</view>
         <view class="cu-item text-blue">
           <view class="cu-card article" style="">

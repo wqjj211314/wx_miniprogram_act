@@ -374,6 +374,7 @@ Page({
               var temp = res.tempFiles;
               var path = temp[0].tempFilePath;
               var size = temp[0].size;
+              
               if(size > 1024 * 1024 * 10){
                 wx.showToast({
                   title: '图片过大,需要小于10M',

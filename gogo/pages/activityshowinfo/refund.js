@@ -12,7 +12,7 @@ Page({
     part_member_num: "",
     sel_refund_member_list: [],
     activity_info: {},
-    refund_fee: null
+    refund_fee: ""
   },
 
   /**
@@ -54,7 +54,7 @@ Page({
       })
     } else {
       wx.showToast({
-        title: '填写退款金额： ' + price + "元",
+        title: '退款金额： ' + price + "元",
         icon: "none",
         duration: 3000
       })

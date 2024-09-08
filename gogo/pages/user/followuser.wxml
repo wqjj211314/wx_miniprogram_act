@@ -1,0 +1,32 @@
+<!--pages/friend/friend.wxml-->
+<scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+  <block wx:for="{{follow_list}}">
+    <view class="flex p-xs bg-white padding-sm align-center margin-top-sm" style="border-radius: 20rpx;">
+      <view class="flex-sub bg-white radius" bind:tap="chat_with" data-index="{{index}}">
+        <view class="cu-avatar xl radius" style="background-image:url({{item.avatarUrl}});">
+        </view>
+      </view>
+
+      <view class="flex-treble bg-white padding-sm solid-bottom">
+        <view class="text-lg margin-bottom">
+          <text class="text-black">{{item.nickName}}</text>
+          <text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text>
+        </view>
+        <view class="bg-white" style="overflow: scroll;width: 300rpx;">
+          <view style="white-space:nowrap;">
+            <block wx:for="{{item.club_name_list}}" wx:for-item="{{club_name}}">
+              <button class="cu-btn round" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;margin-right: 15rpx;">{{club_name}}</button>
+            </block>
+            
+          </view>
+        </view>
+
+      </view>
+      <view class="flex text-grey" style="align-items: center;justify-content: center;" bind:tap="create_activity_list" data-index="{{index}}">
+        发布的活动
+        <text class="cuIcon-right" style="font-size: 60rpx;color: rgba(230, 227, 224, 0.753);"></text>
+      </view>
+    </view>
+  </block>
+ 
+</scroll-view>

@@ -18,6 +18,7 @@
           <view class="cu-btn" style="width:70%;height:300rpx;border-radius: 20rpx;padding:0rpx;" bind:tap="more_img" data-index="{{index}}" data-url="{{item.club_place_img[0]}}">
             <image src="{{item.club_place_img[0]}}" mode="aspectFill" style="width: 100%;height: 100%;"></image>
             <view class="cu-btn" style="position: absolute;bottom: 0rpx;width: 100%;background-color: rgba(128, 128, 128, 0.452);color:white">点击查看更多（{{item.club_place_img.length}}）</view>
+            <view class="cu-tag bg-blue" style="position: absolute;right:0;top:0rpx;" wx:if="{{item.distance != ''}}">{{item.distance}}km</view>
           </view>
           <view class="text-content flex" style="width:50%;margin-top: 10rpx;margin-bottom: 0rpx;margin-left: 20rpx;padding-right: 20rpx;font-size: 25rpx;flex-direction: column;justify-content: space-between;">
             <view style="height: 300rpx;overflow: scroll;">

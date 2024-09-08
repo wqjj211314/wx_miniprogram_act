@@ -8,7 +8,7 @@
 <view class="cu-bar search bg-white">
   <view class="search-form round">
     <text class="cuIcon-search"></text>
-    <input type="text" placeholder="搜索商品或活动" confirm-type="search" bindinput="searchword" value="{{search_word}}"></input>
+    <input type="text" placeholder="{{search_tip}}" confirm-type="search" bindinput="searchword" value="{{search_word}}"></input>
   </view>
   <view class="action">
     <button class="cu-btn bg-green shadow-blur round" bind:tap="search_main">搜索</button>
@@ -35,13 +35,12 @@
       </view>
 
     </view>
-
-    <view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;">
-      <blcok wx:for="{{good_list}}" wx:for-item="good">
+    <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}">
+      <view wx:for="{{good_list}}" wx:for-item="good">
         <view class="bg-white" style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTogoodinfo" data-index="{{index}}">
           <image class="bg-white" style="height:400rpx;width:100%;" mode="aspectFill" src="{{good.bg_img_exist?good.bg_url:''}}">
           </image>
-          
+
           <view class="bg-white" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 3;overflow: hidden;">
             {{good.good_title}}
           </view>
@@ -57,21 +56,22 @@
               <text class="cu-btn line-green" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">{{item}}</text>
             </block>
           </view>
-          
-          
+
+
         </view>
-      </blcok>
-    </view>
-    <view class="bg-white flex padding" style="height: 200rpx;align-items: flex-end;width: 100%;justify-content: center;font-size: 25rpx;color: gray;">更多好物持续上架中...</view>
+      </view>
+    </grid-view>
+    <view class="flex padding" style="height: 200rpx;align-items: flex-end;width: 100%;justify-content: center;font-size: 25rpx;color: rgb(196, 193, 193);">更多好物持续上架中...</view>
   </swiper-item>
   <!--活动页面-->
   <swiper-item style="width: 100%;height:100%;overflow: auto;" class="">
-  <view class="bg-white" style="padding-left:20rpx;">
-    <button class="cu-btn round" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;" bindtap="navigateToplace">附近场馆</button>
-  </view>
-    
-    <view class="bg-white" style="width: 100vw;column-count: 2;column-gap: 0;row-gap: 20;">
-    <!--
+    <view class="bg-white" style="padding-left:20rpx;">
+      <button class="cu-btn round" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;" bindtap="navigateToplace">附近场馆</button>
+    </view>
+
+    <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}">
+      <view wx:for="{{activity_list}}" wx:for-item="activity_info">
+        <!--
       <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTomini" data-url="#小程序://闪动/EzRai7PnDI3DTvr">
           <image style="height:400rpx;width:100%;" mode="aspectFill" src="https://www.2week.club:5000/static/defaultbg2.jpg">
           </image>
@@ -84,8 +84,8 @@
           </view>
         </view>
 -->
-      <blcok wx:for="{{activity_list}}" wx:for-item="activity_info">
-        <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateToactivityinfo" data-index="{{index}}">
+
+        <view class="bg-white" style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateToactivityinfo" data-index="{{index}}">
           <image style="height:400rpx;width:100%;" mode="aspectFill" src="{{activity_info.bg_img_exist?activity_info.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}">
 
           </image>
@@ -102,9 +102,8 @@
           </view>
 
         </view>
-      </blcok>
-    </view>
-    <view class="bg-white" style="height: 200rpx;"></view>
+      </view>
+    </grid-view>
+    <view class="" style="height: 200rpx;"></view>
   </swiper-item>
-
 </swiper>

@@ -44,7 +44,8 @@
     "pages/index/placedetail",
     "pages/index/addplace",
     "pages/index/editplace",
-    "pages/index/clubdetail"
+    "pages/index/clubdetail",
+    "pages/user/followuser"
   ],
   "tabBar": {
     "color": "#2c2c2c",
@@ -94,15 +95,12 @@
   "plugins": {},
   "permission": {
     "scope.userLocation": {
-      "desc": "你的位置信息将用于活动位置选择"
-    },
-    "scope.userFuzzyLocation": {
-      "desc": "你的位置信息将用于附近活动推荐展示"
+      "desc": "你的位置信息将用于活动位置选择和推荐"
     }
   },
   "requiredPrivateInfos": [
     "chooseLocation",
-    "getFuzzyLocation"
+    "getLocation"
   ],
   "__usePrivacyCheck__": true
 }

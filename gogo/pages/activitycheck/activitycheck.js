@@ -10,10 +10,14 @@ Page({
     hosturl:app.globalData.hosturl,
     imgs:[],
     expanding_money_record_list:[],
-    order_list:[]
+    order_list:[],
+    deliver_status:""
   },
   get_all_order(){
     var that = this;
+    wx.showLoading({
+      title: '',
+    })
     wx.request({
       url: app.globalData.hosturl+'query_all_order', //仅为示例，并非真实的接口地址
       data: {
@@ -42,8 +46,91 @@ Page({
         
       }
     });
+    setTimeout(() => {
+      wx.hideLoading()
+    }, 3000);
   },
-
+  del_order(e){
+    var that = this;
+    
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var order = this.data.order_list[index];
+    console.log(order)
+    wx.request({
+      url: app.globalData.hosturl + 'delete_order', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "order_id":order.order_id,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading();
+        that.get_all_order()
+      },
+      fail: function (error) {
+        wx.hideLoading();
+      }
+    })
+  },
+  refund_order(e){
+    var that = this;
+    
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var order = this.data.order_list[index];
+    console.log(order)
+    wx.request({
+      url: app.globalData.hosturl + 'refund_order', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "order_id":order.order_id,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading();
+        that.get_all_order()
+      },
+      fail: function (error) {
+        wx.hideLoading();
+      }
+    })
+  },
+  inputMsg(e){
+    this.setData({
+      deliver_status: e.detail.value
+    });
+  },
+  update_order_deliver_status(e){
+    var that = this;
+    
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var order = this.data.order_list[index];
+    console.log(order)
+    wx.request({
+      url: app.globalData.hosturl + 'update_order_deliver_status', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "order_id":order.order_id,
+        "deliver_status":this.data.deliver_status
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading();
+        that.get_all_order()
+      },
+      fail: function (error) {
+        wx.hideLoading();
+      }
+    })
+  },
   get_checking_activity_list(){
     var that = this;
     wx.request({

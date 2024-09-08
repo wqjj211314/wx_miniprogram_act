@@ -71,7 +71,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage() {
-
+    return {
+      title: "「"+this.data.activity_info["activity_tag"]+"」"+this.data.activity_info["club_name"]+"成员排名",
+      path: '/pages/activityshowinfo/pkrank?activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+    }
   },
   get_club_pk_rank(user_id,activity_tag){
     var that = this;

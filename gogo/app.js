@@ -46,35 +46,7 @@ App({
       console.log(e);
       //this.user_login();
     }
-    //查看是否授权
-    wx.getSetting({
-      success: function (res) {
-        if (res.authSetting["scope.userFuzzyLocation"]) {
-          console.log("授权了获取模糊位置");
-        }
-      },
-      fail: function (res) {
-        console.log("没授权获取模糊位置");
-        wx.authorize({
-          scope: 'scope.userFuzzyLocation',
-          success(res) {
-            console.log(res)
-            if (res.errMsg == 'authorize:ok') {
-              wx.getFuzzyLocation({
-                type: 'wgs84',
-                success(res) {
-                  console.log("获取模糊地址")
-                  console.log(res)  //此时里面有经纬度
-                }
-              })
-            }
-          },
-          fail(err) {
-            console.log(err)
-          }
-        })
-      }
-    })
+
 
   },
 

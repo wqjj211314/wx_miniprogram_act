@@ -82,7 +82,7 @@
               <view>
                 <text class="iconfont icon-fl-renminbi text-bold text-orange" style="font-size: 32rpx;"></text>
                 <text class="text-bold text-orange" style="font-size: 45rpx;">{{item.pay_price/100}}</text>
-                <text class="text-red" style="margin-left: 20rpx;">{{item.trade_state=='SUCCESS'?'已付款':''}}{{item.trade_state=='REFUND'?'已退款':''}}</text>
+                <text class="text-red" style="margin-left: 20rpx;">{{item.trade_state_desc}}</text>
               </view>
               <view class="flex padding-sm" style="flex-direction:row;justify-content: center;align-items: center;">
                 <view>
@@ -98,6 +98,9 @@
               <view class="padding-sm" style="padding-top: 0rpx;">
                 <text class="cuIcon-deliver text-green" style="margin-right: 10rpx;"></text>{{item.deliver_status}}
               </view>
+              <view class="padding-sm" style="padding-top: 0rpx;" wx:if="{{item.good_remark!=''}}">
+                <text class="cuIcon-info text-gray" style="margin-right: 10rpx;"></text>{{item.good_remark}}
+              </view>
             </view>
 
 
@@ -109,9 +112,11 @@
             <text class="cuIcon-locationfill text-green"></text>{{item.good_info.selfgetaddress["收件地址"]}}
           </view>
           <view class="flex padding-sm" style="margin-top: 30rpx;justify-content: space-between;">
-            <button class="cu-btn line-gray" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="cancel_order" wx:if="{{item.deliver_status == '7天内发货'&&item.out_trade_no==''}}" data-index="{{index}}">取消订单</button>
-           
-            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="apply_refund" data-index="{{index}}" wx:if="{{item.deliver_status == '已签收'&&item.trade_state=='SUCCESS'}}">申请退货退款</button>
+            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="del_order" data-index="{{index}}">删除订单</button>
+            
+            <button class="cu-btn line-green" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="update_order_deliver_status" data-index="{{index}}">更新物流</button>
+
+            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="refund_order" data-index="{{index}}" wx:if="{{item.deliver_status != '已完成'&&item.trade_state=='SUCCESS'}}">退款</button>
            
           </view>
         </view>
@@ -121,4 +126,10 @@
 </scroll-view>
 <!--空白站位，保证以上内容能全部显示-->
 <view style="height: 150rpx;">
+</view>
+<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
+  <view class="action">
+    <text class="cuIcon-write text-grey"></text>
+  </view>
+  <input class="solid-bottom" bindinput="inputMsg" value="{{deliver_status}}" maxlength="300" cursor-spacing="10" placeholder="更新物流状态信息"></input>
 </view>

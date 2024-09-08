@@ -2,7 +2,7 @@
 <view class="img">
   <image class='img' src="https://www.2week.club:5000/static/userbg.jpg" mode="widthFix" style="width: 100%;"></image>
 </view>
-<scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height: 100vh;">
+<scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height:calc(100vh-20vh);">
   <view class="main">
     <view class="flex userinfo" style="align-items: center;">
       <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
@@ -22,7 +22,25 @@
       编辑资料
       </view>
     </view>
+    <view class="cu-list grid {{admin_flag?'col-3':'col-2'}} sm-border card-menu margin-top-sm" style="" wx:if="{{false}}">
+      <view class="cu-item" bindtap="add_good" wx:if="{{admin_flag}}">
+        <view class="cuIcon-add text-red">
+        </view>
+        <text>新增商品</text>
+      </view>
+      <view class="cu-item" bindtap="navigateToallorder">
+        <view class="cuIcon-goods text-green">
 
+        </view>
+        <text>全部订单</text>
+      </view>
+      <view class="cu-item" bindtap="navigateToordernotdeliver">
+        <view class="cuIcon-deliver text-green">
+        </view>
+        <text>待收货</text>
+      </view>
+
+    </view>
     <view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}">
       <view class="cu-item" bindtap="navigateToActivity">
         <view class="cuIcon-activity text-red">
@@ -50,7 +68,7 @@
     <view class="cu-list menu sm-border card-menu margin-top">
       <view class="cu-item arrow" bindtap="navigateToActivitycreate">
         <view class="content">
-          <text class="cuIcon-circle text-red"></text>
+          <text class="cuIcon-circle text-green"></text>
           <text class="text-grey">发布的活动</text>
         </view>
       </view>
@@ -59,6 +77,12 @@
         <view class="content">
           <text class="cuIcon-icloading text-red"></text>
           <text class="text-grey">待审核的活动</text>
+        </view>
+      </view>
+      <view class="cu-item arrow" bindtap="navigateToFollowUser">
+        <view class="content">
+          <text class="iconfont icon-canyuguanli text-green" style="display:inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;"></text>
+          <text class="text-grey">关注的人</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="navigateToActivitypart">
@@ -76,7 +100,7 @@
       </view>
       <view class="cu-item arrow" bindtap="navigateToMoney">
         <view class="content">
-          <text class="cuIcon-moneybagfill text-red"></text>
+          <text class="cuIcon-moneybagfill text-yellow"></text>
           <text class="text-grey">余额提现</text>
         </view>
       </view>
@@ -109,6 +133,7 @@
       </view>
     </view>
   </view>
+  <view style="height: 400rpx;"></view>
 </scroll-view>
 <view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
   <view class="cu-dialog">

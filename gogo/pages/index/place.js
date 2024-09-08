@@ -7,12 +7,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    place_list:[],
-    show_index:-1,
-    show_address:false,
-    triggered:false,
-    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营"],
-    search_word:""
+    place_list: [],
+    show_index: -1,
+    show_address: false,
+    triggered: false,
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "棋牌", "露营"],
+    search_word: "",
+    latitude: "",
+    longitude: ""
 
   },
 
@@ -20,19 +22,98 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.again_getLocation();
+  },
+  getLocation(that) {
+    var that = this;
+    wx.authorize({
+      scope: 'scope.userLocation',
+      success() {
+        wx.getLocation({
+          type: 'wgs84',
+          success (res) {
+            const latitude = res.latitude
+            const longitude = res.longitude
+            const speed = res.speed
+            const accuracy = res.accuracy
+            that.setData({
+              latitude: latitude,
+              longitude: longitude
+            }) 
+          }
+         })
+         
+      }
+    });
 
   },
-  add_place(){
+  again_getLocation: function () {
+    let that = this;
+    // 获取位置信息
+    wx.getSetting({
+      success: (res) => {
+        console.log("位置信息" + res)
+        console.log(res.authSetting['scope.userLocation'])
+        if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) {//非初始化进入该页面,且未授权
+          wx.showModal({
+            title: '是否授权当前位置',
+            content: '需要获取您的地理位置，请确认授权，否则无法获取您所需数据',
+            success: function (res) {
+              console.log(res)
+              if (res.cancel) {
+                wx.showToast({
+                  title: '授权失败',
+                  icon: 'success',
+                  duration: 1000
+                })
+                
+              } else if (res.confirm) {
+                wx.openSetting({
+                  success: function (dataAu) {
+                    console.log(dataAu)
+                    if (dataAu.authSetting["scope.userLocation"] == true) {
+                      wx.showToast({
+                        title: '授权成功',
+                        icon: 'success',
+                        duration: 1000
+                      })
+                      //再次授权，调用getLocationt的API
+                      that.getLocation();
+                    } else {
+                      wx.showToast({
+                        title: '授权失败',
+                        icon: 'success',
+                        duration: 1000
+                      })
+                     
+                    }
+                  }
+                })
+              }
+            }
+          })
+        } else if (res.authSetting['scope.userLocation'] == undefined) {//初始化进入
+          that.getLocation();
+
+        }
+        else { //授权后默认加载
+          that.getLocation();
+        }
+      }
+    })
+
+  },
+  add_place() {
     wx.navigateTo({
       url: 'addplace',
     })
   },
-  show_address(){
+  show_address() {
     this.setData({
-      show_address:!this.data.show_address
+      show_address: !this.data.show_address
     })
   },
-  onScrollRefresh(){
+  onScrollRefresh() {
     this.get_all_clubplace();
     var that = this;
     setTimeout(function () {
@@ -41,26 +122,43 @@ Page({
       })
     }, 2000);
   },
-  get_all_clubplace(){
-    if(!util.check_login(app)){
+  get_all_clubplace() {
+    if (!util.check_login(app)) {
       return;
     }
+    wx.showLoading({
+      title: '',
+    })
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_all_clubplace',
       data: {
-        "user_id": app.globalData.login_userInfo["user_id"]
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "longitude":that.data.longitude,
+        "latitude":that.data.latitude
       },
       success: (res) => {
         console.log("appjs用户openid");
         console.log(res.data);
-        if(res.data.code == 200){
+        if (res.data.code == 200) {
+          var place_list = res.data.result;
+          place_list.forEach(item=>{
+            if(that.data.latitude!=""&&that.data.longitude!=""){
+              item["distance"] = util.GetDistance(that.data.latitude,  that.data.longitude,  item.latitude,  item.longitude)
+            }else{
+              item["distance"] = ""
+            }
+            
+          })
           that.setData({
-            place_list:res.data.result
+            place_list: place_list
           })
         }
       }
     })
+    setTimeout(function(){
+      wx.hideLoading()
+    },3000)
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -75,8 +173,8 @@ Page({
   onShow() {
     this.get_all_clubplace()
   },
-  go_to_place(e){
-   
+  go_to_place(e) {
+
     var index = e.currentTarget.dataset.index;
     console.log(index)
     var place = this.data.place_list[index];
@@ -88,22 +186,22 @@ Page({
       scale: 28
     })
   },
-  show_location(e){
+  show_location(e) {
     var index = e.currentTarget.dataset.index;
     console.log(index)
     this.setData({
-      show_index:index
+      show_index: index
     })
   },
-  edit_place_info(e){
+  edit_place_info(e) {
     var index = e.currentTarget.dataset.index;
     console.log(index)
     var place = this.data.place_list[index];
     wx.navigateTo({
-      url: 'editplace?placeinfo='+encodeURIComponent(JSON.stringify(place)),
+      url: 'editplace?placeinfo=' + encodeURIComponent(JSON.stringify(place)),
     })
   },
-  more_img(e){
+  more_img(e) {
     var index = e.currentTarget.dataset.index;
     console.log(index)
     var place = this.data.place_list[index];
@@ -113,7 +211,7 @@ Page({
       current: url
     })
   },
-  go_to_miniprogram(e){
+  go_to_miniprogram(e) {
     var url = e.currentTarget.dataset.url;
     console.log(url)
     wx.navigateToMiniProgram({
@@ -167,7 +265,7 @@ Page({
   onShareAppMessage() {
     return {
       title: "查看附近场馆信息",
-      
+
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
           console.log("成功", res)
@@ -178,19 +276,20 @@ Page({
       }
     }
   },
-  search_clubplace_list(e){
+  search_clubplace_list(e) {
     this.setData({
-      search_word:e.currentTarget.dataset.search
+      search_word: e.currentTarget.dataset.search
     })
     wx.showLoading({
       title: '搜索中...',
     })
     var _that = this;
+    var that= this;
     wx.request({
       url: app.globalData.hosturl + 'search_clubplace', //仅为示例，并非真实的接口地址
       data: {
-        "user_id":app.globalData.login_userInfo["user_id"],
-        "search_word":this.data.search_word,
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "search_word": this.data.search_word,
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -200,47 +299,52 @@ Page({
         var list = [];
         console.log("获取list");
         console.log(res.data);
-        if(res.data.code == 200){
+        if (res.data.code == 200) {
           res.data.result.forEach(element => {
             console.log(element.activity_id)
+            if(that.data.latitude!=""&&that.data.longitude!=""){
+              element["distance"] = util.GetDistance(that.data.latitude,  that.data.longitude,  element.latitude,  element.longitude)
+            }else{
+              element["distance"] = ""
+            }
             list.push(element);
           });
-          if(list.length == 0){
+          if (list.length == 0) {
             wx.showToast({
               title: '搜索为空',
-              icon:"error",
-              duration:3000
+              icon: "error",
+              duration: 3000
             })
-          }else{
+          } else {
             _that.setData({
               place_list: list,
             })
           }
-        }else{
+        } else {
           wx.showToast({
             title: '服务器异常',
-            icon:"error",
-            duration:3000
+            icon: "error",
+            duration: 3000
           })
         }
-        
-        
-        setTimeout(function(){
+
+
+        setTimeout(function () {
           wx.hideLoading({
-            success: (res) => {},
+            success: (res) => { },
           });
-        },3000)
+        }, 3000)
       },
-      fail(res){
+      fail(res) {
         wx.hideLoading({
-          success: (res) => {},
+          success: (res) => { },
         });
         wx.showToast({
           title: '网络可能异常...',
-          icon:"error",
-          duration:4000
+          icon: "error",
+          duration: 4000
         })
-  
+
       }
     });
   },

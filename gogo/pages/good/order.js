@@ -144,6 +144,49 @@ Page({
       }
     })
   },
+  apply_refund(e){
+    var that = this;
+    
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var order = this.data.order_list[index];
+    console.log(order)
+    wx.request({
+      url: app.globalData.hosturl + 'apply_refund', //仅为示例，并非真实的接口地址
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "order_id":order.order_id,
+        "deliver_status":this.data.deliver_status
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading();
+        if (res.data.code == 200) {
+          console.log(res.data.result)
+          that.setData({
+            order_list: res.data.result,
+          })
+          wx.showToast({
+            title: '已提交申请！',
+            icon:'success',
+            duration:3000
+          })
+          if(res.data.result.length == 0){
+            wx.showToast({
+              title: '没找到订单',
+              icon:'success',
+              duration:3000
+            })
+          }
+        }
+      },
+      fail: function (error) {
+        wx.hideLoading();
+      }
+    })
+  },
   pay_order(e){
     var that = this;
     var index = e.currentTarget.dataset.index;

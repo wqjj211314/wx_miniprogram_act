@@ -1,11 +1,11 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-<view class="bg-white flex" style="height: 200rpx;align-items: center;justify-content: center;">
+<view class="bg-white flex" style="height: 150rpx;align-items: center;justify-content: center;">
   <view class="flex" style="flex-direction: column;align-items: center;">
     <view class="cu-avatar round" style="background-image:url({{activity_info.createuser.avatarUrl}});margin-right: 8rpx;"></view>
     <text class="text-black">{{activity_info.createuser.nickName}}</text>
   </view>
   <view style="margin-left: 20rpx;">
-    <view style="margin-bottom: 20rpx;" class="text-blue">{{activity_info.club_name==""?activity_info.activity_tag:activity_info.club_name}}排名<text class="text-gray" style="font-size: 22rpx;">{{sel_group_type==''?'(暂无对局数据)':''}}</text></view>
+    <view style="margin-bottom: 20rpx;" class="text-blue">{{activity_info.club_name==""?activity_info.activity_tag:activity_info.club_name}}排名<text class="text-gray" style="font-size: 22rpx;">{{sel_group_type==''?'(暂无对局数据)':'前20名'}}</text></view>
     <view style="font-size: 25rpx;">最后更新{{modify_time}}</view>
   </view>
 </view>
@@ -45,7 +45,7 @@
     <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
       <view class="flex" style="width: 15%;align-items: center;justify-content: space-around;">
         <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
-          <view class="{{rank_num < 3?'text-red text-bold':''}}" style="height: fit-content;font-size: 40rpx;">{{rank_num+1}}</view>
+          <view class="{{rank_num < 4?'text-red text-bold':'text-gray'}}" style="height: fit-content;font-size: 40rpx;">{{rank_num+1}}</view>
         </view>
       </view>
       <view class="flex" style="width: 40%;align-items: center;justify-content: center;flex-wrap: wrap;">

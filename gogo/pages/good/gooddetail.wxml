@@ -1,4 +1,4 @@
-<scroll-view scroll-y="true" style="height: 100vh;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+<scroll-view scroll-y="true" style="height:calc(100vh-140rpx)" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;">
   <view style="background-color: rgba(226, 230, 247, 0.308);">
     <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="max-height:1000rpx;min-height: 800rpx;" autoplay="false">
@@ -88,6 +88,9 @@
       </view>
     </view>
 
+    <view class="" style="margin-top: 30rpx;font-size: 30rpx;">
+      <input placeholder="如有其他要求，请填写说明" bindinput='good_remark' style="color:black;" class="" value="{{club_name}}" maxlength="50"></input>
+    </view>
   </view>
   <view style="height: 200rpx;"></view>
 </scroll-view>

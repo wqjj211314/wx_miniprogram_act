@@ -7,6 +7,7 @@ Page({
    */
   data: {
     activity_list:[],
+    search_tip:"搜索相关活动",
     hosturl:app.globalData.hosturl,
     share_use_id:"",
     search_word:"",
@@ -134,7 +135,8 @@ Page({
     console.log(event);
     var that = this;
     this.setData({
-      current_swiper_item_index: event.detail.current
+      current_swiper_item_index: event.detail.current,
+      search_tip:event.detail.current==0?'搜索相关商品':'搜索相关活动'
     })
     
   },

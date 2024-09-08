@@ -112,7 +112,7 @@
   </view>
   <block wx:for="{{sort_users_score}}">
     <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;" hidden="{{hidden_score_list}}">
-      <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
+      <view class="flex padding-sm" style="align-items: center;justify-content: space-between;padding-bottom: 10rpx;">
         <view class="flex" style="width: 15%;align-items: center;">
           <view class="flex" style="flex-direction: column;width: 100%;height: fit-content;align-content:center;align-items: center;">
             <view class="cu-avatar radius" style="background-image:url({{member_users[index].avatarUrl}});">

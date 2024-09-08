@@ -66,7 +66,7 @@ function GetDistance( lat1,  lng1,  lat2,  lng2){
   Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
   s = s *6378.137 ;// EARTH_RADIUS;
   s = Math.round(s * 10000) / 10000;
-  return s;
+  return Number(s.toFixed(1));
 }
 /*获取当前页url*/
 function getCurrentPageUrl(){

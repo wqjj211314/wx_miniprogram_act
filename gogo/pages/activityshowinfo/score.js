@@ -45,7 +45,7 @@ function get_pk_groups(hosturl, that, activity_id, group_tag, activity_tag) {
     success(res) {
       pkinfo = res.data;
       console.log("获取当前分组的对阵情况");
-      console.log(pkinfo);
+      
       if (pkinfo == "") {
         return
       }
@@ -146,10 +146,10 @@ function get_score(pk_groups) {
   var groups_score = {};
   pk_groups.forEach((item) => {
     var score = item[item.length - 2];
+    console.log(score)
     var max = Math.max.apply(null, score);
     var min = Math.min.apply(null, score);
-    console.log("max" + max);
-    console.log("min" + min);
+    
     var peace = false;
     var battle = true;
     if (max == min) {
@@ -270,7 +270,7 @@ function sort_dict(data) {
       if (data[a]["all_win_rate"] == data[b]["all_win_rate"]) {
         return -(data[a]["total_scores_diff"] - data[b]["total_scores_diff"])
       }
-      return -(data[a]["all_win_rate"] - data[b]["al_win_rate"])
+      return -(data[a]["all_win_rate"] - data[b]["all_win_rate"])
     }
     return -(data[a]["all_win"] - data[b]["all_win"]);//降序
   });
