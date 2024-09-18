@@ -42,7 +42,14 @@
       </view>
     </view>
   </view>
-
+  <view class="cu-form-group">
+    <view class="title">代订场馆名称</view>
+    <input placeholder="场馆名称" bindinput='good_club_place' type="text" style="color:black;text-align: right;" value="{{good_club_place}}"></input>
+  </view>
+  <view class="cu-form-group">
+    <view class="title">代订场馆小程序</view>
+    <input placeholder="场馆订场小程序" bindinput='good_club_place_mini_url' type="text" style="color:black;text-align: right;" value="{{good_club_place_mini_url}}"></input>
+  </view>
 </view>
 <view class="" style="padding-top:0px;margin-top:0px;margin:0rpx;width: 100%;">
   <view class="radius bg-white margin-top">

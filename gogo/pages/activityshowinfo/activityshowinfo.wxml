@@ -106,8 +106,8 @@
 
                       <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;margin-left: 20rpx;" bind:tap="chat" data-membernum="{{item.member_num}}">
                       </view>
-                      <view class="" style="width: 200rpx;position: initial;overflow: hidden;white-space: nowrap;">
-                        {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
+                      <view class="" style="width: 300rpx;position: initial;overflow: hidden;white-space: nowrap;margin-left: 15rpx;">
+                        {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}" style="margin-left: 10rpx;"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"排队中":""}}</text>
                       </view>
                       <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                         <view class="text-black flex" style="font-size: 25rpx;width: fit-content;">
@@ -139,8 +139,8 @@
 
                     <view class="cu-avatar round" style="background-image:url({{item.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;" bind:tap="chat" data-membernum="{{item.member_num}}">
                     </view>
-                    <view class="" style="width: 200rpx;position: initial;overflow: hidden;white-space: nowrap;">
-                      {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text>
+                    <view class="" style="width: 300rpx;position: initial;overflow: hidden;white-space: nowrap;margin-left: 15rpx;">
+                      {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}" style="margin-left: 10rpx;"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"排队中":""}}</text>
                     </view>
                     <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                       <view class="text-black flex" style="font-size: 30rpx;width: fit-content;">
@@ -168,7 +168,7 @@
       <view class="cu-list menu card-menu margin-top" style="height: fit-content;padding-bottom: 0rpx;">
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-infofill text-green" style="font-size: 30rpx;"></text>
+            <text class="cuIcon-infofill text-gray" style="font-size: 30rpx;"></text>
             <text class="text-grey">报名限制</text>
           </view>
           <view class="action" style="max-width:66%;">
@@ -177,7 +177,7 @@
         </view>
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-remind text-green"></text>
+            <text class="cuIcon-remind text-gray"></text>
             <text class="text-grey">报名截止</text>
           </view>
           <view class="action" style="max-width:66%;">
@@ -186,7 +186,7 @@
         </view>
         <view class="cu-item">
           <view class="content">
-            <text class="cuIcon-remind text-green"></text>
+            <text class="cuIcon-remind text-gray"></text>
             <text class="text-grey">取消报名截止</text>
           </view>
           <view class="action" style="max-width:66%;">
@@ -196,7 +196,7 @@
         <view class="cu-item" wx:if="{{partinfo.length > 0}}">
 
           <view class="content">
-            <text class="cuIcon-newsfill text-green"></text>
+            <text class="cuIcon-newsfill text-gray"></text>
             <text class="text-grey">报名信息</text>
           </view>
           <view class="action" style="max-width:70%;">
@@ -282,7 +282,7 @@
           </view>
         </view>
       </view>
-      <view class="bg-white text-center text-blue margin-top" wx:if="{{recommend_list.length > 0}}">- - 推荐 - -</view>
+      <view class="bg-white text-center text-blue margin-top" wx:if="{{recommend_list.length > 0}}" style="font-size: 24rpx;">- - 为你推荐 - -</view>
 
       <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}" wx:if="{{recommend_list.length > 0}}">
         <view wx:for="{{recommend_list}}">

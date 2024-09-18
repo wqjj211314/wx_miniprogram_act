@@ -4,8 +4,8 @@
   <button class="cu-btn bg-blue round" disabled="{{!can_get || userinfo.total_money == 0}}" bind:tap="getallmoney">全部提现</button>
 </view>
 
-<view style="margin-top: 30rpx;margin-bottom: 10rpx;">提现信息(免手续费，24h内到账)</view>
-<form>
+<view style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{can_get || userinfo.total_money != 0}}">提现信息(免手续费，24h内到账)</view>
+<form wx:if="{{can_get || userinfo.total_money != 0}}">
   <view class="cu-form-group">
     <view class="title" style="min-width: 180rpx;">银行开户人</view>
     <input placeholder="请输入开户人姓名" value="{{bank_account_name}}" bindinput='bankaccountnameInput'></input>

@@ -16,7 +16,9 @@ Page({
     good_limit:0,
     good_detail:"",
     good_deliver_options:[],
-    deliver_options:["预付配送","上门货到付款","自提"],
+    good_club_place:"",
+    good_club_place_mini_url:"",
+    deliver_options:["预付","货到付款","自提"],
     imgList:[],
     contact_address:"杭州市余杭区创景路万达广场自提，时间另行预约",
     contact_name:"行乐",
@@ -129,6 +131,16 @@ Page({
   good_store(e){
     this.setData({
       good_store: e.detail.value
+    })
+  },
+  good_club_place(e){
+    this.setData({
+      good_club_place: e.detail.value
+    })
+  },
+  good_club_place_mini_url(e){
+    this.setData({
+      good_club_place_mini_url: e.detail.value
     })
   },
   good_limit(e){
@@ -320,6 +332,8 @@ Page({
         "good_deliver_options": this.data.good_deliver_options,
         "good_store": this.data.good_store,
         "good_limit": this.data.good_limit,
+        "good_club_place":this.data.good_club_place,
+        "good_club_place_mini_url":this.data.good_club_place_mini_url,
         "selfgetaddress":JSON.stringify(selfgetaddress)
       },
       header: {

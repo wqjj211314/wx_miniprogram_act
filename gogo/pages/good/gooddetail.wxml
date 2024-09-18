@@ -29,6 +29,15 @@
       </view>
     </view>
   </view>
+<view wx:if="{{good_info.good_club_place != ''}}" style="margin:0rpx 15rpx;">
+  <view class="cu-form-group bg-gray" bindtap="chooseposition" style="border-radius: 20rpx;">
+    <view class="title text-black" style="font-size: 27rpx;">{{good_info.good_club_place}}</view>
+    <view class="flex text-blue" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;" bind:tap="go_to_miniprogram" data-url="{{good_info.good_club_place_mini_url}}">
+      查看剩余场地<text class="cuIcon-right text-blue" style=""></text>
+    </view>
+  </view>
+</view>
+
   <view class="padding" style="font-size: 35rpx;width: 100vw;">
     <view>选择地址
     <button class="cu-btn line-black" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;border-radius: 20rpx;margin-left: 20rpx;" bind:tap="new_address">新增地址</button>

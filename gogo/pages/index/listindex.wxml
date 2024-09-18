@@ -70,6 +70,7 @@
     </view>
 
     <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}">
+    <view class="bg-white" style="height: 300rpx;padding:8rpx;padding-top: 20rpx;">附近免费乒乓球场地</view>
       <view wx:for="{{activity_list}}" wx:for-item="activity_info">
         <!--
       <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTomini" data-url="#小程序://闪动/EzRai7PnDI3DTvr">

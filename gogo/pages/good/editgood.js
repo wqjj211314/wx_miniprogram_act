@@ -18,6 +18,8 @@ Page({
     good_detail: "",
     good_deliver_options: [],
     deliver_options: ["预付", "货到付款", "自提"],
+    good_club_place:"",
+    good_club_place_mini_url:"",
     imgList: [],
     admin_flag:false,
     contact_address:"杭州市余杭区创景路万达广场自提，时间另行预约",
@@ -102,6 +104,16 @@ Page({
     value = value.replace("，",",")
     this.setData({
       good_size:value==""?[]:value.split(",")
+    })
+  },
+  good_club_place(e){
+    this.setData({
+      good_club_place: e.detail.value
+    })
+  },
+  good_club_place_mini_url(e){
+    this.setData({
+      good_club_place_mini_url: e.detail.value
     })
   },
   good_color(e) {
@@ -340,9 +352,9 @@ Page({
         "good_deliver_options": this.data.good_deliver_options,
         "good_store": this.data.good_store,
         "good_limit": this.data.good_limit,
-        "selfgetaddress":JSON.stringify(selfgetaddress)
-
-
+        "selfgetaddress":JSON.stringify(selfgetaddress),
+        "good_club_place":this.data.good_club_place,
+        "good_club_place_mini_url":this.data.good_club_place_mini_url,
       },
       header: {
         'content-type': 'application/json' // 默认值

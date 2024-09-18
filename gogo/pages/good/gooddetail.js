@@ -409,6 +409,26 @@ Page({
       good_remark: e.detail.value
     })
   },
+  go_to_miniprogram(e) {
+    var url = e.currentTarget.dataset.url;
+    console.log(url)
+    wx.navigateToMiniProgram({
+      shortLink: url,
+      success(res) {
+        // 打开成功
+        wx.showToast({
+          title: '打开成功',
+        })
+      },
+      fail(res) {
+        // 打开失败
+        console.log(res)
+        wx.showToast({
+          title: '打开失败',
+        })
+      },
+    })
+  },
   buy() {
     //下单
     console.log(JSON.stringify(this.data.address_list[this.data.addressindex]))
