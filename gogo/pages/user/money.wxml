@@ -15,10 +15,10 @@
     <input placeholder="请输入银行卡号,仅支持数字" value="{{bank_num}}" bindinput='banknumInput'></input>
   </view>
 </form>
-<view class="bg-white padding" style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{money_list.length > 0}}">交易记录</view>
+<view class="bg-white padding" style="margin-top: 30rpx;margin-bottom: 0rpx;" wx:if="{{money_list.length > 0}}">交易记录</view>
 <form>
   <block wx:for="{{money_list}}" wx:key="id">
-      <view class="flex bg-white margin-sm padding-sm" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
+      <view class="flex bg-white margin-sm padding-sm" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;border-radius: 20rpx;">
         <view class="text-blue" style="flex:1;">
           {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}元
         </view>

@@ -26,6 +26,9 @@ Page({
       longitude:app.globalData.login_userInfo["longitude"]
     })
     this.again_getLocation();
+    wx.showLoading({
+      title: '',
+    })
   },
   getLocation(that) {
     var that = this;
@@ -37,12 +40,12 @@ Page({
           success (res) {
             const latitude = res.latitude
             const longitude = res.longitude
-            const speed = res.speed
-            const accuracy = res.accuracy
+           
             that.setData({
               latitude: latitude,
               longitude: longitude
             }) 
+            that.get_all_clubplace()
           }
          })
          
@@ -179,7 +182,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    this.get_all_clubplace()
+    //this.get_all_clubplace()
   },
   go_to_place(e) {
 

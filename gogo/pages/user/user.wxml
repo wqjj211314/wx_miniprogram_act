@@ -22,24 +22,30 @@
       编辑资料
       </view>
     </view>
-    <view class="cu-list grid {{admin_flag?'col-3':'col-2'}} sm-border card-menu margin-top-sm" style="" wx:if="{{false}}">
-      <view class="cu-item" bindtap="add_good" wx:if="{{admin_flag}}">
+    <view class="bg-white text-black" style="margin:10px 17px 0px;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;padding:15rpx;padding-bottom: 0rpx;">我的订单</view>
+    <view class="cu-list grid {{checking_flag?'col-4':'col-3'}} card-menu" style="border-radius: 0rpx;border-bottom-right-radius: 20rpx;border-bottom-left-radius: 20rpx;">
+      <view class="cu-item" bindtap="add_good" wx:if="{{checking_flag}}">
         <view class="cuIcon-add text-red">
         </view>
         <text>新增商品</text>
       </view>
-      <view class="cu-item" bindtap="navigateToallorder">
-        <view class="cuIcon-goods text-green">
-
+      <view class="cu-item" bindtap="navigateTocancelorder">
+        <view class="cuIcon-goods text-gray">
         </view>
-        <text>全部订单</text>
+        <text>退款/售后</text>
       </view>
+     
+      
       <view class="cu-item" bindtap="navigateToordernotdeliver">
         <view class="cuIcon-deliver text-green">
         </view>
         <text>待收货</text>
       </view>
-
+      <view class="cu-item" bindtap="navigateToallorder">
+        <view class="cuIcon-goods text-green">
+        </view>
+        <text>全部订单</text>
+      </view>
     </view>
     <view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}">
       <view class="cu-item" bindtap="navigateToActivity">

@@ -79,6 +79,11 @@ Page({
       url: '../good/order?deliver_status='+"",
     })
   },
+  navigateTocancelorder(){
+    wx.navigateTo({
+      url: '../good/order?deliver_status='+"申请退款",
+    })
+  },
   navigateToordernotdeliver(){
     wx.navigateTo({
       url: '../good/order?deliver_status='+"7天内发货",

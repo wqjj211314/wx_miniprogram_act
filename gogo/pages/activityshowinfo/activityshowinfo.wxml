@@ -193,8 +193,7 @@
             <text class="text-grey text-sm">{{activity_info.cancelendtimeweek}}</text>
           </view>
         </view>
-        <view class="cu-item" wx:if="{{partinfo.length > 0}}">
-
+        <view class="cu-item" wx:if="{{partinfo.length > 0&&false}}">
           <view class="content">
             <text class="cuIcon-newsfill text-gray"></text>
             <text class="text-grey">报名信息</text>

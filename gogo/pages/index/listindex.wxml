@@ -16,24 +16,29 @@
 </view>
 <swiper style="height:calc(100% - 100rpx);" current="{{current_swiper_item_index}}" bindchange="swiper_change">
   <swiper-item style="width: 100%;height:100%;overflow: auto;" class="">
-    <view class="cu-list grid {{admin_flag?'col-3':'col-2'}} sm-border card-menu" style="margin:0rpx;">
+    <view class="cu-list grid {{admin_flag?'col-4':'col-3'}} sm-border card-menu" style="margin:0rpx;">
       <view class="cu-item" bindtap="add_good" wx:if="{{admin_flag}}">
         <view class="cuIcon-add text-red">
         </view>
         <text>新增商品</text>
       </view>
-      <view class="cu-item" bindtap="navigateToallorder">
-        <view class="cuIcon-goods text-green">
-
+      <view class="cu-item" bindtap="navigateTocancelorder">
+        <view class="cuIcon-goods text-gray">
         </view>
-        <text>全部订单</text>
+        <text>退款/售后</text>
       </view>
+     
+      
       <view class="cu-item" bindtap="navigateToordernotdeliver">
         <view class="cuIcon-deliver text-green">
         </view>
         <text>待收货</text>
       </view>
-
+      <view class="cu-item" bindtap="navigateToallorder">
+        <view class="cuIcon-goods text-green">
+        </view>
+        <text>全部订单</text>
+      </view>
     </view>
     <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}">
       <view wx:for="{{good_list}}" wx:for-item="good">
@@ -70,7 +75,7 @@
     </view>
 
     <grid-view type="masonry" cross-axis-count="{{2}}" cross-axis-gap="{{4}}" main-axis-gap="{{4}}">
-    <view class="bg-white" style="height: 300rpx;padding:8rpx;padding-top: 20rpx;">附近免费乒乓球场地</view>
+    <view class="bg-white" style="height: 300rpx;padding:8rpx;padding-top: 20rpx;" wx:if="{{false}}">附近免费乒乓球场地</view>
       <view wx:for="{{activity_list}}" wx:for-item="activity_info">
         <!--
       <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;padding-top: 20rpx;" bind:tap="navigateTomini" data-url="#小程序://闪动/EzRai7PnDI3DTvr">

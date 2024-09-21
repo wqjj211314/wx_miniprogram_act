@@ -20,7 +20,8 @@ Page({
     choose_selfget: false,
     order_amount_7day: 0,
     only_self_deliver: false,
-    good_remark:""
+    good_remark:"",
+    share_user_id:""
   },
 
   /**
@@ -33,6 +34,11 @@ Page({
     if (app.globalData.login_userInfo["checking_flag"]) {
       this.setData({
         admin_flag: true
+      })
+    }
+    if(options.hasOwnProperty("share_user_id")){
+      this.setData({
+        share_user_id: options.share_user_id
       })
     }
     this.setData({
@@ -288,7 +294,7 @@ Page({
     return {
       title: "「" + this.data.good_info["good_price"] + "元」" + this.data.good_info["good_title"],
       //desc: '自定义分享描述',
-      path: '/pages/good/gooddetail?good_info=' + good_info,
+      path: '/pages/good/gooddetail?good_info=' + good_info+'&&share_user_id='+app.globalData.login_userInfo["user_id"],
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
@@ -477,7 +483,8 @@ Page({
           "good_type": this.data.sel_good_type,
           "good_deliver": this.data.sel_deliver,
           "good_remark":this.data.good_remark,
-          "address": this.data.address_list[this.data.addressindex]
+          "address": this.data.address_list[this.data.addressindex],
+          "share_user_id":this.data.share_user_id
         },
         header: {
           'content-type': 'application/json' // 默认值
