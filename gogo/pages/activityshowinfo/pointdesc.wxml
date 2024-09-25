@@ -2,17 +2,17 @@
 <view style="font-size: 30rpx;padding:10rpx;">
 <view style="background-color: white;padding:20rpx;">对阵、积分等说明</view>
 <view style="background-color: white;padding:20rpx;">
-  一、兴趣积分等信息可以在「我的--兴趣列表」中查看修改相关信息;
+  一、兴趣等级分等信息可以在「我的--兴趣列表」中查看修改相关信息;
 </view>
 <view style="background-color: white;padding:20rpx;">
   二、羽毛球、篮球、乒乓球、台球、棋牌麻将、跑步、骑行、网球、击剑等类型活动，可以分组进行对阵，对阵选项包括：1V1对阵、2V2对阵、4-6人混双对阵、固定搭档对阵、自定义。
 </view>
-<view style="background-color: white;padding:20rpx;">三、积分根据对局胜负情况进行累计，按照胜+10分负-2分的一般规则进行积分累计。</view>
-<view style="background-color: white;padding:20rpx;">四、积分按照每1000分一个等级，积分达到等级分的80%晋级下一等级，需要完成胜3场且胜率至少50%。</view>
+<view style="background-color: white;padding:20rpx;">三、等级分根据对局胜负情况进行累计，按照胜+10分负-2分的一般规则进行等级分累计。</view>
+<view style="background-color: white;padding:20rpx;">四、等级分按照每1000分一个等级，积分达到等级分的80%晋级下一等级，需要完成胜3场且胜率至少50%。</view>
 
 <view style="background-color: white;padding:20rpx;">五、举例说明：</view>
 <view style="background-color: white;padding:40rpx;">
-1.当前羽毛球积分600，胜5场负3场，累计增加积分44分</view>
+1.当前羽毛球等级分600，胜5场负3场，累计增加积分44分</view>
 <view style="background-color: white;padding:40rpx;">
-2.当前羽毛球积分900，胜3场负1场，因为900 > 1000 * 80%且胜率75% > 50%,直接积分进入下一等级，最终积分1000分</view>
+2.当前羽毛球等级分900，胜3场负1场，因为900 > 1000 * 80%且胜率75% > 50%,直接积分进入下一等级，最终积分1000分</view>
 </view>

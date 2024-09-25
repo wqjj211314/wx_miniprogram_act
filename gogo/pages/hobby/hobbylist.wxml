@@ -8,7 +8,7 @@
         <image src="{{item.bg_url}}" mode="aspectFill" wx:if="{{item.bg_img_exist}}"></image>
         <image src="https://www.2week.club:5000/static/userbg.jpg" mode="aspectFill" wx:else></image>
         <view class="cu-tag bg-blue" style="position: absolute;left:0;right:auto;margin-left:0rpx;">{{item.hobby_tag}}</view>
-        <view class="cu-tag bg-blue" wx:if="{{item.is_pk_hobby}}">{{item.hobby_tag}}积分：{{item.hobby_point}}</view>
+        <view class="cu-tag bg-blue" wx:if="{{item.is_pk_hobby}}">{{item.hobby_tag}}等级分：{{item.hobby_point}}</view>
         <!--留言功能-->
         <!--
         <view class="cu-bar" style="height:50%;" wx:if="{{false}}">

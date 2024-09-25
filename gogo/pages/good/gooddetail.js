@@ -37,6 +37,7 @@ Page({
       })
     }
     if(options.hasOwnProperty("share_user_id")){
+      console.log("分享人")
       this.setData({
         share_user_id: options.share_user_id
       })
@@ -437,6 +438,7 @@ Page({
   },
   buy() {
     //下单
+    console.log(this.data.share_user_id)
     console.log(JSON.stringify(this.data.address_list[this.data.addressindex]))
     if ((this.data.address_list.length <= 0 || this.data.addressindex < 0 || this.data.addressindex >= this.data.address_list.length)) {
       wx.showToast({
@@ -472,6 +474,7 @@ Page({
       wx.showLoading({
         title: '下单中...',
       })
+      console.log("分享"+this.data.share_user_id)
       wx.request({
         url: app.globalData.hosturl + 'buy_good', //仅为示例，并非真实的接口地址
         data: {

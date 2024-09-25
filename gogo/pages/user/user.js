@@ -102,6 +102,11 @@ Page({
       modalName: null
     })
   },
+  add_good(){
+    wx.navigateTo({
+      url:"/pages/good/addgood"
+    })
+  },
   navigateToallorder(){
     wx.navigateTo({
       url: '../good/order?deliver_status='+"",
@@ -115,6 +120,11 @@ Page({
   navigateToordernotdeliver(){
     wx.navigateTo({
       url: '../good/order?deliver_status='+"7天内发货",
+    })
+  },
+  navigateToshareorder(){
+    wx.navigateTo({
+      url: '../good/shareorder',
     })
   },
   navigateToActivity() {
@@ -225,6 +235,22 @@ Page({
   onUnload: function () {
 
   },
+  show_tel(){
+    wx.showModal({
+      title: '联系行乐GO',
+      content: '向开发者反馈建议，微信 growthwang30\n，收费提现问题申诉，电话 18018757991',
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          
+        }
+      }
+    })
+  },
+
   onScrollRefresh:function(){
     var that = this;
     setTimeout(function () {

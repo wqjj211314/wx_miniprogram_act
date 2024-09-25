@@ -31,7 +31,7 @@ Page({
     begintime: year + "-" + month + "-" + day + " 20:00",
     endtime: year + "-" + month + "-" + day + " 22:00",
     addendtime: year + "-" + month + "-" + day + " 20:00",
-    cancelendtime: year + "-" + month + "-" + day + " 18:00",
+    cancelendtime: year + "-" + month + "-" + day + " 20:00",
     hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营","校友会","老乡会"],
     hobby_tag: "",
     max_part_number: 10,
@@ -500,7 +500,7 @@ Page({
         duration: 3000
       });
       return;
-    }else if(this.data.pay_type == "线上报名收费"&& (this.data.pay_price == NaN || this.data.pay_price == "0.00")){
+    }else if(this.data.pay_type == "线上收费"&& (this.data.pay_price == NaN || this.data.pay_price == "0.00")){
       wx.showToast({
         title: "收费金额有误",
         icon: "none",

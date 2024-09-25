@@ -66,13 +66,13 @@
         </view>
 
         <view class="text-center" style="margin-bottom: 10rpx;margin-right: 10rpx;">
-          <button class="cu-btn round {{pay_type == '线上报名收费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="线上报名收费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">线上报名收费</button>
+          <button class="cu-btn round {{pay_type == '线上收费'?'bg-green':''}}" bindtap="choose_pay_type" data-paytype="线上收费" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;">线上收费</button>
         </view>
 
       </view>
     </view>
-    <view class="cu-form-group" wx:if="{{pay_type == '线上报名收费'}}">
-      <view class="title">收费金额<text style="color: red;">*</text><text class="cuIcon-recharge lg text-red"></text></view>
+    <view class="cu-form-group" wx:if="{{pay_type == '线上收费'}}">
+      <view class="title">收费金额<text class="cuIcon-recharge lg text-red"></text></view>
       <input placeholder="请输入收费金额" bindinput='priceInput' type="digit" style="color:black;text-align: right;" bindblur="priceInputBlur" value="{{pay_price}}"></input>
     </view>
 

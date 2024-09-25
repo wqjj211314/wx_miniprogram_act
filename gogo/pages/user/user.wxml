@@ -1,10 +1,9 @@
-<!--pages/user/user.wxmlhttps://www.2week.club:5000/static/userbg.jpg-->
-<view class="img">
-  <image class='img' src="https://www.2week.club:5000/static/userbg.jpg" mode="widthFix" style="width: 100%;"></image>
-</view>
-<scroll-view refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh" style="height:calc(100vh-20vh);">
-  <view class="main">
-    <view class="flex userinfo" style="align-items: center;">
+<scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+  <view class="" style="width:100vw;height:25vh;">
+    <image class='' src="https://www.2week.club:5000/static/userbg.jpg" mode="widthFix" style="width: 100%;z-index: -1;"></image>
+  </view>
+  <view class="" style="margin-top:-80rpx;">
+    <view class="flex userinfo" style="align-items: center;margin:10px 15px 0px;">
       <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
         <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
         </view>
@@ -19,23 +18,28 @@
         </view>
       </view>
       <view class="cuIcon-edit cu-btn line-green round" style="margin-left: auto;" bindtap="modify_user_info">
-      编辑资料
+        编辑资料
       </view>
     </view>
-    <view class="bg-white text-black" style="margin:10px 17px 0px;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;padding:15rpx;padding-bottom: 0rpx;">我的订单</view>
-    <view class="cu-list grid {{checking_flag?'col-4':'col-3'}} card-menu" style="border-radius: 0rpx;border-bottom-right-radius: 20rpx;border-bottom-left-radius: 20rpx;">
+    <view class="bg-white text-black" style="margin:10px 15px 0px;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;padding:15rpx;padding-bottom: 0rpx;">我的订单</view>
+    <view class="cu-list grid {{checking_flag?'col-5':'col-4'}} card-menu" style="border-radius: 0rpx;border-bottom-right-radius: 20rpx;border-bottom-left-radius: 20rpx;margin:0px 15px 0px;">
       <view class="cu-item" bindtap="add_good" wx:if="{{checking_flag}}">
         <view class="cuIcon-add text-red">
         </view>
         <text>新增商品</text>
       </view>
+
       <view class="cu-item" bindtap="navigateTocancelorder">
         <view class="cuIcon-goods text-gray">
         </view>
         <text>退款/售后</text>
       </view>
-     
-      
+      <view class="cu-item" bindtap="navigateToshareorder">
+        <view class="cuIcon-share text-green">
+        </view>
+        <text>分享奖励</text>
+      </view>
+
       <view class="cu-item" bindtap="navigateToordernotdeliver">
         <view class="cuIcon-deliver text-green">
         </view>
@@ -47,7 +51,7 @@
         <text>全部订单</text>
       </view>
     </view>
-    <view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}">
+    <view class="cu-list grid col-4 sm-border card-menu margin-top" wx:if="{{false}}" style="margin:10px 15px 0px;">
       <view class="cu-item" bindtap="navigateToActivity">
         <view class="cuIcon-activity text-red">
         </view>
@@ -71,7 +75,7 @@
       </view>
     </view>
 
-    <view class="cu-list menu sm-border card-menu margin-top">
+    <view class="cu-list menu sm-border card-menu margin-top" style="margin:10px 15px 0px;">
       <view class="cu-item arrow" bindtap="navigateToActivitycreate">
         <view class="content">
           <text class="cuIcon-circle text-green"></text>
@@ -112,8 +116,8 @@
       </view>
     </view>
 
-    <view class="cu-list menu sm-border card-menu margin-top">
-      <view class="cu-item arrow" bind:tap="showModal" data-target="DialogModal-suggest">
+    <view class="cu-list menu sm-border card-menu margin-top" style="margin:10px 15px 0px;">
+      <view class="cu-item arrow" bind:tap="show_tel" data-target="DialogModal-suggest">
         <view class="content">
           <text class="cuIcon-phone text-green" style="font-size:40rpx;"></text>
           <text class="text-grey">客服联系</text>
@@ -128,7 +132,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.67</text>
+          <text class="text-grey text-sm">v1.0.80</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">
@@ -139,25 +143,6 @@
       </view>
     </view>
   </view>
-  <view style="height: 400rpx;"></view>
-</scroll-view>
-<view class="cu-modal {{modalName=='DialogModal-suggest'?'show':''}}">
-  <view class="cu-dialog">
-    <view class="cu-bar bg-white justify-end">
-      <view class="content">客服联系</view>
-      <view class="action" bindtap="hideModal">
-        <text class="cuIcon-close text-red"></text>
-      </view>
-    </view>
-    <view class="padding-xl">
-      <text>向开发者反馈建议，微信growthwang30\n</text>
-      <text>收费提现问题申诉，电话18018757991</text>
-    </view>
-    <view class="cu-bar bg-white justify-end">
-      <view class="action">
-        <button class="cu-btn line-green text-green" bindtap="hideModal">确认</button>
 
-      </view>
-    </view>
-  </view>
-</view>
+  <view style="height: 200rpx;"></view>
+</scroll-view>

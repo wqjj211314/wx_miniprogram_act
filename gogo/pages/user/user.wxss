@@ -2,6 +2,10 @@
 @import "/colorui/main.wxss";
 @import "/colorui/icon.wxss";
 @import "/colorui/iconfont.wxss";
+page{
+  height:100%;
+  padding:0;
+  }
 .rightarrow::after{
   color: black;
   content: "\e6a3";
@@ -43,7 +47,7 @@
 }
 .img{
   width:100vw;
-  height: 50vh;
+  height: 400px;
   z-index: -1;
   position:absolute; 
   top:0px;

@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    club_place_id:"",
     club_place_title: "",
     club_place_type_list:[],
     club_place_equipment: "",
@@ -21,6 +22,7 @@ Page({
     longitude: "",
     imgList: [],
     hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营"],
+    admin_flag:false,
 
   },
 
@@ -30,6 +32,7 @@ Page({
   onLoad(options) {
     var placeinfo = JSON.parse(decodeURIComponent(options.placeinfo));
     this.setData({
+      club_place_id: placeinfo.club_place_id,
       club_place_title: placeinfo.club_place_title,
       club_place_type_list:placeinfo.club_place_type_list,
       club_place_equipment: placeinfo.club_place_equipment,
@@ -43,6 +46,7 @@ Page({
       latitude: placeinfo.latitude,
       longitude: placeinfo.longitude,
       imgList: placeinfo.club_place_img,
+      admin_flag:app.globalData.login_userInfo["checking_flag"]
     })
 
   },
@@ -214,7 +218,54 @@ Page({
       imgList: this.data.imgList
     })
   },
-
+  set_main_bg(e){
+    var img_url = e.currentTarget.dataset.imgurl;
+    wx.request({
+      url: app.globalData.hosturl + 'set_main_bg', //仅为示例，并非真实的接口地址
+      data: {
+        "img_url": img_url,
+        "club_place_id":this.data.club_place_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.showToast({
+          title: res.data,
+          duration:3000,
+          icon:'success'
+        })
+        
+      },
+      fail: function (error) {
+       
+      }
+    });
+  },
+  del_bg(e){
+    var img_url = e.currentTarget.dataset.imgurl;
+    wx.request({
+      url: app.globalData.hosturl + 'del_bg', //仅为示例，并非真实的接口地址
+      data: {
+        "img_url": img_url,
+        "club_place_id":this.data.club_place_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.showToast({
+          title: res.data,
+          duration:3000,
+          icon:'success'
+        })
+        
+      },
+      fail: function (error) {
+       
+      }
+    });
+  },
   add_club_place() {
     var that = this;
     if (this.data.club_place_title == "") {

@@ -89,7 +89,11 @@ Page({
       url: '../good/order?deliver_status='+"7天内发货",
     })
   },
-
+  navigateToshareorder(){
+    wx.navigateTo({
+      url: '../good/shareorder',
+    })
+  },
   get_activity_list(){
     var _that = this;
     wx.showLoading({

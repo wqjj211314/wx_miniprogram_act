@@ -39,6 +39,7 @@
     "pages/good/editgood",
     "pages/good/address",
     "pages/good/order",
+    "pages/good/shareorder",
     "pages/index/place",
     "pages/index/club",
     "pages/index/placedetail",

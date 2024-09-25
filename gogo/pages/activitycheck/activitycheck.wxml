@@ -15,6 +15,8 @@
 
   <button class="btn bg-green margin-top" bind:tap="delete_all_activity_queue_member">删除所有排队成员</button>
 
+  <button class="btn bg-green margin-top" bind:tap="calculate_all_share_order">结算分享奖励</button>
+
   <block wx:for="{{expanding_money_record_list}}" wx:key="id">
   <view class="bg-white padding-sm margin">
     <view class="flex bg-white margin-sm padding" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
@@ -112,11 +114,12 @@
             <text class="cuIcon-locationfill text-green"></text>{{item.good_info.selfgetaddress["收件地址"]}}
           </view>
           <view class="flex padding-sm" style="margin-top: 30rpx;justify-content: space-between;">
-            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="del_order" data-index="{{index}}">删除订单</button>
+            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="del_order" data-index="{{index}}">删除</button>
             
-            <button class="cu-btn line-green" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="update_order_deliver_status" data-index="{{index}}">更新物流</button>
+            <button class="cu-btn line-green" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="update_order_deliver_status" data-index="{{index}}">更新物流</button>
+            <button class="cu-btn line-blue" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="update_order_price" data-index="{{index}}">改价</button>
 
-            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 40rpx;" bindtap="refund_order" data-index="{{index}}" wx:if="{{item.deliver_status != '已完成'&&item.trade_state=='SUCCESS'}}">退款</button>
+            <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="refund_order" data-index="{{index}}" wx:if="{{item.deliver_status != '已完成'&&item.trade_state=='SUCCESS'}}">退款</button>
            
           </view>
         </view>
@@ -131,5 +134,5 @@
   <view class="action">
     <text class="cuIcon-write text-grey"></text>
   </view>
-  <input class="solid-bottom" bindinput="inputMsg" value="{{deliver_status}}" maxlength="300" cursor-spacing="10" placeholder="更新物流状态信息"></input>
+  <input class="solid-bottom" bindinput="inputMsg" value="{{input_value}}" maxlength="300" cursor-spacing="10" placeholder="更新物流或改价"></input>
 </view>

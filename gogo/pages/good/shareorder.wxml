@@ -1,0 +1,56 @@
+<!--pages/activityadd/activityadd.wxml-->
+<scroll-view scroll-y="true" style="width:100vw;height:100vh;">
+
+  <view class="cu-list menu card-menu">
+    <block wx:for="{{order_list}}" wx:key="order_id" wx:for-index="index">
+      <view class="" style="width: 100%;padding-bottom: 15rpx;margin-top:40rpx;">下单时间 {{item.modify_time}}</view>
+      <view class="cu-form-group" style="border-radius: 20rpx;width: 100%;">
+        <view style="width: 100%;">
+
+          <view class="text-cut text-bold padding-top" style="height: fit-content;" bindtap="">
+            <view class="text-cut">{{item.good_title}}
+            </view>
+          </view>
+
+          <view class="content bg-white flex padding-top" style="">
+            <view class="cu-btn" style="width:70%;height:300rpx;border-radius: 20rpx;padding:0rpx;" bind:tap="gooddetail" data-index="{{index}}">
+              <image src="{{item.bg_url}}" mode="aspectFill" style="width: 100%;height: 100%;"></image>
+            </view>
+            <view class="text-content" style="width:50%;margin-top: 10rpx;margin-bottom: 0rpx;margin-left: 20rpx;padding-right: 20rpx;font-size: 25rpx;">
+
+              <view class="cu-avatar round" style="background-image:url({{item.customerinfo.avatarUrl}});width: 40rpx;height: 40rpx;position: initial;margin-top:0rpx;">
+              </view> {{item.customerinfo.nickName}}<text class="text-gray" style="font-size: 20rpx;"> 通过分享下单</text>
+
+
+              <view>
+                <text class="iconfont icon-fl-renminbi text-bold text-orange" style="font-size: 32rpx;"></text>
+                <text class="text-bold text-orange" style="font-size: 45rpx;">{{item.pay_price/100}}</text>
+                <text class="text-gray" style="margin-left: 20rpx;">{{item.trade_state_desc}}</text>
+              </view>
+              <view class="flex padding-bottom-sm" style="flex-direction:row;justify-content: center;align-items: center;">
+                <view>
+                  <text class="cuIcon-goods text-green" style="margin-right: 10rpx;"></text>{{item.good_type}} {{item.good_size}} {{item.good_color}}
+                </view>
+                <view class="">
+                  <button class="cu-btn line-black" style="padding: 0 10rpx;font-size: 25rpx;height: 30rpx;border-radius: 10rpx;margin-left: 10rpx;width: fit-content;">x{{item.order_amount}}</button>
+                </view>
+              </view>
+
+              <view class="padding-bottom-sm" style="padding-top: 0rpx;">
+                <text class="cuIcon-deliver text-green" style="margin-right: 10rpx;"></text>{{item.deliver_status}}
+              </view>
+            </view>
+          </view>
+          <view class="bg-gray padding-sm margin-top" style="border-radius: 20rpx;width: 100%;margin-right: 20rpx;">
+            分享奖励<text class="iconfont icon-fl-renminbi text-bold text-orange" style="font-size: 32rpx;">{{item.order_amount}}</text>({{item.share_trade_status==''?'订单完成后计入账户余额':item.share_trade_status}})
+          </view>
+
+        </view>
+      </view>
+    </block>
+  </view>
+  <!--pages/activityadd/activityadd.wxml-->
+  <!--空白站位，保证以上内容能全部显示-->
+  <view style="height: 150rpx;">
+  </view>
+</scroll-view>
