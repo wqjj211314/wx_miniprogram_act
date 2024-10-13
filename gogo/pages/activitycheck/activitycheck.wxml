@@ -11,11 +11,32 @@
       </view>
     </swiper-item>
   </swiper>
-  <button class="btn bg-green margin-top" bind:tap="calculate_close_all_activity">统计结算所有活动</button>
 
-  <button class="btn bg-green margin-top" bind:tap="delete_all_activity_queue_member">删除所有排队成员</button>
+  <view class="cu-list grid col-4 card-menu" style="border-radius: 0rpx;border-bottom-right-radius: 20rpx;border-bottom-left-radius: 20rpx;margin:20rpx 0rpx;">
+      <view class="cu-item" bindtap="calculate_close_all_activity">
+        <view class="cuIcon-close text-red">
+        </view>
+        <text>结算所有活动</text>
+      </view>
 
-  <button class="btn bg-green margin-top" bind:tap="calculate_all_share_order">结算分享奖励</button>
+      <view class="cu-item" bindtap="delete_all_activity_queue_member">
+        <view class="cuIcon-delete text-red">
+        </view>
+        <text>删除排队成员</text>
+      </view>
+      <view class="cu-item" bindtap="calculate_all_share_order">
+        <view class="cuIcon-share text-green">
+        </view>
+        <text>结算分享奖励</text>
+      </view>
+
+      <view class="cu-item" bindtap="">
+        <view class="cuIcon-info text-gray">
+        </view>
+        <text>待定</text>
+      </view>
+      
+    </view>
 
   <block wx:for="{{expanding_money_record_list}}" wx:key="id">
   <view class="bg-white padding-sm margin">

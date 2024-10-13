@@ -147,10 +147,10 @@
   </view>
   <block wx:for="{{pk_groups}}" wx:for-item="pk_group" wx:for-index="pk_group_index">
     <view class="bg-white padding-sm text-grey" style="padding-top:15rpx;padding-bottom: 10rpx;" wx:if="{{!hidden_pk_group}}">
-    第{{pk_group_index+1}}场
-    <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-red round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;font-size: 25rpx;" wx:if="{{(admin_flag)&&show_edit_flag}}">
-            删除
-          </view>
+      第{{pk_group_index+1}}场
+      <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-red round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;font-size: 25rpx;" wx:if="{{(admin_flag)&&show_edit_flag}}">
+        删除
+      </view>
     </view>
     <view class="" style="display: flex;background-color: white;border-radius: 10rpx;border-bottom: 1px solid rgb(236, 235, 235);justify-content: space-between;padding: 10rpx 10rpx;height: fit-content;{{pk_group_index==pk_groups.length -1 ?'border-bottom-width:0rpx;':''}}" wx:if="{{!hidden_pk_group}}">
 
@@ -167,7 +167,7 @@
             </view>
           </block>
           <!--PK的icon显示，最多到倒数第三项-->
-          <text class="iconfont icon-PK" style="font-size: 30rpx;color: blue;margin-right:5rpx;" wx:if="{{group_index < pk_group.length -3}}"/>
+          <text class="iconfont icon-PK" style="font-size: 30rpx;color: blue;margin-right:5rpx;" wx:if="{{group_index < pk_group.length -3}}" />
         </block>
       </view>
       <view class="flex" style="align-items: center;" wx:if="{{!show_edit_flag}}">
@@ -219,29 +219,41 @@
     <view class="text-gray bg-white" style="font-size: 25rpx;">{{pk_group_score_tags[1]==undefined?"":pk_group_score_tags[1]+",不参与能力积分统计"}}
     </view>
     <view class="cu-bar bg-white justify-end">
-      <view class="content">记录比分
-
+      <view class="content">记录比分等数据
       </view>
       <view class="action" bindtap="hideModal">
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
     <view class="">
-      <view class="solid" style="margin: 10rpx;">
+      <view class="solid" style="">
         <block wx:for="{{score_pk_group}}" wx:for-item="item" wx:for-index="index">
-          <view class="left" style="display: flex;margin: 10rpx 20rpx;justify-content: center;align-items: center;" wx:if="{{index < score_pk_group.length-2}}">
-          <view class="flex" style="min-width: 150rpx;align-items: center;justify-content: center;">
-            <block wx:for="{{item}}" wx:for-item="item2">
-              <view class="flex margin-right margin-top-sm" style="flex-direction: column;width:fit-content;height: fit-content;align-content:center;align-items: center;">
-                <view class="cu-avatar radius" style="background-image:url({{member_users[item2].avatarUrl}});">
-                  <view class="cu-tag badge {{member_users[item2].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[item2].member_num)}}</view>
+          <view class="left bg-white" style="display: flex;margin: 10rpx 20rpx;justify-content: space-around;align-items: center;" wx:if="{{index < score_pk_group.length-2}}">
+            <view class="flex" style="min-width: 150rpx;align-items: center;justify-content: center;">
+              <block wx:for="{{item}}" wx:for-item="item2">
+                <view class="flex margin-right margin-top-sm" style="flex-direction: column;width:fit-content;height: fit-content;align-content:center;align-items: center;">
+                  <view class="cu-avatar radius" style="background-image:url({{member_users[item2].avatarUrl}});">
+                    <view class="cu-tag badge {{member_users[item2].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[item2].member_num)}}</view>
+                  </view>
+                  <view style="font-size: 18rpx;height: fit-content;">{{member_users[item2].nickName}}</view>
                 </view>
-                <view style="font-size: 18rpx;height: fit-content;">{{member_users[item2].nickName}}</view>
+              </block>
+            </view>
+            <view class="" style="">
+              <!-- 主容器 -->
+              <view class="stepper">
+                <!-- 减号 -->
+                <text class="normal" bindtap="del_num" data-index="{{index}}">
+                <text class="iconfont icon-jianhao"></text>
+                </text>
+                <!-- 数值 -->
+                <input class="input" placeholder="记录比分" type="{{activity_info.activity_tag=='羽毛球'?'number':'text'}}" value="{{temp_edit_pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" style="font-size: 25rpx;"/>
+                <!-- 加号 -->
+                <text class="normal" bindtap="add_num" data-index="{{index}}">
+                  <text class="iconfont icon-jiahao"></text>
+                </text>
+
               </view>
-            </block>
-          </view>
-            <view class="cu-form-group" style="height: 35rpx;flex:1;">
-              <input placeholder="记录得分等" type="{{activity_info.activity_tag=='羽毛球'?'number':'text'}}" value="{{pk_group_score[index]}}" bindinput='input_score' data-index="{{index}}" />
             </view>
           </view>
         </block>

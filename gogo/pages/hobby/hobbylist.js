@@ -10,7 +10,7 @@ Page({
     user_id: "",
     reload_options: "",
     hosturl: app.globalData.hosturl,
-    self_flag:false
+    self_flag:false,
   },
 
   /**
@@ -57,8 +57,6 @@ Page({
         that.setData({
           hobby_list: hobby_list
         })
-
-
       },
       fail: function (error) {
         wx.hideLoading();
@@ -77,12 +75,11 @@ Page({
   onReady() {
 
   },
-
+  
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
   },
 
   /**

@@ -2,3 +2,39 @@
 @import "/colorui/main.wxss";
 @import "/colorui/icon.wxss";
 @import "/colorui/iconfont.wxss";
+/*主容器*/  
+.stepper {  
+  display:flex;
+  height: 80rpx;  
+  /*给主容器设一个边框*/  
+  border: 1px solid rgba(228, 224, 224, 0.404);  
+  border-radius: 30rpx;  
+}  
+
+/*加号和减号*/  
+.stepper text {  
+  width: 80rpx;  
+  line-height:80rpx;  
+  text-align: center;  
+}  
+
+/*数值*/  
+.stepper .input {  
+  width: 180rpx;  
+  height: 80rpx;  
+  text-align: center;  
+  font-size: 12px;  
+  /*给中间的input设置左右边框即可*/  
+  border-left: 0.8px solid rgba(228, 224, 224, 0.404); 
+  border-right: 0.8px solid rgba(228, 224, 224, 0.404); 
+}  
+
+/*普通样式*/  
+.stepper .normal{  
+  color: rgba(131, 129, 129, 0.692);  
+}  
+
+/*禁用样式*/  
+.stepper .disabled{  
+  color: #ccc;  
+}  

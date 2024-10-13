@@ -1,6 +1,17 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-y="true" style="height: 100%;">
-
+<!--
+ <canvas2d-ring type="2d" id="canringA" canvasWidth="{{120}}" f_weight="bold"  value="{{completePercent}}"  f_size="15"  lineWidth="{{20}}"  title=""></canvas2d-ring>
+ <canvas2d-ring type="2d" id="canringB" canvasWidth="{{120}}" f_weight="bold"  value="{{completePercent2}}"  lineColor="#06c15f" f_size="15"  lineWidth="{{20}}"  title=""></canvas2d-ring>
+<circle draw='circwewle1' per = '40' r = '100'/>
+<circle draw='circwewle2' per = '10' r = '30'/>
+<circle draw='circwewle3' per = '20' r = '100'/>
+<circle draw='circwewle' per = '50' r = '60'/>
+<circle draw='circwewle' per = '90' r = '120'/>
+draw : 确定 canvas的id
+per : 进度百分比 (1-100)
+r: 圆的半径 (按px,最终转化成rpx)
+-->
 <block wx:for-index="idx" wx:for='{{hobby_list}}' wx:key="hobby_tag">
   <view class="cu-card case no-card" style="margin-bottom: 8rpx;">
     <view class="cu-item">

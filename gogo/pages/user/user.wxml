@@ -132,7 +132,7 @@
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
-          <text class="text-grey text-sm">v1.0.80</text>
+          <text class="text-grey text-sm">v1.0.82</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">

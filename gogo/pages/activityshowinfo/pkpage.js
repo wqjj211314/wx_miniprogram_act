@@ -504,7 +504,7 @@ Page({
     var index = e.currentTarget.dataset.index;
     var score_pk_group = this.data.pk_groups[index];
     console.log(score_pk_group);//[[1,2],[3,4]]//不是[[[1,2],[3,4]]]
-    var pk_group_score = [];//new Array(score_pk_group.length-1).fill(0);
+    var pk_group_score = new Array(score_pk_group.length-2).fill(0);
     var score = score_pk_group[score_pk_group.length - 2];
     score.forEach(item => {
       if (item != 0) {//默认的比分是0
@@ -539,7 +539,27 @@ Page({
   if (t === '-') {
     n = '-' + n
   }
-  return Number(n)
+  return Number.isNaN(Number(n))?0:Number(n)
+  },
+  add_num(e) {
+    var score_index = e.currentTarget.dataset.index;
+    var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
+    console.log(this.data.pk_groups)
+    temp_edit_pk_group_score[score_index] = this.parse_score_num(temp_edit_pk_group_score[score_index]) + 1;
+    console.log(this.data.pk_groups)
+    this.setData({
+      temp_edit_pk_group_score: temp_edit_pk_group_score
+    })
+  },
+  del_num(e) {
+    var score_index = e.currentTarget.dataset.index;
+    var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
+    console.log(this.data.pk_groups)
+    temp_edit_pk_group_score[score_index] = this.parse_score_num(temp_edit_pk_group_score[score_index]) - 1;
+    console.log(this.data.pk_groups)
+    this.setData({
+      temp_edit_pk_group_score: temp_edit_pk_group_score
+    })
   },
   input_score(e) {
     var score = e.detail.value;
@@ -549,7 +569,7 @@ Page({
     var score_index = e.currentTarget.dataset.index;
     //score = parseInt(score.replace(/\D/g, ''));
     console.log(score)
-    score = this.parse_score_num(score)
+    //score = this.parse_score_num(score)
     
     console.log("比分" + score);
     console.log("index=" + score_index);
@@ -570,18 +590,24 @@ Page({
       temp_edit_pk_group_score_tags: temp_edit_pk_group_score_tags
     })
   },
+  
   update_score(e) {
     var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
+    temp_edit_pk_group_score.forEach((item,index)=>{
+      console.log(this.parse_score_num(item))
+      console.log(typeof this.parse_score_num(item))
+      temp_edit_pk_group_score[index] = this.parse_score_num(item);
+    })
     var score_pk_group = this.data.score_pk_group;
     var pk_groups = this.data.pk_groups;
-    console.log(pk_groups);
+    //console.log(pk_groups);
     score_pk_group[score_pk_group.length - 2] = temp_edit_pk_group_score;
     score_pk_group[score_pk_group.length - 1] = this.data.temp_edit_pk_group_score_tags;
     pk_groups[this.data.edit_pk_group_index] = score_pk_group;
     console.log("提交比分")
     console.log(this.data.edit_pk_group_index);
     console.log(score_pk_group);
-    console.log(pk_groups);
+    //console.log(pk_groups);
     this.setData({
       pk_groups: pk_groups,
       modalName: "",
