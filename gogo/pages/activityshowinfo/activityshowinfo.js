@@ -170,7 +170,8 @@ Page({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": activity_info.activity_id,
-        "hobby_tag": activity_info.activity_tag
+        "hobby_tag": activity_info.activity_tag,
+        "user_id":app.globalData.login_userInfo["user_id"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -790,7 +791,7 @@ Page({
   },
 
   part_activity() {
-
+    var that = this;
     //提前判断报名限制再跳转
     if (this.data.part_limit != 0 && this.data.activity_user_info["user_id"] != app.globalData.login_userInfo["user_id"]) {
       wx.showToast({
@@ -812,7 +813,7 @@ Page({
     }
 
     //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
-    var that = this;
+    
     if (!util.check_login(app)) {
       return;
     }
@@ -884,6 +885,22 @@ Page({
                 icon: "success",
                 duration: 2000
               })
+              wx.request({
+                url: app.globalData.hosturl + 'get_member_user_id_pay_status', //仅为示例，并非真实的接口地址
+                data: {
+                  "activity_id": that.data.activity_info.activity_id,
+                  "user_id": app.globalData.login_userInfo["user_id"]
+                },
+                header: {
+                  'content-type': 'application/json' // 默认值
+                },
+                success(res) {
+                  console.log(res.data)
+                },
+                fail(res) {
+                 
+                }
+              });
               //返回首页的活动页。
               setTimeout(function () {
                 app.globalData.current_activity_id = that.data.activity_info.activity_id;

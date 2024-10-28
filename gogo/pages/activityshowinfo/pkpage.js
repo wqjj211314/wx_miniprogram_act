@@ -133,7 +133,7 @@ Page({
       admin_users: admin_users,
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,//毫秒
-      is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*12),
+      is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*24),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
     })
@@ -206,7 +206,8 @@ Page({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": activity_id,
-        "hobby_tag": activity_tag
+        "hobby_tag": activity_tag,
+        "user_id":app.globalData.login_userInfo["user_id"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -637,8 +638,10 @@ Page({
     var pk_groups = this.data.pk_groups;
     var activity_id = this.data.activity_id;
     var group_tag = this.data.group_tag;
+
     wx.request({
       url: app.globalData.hosturl + 'new_update_activity_member_pk', //仅为示例，并非真实的接口地址
+      method:"POST",
       data: {
         "user_id":app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id,
@@ -653,11 +656,7 @@ Page({
       },
       success(res) {
         console.log(res);
-        setTimeout(function(){
-          wx.hideLoading({
-            success: (res) => {},
-          });
-        },3000)
+        
         if (res.data.code == -1) {
           wx.showToast({
             title: res.data,
@@ -677,6 +676,11 @@ Page({
 
       }
     });
+    setTimeout(function(){
+      wx.hideLoading({
+        success: (res) => {},
+      });
+    },3000)
   },
   clear_pk_group() {
     this.setData({ pk_groups: [], submit_flag: true, modalName: "" })

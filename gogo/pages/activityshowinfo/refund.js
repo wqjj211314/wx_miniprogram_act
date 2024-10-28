@@ -121,7 +121,8 @@ Page({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": that.data.activity_info.activity_id,
-        "hobby_tag": that.data.activity_info.activity_tag
+        "hobby_tag": that.data.activity_info.activity_tag,
+        "user_id":app.globalData.login_userInfo["user_id"]
       },
       header: {
         'content-type': 'application/json' // 默认值

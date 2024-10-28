@@ -154,7 +154,7 @@
   </view>
   <view class="cu-form-group">
     <view class="title">允许带人报名</view>
-    <switch checked bindchange="takechange"></switch>
+    <switch checked="{{take_flag==1}}" bindchange="takechange"></switch>
   </view>
   <view class="cu-form-group" wx:if="{{custom_part}}">
     <view class="title">报名标签</view>

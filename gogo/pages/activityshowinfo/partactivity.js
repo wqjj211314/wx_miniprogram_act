@@ -199,6 +199,22 @@ Page({
                 icon: "success",
                 duration: 2000
               })
+              wx.request({
+                url: app.globalData.hosturl + 'get_member_user_id_pay_status', //仅为示例，并非真实的接口地址
+                data: {
+                  "activity_id": that.data.activity_info.activity_id,
+                  "user_id": app.globalData.login_userInfo["user_id"]
+                },
+                header: {
+                  'content-type': 'application/json' // 默认值
+                },
+                success(res) {
+                  console.log(res.data)
+                },
+                fail(res) {
+                 
+                }
+              });
               //返回首页的活动页。
               setTimeout(function () {
                 app.globalData.current_activity_id = that.data.activity_info.activity_id;

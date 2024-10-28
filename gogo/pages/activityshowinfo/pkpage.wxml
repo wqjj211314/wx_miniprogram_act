@@ -163,7 +163,7 @@
               <view class="cu-avatar radius" style="background-image:url({{member_users[group_member_num].avatarUrl}});">
                 <view class="cu-tag badge {{member_users[group_member_num].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[group_member_num].member_num)}}</view>
               </view>
-              <view style="font-size: 18rpx;height: fit-content;">{{member_users[group_member_num].nickName}}</view>
+              <view style="font-size: 18rpx;height: fit-content;white-space: nowrap;max-width: 60rpx;overflow: hidden;">{{member_users[group_member_num].nickName}}</view>
             </view>
           </block>
           <!--PK的icon显示，最多到倒数第三项-->
