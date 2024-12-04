@@ -1,6 +1,6 @@
 <!--pages/activityshowinfo/pkpage.wxml-->
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
-<scroll-view scroll-y="true" style="height:calc(100vh - 140rpx);" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+<scroll-view scroll-y="true" style="height:calc(100vh - 10rpx);" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <!--管理员显示
   <view class="bg-white" style="margin-bottom: 20rpx;" wx:if="{{admin_users.length > 0}}">
     <view class="flex bg-white text-black" style="justify-content:space-between;padding: 30rpx 20rpx;">
@@ -45,37 +45,8 @@
   </view>
   <!--详情展示-->
   <block wx:if="{{show_member_info_flag}}">
-    <block wx:for="{{group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" wx:key="member_num">
-      <view class="cu-list menu-avatar bg-white text-black" style="padding-left:15rpx;margin:0rpx;">
-        <view class="cu-item" style="height: fit-content;padding-bottom: 20rpx;padding-top:20rpx;border-bottom:1rpx solid rgb(228, 228, 228);">
-          <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(item.member_num)}}号</view>
-          <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{item.avatarUrl}});">
-            <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
-            </view>
-          </view>
-          <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
-            <view class="text-black">{{item.nickName}}</view>
-            <view class="text-black flex" style="font-size: 20rpx;">
-              <view class="" style="word-break: break-all;">
-                <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
-                  <text class="cuIcon-tagfill text-red"></text>
-                  <text class="margin-right-xs">{{key}}:{{value}}</text>
-                </block>
-              </view>
-            </view>
-          </view>
-          <view class="action" style="width: fit-content;margin: 0rpx 30rpx;" wx:if="{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace) != '0'}}">
-            <view class="text-black text-xs">历史胜率</view>
-            <view class="cu-tag line-blue">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
-          </view>
-          <view class="action" style="width: fit-content;margin: 0rpx 30rpx;">
-            <view class="text-black text-xs">{{activity_info.activity_tag}}积分
-              <!--<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text>-->
-            </view>
-            <view class="cu-tag line-blue">积分{{item.hobby_info.hobby_point}}</view>
-          </view>
-        </view>
-      </view>
+    <block wx:for="{{group_users}}" wx:for-index="index" wx:for-item="item" wx:key="index" >
+      <include src="member_info_list.wxml"></include>
     </block>
   </block>
 
@@ -146,7 +117,7 @@
     <view class="text-blue" style="" bind:tap="expand_pk_group">{{hidden_pk_group?"展开":"隐藏"}}</view>
   </view>
   <block wx:for="{{pk_groups}}" wx:for-item="pk_group" wx:for-index="pk_group_index">
-    <view class="bg-white padding-sm text-grey" style="padding-top:15rpx;padding-bottom: 10rpx;" wx:if="{{!hidden_pk_group}}">
+    <view class="bg-white text-grey" style="height: 70rpx;padding-left:20rpx;padding-top: 10rpx;" wx:if="{{!hidden_pk_group}}">
       第{{pk_group_index+1}}场
       <view data-index="{{pk_group_index}}" bindtap="del_pk_group" class="cu-btn line-red round" style="margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;width: 130rpx;font-size: 25rpx;" wx:if="{{(admin_flag)&&show_edit_flag}}">
         删除
@@ -188,7 +159,7 @@
       </view>
       <view class="flex" style="justify-content: center;align-items: center;" wx:if="{{admin_flag&&!is_end_12h}}">
         <view style="width: fit-content;display: flex;flex-direction:column;margin:0 6rpx;justify-content: center;align-items: center;" class="margin-tb-sm text-center" wx:if="{{(admin_flag)&&show_edit_flag}}">
-          <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:15rpx;height: fit-content;width: fit-content;border-radius:2rpx;width: 130rpx;font-size: 26rpx;" wx:if="{{admin_flag}}">
+          <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:15rpx;height: fit-content;width: fit-content;border-radius:2rpx;width: fit-content;font-size: 26rpx;" wx:if="{{admin_flag}}">
             再来一局
           </view>
         </view>
@@ -198,16 +169,16 @@
   </block>
   <view style="height: 200rpx;"></view>
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;">
-  <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: {{safeArea==0?20:safeArea}}rpx;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
     <view class="" style="flex:1;margin-right:20rpx;" bindtap="nagivateActivityInfo">
-      <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">活动详情</button>
+      <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">活动详情</button>
     </view>
     <view class="" style="flex:1;margin-right:20rpx;" bindtap="show_modal" data-target="bottomModal" wx:if="{{(admin_flag&&!is_end_12h)}}">
-      <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">对阵选项</button>
+      <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">对阵选项</button>
     </view>
     <view class="" style="flex:1;" bindtap="update_pk_group" wx:if="{{(admin_flag&&!is_end_12h)}}">
-      <button class="cu-btn bg-blue round" style="width: 100%;height: 85rpx;" disabled="{{!submit_flag}}">提交</button>
+      <button class="cu-btn round bg-blue" style="width: 100%;height: 85rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;" disabled="{{!submit_flag}}">提交</button>
     </view>
   </view>
 </view>
@@ -272,7 +243,7 @@
 </view>
 <!--对阵选项弹框-->
 <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
-  <view class="cu-dialog">
+  <view class="cu-dialog bg-white" style="padding-bottom: env(safe-area-inset-bottom);">
     <view class="cu-list grid col-2" style="">
       <view class="cu-item" bind:tap="showpkmodal" data-method="get1v1" data-methodtip="1V1对阵">
         <view class="iconfont icon-1v1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>

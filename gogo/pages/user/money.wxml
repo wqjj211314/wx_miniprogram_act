@@ -18,14 +18,17 @@
 <view class="bg-white padding" style="margin-top: 30rpx;margin-bottom: 0rpx;" wx:if="{{money_list.length > 0}}">交易记录</view>
 <form>
   <block wx:for="{{money_list}}" wx:key="id">
-      <view class="flex bg-white margin-sm padding-sm" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;border-radius: 20rpx;">
-        <view class="text-blue" style="flex:1;">
+      <view class="flex bg-white margin-sm padding-sm" style="align-content: center;align-items: center;border-radius: 20rpx;flex-direction: column;">
+        <view class="flex" style="justify-content: space-around;align-items: center;width: 100%;">
+        <view class="text-orange" style="flex:1;text-align: start;">
           {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}元
         </view>
-        <view style="margin-left: 25rpx;width: 400rpx;">
-          <view>交易详情：{{item.trade_desc}}</view>
+        <view class="text-red" style="flex:1;text-align: end;">余额：{{item.current_money}}元</view>
+        </view>
+        <view style="margin-top: 20rpx;text-align: start;width: 100%;">
+          <view style="">交易详情：{{item.trade_desc}}</view>
           <view>操作时间：{{item.submit_time}}</view>
-          <view class="text-blue">余额：{{item.current_money}}元</view>
+          
         </view>
       </view>
   </block>

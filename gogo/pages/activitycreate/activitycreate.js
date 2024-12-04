@@ -90,7 +90,7 @@ Page({
     var activity_info = this.data.activity_create_list[index];
     app.globalData.current_activity_id = activity_info.activity_id;
     wx.switchTab({
-      url: '../index/index'
+      url: '../index/newindex'
     })
   },
   navigateToActivityInfo(e){

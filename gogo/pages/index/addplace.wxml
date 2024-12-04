@@ -41,9 +41,9 @@
   </view>
 </view>
 <view class="cu-list menu card-menu margin-top" style="width: 100%;margin:0rpx;margin-top: 40rpx;">
-  <view class="cu-form-group" bindtap="chooseposition">
-    <view class="title" style="width:22%;">场地位置</view>
-    <view class="flex" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;font-size: larger;">
+  <view class="cu-form-group flex" bindtap="chooseposition">
+    <view class="title" style="width:200rpx;">场地位置</view>
+    <view class="flex" style="white-space:normal;align-items: center;justify-content: flex-end;font-size: larger;flex:1;">
       {{club_place_address}}<text class="cuIcon-right text-grey" style="font-size: larger;"></text>
     </view>
   </view>
@@ -80,8 +80,9 @@
     <textarea placeholder="详细介绍其他情况" bindinput='place_detail' auto-height="true" maxlength="3000" style="min-height: 200rpx;line-height: unset;height: fit-content;width: 100%;padding:20rpx 20rpx;" value="{{place_detail}}"></textarea>
   </view>
 </view>
-<view class="cu-bar tabbar" style="padding:0rpx 20rpx;height: fit-content;justify-content: space-around;font-size: 30rpx;margin:20rpx 5rpx;">
-  <view class="" bindtap="add_club_place" style="width: 100%;height: fit-content;">
-    <button class="cu-btn bg-green round" style="width: 100%;height:80rpx;">新增场地</button>
+<view style="height: 200rpx;"></view>
+<view class="bg-white" style="width: 100%;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;padding-top: 10rpx;padding-bottom: 34rpx;">
+  <view class="" bindtap="add_club_place" style="height: fit-content;margin:10rpx;">
+    <button class="cu-btn bg-blue round" style="width: 100%;height:80rpx;">新增场地</button>
   </view>
 </view>

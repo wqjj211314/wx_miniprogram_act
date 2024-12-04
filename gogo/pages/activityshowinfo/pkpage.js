@@ -48,7 +48,11 @@ Page({
     submit_flag: false,
     method: "",//对阵选项的方法调用
     method_tip: "",
-    show_edit_flag: false
+    show_edit_flag: false,
+    pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑", "棋牌"],
+    is_pk_hobby: true,
+    show_more_flag:false,
+    safeArea:app.globalData.safeArea
   },
 
   /**
@@ -136,6 +140,7 @@ Page({
       is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*24),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
+      is_pk_hobby: this.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
     })
     //获取已存储的对阵列表
     score.get_pk_groups(app.globalData.hosturl, this, activity_id, group_tag, activity_tag);

@@ -21,7 +21,7 @@ Component({
     },
     isBack: {
       type: [Boolean, String],
-      default: false
+      default: true
     },
     bgImage: {
       type: String,
@@ -45,6 +45,16 @@ Component({
    */
   methods: {
     BackPage() {
+      let pages = getCurrentPages();
+      console.log("返回栈")
+      console.log(pages.length)
+      console.log(pages)
+     if(pages.length <= 1){
+      wx.switchTab({
+        url: '/pages/index/newindex',
+      })
+     }
+      //let prevPage = pages[pages.length - 2]; 
       wx.navigateBack({
         delta: 1
       });

@@ -218,9 +218,7 @@ Page({
               //返回首页的活动页。
               setTimeout(function () {
                 app.globalData.current_activity_id = that.data.activity_info.activity_id;
-                wx.switchTab({
-                  url: '../index/index'
-                })
+                wx.navigateBack();
               }, 2000)
             },
             'fail': function (res) {
@@ -242,9 +240,7 @@ Page({
           //返回首页的活动页。
           setTimeout(function () {
             app.globalData.current_activity_id = that.data.activity_info.activity_id;
-            wx.switchTab({
-              url: '../index/index'
-            })
+           wx.navigateBack();
           }, 1000)
         } else {
           wx.showToast({

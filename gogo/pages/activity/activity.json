@@ -3,6 +3,6 @@
     "DatetimePicker": "../components/datetimepicker"
 
   },
-  "navigationBarTitleText": "创建活动",
-  "navigationStyle":"custom"
+ 
+  "navigationBarTitleText": "发布活动"
 }

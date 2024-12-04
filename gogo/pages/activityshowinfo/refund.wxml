@@ -26,10 +26,10 @@
   </view>
 </checkbox-group>
 
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;">
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: env(safe-area-inset-bottom);">
   <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
     <view class="" style="flex:1;" bindtap="refund_some_money">
-      <button class="cu-btn bg-green round" style="width: 100%;height: 85rpx;">{{sel_refund_member_list.length > 0?"总共"+sel_refund_member_list.length+"人每人":""}}退款{{refund_fee==0?"":refund_fee+"元"}}</button>
+      <button class="cu-btn bg-blue round" style="width: 100%;height: 85rpx;">{{sel_refund_member_list.length > 0?"总共"+sel_refund_member_list.length+"人每人":""}}退款{{refund_fee==0?"":refund_fee+"元"}}</button>
     </view>
   </view>
 </view>

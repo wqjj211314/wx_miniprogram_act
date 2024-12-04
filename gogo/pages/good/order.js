@@ -242,5 +242,10 @@ Page({
         wx.hideLoading();
       }
     })
+  },
+  navigateToPartactivity(){
+    wx.navigateTo({
+      url: '/pages/activitypart/activitypart',
+    })
   }
 })

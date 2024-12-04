@@ -136,6 +136,10 @@ Component({
           item.indexOf(el) !== -1 && rangeValue.push(itemIndex)
         })
       })
+      if(rangeValue.length == 5){
+        rangeValue[3] = "20";
+        rangeValue[4] = "00";
+      }
       this.setData({
         rangeValue
       })

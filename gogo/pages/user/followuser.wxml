@@ -12,9 +12,9 @@
           <text class="text-black">{{item.nickName}}</text>
           <text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}"></text>
         </view>
-        <view class="bg-white" style="overflow: scroll;width: 300rpx;">
+        <view class="bg-white" style="overflow: scroll;width: 300rpx;" wx:if="{{item.club_name_list.length > 0}}">
           <view style="white-space:nowrap;">
-            <block wx:for="{{item.club_name_list}}" wx:for-item="{{club_name}}">
+            <block wx:for="{{item.club_name_list}}" wx:for-item="club_name">
               <button class="cu-btn round" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;margin-right: 15rpx;">{{club_name}}</button>
             </block>
             

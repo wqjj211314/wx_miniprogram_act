@@ -18,15 +18,24 @@ Page({
     wx.showLoading({
       title: '数据获取中...',
     });
-    this.setData({
-      user_id:options.user_id
-    })
-    if(app.globalData.login_userInfo["user_id" == options.user_id]){
+    var user_id = "";
+    if(options.hasOwnProperty("user_id")){
+      user_id = options.user_id;
+      this.setData({
+        user_id:options.user_id
+      })
+      if(app.globalData.login_userInfo["user_id"] == options.user_id){
+        this.setData({
+          is_login_user:true
+        })
+      }
+    }else{
+      user_id = app.globalData.login_userInfo["user_id"];
       this.setData({
         is_login_user:true
       })
     }
-    this.navigateToActivityadd(options.user_id);
+    this.navigateToActivityadd(user_id);
   },
   navigateToActivityadd(user_id){
     var that = this;
@@ -70,7 +79,7 @@ Page({
     var index_activity = this.data.activity_part_list[index];
     app.globalData.current_activity_id = index_activity.activity_id;
     wx.switchTab({
-      url: '../index/index'
+      url: '../index/newindex'
     })
   },
   navigateToActivityInfo(e){

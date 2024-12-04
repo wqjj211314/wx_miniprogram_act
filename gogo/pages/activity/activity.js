@@ -29,21 +29,22 @@ Page({
     showPrivacy:false,
     activity_id:"",
     begintime: year + "-" + month + "-" + day + " 20:00",
-    endtime: year + "-" + month + "-" + day + " 22:00",
-    addendtime: year + "-" + month + "-" + day + " 20:00",
-    cancelendtime: year + "-" + month + "-" + day + " 20:00",
+    endtime: "请选择",//year + "-" + month + "-" + day + " 22:00",
+    addendtime: "请选择",//year + "-" + month + "-" + day + " 20:00",
+    cancelendtime: "请选择",//year + "-" + month + "-" + day + " 20:00",
     hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营","校友会","老乡会"],
     hobby_tag: "",
     max_part_number: 10,
     title: "",
     title_tags:[],
+    sample_title_tags:["免费停车","包球","娱乐局"],
     detail: "",
     imgList: [],
     latitude: "",
     longitude: "",
     activityaddress: "请选择活动地点",
     partinfo: [],
-    partinfo_all_options: ["姓名", "性别", "年龄", "籍贯", "公司", "职业", "学校", "专业", "年级"],
+    partinfo_all_options: ["姓名", "性别","自评等级", "籍贯", "公司", "职业", "学校"],
     sel_index: -1,
     part_limit_picker: ["所有人均可参与", "通过发起人和成员分享可以参与", "通过发起人分享可以参与"],
     part_limit_index: 0,
@@ -56,7 +57,7 @@ Page({
     disabled_flag: false,
     add_new_partinfo: "",
     roomlist: [],
-    room_items: new Array(10),
+    room_items: new Array(9),
     edit_activity_flag:false,
     group_tag_list:new Array(1),
     group_room_list:[],
@@ -86,7 +87,22 @@ Page({
       hobby_tag: hobbytagvalue
     })
     this.get_activity_info(hobbytagvalue);
-
+  },
+  choose_title_tag(e){
+    var title_tag = e.target.dataset.titletag;
+    var title_tags = this.data.title_tags;
+    if(title_tags.indexOf(title_tag)==-1){
+      title_tags.push(title_tag);
+      this.setData({
+        title_tags: title_tags
+      })
+    }else{
+      title_tags.splice(title_tags.indexOf(title_tag), 1);
+      this.setData({
+        title_tags: title_tags
+      })
+    }
+    
   },
   choose_cache_location(event){
     var index = event.target.dataset.index;
@@ -573,7 +589,7 @@ Page({
         "part_limit": this.data.part_limit_index,
         "edit_activity_flag":this.data.edit_activity_flag,
         "pay_type":this.data.pay_type,
-        "pay_price":this.data.pay_price,
+        "pay_price":this.data.pay_type=='线上收费'?this.data.pay_price:0,
         "bg_url":bg_url,
         "take_flag":this.data.take_flag==false?0:1,
         "club_name":this.data.club_name
@@ -869,6 +885,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    if (typeof this.getTabBar === 'function' ) {
+      this.getTabBar((tabBar) => {
+        tabBar.setData({
+          selected: 1
+        })
+      })
+    }
     var _this = this;
     console.log("活动创建页onshow")
     wx.request({
@@ -1009,13 +1032,19 @@ Page({
     
     this.setData({
       title_tags,
-      new_title_tag: ""
+      new_title_tag: "",
+      modalName:""
     });
   },
 
   custom_group_tag(){
     wx.navigateTo({
       url: 'customgroup?group_tag_list='+encodeURIComponent(JSON.stringify(this.data.group_tag_list))+'&&group_room_list='+encodeURIComponent(JSON.stringify(this.data.group_room_list))+'&&group_limit_list='+encodeURIComponent(JSON.stringify(this.data.group_limit_list)),
+    })
+  },
+  show_custom_title_tag(){
+    this.setData({
+      modalName:"title_tag_modal"
     })
   },
   /**
@@ -1050,6 +1079,8 @@ Page({
     console.log(item.index)//0
     console.log(item.pagePath)//pages/index/index
     console.log(item.text)//首页
-    app.globalData.tab_page_path = item.pagePath;
+    wx.switchTab({
+      url: '/pages/index/newindex',
+    })
   },
 })

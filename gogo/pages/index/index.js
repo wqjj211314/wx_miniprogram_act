@@ -71,6 +71,7 @@ Page({
     //server.get_friend_newest_chat_msg(this, app);
   },
   socketinit() {
+    return;
     var that = this;
     if (onSockettest != "") {
       console.log("断开socket")

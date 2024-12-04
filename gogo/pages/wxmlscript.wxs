@@ -17,6 +17,16 @@ var hobby_point = function(hobby_point){
   //return ""
   return "L"+point
 }
+var hobby_point_per = function(hobby_point){
+  var point = (Math.floor(hobby_point/1000) + 1)*1000;
+  var per = (hobby_point/point).toFixed(2)*100
+  return per
+}
+var data_per = function(data,total){
+  var point = (Math.floor(data/total) + 1)*total;
+  var per = (data/point).toFixed(2)*100
+  return per
+}
 var win_rate = function(win,peace,fail){
   var total = win+peace+fail;
   if(total == 0){
@@ -24,6 +34,14 @@ var win_rate = function(win,peace,fail){
   }
   var point = Math.round(win/total*100);
   return point+"%"
+}
+var win_rate_per = function(win,peace,fail){
+  var total = win+peace+fail;
+  if(total == 0){
+    return "0"
+  }
+  var point = Math.round(win/total*100);
+  return point
 }
 
 var show_member_num = function (member_num_str) {
@@ -55,6 +73,9 @@ module.exports = {
   iscontain:iscontain,
   hobby_point:hobby_point,
   win_rate:win_rate,
-  indexOf:indexOf
+  win_rate_per:win_rate_per,
+  indexOf:indexOf,
+  hobby_point_per:hobby_point_per,
+  data_per:data_per
 };
 module.exports.msg = "some msg";

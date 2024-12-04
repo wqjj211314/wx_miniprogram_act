@@ -2,19 +2,27 @@
 App({
   onLaunch: function () {
     this.autoUpdate();
-    this.get_friend_newest_chat_msg();
-    wx.getSystemInfo({
-      success: e => {
-        this.globalData.StatusBar = e.statusBarHeight;
-        let capsule = wx.getMenuButtonBoundingClientRect();
+    //this.get_friend_newest_chat_msg();
+    const windowInfo = wx.getWindowInfo();
+    this.globalData.windowInfo = windowInfo;
+    if(windowInfo != ""){
+      var safeArea = windowInfo.safeArea;
+      if(safeArea!=undefined){
+        this.globalData.safeArea = windowInfo.windowHeight - safeArea.bottom;
+      }
+    }
+    this.globalData.StatusBar = windowInfo.statusBarHeight;
+    console.log("机器状态栏高度"+windowInfo.statusBarHeight);
+    let capsule = wx.getMenuButtonBoundingClientRect();
         if (capsule) {
           this.globalData.Custom = capsule;
-          this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
+          this.globalData.CustomBar = capsule.bottom + capsule.top - windowInfo.statusBarHeight;
+          //this.globalData.
+          console.log("机器胶囊高度"+capsule.height);
+          console.log("机器胶囊高度CustomBar"+this.globalData.CustomBar);
         } else {
-          this.globalData.CustomBar = e.statusBarHeight + 50;
+          this.globalData.CustomBar = windowInfo.statusBarHeight + 50;
         }
-      }
-    })
     try {
       console.log("用户APP登录");
       //直接获取缓存保存的
@@ -76,7 +84,10 @@ App({
     fix_partner_pk_groups:[],
     contact_address:"",
     contact_name:"",
-    contact_tel:""
+    contact_tel:"",
+    add_activity_flag:false,
+    windowInfo:"",
+    safeArea:0
   },
   user_login() {
     //return;

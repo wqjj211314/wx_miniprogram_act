@@ -1,0 +1,37 @@
+<scroll-view scroll-y="true" style="height:100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+  <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height:calc(100% - 110rpx);" autoplay="true" wx:if="{{moods.length > 0}}">
+    <swiper-item wx:for="{{moods}}" class="" wx:key="id" bindtap="ViewImage" data-url="{{item.img_url}}" style="height: 100%;">
+      <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
+      <view class="" style="position: absolute;bottom: 0;width: 100%;">
+        <view class="cu-card article" style="width:80%;margin-bottom:15rpx;">
+          <view class="cu-item shadow" style="background-color:transparent;margin-bottom:5rpx;margin-left:15rpx;padding-bottom:15rpx;">
+            <view class="title" style="padding:0rpx;">
+              <view class="customer-title-cu-btn flex" style="background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;">
+                <view>
+                  <view class="cu-avatar round sm" style="background-image:url({{item.user_info.avatarUrl}});margin-right:10rpx;" bindtap="">
+                  </view>
+                  <text class="text-white" style="max-width:200px;font-size:30rpx;padding-right:10rpx;" bindtap="">{{item["user_info"].nickName}}
+                  </text>
+                </view>
+                <view class="text-content" style="color:white;font-size: 25rpx;margin-left:10rpx;margin-top:10rpx;margin-bottom:10rpx;word-wrap: break-word;line-height: normal;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 5;-webkit-box-orient: vertical;"><text>{{item.mood_text}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+  <view class="flex" wx:if="{{moods.length <= 0}}" style="color: rgba(128, 128, 128, 0.1);width: 100%;text-align: center;height: 100%;align-items: center;justify-content: center;font-size: 60rpx;">空空如也</view>
+  
+</scroll-view>
+
+<!--底部导航栏-->
+<!--未结束wx:if="!is_end"要显示-->
+<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: env(safe-area-inset-bottom);" wx:if="{{admin_flag}}">
+  <view class="" style="flex:1;padding:9rpx 10rpx 20rpx;" bindtap="recore_mood">
+    <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+    <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">记录活动瞬间</button>
+  </view>
+
+</view>

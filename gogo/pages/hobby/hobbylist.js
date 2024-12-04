@@ -1,6 +1,7 @@
 const app = getApp();
+//import Canvas from '../../utils/canvas.js'
 Page({
-
+  //...Canvas.options,
   /**
    * 页面的初始数据
    */
@@ -11,13 +12,16 @@ Page({
     reload_options: "",
     hosturl: app.globalData.hosturl,
     self_flag:false,
+    //...Canvas.data,
   },
+
+
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    //var user_id = JSON.parse(decodeURIComponent(options.user_id));
+
     var user_id = "";
     var that = this;
     if (options.hasOwnProperty("user_id")) {
@@ -73,7 +77,8 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-
+    
+  
   },
   
   /**

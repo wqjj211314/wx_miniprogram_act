@@ -1,23 +1,28 @@
 <view class="" style="padding-top:0px;margin-top:0px;">
-<view class="bg-white padding" >
-  <textarea placeholder="说下此刻的心情想法..." auto-height maxlength="400" bindinput='detailInput' style="max-height:10em;min-height: 5em;width: 100%;" value="{{detail}}"></textarea>
-</view>
-    <view class="radius bg-white">
-      <view class='pagecenter1' style="padding-top:20rpx;">
-        <view class="cu-form-group">
-          <view class="grid col-4 grid-square flex-sub">
-            <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
-              <image src='{{imgList[index]}}' mode='aspectFill'></image>
-              <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
-                <text class="cuIcon-close"></text>
-              </view>
+  <view class="bg-white padding">
+    <textarea placeholder="记录此刻的美好心情..." auto-height maxlength="400" bindinput='detailInput' style="max-height:10em;min-height: 5em;width: 100%;" value="{{detail}}"></textarea>
+  </view>
+  <view class="radius bg-white">
+    <view class='pagecenter1' style="padding-top:20rpx;">
+      <view class="cu-form-group">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+              <text class="cuIcon-close"></text>
             </view>
-            <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
-              <text class="cuIcon-cameraadd"></text>
-            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<1}}">
+            <text class="cuIcon-cameraadd"></text>
           </view>
         </view>
       </view>
     </view>
   </view>
-  <button class="bg-green margin-top" bind:tap="save_mood">发表</button>
+</view>
+<view  class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: env(safe-area-inset-bottom);">
+  <view class="" style="flex:1;padding:9rpx 10rpx 20rpx;" bindtap="save_mood">
+    <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">发表</button>
+  </view>
+
+</view>

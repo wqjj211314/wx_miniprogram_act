@@ -3,6 +3,7 @@
     "cu-custom": "colorui/components/cu-custom"
   },
   "pages": [
+    "pages/index/newindex",
     "pages/index/index",
     "pages/activity/activity",
     "pages/user/login",
@@ -46,42 +47,34 @@
     "pages/index/addplace",
     "pages/index/editplace",
     "pages/index/clubdetail",
-    "pages/user/followuser"
+    "pages/user/followuser",
+    "pages/good/goodindex",
+    "pages/activityshowinfo/activityshare",
+    "pages/activityshowinfo/activitymembergroup",
+    "pages/activity/blank"
   ],
   "tabBar": {
-    "color": "#2c2c2c",
-    "selectedColor": "#39b54a",
+    "custom": true,
+    "color": "black",
+    "selectedColor": "#4689FF",
     "backgroundColor": "#fff",
     "borderStyle": "white",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/index/newindex",
         "iconPath": "image/index.png",
-        "selectedIconPath": "image/index_select.png",
+        "selectedIconPath": "image/index_sel.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/index/listindex",
-        "iconPath": "image/find.png",
-        "selectedIconPath": "image/find_select.png",
-        "text": "发现"
-      },
-      {
         "pagePath": "pages/activity/activity",
-        "iconPath": "image/add.png",
-        "selectedIconPath": "image/add_select.png",
-        "text": "发布"
-      },
-      {
-        "pagePath": "pages/friend/friend",
-        "iconPath": "image/chat.png",
-        "selectedIconPath": "image/chat_select.png",
-        "text": "消息"
+        "iconPath": "image/add_sel.png",
+        "selectedIconPath": "image/add_sel.png"
       },
       {
         "pagePath": "pages/user/user",
         "iconPath": "image/my.png",
-        "selectedIconPath": "image/my_select.png",
+        "selectedIconPath": "image/my_sel.png",
         "text": "我的"
       }
     ]

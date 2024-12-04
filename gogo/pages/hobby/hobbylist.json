@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    
+    "circle": "/pages/components/circle",
+    "mycircle":"/pages/components/mycircle"
   },
+  "navigationStyle": "custom",
   "navigationBarTitleText": "兴趣列表"
 }

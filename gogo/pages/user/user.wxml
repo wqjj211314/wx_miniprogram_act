@@ -1,52 +1,68 @@
+
 <scroll-view scroll-y="true" style="height: 100%;" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
-  <view class="" style="width:100vw;height:25vh;">
-    <image class='' src="https://www.2week.club:5000/static/userbg.jpg" mode="widthFix" style="width: 100%;z-index: -1;"></image>
+  <cu-custom>
+  <view slot="content" style="color: white;font-weight: 600;font-size: 36rpx;line-height: 50rpx;">我的</view>
+</cu-custom>
+
+<view style="width: 297rpx;height: 297rpx;background: linear-gradient( 230deg, rgba(70,137,255,0) 0%, #e7c83fc9 100%);opacity: 0.33;right:78rpx;border-radius: 100%;top:-163rpx;position: fixed;z-index: -1;">
+</view>
+<view style="width: 100%;height: 700rpx;background: linear-gradient( 359deg, #F5F5F5 0%, #d6e9bd 47%, #beee64b7 100%);position: absolute;top:0rpx;z-index: -2;">
+</view>
+  <view class="" style="padding-top:{{10}}px;margin:0rpx 30rpx;">
+    <image class='' src="https://www.2week.club:5000/static/userbg.jpg" mode="aspectFill" style="width: 100%;height: 320rpx;border-radius: 30rpx;"></image>
   </view>
-  <view class="" style="margin-top:-80rpx;">
+  <view class="" style="margin-top:30rpx;">
     <view class="flex userinfo" style="align-items: center;margin:10px 15px 0px;">
-      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info">
+      <view class="cu-avatar round lg" style="background-image:url({{userinfo.avatarUrl}});width: 128rpx;height: 128rpx;" bind:tap="modify_user_info"><!--border: 0.5rpx solid {{userinfo.gender==0?'#e03997':'#0081ff'}};-->
         <view class="cu-tag badge {{userinfo.gender==0?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
         </view>
       </view>
-      <view class="column-sidebar">
-        <view class="nickname text-black" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;padding-left:0rpx;">
+      <view class="column-sidebar" bindtap="modify_user_info">
+        <view class="nickname text-black flex" style="border:none;background-color:#fff;font-size: 40rpx;padding: 0rpx;margin: 0rpx;line-height: 1;padding-left:0rpx;flex-direction: row;justify-content: left;align-items: center;">
           <!--class="rightarrow"-->
           <text class="text-black" style="font-size: 30rpx;">{{userinfo.nickName}}</text>
+          <text class="cuIcon-right text-gray" style="font-size: 30rpx;margin-left: 10rpx;"></text>
+          
         </view>
         <view style="margin-top: 15rpx;">
-          <view class="cu-tag bg-green light sm round" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
+          <view class="cu-tag sm round line-green" style="margin-top:10rpx;padding:20rpx;">{{userinfo.signature==""?"个性签名":userinfo.signature}}</view>
         </view>
       </view>
-      <view class="cuIcon-edit cu-btn line-green round" style="margin-left: auto;" bindtap="modify_user_info">
-        编辑资料
+      <view class="flex" style="flex-direction: column;flex:1;justify-content: space-around;height: 100%;">
+
+        <view class="cu-btn line-green round" style="margin-left: auto;" bindtap="navigateToFriendList">
+          <text class="cuIcon-mark" style="font-size: 35rpx;"></text>
+          私信
+        </view>
+
       </view>
     </view>
     <view class="bg-white text-black" style="margin:10px 15px 0px;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;padding:15rpx;padding-bottom: 0rpx;">我的订单</view>
     <view class="cu-list grid {{checking_flag?'col-5':'col-4'}} card-menu" style="border-radius: 0rpx;border-bottom-right-radius: 20rpx;border-bottom-left-radius: 20rpx;margin:0px 15px 0px;">
       <view class="cu-item" bindtap="add_good" wx:if="{{checking_flag}}">
-        <view class="cuIcon-add text-red">
+        <view class="cuIcon-add text-orange">
         </view>
         <text>新增商品</text>
       </view>
 
       <view class="cu-item" bindtap="navigateTocancelorder">
-        <view class="cuIcon-goods text-gray">
+        <view class="cuIcon-goods text-orange">
         </view>
         <text>退款/售后</text>
       </view>
       <view class="cu-item" bindtap="navigateToshareorder">
-        <view class="cuIcon-share text-green">
+        <view class="cuIcon-share text-orange">
         </view>
         <text>分享奖励</text>
       </view>
 
       <view class="cu-item" bindtap="navigateToordernotdeliver">
-        <view class="cuIcon-deliver text-green">
+        <view class="cuIcon-deliver text-orange">
         </view>
         <text>待收货</text>
       </view>
       <view class="cu-item" bindtap="navigateToallorder">
-        <view class="cuIcon-goods text-green">
+        <view class="cuIcon-goods text-orange">
         </view>
         <text>全部订单</text>
       </view>
@@ -78,20 +94,20 @@
     <view class="cu-list menu sm-border card-menu margin-top" style="margin:10px 15px 0px;">
       <view class="cu-item arrow" bindtap="navigateToActivitycreate">
         <view class="content">
-          <text class="cuIcon-circle text-green"></text>
+          <text class="cuIcon-circle text-blue"></text>
           <text class="text-grey">发布的活动</text>
         </view>
       </view>
 
       <view wx:if="{{checking_flag}}" class="cu-item arrow" bindtap="navigateToActivitychecking">
         <view class="content">
-          <text class="cuIcon-icloading text-red"></text>
+          <text class="cuIcon-icloading text-blue"></text>
           <text class="text-grey">待审核的活动</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="navigateToFollowUser">
         <view class="content">
-          <text class="iconfont icon-canyuguanli text-green" style="display:inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;"></text>
+          <text class="iconfont icon-canyuguanli text-blue" style="display:inline-block;margin-right: 10rpx;width: 1.6em;text-align: center;"></text>
           <text class="text-grey">关注的人</text>
         </view>
       </view>
@@ -104,8 +120,8 @@
 
       <view class="cu-item arrow" bindtap="navigateTohobbylist">
         <view class="content">
-          <text class="cuIcon-likefill text-red"></text>
-          <text class="text-grey">兴趣列表</text>
+          <text class="cuIcon-rankfill text-blue"></text>
+          <text class="text-grey">我的活动数据</text>
         </view>
       </view>
       <view class="cu-item arrow" bindtap="navigateToMoney">
@@ -119,7 +135,7 @@
     <view class="cu-list menu sm-border card-menu margin-top" style="margin:10px 15px 0px;">
       <view class="cu-item arrow" bind:tap="show_tel" data-target="DialogModal-suggest">
         <view class="content">
-          <text class="cuIcon-phone text-green" style="font-size:40rpx;"></text>
+          <text class="cuIcon-phone text-blue" style="font-size:40rpx;"></text>
           <text class="text-grey">客服联系</text>
         </view>
         <view class="action" style="max-width:66%;">
@@ -128,7 +144,7 @@
       </view>
       <view class="cu-item">
         <view class="content">
-          <text class="cuIcon-tag text-green" style="font-size:40rpx;"></text>
+          <text class="cuIcon-tag text-blue" style="font-size:40rpx;"></text>
           <text class="text-grey">版本</text>
         </view>
         <view class="action" style="max-width:66%;">
@@ -137,7 +153,7 @@
       </view>
       <view class="cu-item arrow" bindtap="chat_with_dev">
         <view class="content">
-          <text class="cuIcon-service text-green" style="font-size:40rpx;"></text>
+          <text class="cuIcon-service text-blue" style="font-size:40rpx;"></text>
           <text class="text-grey">留言咨询</text>
         </view>
       </view>

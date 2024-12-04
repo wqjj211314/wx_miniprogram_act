@@ -1,0 +1,40 @@
+<view class="cu-list menu-avatar" style="margin:0rpx;height: fit-content;overflow: visible;">
+      <view class="cu-item" style="min-height:120rpx;height: fit-content;position: relative;border:none;{{index==0?'padding-top:20rpx;':''}}">
+        <view class="flex" style="position: absolute;left: 30rpx;align-items: center;justify-content: center;">
+        <view class="cu-avatar round lg" style="background-image:url({{item.avatarUrl}});width: 80rpx;height: 80rpx;margin-right: 20rpx;" bind:tap="chat" data-membernum="{{item.member_num}}">
+          <view class="cu-tag badge {{item.gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+          </view>
+        </view>
+        <view class="flex" style="flex-direction: column;">
+          <view class="text-black">{{item.nickName}}<text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"「排队中」":""}}</text></view>
+          <view class="text-black flex" style="font-size: 20rpx;">
+            <view class="" style="word-break: break-all;width:250rpx;line-height: 1.2em;-webkit-line-clamp: 2;text-overflow: ellipsis;display: -webkit-box;overflow: hidden;-webkit-box-orient: vertical;margin-top: 8rpx;">
+              <block wx:for="{{item.partinfo}}" wx:for-index="key" wx:for-item="value">
+                <text class="margin-right-xs" wx:if="{{key!='姓名'||key!='性别'}}">{{key}}:{{value}}</text>
+              </block>
+            </view>
+          </view>
+        </view>
+        </view>
+        <view class="flex" style="margin: 0rpx 20rpx;justify-content: center;flex-direction: column;align-items:center;width: 110rpx;" wx:if="{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace) != '0' && is_pk_hobby}}">
+          <view class="text-black text-xs">历史胜率</view>
+          <view class="cu-tag line-blue" style="margin-top: 10rpx;">{{tools.win_rate(item.hobby_info.all_win,item.hobby_info.all_fail,item.hobby_info.all_peace)}}</view>
+        </view>
+        <view class="flex" style="margin: 0rpx 20rpx;justify-content: center;flex-direction: column;align-items:center;width: 110rpx;" wx:if="{{is_pk_hobby&&item.hobby_info.hobby_point != 0}}">
+          <view class="text-black text-xs">{{activity_info.activity_tag}}积分
+            <!--<text class="text-blue" style="">{{tools.hobby_point(item.hobby_info.hobby_point)}}级</text>-->
+          </view>
+          <view class="cu-tag line-blue" style="margin-top: 10rpx;">积分{{item.hobby_info.hobby_point}}</view>
+        </view>
+        <view class="bg-grey padding" style="position:absolute;bottom:100rpx;right:50rpx;border-radius: 20rpx;padding-bottom: 15rpx;padding-top: 15rpx;text-align: center;" wx:if="{{item.member_num==sel_member_num}}">
+          <view class="" style="font-size: 30rpx;border-bottom: solid;padding-bottom: 15rpx;margin-bottom:15rpx;border-bottom:solid rgba(255, 255, 255, 0.192);" bind:tap="delete_member" data-membernum="{{item.member_num}}" wx:if="{{!is_begin&&activity_info.activity_status < 800}}">
+            取消报名
+          </view>
+          <view class="" style="font-size: 30rpx;" wx:if="{{is_pk_hobby&&activity_info.activity_status < 800&&item.is_queue != 1}}" bind:tap="update_member_admin" data-membernum="{{item.member_num}}">
+            {{item.admin_status==0?"设为管理员":"取消管理员"}}
+          </view>
+        </view>
+        
+        <view style="width: 60rpx;" wx:if="{{admin_flag&&((!is_begin&&activity_info.activity_status < 800)||(is_pk_hobby&&activity_info.activity_status < 800))&&show_more_flag}}"><text class="cuIcon-moreandroid lg text-gray" style="font-size: 60rpx;" data-membernum="{{item.member_num}}" bind:tap="show_admin_options"></text></view>
+      </view>
+    </view>

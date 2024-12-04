@@ -40,8 +40,8 @@
 
       <view class="cu-item arrow" bindtap="navigateTohobbylist">
         <view class="content">
-          <text class="cuIcon-likefill text-red"></text>
-          <text class="text-grey">TA的兴趣列表</text>
+          <text class="cuIcon-rankfill text-blue"></text>
+          <text class="text-grey">TA的活动数据</text>
         </view>
       </view>
      

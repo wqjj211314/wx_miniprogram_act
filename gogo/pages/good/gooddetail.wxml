@@ -1,4 +1,4 @@
-<scroll-view scroll-y="true" style="height:calc(100vh-140rpx)" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
+<scroll-view scroll-y="true" style="height:calc(100vh)" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
   <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;">
   <view style="background-color: rgba(226, 230, 247, 0.308);">
     <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="max-height:1000rpx;min-height: 800rpx;" autoplay="false">
@@ -103,9 +103,9 @@
   </view>
   <view style="height: 200rpx;"></view>
 </scroll-view>
-<view class="cu-bar tabbar bg-white" style="padding:0rpx;height: fit-content;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: 140rpx;">
+<view class="cu-bar tabbar bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: env(safe-area-inset-bottom);">
 
-  <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 20rpx;">
+  <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;">
     <view class="margin" style="flex:1;margin-right:20rpx;" bindtap="switch_listindex">
       <button class="cu-btn bg-green" style="border-radius: 20rpx;width: 100%;height: 85rpx;">返回首页</button>
     </view>

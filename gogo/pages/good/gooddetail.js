@@ -158,8 +158,8 @@ Page({
     });
   },
   switch_listindex() {
-    wx.switchTab({
-      url: '/pages/index/listindex',
+    wx.navigateTo({
+      url: '/pages/good/goodindex',
     })
   },
   get_order_address() {

@@ -1,7 +1,7 @@
 //const chooseLocation = requirePlugin('chooseLocation');
 const app = getApp();
 const util = require("../../utils/util.js");
-const score = require("score.js");
+//const score = require("score.js");
 const share = require("share.js");
 const manage_activity = require("manage_activity.js");
 
@@ -10,10 +10,12 @@ Page({
    * 页面的初始数据
    */
   data: {
+    CustomBar: app.globalData.CustomBar,
     activity_info: [],
+    room_list: [],
     is_begin: false,
     is_end: true,
-    is_end_12h:false,
+    is_end_12h: false,
     is_addend: false,
     is_cancelend: false,
     activity_user_info: [],
@@ -25,13 +27,13 @@ Page({
     ispart: false,
     part_flag: false,//是否参与
     part_member_num: "",//当前用户参与的编号
+    part_group_tag: "",
     like_flag: false,
     isend: false,
     partbuttonmsg: "我要报名",
     modalName: "",
     avatarUrl_list: [],
-    partinfo_keys: [],
-    partinfo_values: [],
+    
     user_info_list: [],
     addendtime: "",
     member: 0,
@@ -70,8 +72,7 @@ Page({
     group_limit: "",//编辑分组
     edit_group_tag_dict: {},//编辑分组
     triggered: false,
-    moods: [],
-    mood_img_list: [],
+
     select_group_tag: "",//报名所选择的分组
     pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑", "棋牌"],
     is_pk_hobby: true,
@@ -80,15 +81,18 @@ Page({
     empty_group_tag_dict: true,//用来显示报名预分组的
     request_partner_list: [],
     recommend_list: [],
-    barbg_url:"https://www.2week.club:5000/static/barbg/羽毛球.jpg",
-    barbg_tags:["羽毛球","台球","篮球","棋牌","乒乓球"],
-    loading_tip:"加载中..."
+    barbg_url: "https://www.2week.club:5000/static/barbg/羽毛球.jpg",
+    barbg_tags: ["羽毛球", "台球", "篮球", "棋牌", "乒乓球"],
+    loading_tip: "加载中",
+    show_detail_flag:false,
+    safeArea:app.globalData.safeArea
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    
     var that = this;
     console.log("加载用户活动详情页");
     console.log(options)
@@ -100,12 +104,7 @@ Page({
         share_use_id: share_use_id
       });
     }
-    if (options.hasOwnProperty("current_swiper_item_index")) {
-      let current_swiper_item_index = decodeURIComponent(options.current_swiper_item_index);
-      this.setData({
-        current_swiper_item_index: current_swiper_item_index
-      });
-    }
+
     console.log(activity_info);
     console.log(activity_user_info);
     var addendtime = activity_info["addendtime"];
@@ -114,9 +113,10 @@ Page({
     }
     this.setData({
       activity_info: activity_info,
+      room_list: activity_info.room.split(","),
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
-      is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*12),
+      is_end_12h: new Date(activity_info["endtime"]) - new Date() <= -(1000 * 60 * 60 * 12),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
       new_announcement: activity_info["announcement"],
@@ -134,12 +134,9 @@ Page({
     console.log(new Date().getTime());
 
 
-    wx.setNavigationBarTitle({
-      title: activity_info.title
-    })
-    if(this.data.barbg_tags.includes(activity_info.activity_tag)){
+    if (this.data.barbg_tags.includes(activity_info.activity_tag)) {
       this.setData({
-        barbg_url:"https://www.2week.club:5000/static/barbg/"+activity_info.activity_tag+".jpg"
+        barbg_url: "https://www.2week.club:5000/static/barbg/" + activity_info.activity_tag + ".jpg"
       })
     }
     this.init_activity_all_info(activity_info);
@@ -149,7 +146,12 @@ Page({
       show_part_flag: !this.data.show_part_flag
     })
   },
-  go_to_place(e){
+  show_detail(){
+    this.setData({
+      show_detail_flag:!this.data.show_detail_flag
+    })
+  },
+  go_to_place(e) {
     wx.openLocation({
       latitude: Number(this.data.activity_info.latitude),
       longitude: Number(this.data.activity_info.longitude),
@@ -164,20 +166,28 @@ Page({
     })
   },
   init_activity_all_info(activity_info) {
-   
+
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": activity_info.activity_id,
         "hobby_tag": activity_info.activity_tag,
-        "user_id":app.globalData.login_userInfo["user_id"]
+        "user_id": app.globalData.login_userInfo["user_id"]
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
         //更新活动信息
+        if(res.data["code"] == 500){
+          wx.showToast({
+            title: '服务器异常',
+            icon:'error',
+            duration:4000
+          })
+          
+        }
         var activity_info = that.data.activity_info;
         console.log(res.data["activity_info"])
         var new_activity_info = res.data["activity_info"]
@@ -189,9 +199,10 @@ Page({
         //更新活动的时间限制信息
         that.setData({
           activity_info: activity_info,
+          room_list: activity_info.room.split(","),
           is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
           is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
-          is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*12),
+          is_end_12h: new Date(activity_info["endtime"]) - new Date() <= -(1000 * 60 * 60 * 12),
           is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
           is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
           new_announcement: activity_info["announcement"],
@@ -202,12 +213,12 @@ Page({
           title_tags: activity_info.title_tags,
           share_res_limit: activity_info["part_limit"],
           is_pk_hobby: that.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1,
-          loading_tip:""
+          loading_tip: ""
         });
-       
+
         that.update_part_info(that, res);
         that.set_part_limit();
-        
+
       },
       fail(res) {
         wx.hideLoading()
@@ -217,10 +228,10 @@ Page({
         })
       }
     });
-    score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
-    score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
-    share.get_activity_moods(app.globalData.hosturl, that, activity_info.activity_id)
-    this.get_request_partner_list()
+    //score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
+    //score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
+
+    //this.get_request_partner_list()
   },
 
   show_user_detail(e) {
@@ -258,8 +269,7 @@ Page({
     console.log("成员信息" + res.data);
     var result = res.data;
     console.log(result["avatarUrl_list"]);
-    console.log(result["partinfo_keys"]);
-    console.log(result["partinfo_values"]);
+   
     console.log(result["user_info_part_info_list"]);
     var user_info_list = result["user_info_list"];
     console.log(user_info_list.length);
@@ -280,8 +290,7 @@ Page({
     })
 
     var avatarUrl_list = result["avatarUrl_list"];
-    var partinfo_keys = result["partinfo_keys"];
-    var partinfo_values = result["partinfo_values"];
+   
 
     //测试用，创建20个参与人员
     var info = result["user_info_part_info_list"];
@@ -289,6 +298,7 @@ Page({
     var ungroup_partinfo_list = [];
     var member_users = {};
     var part_member_num = "";
+    var part_group_tag = "";
     var login_user_part_list = [];
     console.log(info);
     //提取分组信息
@@ -321,6 +331,7 @@ Page({
       if (item["user_id"] == app.globalData.login_userInfo["user_id"] && part_member_num == "") {
         console.log("已参与")
         part_member_num = item["member_num"];
+        part_group_tag = item["group_tag"];
         //var partinfo = that.data.partinfo;
         //有参与编号代表已参与，已参与如果重复报名需要提供姓名，性别
         if (partinfo.indexOf("姓名") == -1) {//没找到
@@ -332,7 +343,8 @@ Page({
         that.setData({
           part_flag: true,
           part_member_num: item["member_num"],
-          partinfo: partinfo
+          partinfo: partinfo,
+          part_group_tag: part_group_tag
         })
       }
 
@@ -395,8 +407,7 @@ Page({
     //entire_part_info.push(JSON.parse(JSON.stringify(info)));
     that.setData({
       avatarUrl_list: avatarUrl_list,
-      partinfo_keys: partinfo_keys,
-      partinfo_values: partinfo_values,
+      
       user_info_list: user_info_list,
       ungroup_partinfo_list: ungroup_partinfo_list,
       entire_part_info: info,
@@ -470,7 +481,6 @@ Page({
     this.setData({
       cancel_part_members: cancel_part_members
     })
-
   },
   confirm_cancel_part() {
     var that = this;
@@ -608,9 +618,6 @@ Page({
         that.get_recommand_list()
       }, 5000)
     }
-
-
-
   },
   getuserinfo() {
     try {
@@ -747,7 +754,7 @@ Page({
       console.log("没进来？")
       return {
         title: this.data.activity_info.activity_status_comment,
-        path: '/pages/index/index',
+        path: '/pages/index/newindex',
       }
     }
 
@@ -764,7 +771,7 @@ Page({
     return {
       title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id+"&current_swiper_item_index="+this.data.current_swiper_item_index,
+      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
@@ -774,7 +781,7 @@ Page({
       fail: function (res) {
         console.log("失败", res)
       },
-      
+
     }
   },
   //
@@ -813,7 +820,7 @@ Page({
     }
 
     //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
-    
+
     if (!util.check_login(app)) {
       return;
     }
@@ -898,16 +905,10 @@ Page({
                   console.log(res.data)
                 },
                 fail(res) {
-                 
+
                 }
               });
-              //返回首页的活动页。
-              setTimeout(function () {
-                app.globalData.current_activity_id = that.data.activity_info.activity_id;
-                wx.switchTab({
-                  url: '../index/index'
-                })
-              }, 2000)
+
             },
             'fail': function (res) {
               console.log("取消支付")
@@ -925,13 +926,7 @@ Page({
             duration: 2000
           })
           console.log("免费报名")
-          //返回首页的活动页。
-          setTimeout(function () {
-            app.globalData.current_activity_id = that.data.activity_info.activity_id;
-            wx.switchTab({
-              url: '../index/index'
-            })
-          }, 1000)
+
         } else {
           wx.showToast({
             title: res.data.result,
@@ -978,10 +973,16 @@ Page({
     })
   },
   show_more_options_modal(e) {
+    if (this.data.modalName == 'DialogModal-moreoptions') {
+      this.setData({
+        modalName: ""
+      })
+    } else {
+      this.setData({
+        modalName: e.currentTarget.dataset.target
+      })
+    }
 
-    this.setData({
-      modalName: e.currentTarget.dataset.target
-    })
   },
   hideModal(e) {
     this.setData({
@@ -1216,6 +1217,7 @@ Page({
   },
   delete_member(e) {
     console.log("移除成员");
+
     var that = this;
     wx.showModal({
       title: '删除取消所选人员的报名资格',
@@ -1437,9 +1439,9 @@ Page({
       disable_save_group: true,
       edit_group_flag: false
     })
-    setTimeout(function(){
+    setTimeout(function () {
       wx.hideLoading()
-    },1500)
+    }, 1500)
   },
   edit_completed_group(e) {
     console.log(e.currentTarget.dataset.tag);
@@ -1461,9 +1463,9 @@ Page({
     app.globalData.edit_group_user = []
     console.log(this.data.current_edit_group);
   },
-  pk_page(e) {
-    console.log(e.currentTarget.dataset.tag);
-    var group_tag = e.currentTarget.dataset.tag;
+  pk_page() {
+    console.log(this.data.part_group_tag);
+    var group_tag = this.data.part_group_tag;
     var groups = "";
     var room = "暂定"
     if (group_tag == "") {
@@ -1561,21 +1563,7 @@ Page({
       url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
-  swiper_change(event) {
-    console.log("swiper_change")
-    console.log(event);
-    this.setData({
-      current_swiper_item_index: event.detail.current
-    })
-    //进入排名界面
-    if (event.detail.current == 2) {
-      //要对点赞情况进行初始化
-      var like_dict = score.is_like(this.data.part_member_num, this.data.like_dict);
-      this.setData({
-        like_dict: like_dict
-      })
-    }
-  },
+
   like(e) {
     var like_member_group = e.currentTarget.dataset.likemembergroup;
     var part_member_num = this.data.part_member_num;
@@ -1639,25 +1627,12 @@ Page({
     var that = this;
     setTimeout(function () {
       that.setData({
-        triggered: false,
-        edit_group_flag: false,
+        triggered: false
       })
     }, 2000);
     this.init_activity_all_info(this.data.activity_info);
   },
-  recore_mood() {
-    if (this.data.moods.length > 20) {
-      wx.showToast({
-        title: '最多支持20条见闻分享',
-        icon: "none",
-        duration: 3000
-      })
-      return;
-    }
-    wx.navigateTo({
-      url: 'share_mood?activity_id=' + this.data.activity_info["activity_id"],
-    })
-  },
+
   ViewImage(e) {
     wx.previewImage({
       urls: this.data.mood_img_list,
@@ -1723,15 +1698,15 @@ Page({
       content: '确认取消活动吗？',
       complete: (res) => {
         if (res.cancel) {
-          
+
         }
-    
+
         if (res.confirm) {
           manage_activity.cancel_activity(that, that.data.activity_info["activity_id"], app.globalData.hosturl, app)
         }
       }
     })
-    
+
   },
   refund_all_member(e) {
     this.setData({
@@ -1747,7 +1722,7 @@ Page({
         }
         if (res.confirm) {
           manage_activity.refund_all_member(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
-          setTimeout(function(){
+          setTimeout(function () {
             that.init_activity_all_info(that.data.activity_info)
           }, 2000)
         }
@@ -1813,4 +1788,18 @@ Page({
       url: '../good/gooddetail?good_info=' + good_info
     })
   },
+  go_to_activityshare() {
+    var admin_flag = false;
+    admin_flag = (this.data.activity_info.activity_status >= 200 && this.data.activity_info.activity_status < 800 && ((!this.data.is_addend && !this.data.is_begin) || this.data.login_user_part_list.length > 0 || this.data.admin_flag)) && this.data.loading_tip == '';
+    wx.navigateTo({
+      url: 'activityshare?activity_id=' + this.data.activity_info.activity_id + '&admin_flag=' + admin_flag,
+    })
+  },
+  go_to_activitymembergroup() {
+    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+    let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_info.createuser));
+    wx.navigateTo({
+      url: 'activitymembergroup?activity_info=' + activity_info + '&&activity_user_info=' + activity_user_info,
+    })
+  }
 })

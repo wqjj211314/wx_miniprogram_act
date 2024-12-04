@@ -23,6 +23,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    
     //let user_info = JSON.parse(decodeURIComponent(options.userinfo))
     console.log("用户页 user onLoad");
     var url = util.getCurrentPageUrl();
@@ -211,6 +212,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    if (typeof this.getTabBar === 'function' ) {
+      this.getTabBar((tabBar) => {
+        tabBar.setData({
+          selected: 2
+        })
+      })
+    }
     console.log("用户页 user onShow");
     this.setData({
       friend_chat_msg_display:app.globalData.friend_chat_msg_display,
