@@ -140,6 +140,7 @@ Page({
       })
     }
     this.init_activity_all_info(activity_info);
+   
   },
   show_all_part() {
     this.setData({
@@ -166,7 +167,9 @@ Page({
     })
   },
   init_activity_all_info(activity_info) {
-
+    wx.showLoading({
+      title: '加载中',
+    })
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
@@ -218,7 +221,7 @@ Page({
 
         that.update_part_info(that, res);
         that.set_part_limit();
-
+        wx.hideLoading();
       },
       fail(res) {
         wx.hideLoading()
@@ -228,10 +231,10 @@ Page({
         })
       }
     });
-    //score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
-    //score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
-
-    //this.get_request_partner_list()
+    setTimeout(function(){
+      wx.hideLoading()
+    },1000)
+    
   },
 
   show_user_detail(e) {
@@ -407,7 +410,6 @@ Page({
     //entire_part_info.push(JSON.parse(JSON.stringify(info)));
     that.setData({
       avatarUrl_list: avatarUrl_list,
-      
       user_info_list: user_info_list,
       ungroup_partinfo_list: ungroup_partinfo_list,
       entire_part_info: info,
@@ -420,6 +422,75 @@ Page({
       all_group_tag2_dict: all_group_tag2_dict
     });
     that.update_part_status();
+  },
+  random_gift(){
+    var that = this;
+    var entire_part_info = this.data.entire_part_info;
+    var user_id_list = [];
+    var member_num_list = [];
+    entire_part_info.forEach(item=>{
+      var user_id = item.user_id;
+      if(user_id_list.indexOf(user_id) == -1){
+        user_id_list.push(user_id)
+        member_num_list.push(item.member_num)
+      }
+    })
+    var random_index = Math.floor(Math.random()*user_id_list.length)
+    var gift_member_num = member_num_list[random_index];
+    var gift_user_info = this.data.member_users[gift_member_num];
+    console.log(that.data.activity_info.activity_id)
+    this.setData({
+      modalName:""
+    })
+    wx.showModal({
+      title: '随机抽奖结果',
+      content: '中奖人员是第'+gift_member_num.replace('#','')+'号成员，昵称:'+gift_user_info['nickName'],
+      complete: (res) => {
+        if (res.cancel) {
+          
+        }
+    
+        if (res.confirm) {
+          wx.showLoading({
+            title: '保存中',
+          })
+          wx.request({
+            url: app.globalData.hosturl + 'update_member_more_info', //仅为示例，并非真实的接口地址
+            data: {
+              "activity_id": that.data.activity_info.activity_id,
+              "member_num": gift_member_num,
+              "info_key":"gift_flag",
+              "info_value":1
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            success(res) {
+              wx.hideLoading();
+              if (res.data.code == 200) {
+                wx.showToast({
+                  title: res.data.result,
+                  icon: "success",
+                  duration: 1000
+                })
+                //that.init_activity_all_info(that.data.activity_info);
+              } else {
+                wx.showToast({
+                  title: res.data.result,
+                  icon: "error",
+                  duration: 1000
+                })
+              }
+      
+            },
+            fail(res) {
+              wx.hideLoading();
+            }
+          });
+        }
+      }
+    })
+
   },
   chat(e) {
     console.log(e.currentTarget.dataset.membernum);

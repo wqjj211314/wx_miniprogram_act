@@ -1,25 +1,28 @@
-<scroll-view scroll-y="true" style="height:calc(100vh)" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="black" refresher-background="white" refresher-triggered="{{triggered}}" bindrefresherrefresh="onScrollRefresh">
-  <view style="width: 100%;height: fit-content;display:inline-block;padding:8rpx;">
-  <view style="background-color: rgba(226, 230, 247, 0.308);">
-    <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="max-height:1000rpx;min-height: 800rpx;" autoplay="false">
-      <swiper-item wx:for="{{good_info.good_img}}" class="" wx:key="*this" bindtap="ViewImage" data-url="{{item}}">
-        <image style="width:100%;" mode="widthFix" src="{{item}}">
-        </image>
-      </swiper-item>
-     
-    </swiper>
-  </view>
-    <view class="text-bold" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 2;overflow: hidden;padding:20rpx;">
+
+  <view style="width: 100%;height: fit-content;display:inline-block;padding:20rpx;">
+    <view style="background-color: rgba(226, 230, 247, 0.308);padding:0rpx;">
+      <swiper class="screen-swiper square-dot" indicator-dots="true" circular="true" interval="5000" duration="500" style="height: 800rpx;" autoplay="false">
+        <swiper-item wx:for="{{good_info.good_img}}" class="" wx:key="*this" bindtap="ViewImage" data-url="{{item}}">
+          <image style="" mode="heightFix" src="{{item}}">
+          </image>
+        </swiper-item>
+
+      </swiper>
+    </view>
+    <view class="text-bold" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 2;overflow: hidden;margin-top:20rpx;">
       {{good_info.good_title}}
     </view>
-    <view style="font-size: 45rpx;margin-top: 10rpx;height: fit-content;padding:20rpx;">
+    <view class="flex" style="font-size: 45rpx;margin-top: 20rpx;height: fit-content;align-items: center;">
+    <view class="flex" style="align-items: baseline;">
       <text class="iconfont icon-fl-renminbi text-orange text-bold" style="font-size: 32rpx;"></text>
       <text class="text-bold text-orange" style="font-size: 60rpx;">{{good_info.good_price}}</text>
+    </view>
+
       <block wx:for="{{good_info.good_tag}}">
-        <text class="cu-btn line-blue" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">{{item}}</text>
+        <view class="bg-white" style="text-align:center;border-radius: 8rpx;border: 1rpx solid #4689FF;font-weight: 400;font-size: 24rpx;color: #4689FF;line-height: 33rpx;padding:6rpx 9rpx;width: fit-content;margin-left:20rpx;height: fit-content;">{{item}}</view>
       </block>
     </view>
-    <view class="flex" style="justify-content: space-between;align-items: center;padding-left:20rpx;">
+    <view class="flex" style="justify-content: space-between;align-items: center;margin-top: 10rpx;;">
       <view>
         <text class="cu-btn line-green" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">7天内发货</text>
       </view>
@@ -29,20 +32,20 @@
       </view>
     </view>
   </view>
-<view wx:if="{{good_info.good_club_place != ''}}" style="margin:0rpx 15rpx;">
-  <view class="cu-form-group bg-gray" bindtap="chooseposition" style="border-radius: 20rpx;">
-    <view class="title text-black" style="font-size: 27rpx;">{{good_info.good_club_place}}</view>
-    <view class="flex text-blue" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;" bind:tap="go_to_miniprogram" data-url="{{good_info.good_club_place_mini_url}}">
-      查看剩余场地<text class="cuIcon-right text-blue" style=""></text>
+  <view wx:if="{{good_info.good_club_place != ''}}" style="margin-top: 10rpx;">
+    <view class="cu-form-group bg-gray" bindtap="chooseposition" style="border-radius: 20rpx;margin-left: 20rpx;margin-right: 20rpx;">
+      <view class="title text-black" style="font-size: 27rpx;">{{good_info.good_club_place}}</view>
+      <view class="flex text-blue" style="max-width:78%;white-space:normal;align-items: center;justify-content: center;" bind:tap="go_to_miniprogram" data-url="{{good_info.good_club_place_mini_url}}">
+        查看剩余场地<text class="cuIcon-right text-blue" style=""></text>
+      </view>
     </view>
   </view>
-</view>
 
   <view class="padding" style="font-size: 35rpx;width: 100vw;">
     <view>选择地址
-    <button class="cu-btn line-black" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;border-radius: 20rpx;margin-left: 20rpx;" bind:tap="new_address">新增地址</button>
+      <button class="cu-btn line-black" style="padding: 0 20rpx;font-size: 25rpx;height: 55rpx;border-radius: 20rpx;margin-left: 20rpx;" bind:tap="new_address">新增地址</button>
     </view>
-    <scroll-view scroll-x class="bg-white padding" scroll-with-animation style="white-space: nowrap;width: 100%;">
+    <scroll-view scroll-x class="bg-white padding-sm" scroll-with-animation style="white-space: nowrap;width: 100%;">
       <view class="" style="display: inline-block;margin-right: 30rpx;" wx:for="{{address_list}}" data-addressindex="{{index}}" bind:tap="sel_address">
         <view class="flex padding-sm {{index==addressindex?'bg-green text-white':'bg-gray'}}" style="width: 400rpx;justify-content: left;flex-direction: column;align-items: flex-start;font-size: 25rpx;border-radius: 20rpx;white-space: normal;">
           <block wx:for="{{item}}" wx:for-item="value" wx:for-index="key">
@@ -76,12 +79,12 @@
     </view>
     <view>自提地址</view>
     <view class="padding-sm" style="display: inline-block;margin-right: 30rpx;">
-        <view class="flex padding-sm {{choose_selfget?'bg-green':'bg-gray'}}" style="width: 100%;justify-content: left;flex-direction: column;align-items: flex-start;font-size: 25rpx;border-radius: 20rpx;white-space: normal;">
-          <block wx:for="{{good_info.selfgetaddress}}" wx:for-item="value" wx:for-index="key">
-            <view class="" style="padding-bottom: 10rpx;">{{key}}:{{value}}</view>
-          </block>
-        </view>
+      <view class="flex padding-sm {{choose_selfget?'bg-green':'bg-gray'}}" style="width: 100%;justify-content: left;flex-direction: column;align-items: flex-start;font-size: 25rpx;border-radius: 20rpx;white-space: normal;">
+        <block wx:for="{{good_info.selfgetaddress}}" wx:for-item="value" wx:for-index="key">
+          <view class="" style="padding-bottom: 10rpx;">{{key}}:{{value}}</view>
+        </block>
       </view>
+    </view>
 
     <view class="flex margin-top-sm" style="justify-content: space-between;align-items: center;">
       <view>数量<text class="text-gray" style="font-size: 25rpx;margin-left: 20rpx;">7天限购{{good_info.good_limit}}件/库存{{good_info.good_store}}件</text></view>
@@ -97,23 +100,24 @@
       </view>
     </view>
 
-    <view class="" style="margin-top: 30rpx;font-size: 30rpx;">
-      <input placeholder="如有其他要求，请填写说明" bindinput='good_remark' style="color:black;" class="" value="{{club_name}}" maxlength="50"></input>
+    <view class="flex" style="margin-top: 30rpx;align-items: center;justify-content: space-between;">
+      <view>备注</view>
+      <view style="flex:1;text-align: end;margin-left: 20rpx;">
+        <input placeholder="如有其他要求，请填写说明" bindinput='good_remark' style="color:black;font-size: 30rpx;text-align: end;" class="" value="{{club_name}}" maxlength="50"></input>
+      </view>
     </view>
   </view>
-  <view style="height: 200rpx;"></view>
-</scroll-view>
-<view class="cu-bar tabbar bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: env(safe-area-inset-bottom);">
+  <view style="height: 300rpx;"></view>
 
-  <view style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;">
-    <view class="margin" style="flex:1;margin-right:20rpx;" bindtap="switch_listindex">
-      <button class="cu-btn bg-green" style="border-radius: 20rpx;width: 100%;height: 85rpx;">返回首页</button>
-    </view>
-    <view class="margin" style="flex:1;margin-right:20rpx;" bindtap="edit_good" wx:if="{{admin_flag}}">
-      <button class="cu-btn bg-green" style="border-radius: 20rpx;width: 100%;height: 85rpx;">编辑</button>
-    </view>
-    <view class="margin" style="flex:1;" bindtap="buy">
-      <button class="cu-btn text-white" style="width: 100%;height: 85rpx;border-radius: 20rpx;background-color:rgb(240, 96, 60)">立即下单</button>
-    </view>
+<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: 34rpx;padding-top:0rpx;">
+
+  <view style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="switch_listindex" wx:if="{{false}}">
+    <button class="cu-btn bg-green" style="border-radius: 20rpx;width: 100%;height: 85rpx;">返回首页</button>
+  </view>
+  <view style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="edit_good" wx:if="{{admin_flag}}">
+    <button class="cu-btn bg-green" style="border-radius: 20rpx;width: 100%;height: 85rpx;">编辑</button>
+  </view>
+  <view style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="buy">
+    <button class="cu-btn text-white" style="width: 100%;height: 85rpx;border-radius: 20rpx;background-color:rgb(240, 96, 60)">立即下单</button>
   </view>
 </view>

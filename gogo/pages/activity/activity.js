@@ -40,6 +40,7 @@ Page({
     sample_title_tags:["免费停车","包球","娱乐局"],
     detail: "",
     imgList: [],
+    imgList_fordetail:[],
     latitude: "",
     longitude: "",
     activityaddress: "请选择活动地点",
@@ -149,6 +150,7 @@ Page({
         if (res.data.hasOwnProperty("detail")) {
           that.setData({
             detail: res.data["detail"],
+            imgList_fordetail:res.data["detail_imgs"],
             max_part_number:res.data["max_part_number"],
             modalName:res.data["bg_img_exist"]?"bgurl_modal":"",
             bg_url:res.data["bg_img_exist"]?res.data["bg_url"]:"",
@@ -435,6 +437,71 @@ Page({
       imgList: this.data.imgList
     })
   },
+
+  ChooseImage_fordetail() {
+    var that = this;
+    wx.getPrivacySetting({
+      success: res => {
+        console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }
+        console.log(res)
+        if (res.needAuthorization) {
+          console.log("需要授权")
+          // 需要弹出隐私协议
+          this.setData({
+            showPrivacy: true
+          })
+        } else {
+          // 用户已经同意过隐私协议，所以不需要再弹出隐私协议，也能调用隐私接口
+          console.log("已同意过")
+          wx.chooseMedia({
+            count: 4, //默认9
+            mediaType: ["image"],
+            sourceType: ["album"],
+            //sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有,原图可以支持gif
+            sourceType: ['album'], //从相册选择
+            success: (res) => {
+              
+              console.log("选择图片成功，选择图片结果");
+              console.log(res)
+              console.log(res.tempFiles);
+              var imgList = that.data.imgList_fordetail;
+              var tempFiles = res.tempFiles;
+              tempFiles.forEach(item=>{
+                imgList.push(item.tempFilePath)
+              })
+              that.setData({
+                imgList_fordetail: imgList
+              })
+            },
+            fail(res){
+              console.log("选择图片失败")
+              console.log(res)
+            },
+            complete(res){
+              console.log("选择图片完成")
+              console.log(res)
+            }
+          });
+        }
+      },
+      fail: () => {},
+      complete: () => {}
+    })
+    
+  },
+  ViewImage_fordetail(e) {
+    wx.previewImage({
+      urls: this.data.imgList_fordetail,
+      current: e.currentTarget.dataset.url
+    });
+  },
+  DelImg_fordetail(e) {
+    this.data.imgList_fordetail.splice(e.currentTarget.dataset.index, 1);
+    this.setData({
+      imgList_fordetail: this.data.imgList_fordetail
+    })
+  },
+
   chooseposition() {
     const key = 'R4FBZ-BCLKU-AQGVP-B3IJ4-TVKZS-YCBKJ'; //使用在腾讯位置服务申请的key
     const referer = '来呀'; //调用插件的app的名称
@@ -568,6 +635,14 @@ Page({
     //if(!bg_url.startsWith(app.globalData.hosturl)){
       //bg_url = ""
     //}
+    var detail_imgs_list = this.data.imgList_fordetail;
+    var detail_imgs = "";
+    detail_imgs_list.forEach(item=>{
+      if(item.startsWith(app.globalData.hosturl)){                
+        detail_imgs = detail_imgs + "," + item;
+      }
+    })
+    
     wx.request({
       url: app.globalData.hosturl + 'createactivity', //仅为示例，并非真实的接口地址
       data: {
@@ -580,6 +655,7 @@ Page({
         "title_tags":this.data.title_tags.toString(),
         "activity_tag": this.data.hobby_tag.trim(),
         "detail": this.data.detail,
+        "detail_imgs":detail_imgs,
         "location": location,
         "room": this.data.roomlist.toString(),
         "group_tag_dict":this.data.group_tag_dict,
@@ -641,6 +717,7 @@ Page({
             }
           });
         }
+        that.upload_imgList_fordetail(that,result["activity_id"]);
         //后台上传背景图片，创建活动成功后直接跳转至用户页
         setTimeout(function(){
           wx.switchTab({
@@ -667,6 +744,29 @@ Page({
     this.setData({
       modalName: null
     })
+  },
+  upload_imgList_fordetail(that,activity_id){
+            //上传图片
+            var imgList = that.data.imgList_fordetail;
+            imgList.forEach(item=>{
+              if(!item.startsWith(app.globalData.hosturl)){
+                wx.uploadFile({
+                  url: app.globalData.hosturl + 'upload_activity_detail', //接口
+                  filePath: item,
+                  name: 'file',//这个是属性名，用来获取上传数据的，如$_FILES['file']
+                  formData: {
+                    "user_id":app.globalData.login_userInfo["user_id"],
+                    'activity_id': activity_id
+                  },
+                  success: function (res) {
+                  },
+                  fail: function (error) {
+                    console.log(error);
+                  }
+                });
+              }
+              
+            })
   },
   /**
    * 生命周期函数--监听页面加载

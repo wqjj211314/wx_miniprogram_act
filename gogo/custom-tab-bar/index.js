@@ -39,6 +39,9 @@ Component({
       this.setData({
         selected: data.index
       })
+    },
+    test(){
+      console.log("按钮")
     }
   }
 })

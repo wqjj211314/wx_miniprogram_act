@@ -51,7 +51,8 @@
     "pages/good/goodindex",
     "pages/activityshowinfo/activityshare",
     "pages/activityshowinfo/activitymembergroup",
-    "pages/activity/blank"
+    "pages/activity/blank",
+    "pages/activityshowinfo/qrcode"
   ],
   "tabBar": {
     "custom": true,

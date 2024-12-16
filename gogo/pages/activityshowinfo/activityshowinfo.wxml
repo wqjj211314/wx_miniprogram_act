@@ -87,6 +87,7 @@
                   </view>
                   <view class="" style="width: 300rpx;position: initial;overflow: hidden;white-space: nowrap;margin-left: 15rpx;">
                     {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}" style="margin-left: 10rpx;"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"排队中":""}}</text>
+                    <text style="color: red;font-size: 20rpx;">{{item.other_info.gift_flag == 1?"已中奖":""}}</text>
                   </view>
                   <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                     <view class="text-black flex" style="font-size: 25rpx;width: fit-content;">
@@ -120,6 +121,7 @@
                 </view>
                 <view class="" style="width: 300rpx;position: initial;overflow: hidden;white-space: nowrap;margin-left: 15rpx;">
                   {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}" style="margin-left: 10rpx;"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"排队中":""}}</text>
+                  <text style="color: red;font-size: 20rpx;">{{item.other_info.gift_flag == 1?"已中奖":""}}</text>
                 </view>
                 <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                   <view class="text-black flex" style="font-size: 30rpx;width: fit-content;">
@@ -189,7 +191,7 @@
 
 
   </view>
-  <view class="bg-white padding" style="height: fit-content;margin:30rpx 30rpx;border-radius: 20rpx;" wx:if="{{activity_info.detail!=''}}">
+  <view class="bg-white padding" style="height: fit-content;margin:30rpx 30rpx;border-radius: 20rpx;" wx:if="{{activity_info.detail!=''||activity_info.detail_imgs.length > 0}}">
     <view class="flex" style="justify-content: space-between;">
       <view class="text-bold" style="height: fit-content;text-align: left;">活动详情</view>
       <view style="font-weight: 400;font-size: 26rpx;color: #333333;line-height: 37rpx;" bind:tap="show_detail">
@@ -199,6 +201,9 @@
     </view>
     <view style="margin-top:30rpx;word-break: break-all;overflow: hidden;{{show_detail_flag?'height:fit-content;':'height:4rem;'}}">
       <text>{{activity_info.detail}}</text>
+      <block wx:for="{{activity_info.detail_imgs}}">
+        <image src="{{item}}" mode="widthFix" style="width: 100%;height: fit-content;margin-top:20rpx;"></image>
+      </block>
     </view>
   </view>
   <view class="cu-list menu card-menu margin-bottom" style="padding-top:0rpx;">
@@ -374,6 +379,10 @@
       </view>
       <view class="cu-item" bindtap="cancel_activity" style="justify-content: center;" wx:if="{{admin_flag && !is_end && activity_info.activity_status < 800 && activity_info.activity_status >= 200}}">
         <text>取消活动</text>
+      </view>
+
+      <view class="cu-item" bindtap="random_gift" style="justify-content: center;" wx:if="{{admin_flag && activity_info.activity_status < 800 && activity_info.activity_status >= 200}}">
+        <text>随机抽奖</text>
       </view>
       <!--
       <view class="cu-item" bindtap="delete_activity" style="justify-content: center;" wx:if="{{admin_flag}}">
