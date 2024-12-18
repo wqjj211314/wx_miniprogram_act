@@ -1,1 +1,7 @@
-<image scr="qrcode_url" mode="widthFix" style="height: fit-content;"></image>
+<view style="display: flex;justify-content: center;align-items: center;height: 100%;width: 100%;">
+<image class='' src="{{qrcode_url}}" mode="widthFix" style="border-radius: 30rpx;width: 90vw;height: 90vw;" bind:tap="ViewImagebg" data-url="{{qrcode_url}}" wx:if="{{qrcode_url != ''}}"></image>
+<view style="width: 90vw;height: 90vw;background-color: {{sign_res=='签到成功'?'green':'red'}};display: flex;align-items: center;justify-content: center;border-radius: 30rpx;" wx:else>
+<view style="font-size: 100rpx;color:white;font-weight: bold;">{{sign_res}}</view>
+</view>
+</view>
+

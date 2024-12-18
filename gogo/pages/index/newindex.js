@@ -33,6 +33,7 @@ Page({
       })
     }
     
+    
   },
   navigateToGood(){
     wx.navigateTo({

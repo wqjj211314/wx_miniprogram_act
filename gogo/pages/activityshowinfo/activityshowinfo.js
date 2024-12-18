@@ -459,8 +459,8 @@ Page({
             data: {
               "activity_id": that.data.activity_info.activity_id,
               "member_num": gift_member_num,
-              "info_key":"gift_flag",
-              "info_value":1
+              "info_key":"gift",
+              "info_value":"已中奖"
             },
             header: {
               'content-type': 'application/json' // 默认值
@@ -519,6 +519,14 @@ Page({
 
     }
 
+  },
+  qrcode(){
+    this.setData({
+      modalName:""
+    })
+    wx.navigateTo({
+      url: 'qrcode?activity_id='+this.data.activity_info.activity_id,
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

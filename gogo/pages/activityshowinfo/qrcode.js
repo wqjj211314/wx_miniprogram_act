@@ -6,7 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    qrcode_url:""
+    qrcode_url:"",
+    sign_res:""
 
   },
 
@@ -14,7 +15,31 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    var activity_id = options.activity_id;
+    if(options.hasOwnProperty("activity_id")){
+      var activity_id = options.activity_id;
+      this.sign_qrcode(activity_id);
+    }else if(options.hasOwnProperty("q")){
+      var q = decodeURIComponent(options.q)
+      console.log(q)//https://www.2week.club:5000/static/activity_id?activity_id=20241211_1733925362.8226078o1fAa5PPELB1SokZQPZLzwcRHwa0
+      var params = q.split("?")[1].split("&&|&");
+      console.log(params)
+      var params_dict = {}
+      params.forEach(item=>{
+        var key = item.split("=")[0]
+        var value = item.split("=")[1]
+        console.log(key)
+        console.log(value)
+        params_dict[key] = value
+      })
+      console.log(params_dict)
+      wx.showLoading({
+        title: '签到中',
+      })
+      this.user_sign(params_dict.activity_id)
+    }
+    
+    
+
     
   },
   sign_qrcode(activity_id){
@@ -35,6 +60,40 @@ Page({
       },
       fail(res) {
         
+      }
+    });
+  },
+  ViewImagebg(e) {
+    console.log(e.currentTarget.dataset.url)
+    wx.previewImage({
+      urls: [e.currentTarget.dataset.url],
+      current: e.currentTarget.dataset.url
+    });
+  },
+  user_sign(activity_id){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'user_qrcode_sign', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "user_id":app.globalData.login_userInfo["user_id"]
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading()
+        
+        that.setData({
+          sign_res:res.data.result
+        })
+        console.log(res.data)
+      },
+      fail(res) {
+        wx.hideLoading()
+        wx.showToast({
+          title: "网络异常",
+        })
       }
     });
   },

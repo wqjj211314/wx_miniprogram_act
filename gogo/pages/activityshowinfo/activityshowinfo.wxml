@@ -87,7 +87,11 @@
                   </view>
                   <view class="" style="width: 300rpx;position: initial;overflow: hidden;white-space: nowrap;margin-left: 15rpx;">
                     {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}" style="margin-left: 10rpx;"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"排队中":""}}</text>
-                    <text style="color: red;font-size: 20rpx;">{{item.other_info.gift_flag == 1?"已中奖":""}}</text>
+                    
+                    <block wx:for="{{item.other_info}}" wx:for-item="key_value">
+                      <text style="color: orange;font-size: 20rpx;margin-right: 10rpx;">{{key_value}}</text>
+                    </block>
+                    
                   </view>
                   <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                     <view class="text-black flex" style="font-size: 25rpx;width: fit-content;">
@@ -121,7 +125,10 @@
                 </view>
                 <view class="" style="width: 300rpx;position: initial;overflow: hidden;white-space: nowrap;margin-left: 15rpx;">
                   {{item.nickName}}<text class="{{item.gender=='0'?'cuIcon-female text-pink':'cuIcon-male text-blue'}}" style="margin-left: 10rpx;"></text><text style="color: grey;font-size: 20rpx;">{{item.is_queue == 1?"排队中":""}}</text>
-                  <text style="color: red;font-size: 20rpx;">{{item.other_info.gift_flag == 1?"已中奖":""}}</text>
+                  <block wx:for="{{item.other_info}}" wx:for-item="key_value">
+                      <text style="color: orange;font-size: 20rpx;margin-right: 10rpx;">{{key_value}}</text>
+                    </block>
+                    
                 </view>
                 <view class="action flex" style="flex:1;position: initial;justify-content: flex-end;align-content: flex-end;align-items: flex-end;">
                   <view class="text-black flex" style="font-size: 30rpx;width: fit-content;">
@@ -199,7 +206,7 @@
         <text style="margin-left:5rpx;" class="{{show_detail_flag?'cuIcon-fold':'cuIcon-unfold'}}"></text>
       </view>
     </view>
-    <view style="margin-top:30rpx;word-break: break-all;overflow: hidden;{{show_detail_flag?'height:fit-content;':'height:4rem;'}}">
+    <view style="line-height:46rpx;margin-top:30rpx;word-break: break-all;overflow: hidden;{{show_detail_flag?'height:fit-content;':'height:184rpx;'}}">
       <text>{{activity_info.detail}}</text>
       <block wx:for="{{activity_info.detail_imgs}}">
         <image src="{{item}}" mode="widthFix" style="width: 100%;height: fit-content;margin-top:20rpx;"></image>
@@ -381,9 +388,7 @@
         <text>取消活动</text>
       </view>
 
-      <view class="cu-item" bindtap="random_gift" style="justify-content: center;" wx:if="{{admin_flag && activity_info.activity_status < 800 && activity_info.activity_status >= 200}}">
-        <text>随机抽奖</text>
-      </view>
+      
       <!--
       <view class="cu-item" bindtap="delete_activity" style="justify-content: center;" wx:if="{{admin_flag}}">
         <text>删除活动</text>
@@ -399,6 +404,12 @@
         <text>统计结算活动(积分或费用)</text>
       </view>
       -->
+      <view class="cu-item" bindtap="qrcode" style="justify-content: center;" wx:if="{{admin_flag}}">
+        <text>扫码签到</text>
+      </view>
+      <view class="cu-item" bindtap="random_gift" style="justify-content: center;" wx:if="{{admin_flag && activity_info.activity_status < 800 && activity_info.activity_status >= 200}}">
+        <text>随机抽奖</text>
+      </view>
       <view class="cu-item" bindtap="hideModal" style="justify-content: center;margin-bottom: 10rpx;">
         <text>关闭</text>
       </view>

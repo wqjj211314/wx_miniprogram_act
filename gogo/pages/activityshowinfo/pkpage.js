@@ -247,7 +247,22 @@ Page({
       }
     });
   },
+  chat(e) {
+    console.log(e.currentTarget.dataset.membernum);
+    var membernum = e.currentTarget.dataset.membernum;
+    if (this.data.member_users[membernum]["user_id"] == app.globalData.login_userInfo["user_id"])
+      return;
+    var friend_user_info = {};
+    friend_user_info["user_id"] = this.data.member_users[membernum]["user_id"]
+    friend_user_info["avatarUrl"] = this.data.member_users[membernum]["avatarUrl"]
+    friend_user_info["gender"] = this.data.member_users[membernum]["gender"]
+    friend_user_info["nickName"] = this.data.member_users[membernum]["nickName"]
+    friend_user_info["signature"] = this.data.member_users[membernum]["signature"]
+    wx.navigateTo({
+      url: '../user/userinfo?userinfo=' + encodeURIComponent(JSON.stringify(friend_user_info)),
+    });
 
+  },
   show_user_detail() {
     this.setData({
       show_member_info_flag: !this.data.show_member_info_flag
