@@ -28,7 +28,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: env(safe-area-inset-bottom);" wx:if="{{admin_flag}}">
+<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom:34rpx;" wx:if="{{admin_flag}}">
   <view class="" style="flex:1;padding:9rpx 10rpx 20rpx;" bindtap="recore_mood">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
     <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">记录活动瞬间</button>

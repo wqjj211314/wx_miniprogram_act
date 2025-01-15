@@ -79,13 +79,18 @@ Page({
     show_part_flag: false,
     show_admin_flag: false,
     empty_group_tag_dict: true,//用来显示报名预分组的
-    request_partner_list: [],
     recommend_list: [],
     barbg_url: "https://www.2week.club:5000/static/barbg/羽毛球.jpg",
     barbg_tags: ["羽毛球", "台球", "篮球", "棋牌", "乒乓球"],
     loading_tip: "加载中",
     show_detail_flag:false,
-    safeArea:app.globalData.safeArea
+    safeArea:app.globalData.safeArea,
+    is_display:false,
+    is_focus:false,
+    chat_msgs:[],
+    inputMsg:"",
+    scrollTop:0,
+    edit_member_num:""
   },
 
   /**
@@ -161,9 +166,10 @@ Page({
       scale: 28
     })
   },
-  show_admin_options() {
+  show_admin_options(e) {
     this.setData({
-      show_admin_flag: !this.data.show_admin_flag
+      edit_member_num: e.currentTarget.dataset.membernum,
+      modalName:"admin_modal"
     })
   },
   init_activity_all_info(activity_info) {
@@ -221,6 +227,7 @@ Page({
 
         that.update_part_info(that, res);
         that.set_part_limit();
+        that.get_init_msg();
         wx.hideLoading();
       },
       fail(res) {
@@ -579,7 +586,7 @@ Page({
       },
       success(res) {
         that.update_part_info(that, res);
-        that.get_request_partner_list()
+        
         wx.hideLoading();
       }
     });
@@ -736,51 +743,7 @@ Page({
   },
 
   user_login() {
-    //return;
-    var that = this;
-    wx.login({
-      success(res) {
-        console.log("登录授权结果")
-        console.log(res)
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-
-              app.globalData.openid = res.data.openid;
-              app.globalData.checking_flag = res.data.checking_flag;
-              app.globalData.login_userInfo["user_id"] = res.data.openid;
-              app.globalData.login_userInfo["nickName"] = res.data.nickName;
-              app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
-              app.globalData.login_userInfo["gender"] = res.data.gender;
-              app.globalData.login_userInfo["signature"] = res.data.signature;
-              that.setData({
-                userinfo: res.data,
-                checking_flag: res.data.checking_flag,
-              });
-              try {
-                wx.setStorageSync('openid', res.data.openid);
-                app.globalData.hasUserInfo = true;
-                //wx.setStorageSync('nickName', res.data.nickName);
-              } catch (e) { }
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      },
-      fail(res) {
-        console.log("登录失败")
-      },
-      complete(res) {
-        console.log("登录完成")
-        console.log(res)
-      }
-    });
+    util.get_open_id(app,this);
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -893,7 +856,7 @@ Page({
       var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
       var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
       wx.navigateTo({
-        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit,
+        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit+'&&share_use_id='+this.data.share_use_id,
       })
       return;
     }
@@ -947,6 +910,7 @@ Page({
         "activity_tag": this.data.activity_info.activity_tag,
         "group_tag": this.data.select_group_tag,
         "pay_price": this.data.activity_info.pay_price,
+        "share_user_id":this.data.share_user_id
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -987,7 +951,9 @@ Page({
 
                 }
               });
-
+              setTimeout(function(){
+                that.init_activity_all_info(that.data.activity_info);
+              },1500)
             },
             'fail': function (res) {
               console.log("取消支付")
@@ -1004,6 +970,10 @@ Page({
             icon: "success",
             duration: 2000
           })
+          setTimeout(function(){
+            that.init_activity_all_info(that.data.activity_info);
+          },1500)
+          
           console.log("免费报名")
 
         } else {
@@ -1230,8 +1200,11 @@ Page({
     app.globalData.edit_group_user = []
   },
   update_member_admin(e) {
-    console.log("移除成员");
+   
     var that = this;
+    this.setData({
+      modalName:""
+    })
     var membernum = e.currentTarget.dataset.membernum;
     var admin_member = membernum
     wx.showLoading({
@@ -1296,10 +1269,12 @@ Page({
   },
   delete_member(e) {
     console.log("移除成员");
-
     var that = this;
+    that.setData({
+      modalName:""
+    })
     wx.showModal({
-      title: '删除取消所选人员的报名资格',
+      title: '取消报名资格',
       content: '如果人员产生费用将自动退款。\r\n并且涉及的数据记录将自动删除。',
       complete: (res) => {
         if (res.cancel) {
@@ -1307,7 +1282,9 @@ Page({
         }
 
         if (res.confirm) {
-
+          wx.showLoading({
+            title: '取消中',
+          })
           var membernum = e.currentTarget.dataset.membernum;
           var cancel_part_members = [membernum]
           wx.request({
@@ -1323,7 +1300,7 @@ Page({
             },
             success(res) {
               that.update_part_info(that, res);
-              that.get_request_partner_list()
+              wx.hideLoading()
             }
           });
         }
@@ -1594,41 +1571,7 @@ Page({
       url: 'refund?member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users)) + '&&part_member_num=' + this.data.part_member_num + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
     })
   },
-  get_request_partner_list() {
-    console.log("获取搭档请求列表get_request_partner_list")
-    var that = this;
-    wx.request({
-      url: app.globalData.hosturl + 'get_request_partner_list',
-      data: {
-        "activity_id": this.data.activity_info.activity_id,
-        "user_id": app.globalData.login_userInfo["user_id"]
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        console.log(res.data)
-        if (res.data.code == 200) {
-          var result = res.data.result;
-          var request_partner_list = [];
-          if (that.data.admin_flag) {
-            request_partner_list = result;
-          } else {
-            for (var index in result) {
-              var item = result[index]
-              if (item["req_partner"].indexOf(that.data.part_member_num) != -1 || item["user_id"] == app.globalData.login_userInfo["user_id"]) {
-                request_partner_list.push(item)
-              }
-            }
-          }
-          that.setData({
-            request_partner_list
-          })
-        }
 
-      }
-    })
-  },
   all_pk_page() {
     this.setData({
       modalName: ""
@@ -1767,6 +1710,97 @@ Page({
     })
     manage_activity.delete_activity(this, this.data.activity_info["activity_id"], app.globalData.hosturl, app)
   },
+  get_init_msg() {
+    const that = this;
+    var chat_msgs = [];
+    wx.request({
+      url: app.globalData.hosturl + 'get_init_msg', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": that.data.activity_info.activity_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        if (res.data != "fail") {
+          
+          console.log("聊天消息数量"+res.data.length);
+          res.data.forEach(element => {
+            console.log(element);
+            chat_msgs.unshift(element);
+          });
+          
+          
+          that.setData({
+            chat_msgs: chat_msgs,
+            scrollTop: 0
+          });
+        }
+      }
+    });
+  },
+  show_chat_input(){
+    this.setData({
+      is_display:true
+    })
+  },
+  scroll(e){
+    console.log(e.detail)
+    this.setData({
+      is_focus: false,
+      is_display: false
+    })
+  },
+  onblurkey() {
+    console.log("onblurkey");
+    this.setData({
+      is_focus: false,
+      is_display: false
+    })
+  },
+  inputMsg: function (e) {
+    this.setData({
+      inputMsg: e.detail.value
+    });
+  },
+  sendMsg() {
+    console.log(this.data.inputMsg);
+    var send = this.data.inputMsg.trim();
+    if(send == ""){
+      this.setData({
+        inputMsg: ""
+      });
+      return;
+    }
+    var activity_id = this.data.activity_info.activity_id;
+    var chat_msgs = this.data.chat_msgs;
+    chat_msgs.push({"activity_id":activity_id,"chatmsg":send,"id":1,"msgtime":new Date().getTime()+"","nickName":app.globalData.login_userInfo["nickName"],"user_id":app.globalData.login_userInfo["user_id"]});
+      var top = chat_msgs.length * 100;
+      this.setData({
+        chat_msgs: chat_msgs,
+        scrollTop: top
+      });
+    
+    wx.request({
+      url: app.globalData.hosturl + 'push_activity_chat_msg', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "nickName":app.globalData.login_userInfo["nickName"],
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "new_chat_msg":send
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        
+      }
+    });
+
+    this.setData({
+      inputMsg: ""
+    });
+  },
   cancel_activity(e) {
     this.setData({
       modalName: ""
@@ -1866,6 +1900,56 @@ Page({
     wx.navigateTo({
       url: '../good/gooddetail?good_info=' + good_info
     })
+  },
+  show_admin_options(e){
+    this.setData({
+      modalName:"admin_modal",
+      edit_member_num:e.currentTarget.dataset.membernum
+    })
+  },
+  update_member_admin(e) {
+    console.log("移除成员");
+    this.setData({
+      modalName:""
+    })
+    var that = this;
+    var membernum = e.currentTarget.dataset.membernum;
+    var admin_member = membernum
+    wx.showLoading({
+      title: '',
+    })
+    wx.request({
+      url: app.globalData.hosturl + 'update_member_admin_status', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": that.data.activity_info.activity_id,
+        "admin_member": admin_member
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        wx.hideLoading();
+        if (res.data.code == 200) {
+          wx.showToast({
+            title: res.data.result,
+            icon: "success",
+            duration: 1000
+          })
+        } else {
+          wx.showToast({
+            title: res.data.result,
+            icon: "error",
+            duration: 1000
+          })
+        }
+
+        that.init_activity_all_info(that.data.activity_info);
+        that.show_admin_modal();
+      },
+      fail(res) {
+        wx.hideLoading();
+      }
+    });
   },
   go_to_activityshare() {
     var admin_flag = false;

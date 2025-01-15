@@ -819,25 +819,7 @@ Page({
         }
       }
     });
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-              console.log(res.data.openid);
-              app.globalData.openid = res.data.openid;
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    });
+    util.get_open_id(app,this);
     wx.getPrivacySetting({
       success: res => {
         console.log(res) // 返回结果为: res = { needAuthorization: true/false, privacyContractName: '《xxx隐私保护指引》' }

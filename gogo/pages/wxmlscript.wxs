@@ -18,8 +18,8 @@ var hobby_point = function(hobby_point){
   return "L"+point
 }
 var hobby_point_per = function(hobby_point){
-  var point = (Math.floor(hobby_point/1000) + 1)*1000;
-  var per = (hobby_point/point).toFixed(2)*100
+  //var point = (Math.floor(hobby_point/1000) + 1)*1000;
+  var per = (hobby_point/7000).toFixed(2)*100
   return per
 }
 var data_per = function(data,total){
@@ -46,7 +46,19 @@ var win_rate_per = function(win,peace,fail){
 
 var show_member_num = function (member_num_str) {
   member_num_str = ""+member_num_str;
+  var test = "#1#2";
+  console.log(test.split("#").length)
   return member_num_str.replace("#","");
+}
+var split_arr = function(member_group){
+  var member_list = [];
+  var temp_list = member_group.split("#");
+  for(var i=0;i<temp_list.length;i++){
+    if(temp_list[i]!=""){
+      member_list.push("#"+temp_list[i])
+    }
+  }
+  return member_list;
 }
 //scores最后一位是比分标签
 var show_vs_scores = function(scores){
@@ -76,6 +88,8 @@ module.exports = {
   win_rate_per:win_rate_per,
   indexOf:indexOf,
   hobby_point_per:hobby_point_per,
-  data_per:data_per
+  data_per:data_per,
+  split_arr:split_arr
+
 };
 module.exports.msg = "some msg";

@@ -55,9 +55,10 @@
     </block>
 
   </checkbox-group>
+  <view style="height: 200rpx;"></view>
 </scroll-view>
 
-<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: env(safe-area-inset-bottom);">
+<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: 34rpx;">
   <view class="" style="flex:1;padding:9rpx 10rpx 20rpx;" bindtap="{{re_group_flag?'save_re_group':'save_group'}}">
     <!--disable_flag是防止误触重复报名的，报名完就恢复-->
     <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">{{re_group_flag?'提交保存分组':'已选好'}}</button>

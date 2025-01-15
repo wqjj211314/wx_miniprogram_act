@@ -688,37 +688,7 @@ Page({
     }
     var that = this;
     console.log(new Date());
-    //查看是否授权
-    wx.getSetting({
-      success: function (res) {
-        console.log(res.authSetting);
-        if (res.authSetting['scope.userInfo']) {
-          console.log("用户授权了");
-        } else {
-          //用户没有授权
-          console.log("用户没有授权");
-        }
-      }
-    });
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-              console.log(res.data.openid);
-              app.globalData.openid = res.data.openid;
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    });
+    
     this.get_club_list()
     this.get_activity_location_list()
   },

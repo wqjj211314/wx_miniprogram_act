@@ -1,0 +1,206 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<view class="flex flex-wrap justify-around align-center bg-white" style="padding:20rpx;">
+  <button class="cu-btn {{sel_group_type=='个人排名'?'bg-red':'bg-gray'}}" style="flex:1;margin-right: 10rpx;" bind:tap="sel_group_type" data-grouptype="个人排名">个人排名</button>
+  <button class="cu-btn {{sel_group_type=='组合排名'?'bg-red':'bg-gray'}}" style="flex:1;margin-right: 10rpx;" bind:tap="sel_group_type" data-grouptype="组合排名">组合排名</button>
+  <button class="cu-btn {{sel_group_type=='队伍排名'?'bg-red':'bg-gray'}}" style="flex:1;" bind:tap="sel_group_type" data-grouptype="队伍排名">队伍排名</button>
+
+</view>
+<view class="flex" style="color: rgba(128, 128, 128, 0.05);width: 100%;text-align: center;height: 60%;align-items: center;justify-content: center;font-size: 60rpx;z-index: -10;position: absolute;">空空如也</view>
+<!-- 个人记录排名 -->
+<view wx:if="{{sel_group_type=='个人排名'}}">
+  <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;">
+    <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
+      <view class="flex" style="width: 15%;align-items: center;">
+        <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;color: black;">
+          <view style="">成员</view>
+        </view>
+      </view>
+      <view class="flex" style="justify-content: space-between;width: 85%;">
+        <view class="action flex" style="width: 200rpx;justify-content: center;">
+          <view class="">净胜分</view>
+        </view>
+        <view class="action flex" style="width: 200rpx;justify-content: center;">
+          <view class="">胜率</view>
+        </view>
+        <view class="action flex" style="width: 200rpx;justify-content: center;">
+          <view class="">胜-负</view>
+        </view>
+        <view class="flex text-blue" style="width: 300rpx;justify-content: center;" bind:tap="show_point_desc">
+          <view class="">等级分<text class="cuIcon-right lg"></text></view>
+        </view>
+        <view class="action flex" style="width: 200rpx;justify-content: center;">
+          <view class="">赞一下</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style="margin-bottom: 20rpx;" wx:if="{{!sort_users_score_empty_flag}}">
+    <view style="height: fit-content;">
+      <block wx:for="{{sort_users_score}}">
+        <view class="cu-list menu-avatar bg-white text-black" style="margin:0rpx;padding-left:15rpx;height: 120rpx;" hidden="{{hidden_score_list}}">
+          <view class="flex padding-sm" style="align-items: center;justify-content: space-between;">
+            <view class="flex" style="width: 15%;align-items: center;">
+              <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+                <view class="cu-avatar radius" style="background-image:url({{member_users[index].avatarUrl}});">
+                  <view class="cu-tag badge {{member_users[index].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[index].member_num)}}</view>
+                </view>
+                <view style="font-size: 18rpx;height: fit-content;">{{member_users[index].nickName}}</view>
+              </view>
+            </view>
+            <view class="flex" style="justify-content: space-between;width: 85%;">
+
+              <view class="action flex" style="width: 200rpx;justify-content: center;">
+
+                <view class="{{member_users[index].gender==0?'text-pink':'text-blue'}}" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["total_scores_diff"]}}</view>
+              </view>
+              <view class="action flex" style="width: 200rpx;justify-content: center;">
+
+                <view class="{{member_users[index].gender==0?'text-pink':'text-blue'}}" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["all_win_rate"]}}%</view>
+              </view>
+              <view class="action flex" style="width: 200rpx;justify-content: center;">
+
+                <view class="{{member_users[index].gender==0?'text-pink':'text-blue'}}" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{item["all_win"]}}<text style="color: grey;">-{{item["all_fail"]}}</text></view>
+              </view>
+              <view class="action flex" style="width:300rpx;justify-content: center;">
+                <view class="{{member_users[index].gender==0?'text-grey':'text-grey'}}" style="background-color: white;height: 50rpx;padding:10rpx 10rpx;">{{item["hobby_point"]}}</view>
+                <text style="color: red;font-size: 30rpx;" wx:if="{{activity_info.activity_status<800}}">{{item["all_add_point"]>=0?"+":""}}{{item["all_add_point"]}}</text>
+              </view>
+              <view class="action flex" style="width: 200rpx;justify-content: center;" bind:tap="like" data-likemembergroup="{{index}}">
+                <!--点赞功能-->
+                <text class="lg {{like_dict[index]['like_flag']?'text-red cuIcon-appreciatefill':'text-gray cuIcon-appreciate'}}" style="font-size: 48rpx;">
+                  <text style="font-size: 30rpx;">{{like_dict[index]['member_nums'].length}}</text>
+                </text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+    </view>
+
+  </view>
+  <view style="height: 200rpx;"></view>
+</view>
+<!-- 组合记录排名 -->
+<view style="width: 100%;" wx:if="{{sel_group_type=='组合排名'}}">
+  <view class="flex padding-sm bg-white" style="align-items: center;width: 100%;">
+    <view class="flex" style="flex:2;align-items: center;justify-content: center;">
+      <view style="">组合</view>
+    </view>
+    <view class="flex" style="justify-content: space-between;flex:3;">
+      <view class="flex" style="justify-content: center;flex:1;">
+        <view class="">净胜分</view>
+      </view>
+      <view class="flex" style="justify-content: center;flex:1;">
+        <view class="">胜率</view>
+      </view>
+      <view class="action flex" style="justify-content: center;flex:1;">
+        <view class="">胜-负</view>
+      </view>
+    </view>
+  </view>
+
+  <view style="margin-bottom: 20rpx;">
+
+    <block wx:for="{{group_rank}}" wx:for-index="member_num_group" wx:for-item="group_data">
+      <view class="flex padding-sm bg-white" style="align-items: center;width: 100%;">
+        <view class="flex" style="flex:2;align-items: center;justify-content: center;">
+
+          <block wx:for="{{tools.split_arr(member_num_group)}}" wx:for-item="member_num">
+            <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;margin-right: 10rpx;">
+              <view class="cu-avatar radius" style="background-image:url({{member_users[member_num].avatarUrl}});margin-right: 15rpx;">
+                <view class="cu-tag badge {{member_users[member_num].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[member_num].member_num)}}</view>
+              </view>
+              <view style="font-size: 18rpx;height: fit-content;margin-top: 10rpx;">{{member_users[member_num].nickName}}</view>
+            </view>
+          </block>
+
+        </view>
+        <view class="flex" style="justify-content: space-between;flex:3;">
+          <view class=" flex" style="justify-content: center;flex:1;">
+            <view class="{{member_users[index].gender==0?'text-pink':'text-blue'}}" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{group_data["total_scores_diff"]}}</view>
+          </view>
+          <view class="flex" style="justify-content: center;flex:1;">
+
+            <view class="{{member_users[index].gender==0?'text-pink':'text-blue'}}" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{tools.win_rate(group_data["all_win"],group_data["all_fail"],group_data["all_peace"])}}</view>
+          </view>
+          <view class="flex" style="justify-content: center;flex:1;">
+
+            <view class="{{member_users[index].gender==0?'text-pink':'text-blue'}}" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{group_data["all_win"]}}<text style="color: grey;">-{{group_data["all_fail"]}}</text></view>
+          </view>
+
+
+        </view>
+      </view>
+
+    </block>
+
+
+
+  </view>
+  <view style="height: 200rpx;"></view>
+</view>
+
+<!-- 队伍记录排名 -->
+<view style="width: 100%;" wx:if="{{sel_group_type=='队伍排名'}}">
+  <view class="flex padding-sm bg-white" style="align-items: center;width: 100%;">
+    <view class="flex" style="flex:2;align-items: center;justify-content: center;">
+      <view style="">队伍</view>
+    </view>
+    <view class="flex" style="justify-content: space-between;flex:3;">
+      <view class="flex" style="justify-content: center;flex:1;">
+        <view class="">净胜分</view>
+      </view>
+      <view class="flex" style="justify-content: center;flex:1;">
+        <view class="">胜率</view>
+      </view>
+      <view class="action flex" style="justify-content: center;flex:1;">
+        <view class="">胜-负</view>
+      </view>
+    </view>
+  </view>
+
+  <view style="margin-bottom: 20rpx;">
+    <block wx:for="{{team_rank}}" wx:for-index="team_name" wx:for-item="team_item">
+      <view class="flex padding-sm bg-white" style="align-items: center;width: 100%;">
+        <view class="flex" style="flex:2;align-items: center;justify-content: center;flex-direction: column;">
+          <view class="flex" style="flex:2;align-items: center;justify-content: center;">
+            <block wx:for="{{team_item.team_member_num_list}}" wx:for-item="member_num">
+              <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;margin-right: 10rpx;">
+                <view class="cu-avatar radius" style="background-image:url({{member_users['#'+member_num].avatarUrl}});margin-right: 15rpx;" wx:if="{{index < 2}}">
+                  <view class="cu-tag badge {{member_users['#'+member_num].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users['#'+member_num].member_num)}}</view>
+                </view>
+                <view class="cu-avatar radius" wx:if="{{index == 2}}">
+                  <text class="cuIcon-more text-gray"></text>
+                </view>
+
+              </view>
+            </block>
+          </view>
+          <view style="width: 100%;text-align: center;margin-top:10rpx;">{{team_name}}</view>
+
+        </view>
+        <view class="flex" style="justify-content: space-between;flex:3;">
+          <view class=" flex" style="justify-content: center;flex:1;">
+            <view class="text-blue" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{team_item.team_data["total_scores_diff"]}}</view>
+          </view>
+          <view class="flex" style="justify-content: center;flex:1;">
+
+            <view class="text-blue" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{tools.win_rate(team_item.team_data["all_win"],team_item.team_data["all_fail"],team_item.team_data["all_peace"])}}</view>
+          </view>
+          <view class="flex" style="justify-content: center;flex:1;">
+
+            <view class="text-blue" style="background-color: white;height: 50rpx;padding:10rpx 20rpx;">{{team_item.team_data["all_win"]}}<text style="color: grey;">-{{team_item.team_data["all_fail"]}}</text></view>
+          </view>
+
+
+        </view>
+      </view>
+
+    </block>
+
+
+
+  </view>
+  <view style="height: 200rpx;"></view>
+</view>

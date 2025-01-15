@@ -306,8 +306,7 @@ Page({
   },
 
   user_login() {
-    //return;
-    var that = this;
+   var that = this;
     wx.login({
       success(res) {
         console.log("登录授权结果")
@@ -320,33 +319,42 @@ Page({
               code: res.code
             },
             success: (res) => {
-             
-              app.globalData.openid = res.data.openid;
-              app.globalData.checking_flag = res.data.checking_flag;
-              app.globalData.login_userInfo["user_id"] = res.data.openid;
-              app.globalData.login_userInfo["nickName"] = res.data.nickName;
-              app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
-              app.globalData.login_userInfo["gender"] = res.data.gender;
-              app.globalData.login_userInfo["signature"] = res.data.signature;
+              if(res.data.code !=200){
+                wx.showModal({
+                  title: '用户openid异常',
+                  content: '您的微信可能不兼容！',
+                  complete: (res) => {
+                    if (res.cancel) {
+                      
+                    }
+                
+                    if (res.confirm) {
+                      
+                    }
+                  }
+                })
+                return;
+              }
+              that.globalData.login_userInfo = res.data.result;
               that.setData({
-                userinfo: res.data,
-                checking_flag: res.data.checking_flag,
+                userinfo:res.data.result,
+                checking_flag:  res.data.result.checking_flag,
               });
-              try {
-                wx.setStorageSync('openid', res.data.openid);
-                app.globalData.hasUserInfo = true;
-                //wx.setStorageSync('nickName', res.data.nickName);
-              } catch (e) { }
+                try {
+                  wx.setStorageSync('openid', res.data.result.user_id);
+                  that.globalData.hasUserInfo = true;
+                  
+                } catch (e) { }
             }
           })
         } else {
           console.log('登录失败！' + res.errMsg)
         }
       },
-      fail(res){
+      fail(res) {
         console.log("登录失败")
       },
-      complete(res){
+      complete(res) {
         console.log("登录完成")
         console.log(res)
       }

@@ -10,7 +10,7 @@ Page({
     activity_info: {},
     is_begin: false,
     is_end: true,
-    is_end_12h:false,
+    is_end_12h: false,
     is_addend: false,
     is_cancelend: false,
     activity_id: "",
@@ -22,7 +22,7 @@ Page({
     sel_pk_group_user_list: [],//选择的对阵成员列表，默认是所有成员
     admin_users: [],
     admin_flag: false,
-    part_member_num:"",
+    part_member_num: "",
     show_member_info_flag: false,
     boy_num: 0,
     boy_member_num_list: [],
@@ -35,9 +35,9 @@ Page({
     edit_pk_group_index: 0,
     score_pk_group: [[0, 1], [2, 3]],
     pk_group_score: [],
-    temp_edit_pk_group_score:[],
+    temp_edit_pk_group_score: [],
     pk_group_score_tags: [],
-    temp_edit_pk_group_score_tags:[],
+    temp_edit_pk_group_score_tags: [],
     sort_users_score: {},
     sort_users_score_list: [],
     sort_users_score_empty_flag: true,
@@ -51,8 +51,8 @@ Page({
     show_edit_flag: false,
     pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑", "棋牌"],
     is_pk_hobby: true,
-    show_more_flag:false,
-    safeArea:app.globalData.safeArea
+    show_more_flag: false,
+    safeArea: app.globalData.safeArea
   },
 
   /**
@@ -62,13 +62,13 @@ Page({
     console.log("onLoad加载");
     var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     var activity_tag = activity_info.activity_tag;
-    var activity_id =  activity_info.activity_id;
-    if(options.hasOwnProperty("member_users")){
+    var activity_id = activity_info.activity_id;
+    if (options.hasOwnProperty("member_users")) {
       this.setData({
         member_users: JSON.parse(decodeURIComponent(options.member_users)),
       })
-    }else{
-      this.get_member_list(activity_info.activity_id,activity_info.activity_tag)
+    } else {
+      this.get_member_list(activity_info.activity_id, activity_info.activity_tag)
     }
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
     let group_tag = options.group_tag;
@@ -97,7 +97,7 @@ Page({
       if (item.admin_status == 1) {
         admin_users.push(item);
         if (item.user_id == app.globalData.login_userInfo["user_id"]) {
-         
+
           this.setData({
             admin_flag: true
           })
@@ -114,13 +114,13 @@ Page({
     //没有管理员且是分组成员就有权限
     //有管理员，且是管理员，那管理员就有权限
     //活动发起人一定有权限
-    if ((admin_users.length == 0 && this.data.part_member_num != "") ||activity_info["createuser"]["user_id"] == app.globalData.login_userInfo["user_id"]) {
-      
+    if ((admin_users.length == 0 && this.data.part_member_num != "") || activity_info["createuser"]["user_id"] == app.globalData.login_userInfo["user_id"]) {
+
       this.setData({
         admin_flag: true
       })
     }
-    
+
     this.setData({
       group_users: group_users,
       sel_pk_group_member_list: sel_pk_group_member_list,
@@ -130,14 +130,14 @@ Page({
       girl_num: girl_num,
       girl_member_num_list: girl_member_num_list,
       group_tag: group_tag,
-      
+
       activity_id: activity_id,
       room: options.room,
       activity_info: activity_info,
       admin_users: admin_users,
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
       is_end: new Date(activity_info["endtime"]) - new Date() <= 0,//毫秒
-      is_end_12h:new Date(activity_info["endtime"]) - new Date() <= -(1000*60*60*24),
+      is_end_12h: new Date(activity_info["endtime"]) - new Date() <= -(1000 * 60 * 60 * 24),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
       is_pk_hobby: this.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
@@ -147,24 +147,24 @@ Page({
     wx.showLoading({
       title: '加载中...',
     })
-    setTimeout(function(){
+    setTimeout(function () {
       wx.hideLoading()
-    },2500)
+    }, 2500)
   },
   /**
    * 生命周期函数--监听页面显示
    */
   onShow() {
     console.log("onshow加载");
-    
+
     var edit_group_user = app.globalData.edit_group_user;
     var edit_index = app.globalData.edit_index;
     console.log(edit_index);
     var custom_pk_group = this.data.custom_pk_group;
-    if(Array.isArray(custom_pk_group[edit_index])){
+    if (Array.isArray(custom_pk_group[edit_index])) {
       custom_pk_group[edit_index] = custom_pk_group[edit_index].concat(edit_group_user);
-    }else{
-      custom_pk_group[edit_index] = edit_group_user;  
+    } else {
+      custom_pk_group[edit_index] = edit_group_user;
     }
     //custom_pk_group[edit_index] = edit_group_user;
     app.globalData.edit_group_user = [];
@@ -203,16 +203,17 @@ Page({
       })
       app.globalData.fix_partner_pk_groups = []
     }
+    //this.update_pk_group();
   },
 
-  get_member_list(activity_id,activity_tag){
+  get_member_list(activity_id, activity_tag) {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_memberlist', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": activity_id,
         "hobby_tag": activity_tag,
-        "user_id":app.globalData.login_userInfo["user_id"]
+        "user_id": app.globalData.login_userInfo["user_id"]
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -229,14 +230,14 @@ Page({
         //更新活动的时间限制信息
         that.setData({
           activity_info: activity_info,
-          member_users:member_users
+          member_users: member_users
         });
-       
-        setTimeout(function(){
+
+        setTimeout(function () {
           wx.hideLoading({
-            success: (res) => {},
+            success: (res) => { },
           });
-        },3000)
+        }, 3000)
       },
       fail(res) {
         wx.hideLoading()
@@ -279,7 +280,7 @@ Page({
       modalName: ""
     })
   },
-  nagivateActivityInfo(){
+  nagivateActivityInfo() {
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
 
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_info["createuser"]));
@@ -289,7 +290,7 @@ Page({
     wx.navigateTo({
       url: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
     })
-    
+
   },
   getvs(sample) {
     //[[[0, 1], [2, 3]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]]
@@ -364,10 +365,10 @@ Page({
         girl_list.push(this.data.sel_pk_group_user_list[index])
       }
     }
-    if(girl_num == 2 && boy_num == 4){
+    if (girl_num == 2 && boy_num == 4) {
       console.log(girl_list.concat(boy_list))
       this.data.sel_pk_group_user_list = girl_list.concat(boy_list)
-      sample = [[[0,2],[1,3]],[[0,4],[1,5]],[[4,5],[2,3]],[[0,3],[1,2]],[[0,5],[1,4]],[[3,4],[2,5]]]
+      sample = [[[0, 2], [1, 3]], [[0, 4], [1, 5]], [[4, 5], [2, 3]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[3, 4], [2, 5]]]
     }
     var pk_groups = this.getvs(sample);
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
@@ -492,21 +493,22 @@ Page({
     var index = e.currentTarget.dataset.index;
     wx.showModal({
       title: '删除对局',
-      content: '确认删除第'+(index+1)+'场对局吗？',
+      content: '确认删除第' + (index + 1) + '场对局吗？',
       complete: (res) => {
         if (res.cancel) {
-          
+
         }
-    
+
         if (res.confirm) {
-          
-    var new_pk_groups = this.data.pk_groups;
-    new_pk_groups.splice(index, 1);
-    this.setData({ pk_groups: new_pk_groups, submit_flag: true,show_edit_flag:false });
+
+          var new_pk_groups = this.data.pk_groups;
+          new_pk_groups.splice(index, 1);
+          this.setData({ pk_groups: new_pk_groups, submit_flag: true, show_edit_flag: false });
+          this.update_pk_group();
         }
       }
     })
-    
+
 
   },
   new_pk_group(e) {
@@ -518,14 +520,15 @@ Page({
     newobj[newobj.length - 2] = new Array(newobj.length - 2).fill(0)
     newobj[newobj.length - 1][0] = "";//标签也清楚
     new_pk_groups.push(newobj);
-    this.setData({ pk_groups: new_pk_groups, submit_flag: true,show_edit_flag:false });
+    this.setData({ pk_groups: new_pk_groups, submit_flag: true, show_edit_flag: false });
+    this.update_pk_group()
   },
   score_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;
     var score_pk_group = this.data.pk_groups[index];
     console.log(score_pk_group);//[[1,2],[3,4]]//不是[[[1,2],[3,4]]]
-    var pk_group_score = new Array(score_pk_group.length-2).fill(0);
+    var pk_group_score = new Array(score_pk_group.length - 2).fill(0);
     var score = score_pk_group[score_pk_group.length - 2];
     score.forEach(item => {
       if (item != 0) {//默认的比分是0
@@ -537,30 +540,30 @@ Page({
       edit_pk_group_index: index,
       score_pk_group: score_pk_group,
       pk_group_score: pk_group_score,
-      temp_edit_pk_group_score:JSON.parse(JSON.stringify(pk_group_score)),
+      temp_edit_pk_group_score: JSON.parse(JSON.stringify(pk_group_score)),
       pk_group_score_tags: score_pk_group[score_pk_group.length - 1],
-      temp_edit_pk_group_score_tags:JSON.parse(JSON.stringify(score_pk_group[score_pk_group.length - 1])),
+      temp_edit_pk_group_score_tags: JSON.parse(JSON.stringify(score_pk_group[score_pk_group.length - 1])),
       modalName: "scoreModal"
     });
 
   },
-  parse_score_num(score_num){
+  parse_score_num(score_num) {
     var n = String(score_num)
-  var t = n.charAt(0)
-  // 先把非数字的都替换掉，除了数字和.
-  n = n.replace(/[^\d\.]/g, '')
-  // 必须保证第一个为数字而不是.
-  n = n.replace(/^\./g, '')
-  // 保证只有出现一个.而没有多个.
-  n = n.replace(/\.{2,}/g, '.')
-  // 保证.只出现一次，而不能出现两次以上
-  n = n.replace('.', '$#$').replace(/\./g, '').replace(
-    '$#$', '.')
-  // 如果第一位是负号，则允许添加
-  if (t === '-') {
-    n = '-' + n
-  }
-  return Number.isNaN(Number(n))?0:Number(n)
+    var t = n.charAt(0)
+    // 先把非数字的都替换掉，除了数字和.
+    n = n.replace(/[^\d\.]/g, '')
+    // 必须保证第一个为数字而不是.
+    n = n.replace(/^\./g, '')
+    // 保证只有出现一个.而没有多个.
+    n = n.replace(/\.{2,}/g, '.')
+    // 保证.只出现一次，而不能出现两次以上
+    n = n.replace('.', '$#$').replace(/\./g, '').replace(
+      '$#$', '.')
+    // 如果第一位是负号，则允许添加
+    if (t === '-') {
+      n = '-' + n
+    }
+    return Number.isNaN(Number(n)) ? 0 : Number(n)
   },
   add_num(e) {
     var score_index = e.currentTarget.dataset.index;
@@ -591,7 +594,7 @@ Page({
     //score = parseInt(score.replace(/\D/g, ''));
     console.log(score)
     //score = this.parse_score_num(score)
-    
+
     console.log("比分" + score);
     console.log("index=" + score_index);
     var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
@@ -611,10 +614,10 @@ Page({
       temp_edit_pk_group_score_tags: temp_edit_pk_group_score_tags
     })
   },
-  
+
   update_score(e) {
     var temp_edit_pk_group_score = this.data.temp_edit_pk_group_score;
-    temp_edit_pk_group_score.forEach((item,index)=>{
+    temp_edit_pk_group_score.forEach((item, index) => {
       console.log(this.parse_score_num(item))
       console.log(typeof this.parse_score_num(item))
       temp_edit_pk_group_score[index] = this.parse_score_num(item);
@@ -633,12 +636,13 @@ Page({
       pk_groups: pk_groups,
       modalName: "",
       pk_group_score: [],//清空比分记录
-      temp_edit_pk_group_score_tags:[],
-      temp_edit_pk_group_score:[],
+      temp_edit_pk_group_score_tags: [],
+      temp_edit_pk_group_score: [],
       pk_group_score_tags: [],
       submit_flag: true
     });
     score.get_score(pk_groups);
+    this.update_pk_group();
   },
 
   update_pk_group() {
@@ -661,11 +665,11 @@ Page({
 
     wx.request({
       url: app.globalData.hosturl + 'new_update_activity_member_pk', //仅为示例，并非真实的接口地址
-      method:"POST",
+      method: "POST",
       data: {
-        "user_id":app.globalData.login_userInfo["user_id"],
+        "user_id": app.globalData.login_userInfo["user_id"],
         "activity_id": activity_id,
-        "club_name":this.data.activity_info["club_name"],
+        "club_name": this.data.activity_info["club_name"],
         "group_tag": group_tag,
         "pk_groups": pk_groups,
         "begintime": this.data.activity_info["begintime"],
@@ -676,7 +680,7 @@ Page({
       },
       success(res) {
         console.log(res);
-        
+
         if (res.data.code == -1) {
           wx.showToast({
             title: res.data,
@@ -696,11 +700,11 @@ Page({
 
       }
     });
-    setTimeout(function(){
+    setTimeout(function () {
       wx.hideLoading({
-        success: (res) => {},
+        success: (res) => { },
       });
-    },3000)
+    }, 3000)
   },
   clear_pk_group() {
     this.setData({ pk_groups: [], submit_flag: true, modalName: "" })
@@ -860,6 +864,11 @@ Page({
       show_edit_flag: !this.data.show_edit_flag
     })
   },
+  nagivateActivityPKRank() {
+    wx.navigateTo({
+      url: 'activitypkrank?activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
+    })
+  },
   /**
    * 用户点击右上角分享
    */
@@ -867,7 +876,7 @@ Page({
     console.log("分享对阵详情")
     let group_users = encodeURIComponent(JSON.stringify(this.data.group_users));
     return {
-      title: this.data.activity_info["title"]+"-对局详情",
+      title: this.data.activity_info["title"] + "-对局详情",
       path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room
     }
   },

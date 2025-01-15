@@ -114,10 +114,29 @@
           </view>
           {{activity_info.createuser.nickName}}
         </view>
-        <view class="cu-btn bg-blue" style="border-radius: 40rpx;height: 70rpx;width: 160rpx;font-size: 30rpx;">去报名</view>
+        <view class="cu-btn bg-blue" style="border-radius: 40rpx;height: 70rpx;width: 160rpx;font-size: 30rpx;">{{activity_info.part_status!='报名中'?'去看看':'去报名'}}</view>
       </view>
 
     </view>
+    <view class="bg-white margin padding" style="border-radius: 20rpx;margin-top:20rpx;margin-bottom: 0rpx;" bind:tap="navigateTogoodinfo" data-index="{{index}}" wx:if="{{index < recommend_good_list.length&&recommend_good_list[index].item_type=='good'}}">
+        <image class="bg-white" style="height:400rpx;width:100%;border-radius: 20rpx;" mode="aspectFill" src="{{recommend_good_list[index].bg_img_exist?recommend_good_list[index].bg_url:''}}">
+        </image>
+
+        <view class="bg-white text-bold" style="font-size: 30rpx;display: inline-block;word-break: break-all;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp: 3;overflow: hidden;">
+          {{recommend_good_list[index].good_title}}
+        </view>
+        <view class="bg-white" style="font-size: 45rpx;margin-top: 10rpx;height: fit-content;">
+          <text class="iconfont icon-fl-renminbi" style="font-size: 32rpx;color: #FE4A4A;"></text>
+          <text class="text-bold" style="font-size: 46rpx;color: #FE4A4A;">{{recommend_good_list[index].good_price}}</text>
+          <block wx:for="{{recommend_good_list[index].good_deliver_options}}" wx:for-item="option">
+            <text class="cu-btn line-gray" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">可{{option}}</text>
+          </block>
+          <block wx:for="{{recommend_good_list[index].good_tag}}" wx:for-item="tag">
+            <text class="cu-btn line-green" style="font-size: 20rpx;margin:0px;margin-left:15rpx;padding:10rpx;height: fit-content;width: fit-content;">{{tag}}</text>
+          </block>
+        </view>
+        
+      </view>
   </block>
   <view style="height: 200rpx;"></view>
 </scroll-view>

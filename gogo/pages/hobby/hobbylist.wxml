@@ -1,6 +1,6 @@
 <wxs src="/pages/wxmlscript.wxs" module="tools" />
 <scroll-view scroll-y="true" style="height: 100%;">
-  <cu-custom>
+  <cu-custom isCustom="{{true}}">
   <view slot="content" style="color: white;font-weight: 600;font-size: 36rpx;line-height: 50rpx;">活动数据</view>
 </cu-custom>
 
@@ -13,11 +13,11 @@
       <view class="bg-gray" style="text-align: center;padding:20rpx;border-radius: 30rpx;font-size: 32rpx;">{{item.hobby_tag}}</view>
       <view class="flex">
         <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;">
-          <circle draw='hobbyinfo1{{idx}}' per='{{tools.data_per(item.part_activity_num,365)}}' r='150' content="{{item.part_activity_num==undefined?'0':item.part_activity_num}}场" linecolor="{{['rgba(161, 140, 209, 1)']}}" />
+          <circle draw='hobbyinfo1{{idx}}' per='{{tools.data_per(item.part_activity_num,180)}}' r='150' content="{{item.part_activity_num==undefined?'0':item.part_activity_num}}场" linecolor="{{['rgba(161, 140, 209, 1)']}}" />
           <view>参与活动</view>
         </view>
         <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;">
-          <circle draw='hobbyinfo2{{idx}}' per='{{tools.data_per(item.all_win+item.all_fail+item.all_peace,1000)}}' r='150' content="{{item.all_win+item.all_fail+item.all_peace > 0?(item.all_win+item.all_fail+item.all_peace)+'局':''}}" linecolor="{{['rgba(121, 4, 85, 0.63)']}}" />
+          <circle draw='hobbyinfo2{{idx}}' per='{{tools.data_per(item.all_win+item.all_fail+item.all_peace,1080)}}' r='150' content="{{item.all_win+item.all_fail+item.all_peace > 0?(item.all_win+item.all_fail+item.all_peace)+'局':''}}" linecolor="{{['rgba(121, 4, 85, 0.63)']}}" />
           <view>对局次数</view>
         </view>
       </view>

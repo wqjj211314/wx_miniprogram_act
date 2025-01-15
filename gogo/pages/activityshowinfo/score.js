@@ -9,6 +9,8 @@ function get_like_list(hosturl, that, activity_id) {
       'content-type': 'application/json' // 默认值
     },
     success(res) {
+      console.log("like dict")
+      console.log(res.data)
       var like_dict = res.data;
       like_dict = is_like(that.data.part_member_num, like_dict);
       that.setData({

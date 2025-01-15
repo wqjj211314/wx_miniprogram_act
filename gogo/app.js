@@ -1,4 +1,5 @@
 //app.js
+const util = require("utils/util.js");
 App({
   onLaunch: function () {
     this.autoUpdate();
@@ -92,52 +93,8 @@ App({
   },
   user_login() {
     //return;
-    
-    var that = this;
-    wx.login({
-      timeout: 3000,
-      success(res) {
-        console.log("登录授权结果")
-        console.log(res)
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: that.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-              console.log("appjs用户openid");
-              console.log(res.data);
-              console.log(res.data.openid);
-              console.log(that.globalData.login_userInfo);
-              that.globalData.openid = res.data.openid;
-              that.globalData.checking_flag = res.data.checking_flag;
-              that.globalData.login_userInfo["user_id"] = res.data.openid;
-              that.globalData.login_userInfo["nickName"] = res.data.nickName;
-              that.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
-              that.globalData.login_userInfo["gender"] = res.data.gender;
-              that.globalData.login_userInfo["signature"] = res.data.signature;
-              that.getLocation()
-              try {
-                wx.setStorageSync('openid', res.data.openid);
-                that.globalData.hasUserInfo = true;
-                //wx.setStorageSync('nickName', res.data.nickName);
-              } catch (e) { }
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      },
-      fail(res) {
-        console.log("登录失败")
-      },
-      complete(res) {
-        console.log("登录完成")
-        console.log(res)
-      }
-    });
+    this.getLocation()
+    util.get_open_id(this,this)
   },
   autoUpdate: function () {
     var self = this

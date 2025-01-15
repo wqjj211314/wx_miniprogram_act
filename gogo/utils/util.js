@@ -93,9 +93,61 @@ function check_login(app){
   }
   return true
 }
+function get_open_id(app,that){
+  wx.login({
+    success(res) {
+      console.log("登录授权结果")
+      console.log(res)
+      if (res.code) {
+        //发起网络请求
+        wx.request({
+          url: app.globalData.hosturl + 'getopenid',
+          data: {
+            code: res.code
+          },
+          success: (res) => {
+            if(res.data.code !=200){
+              wx.showModal({
+                title: '用户openid异常',
+                content: '您的微信可能不兼容！',
+                complete: (res) => {
+                  if (res.cancel) {
+                    
+                  }
+              
+                  if (res.confirm) {
+                    
+                  }
+                }
+              })
+              return;
+            }
+            app.globalData.login_userInfo = res.data.result;
+            
+              try {
+                wx.setStorageSync('openid', res.data.result.user_id);
+                app.globalData.hasUserInfo = true;
+                
+              } catch (e) { }
+          }
+        })
+      } else {
+        console.log('登录失败！' + res.errMsg)
+      }
+    },
+    fail(res) {
+      console.log("登录失败")
+    },
+    complete(res) {
+      console.log("登录完成")
+      console.log(res)
+    }
+  });
+}
 exports.convert_date = convert_date;
 exports.toweek = toweek;
 exports.toweek2 = toweek2;
 exports.GetDistance = GetDistance;
 exports.getCurrentPageUrl = getCurrentPageUrl;
 exports.check_login = check_login;
+exports.get_open_id = get_open_id

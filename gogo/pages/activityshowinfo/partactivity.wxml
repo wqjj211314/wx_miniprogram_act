@@ -80,7 +80,7 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: env(safe-area-inset-bottom);">
+<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom: 34rpx;">
   <!--父组件已经判断：未结束-->
   <!--未截止wx:if="{{!is_addend}}"，要显示-->
   <view class="" style="flex:1;padding:9rpx 10rpx 20rpx;" bindtap="part_activity">

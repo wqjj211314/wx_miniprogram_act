@@ -51,6 +51,8 @@ Page({
       good_detail: good_info.good_detail,
       good_store: good_info.good_store,
       good_limit: good_info.good_limit,
+      good_club_place:good_info.good_club_place,
+      good_club_place_mini_url:good_info.good_club_place_mini_url,
       contact_address:good_info.selfgetaddress["收件地址"],
     contact_name:good_info.selfgetaddress["联系人"],
     contact_tel:good_info.selfgetaddress["联系方式"],

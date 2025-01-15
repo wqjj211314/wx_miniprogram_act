@@ -17,7 +17,8 @@ Page({
     good_list:[],
     admin_flag:false,
     triggered:false,
-    index_bar_bg:""
+    index_bar_bg:"",
+    recommend_good_list:[]
   },
  
   onShareAppMessage: function () {},
@@ -27,6 +28,7 @@ Page({
   onLoad(options) {
     this.get_activity_list();
     this.get_index_bar_bg();
+    this.get_recommend_good_list();
     if(app.globalData.login_userInfo["checking_flag"]){
       this.setData({
         admin_flag:true
@@ -35,12 +37,38 @@ Page({
     
     
   },
+  navigateTogoodinfo(e) {
+    var index = e.currentTarget.dataset.index;
+    console.log(index)
+    var goodinfo = this.data.recommend_good_list[index];
+    var good_info = encodeURIComponent(JSON.stringify(this.data.recommend_good_list[index]));
+    console.log(goodinfo)
+    wx.navigateTo({
+      url: '../good/gooddetail?good_info=' + good_info
+    })
+  },
   navigateToGood(){
     wx.navigateTo({
       url: '/pages/good/goodindex',
     })
   },
-
+  get_recommend_good_list() {
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_recommend_good_list',
+      data: {
+        "user_id": app.globalData.login_userInfo["user_id"]
+      },
+      success: (res) => {
+        console.log("获取用户信息")
+        if (res.data.code == 200) {
+          that.setData({
+            recommend_good_list: res.data.result
+          })
+        }
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

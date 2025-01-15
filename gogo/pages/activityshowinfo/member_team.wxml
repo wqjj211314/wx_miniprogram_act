@@ -1,0 +1,71 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<!--再分组的-->
+<view class="bg-white margin-sm padding" wx:for="{{member_num_team_dict}}" wx:for-index="group_team_tag" wx:for-item="member_num_list" wx:key="group_tag" style="border-radius: 30rpx;padding-bottom: 0rpx;">
+  <view class="flex bg-white text-black" style="justify-content:space-between;align-items: center;">
+    <view class="cu-btn line-green round" style="overflow:hidden;word-break: break-all;text-align:left;max-width: 80%;">{{group_team_tag}}</view>
+  </view>
+  <view class="grid" style="background-color: white;flex-wrap: wrap;padding-top:20rpx;border:none;">
+    <block wx:for="{{member_num_list}}" wx:for-item="member_num" wx:key="*this">
+      <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;" bind:tap="chat" data-membernum="{{member_num}}">
+        <view class="cu-avatar radius" style="background-image:url({{member_users[member_num].avatarUrl}});">
+          <view class="cu-tag badge {{member_users[member_num].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_num)}}</view>
+        </view>
+        <view style="font-size: 18rpx;height: fit-content;">{{member_users[member_num].nickName}}</view>
+        <view style="font-size: 18rpx;height: fit-content;color: grey;" wx:if="{{member_users[member_num].is_queue == 1}}">「排队中」</view>
+        <view class="{{member_users[member_num].gender==0?'text-pink':'text-blue'}}" style="font-size: 18rpx;height: fit-content;" wx:if="{{member_users[member_num].admin_status == 1}}">「管理员」</view>
+      </view>
+    </block>
+    <view class="cu-avatar radius margin-right" style="border-radius: 10rpx;border: 1px dashed grey;background-color: white;width: 80rpx;height: 80rpx;" bindtap="clear_group_team" data-tag="{{group_team_tag}}" wx:if="{{admin_flag}}">
+      <text style="color: black;font-size: 30rpx;font-weight: 200;">解散</text>
+    </view>
+
+  </view>
+</view>
+<!--分组编辑区域-->
+<view class="margin-sm padding bg-white" style="border-radius: 30rpx;" wx:if="{{admin_flag&&member_num_nonteam_list.length>0}}">
+  <view style="margin: 10rpx 10rpx;margin-top: 0rpx;">队伍名称</view>
+  <view class="cu-form-group bg-gray" style="border-radius: 10rpx;">
+    <input placeholder="请输入队伍名称" value="{{group_team_tag}}" bindinput='edit_group_tag'></input>
+  </view>
+
+
+  <view style="margin: 10rpx 10rpx;">分组成员</view>
+  <view class="grid bg-gray padding-sm" style="flex-wrap: wrap;margin-bottom: 20rpx;border-radius: 10rpx;min-height:80rpx;">
+    <block wx:for="{{sel_values}}" wx:for-item="member_num">
+      <view class="flex margin-right margin-bottom" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
+        <view class="cu-avatar radius" style="background-image:url({{member_users[member_num].avatarUrl}});">
+
+          <view class="cu-tag badge {{member_users[member_num].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_num)}}</view>
+        </view>
+        <view style="font-size: 18rpx;height: fit-content;">{{member_users[member_num].nickName}}</view>
+      </view>
+    </block>
+    <view class="cu-avatar radius margin-right margin-bottom" style="height:80rpx;width:160rpx;" wx:if="{{sel_values.length > 0}}">
+      <button class="cu-btn bg-green" style="font-size:29rpx;padding:0rpx;height:80rpx;width:160rpx;" bindtap="save_team">确认提交</button>
+    </view>
+  </view>
+</view>
+<!--未分配搭档的成员列表-->
+<view class="bg-white flex" style="align-items: center;justify-content: center;margin-top: 30rpx;color: black;padding-top:30rpx;" wx:if="{{member_num_nonteam_list.length > 0&&admin_flag}}">待编辑队伍成员</view>
+<checkbox-group bindchange="listenCheckboxChange">
+  <block wx:for="{{member_num_nonteam_list}}" wx:for-index="index" wx:key="*this" wx:for-item="member_num">
+    <view class="cu-list menu-avatar" style="margin:0rpx;">
+      <view class="cu-item">
+        <view style="position: absolute;left: 10rpx;">{{tools.show_member_num(member_num)}}号</view>
+        <view class="cu-avatar round lg" style="left:70rpx;background-image:url({{member_users[member_num].avatarUrl}});">
+          <view class="cu-tag badge {{member_users[member_num].gender=='0'?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}">
+          </view>
+        </view>
+        <view class="content" style="left: 170rpx;width: calc(100% - 170rpx - 120rpx - 120rpx);">
+          <view class="text-black">{{member_users[member_num].nickName}}</view>
+
+        </view>
+
+        <view class="action">
+          <checkbox value="{{member_users[member_num].member_num}}" />
+        </view>
+      </view>
+    </view>
+  </block>
+</checkbox-group>
+<view style="height: 200rpx;"></view>

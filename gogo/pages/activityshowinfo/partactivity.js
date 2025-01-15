@@ -18,7 +18,8 @@ Page({
     part_limit: 1,//0不限制参与，1限制参与,
     select_group_tag: "",//报名所选择的分组
     all_group_tag_dict: {},
-    user_info: {}
+    user_info: {},
+    share_user_id:""
 
   },
 
@@ -35,7 +36,13 @@ Page({
       empty_group_tag_dict = false;
       break
     }
+    let share_use_id = "";
+    if (options.hasOwnProperty("share_use_id")) {
+      share_use_id = decodeURIComponent(options.share_use_id);
+     
+    }
     this.setData({
+      share_use_id:share_use_id,
       partinfo: partinfo,
       activity_info: activity_info,
       empty_group_tag_dict: empty_group_tag_dict,
@@ -175,6 +182,7 @@ Page({
         "activity_tag": this.data.activity_info.activity_tag,
         "group_tag": this.data.select_group_tag,
         "pay_price": this.data.activity_info.pay_price,
+        "share_user_id":this.data.share_user_id
       },
       header: {
         'content-type': 'application/json' // 默认值

@@ -30,14 +30,12 @@ Page({
     partbuttonmsg: "我要报名",
     modalName: "",
     avatarUrl_list: [],
-    
     user_info_list: [],
     addendtime: "",
     member: 0,
     hosturl: app.globalData.hosturl,
     admin_flag: false,//是否是发布者，超级权限：编辑活动，删除成员
     edit_group_flag: false,
-    
     activity_date: "",
     share_use_id: "",
     part_limit: 1,//0不限制参与，1限制参与,
@@ -76,7 +74,8 @@ Page({
     barbg_tags:["羽毛球","台球","篮球","棋牌","乒乓球"],
     sel_member_num:"",
     show_more_flag:true,
-    safeArea:app.globalData.safeArea
+    safeArea:app.globalData.safeArea,
+    is_contain_team:false
   },
 
   /**
@@ -145,6 +144,7 @@ Page({
       scale: 28
     })
   },
+
   show_admin_options(e) {
     var sel_num = e.currentTarget.dataset.membernum;
     if(sel_num != this.data.sel_member_num){
@@ -216,12 +216,16 @@ Page({
         })
       }
     });
-    score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
-    score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
+    //score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
+    //score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
    
     this.get_request_partner_list()
   },
-
+  activity_pk_rank(){
+    wx.navigateTo({
+      url: 'activitypkrank?activity_info='+ encodeURIComponent(JSON.stringify(this.data.activity_info))
+    })
+  },
   show_user_detail(e) {
     var all_group_tag_list = this.data.all_group_tag_list;
     var group_tag = e.currentTarget.dataset.tag;
@@ -305,6 +309,11 @@ Page({
       if (item["user_id"] == app.globalData.login_userInfo["user_id"]) {
         console.log("是否参与")
         login_user_part_list.push(item)
+      }
+      if (item["group_team_tag"] != "" && item["group_team_tag"] != undefined&&that.data.is_contain_team != false) {
+        that.setData({
+          is_contain_team:true
+        })
       }
       //初始化成员的字典形式数据，方便wxml获取
       var member_num = item.member_num;
@@ -591,96 +600,7 @@ Page({
     console.log(current_edit_group);
     app.globalData.edit_group_user = [];//app只短暂存储编辑选择的分组成员
     this.update_save_group_button_status();
-    
-    this.getuserinfo()
-    
 
-
-
-  },
-  getuserinfo() {
-    try {
-      console.log("用户登录");
-      //直接获取缓存保存的
-      var openid = wx.getStorageSync('openid');
-      console.log(openid)
-      var that = this;
-      if (openid == "" || openid == undefined) {
-        console.log("需要登录获取openid")
-        this.user_login();
-      } else {
-        //发起网络请求
-        wx.request({
-          url: app.globalData.hosturl + 'get_userinfo',
-          data: {
-            "user_id": openid
-          },
-          success: (res) => {
-            console.log("获取用户信息")
-            console.log(res.data)
-            app.globalData.openid = res.data.user_id;
-            app.globalData.checking_flag = res.data.checking_flag;
-            app.globalData.login_userInfo = res.data;
-            app.globalData.hasUserInfo = true;
-            that.setData({
-              userinfo: res.data,
-              checking_flag: res.data.checking_flag,
-            });
-          }
-        })
-      }
-    } catch (e) {
-      console.log("持久化登录信息获取失败");
-      console.log(e);
-    }
-  },
-
-  user_login() {
-    //return;
-    var that = this;
-    wx.login({
-      success(res) {
-        console.log("登录授权结果")
-        console.log(res)
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
-
-              app.globalData.openid = res.data.openid;
-              app.globalData.checking_flag = res.data.checking_flag;
-              app.globalData.login_userInfo["user_id"] = res.data.openid;
-              app.globalData.login_userInfo["nickName"] = res.data.nickName;
-              app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
-              app.globalData.login_userInfo["gender"] = res.data.gender;
-              app.globalData.login_userInfo["signature"] = res.data.signature;
-              that.setData({
-                userinfo: res.data,
-                checking_flag: res.data.checking_flag,
-              });
-              try {
-                wx.setStorageSync('openid', res.data.openid);
-                app.globalData.hasUserInfo = true;
-                //wx.setStorageSync('nickName', res.data.nickName);
-              } catch (e) { }
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      },
-      fail(res) {
-        console.log("登录失败")
-      },
-      complete(res) {
-        console.log("登录完成")
-        console.log(res)
-      }
-    });
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -736,162 +656,6 @@ Page({
     console.log(info);
   },
 
-  part_activity() {
-    var that = this;
-    //提前判断报名限制再跳转
-    if (this.data.part_limit != 0 && this.data.activity_user_info["user_id"] != app.globalData.login_userInfo["user_id"]) {
-      wx.showToast({
-        title: '请通过分享报名',
-        icon: 'error',
-        duration: 2000
-      });
-      return;
-    }
-    //如果是简单的不需要填写信息，直接报名不跳转,要填写报名信息那就跳转到报名页面
-    if (this.data.partinfo.length != 0 || !this.data.empty_group_tag_dict) {
-      var activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
-      var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
-      var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
-      wx.navigateTo({
-        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit,
-      })
-      return;
-    }
-
-    //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
-    
-    if (!util.check_login(app)) {
-      return;
-    }
-
-    if (this.data.part_limit != 0 && this.data.activity_user_info["user_id"] != app.globalData.login_userInfo["user_id"]) {
-      wx.showToast({
-        title: '请通过分享报名',
-        icon: 'error',
-        duration: 2000
-      });
-      return;
-    }
-    var info = this.data.partinfoinput;
-    //info["自评等级"] = this.data.picker[this.data.picker_index];
-    //this.setData({
-    //partinfoinput: info
-    //});
-    console.log(info)
-    console.log(this.data.partinfo)
-    if (this.data.partinfo.indexOf("自评等级") != -1) {
-      if (!info.hasOwnProperty("自评等级")) {
-        info["自评等级"] = this.data.picker[0]
-      }
-    }
-    if (Object.keys(info).length != this.data.partinfo.length) {
-      wx.showToast({
-        title: '请填写报名信息',
-        icon: 'error',
-        duration: 1000
-      })
-      return;
-    }
-    wx.showLoading({
-      title: '报名中...',
-    })
-    wx.request({
-      url: app.globalData.hosturl + 'pay_miniprog', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": this.data.activity_info.activity_id,
-        "user_id": app.globalData.login_userInfo["user_id"],
-        "title": this.data.activity_info.title,
-        "partinfo": JSON.stringify(info),
-        "latitude": this.data.activity_info.latitude,
-        "longitude": this.data.activity_info.longitude,
-        "activity_tag": this.data.activity_info.activity_tag,
-        "group_tag": this.data.select_group_tag,
-        "pay_price": this.data.activity_info.pay_price,
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        //that.update_part_info(that,res);
-        console.log("商户server调用支付统一下单")
-        console.log(res.data.result);
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          wx.requestPayment({
-            'timeStamp': res.data.result.timeStamp,
-            'nonceStr': res.data.result.nonceStr,
-            'package': res.data.result.package,
-            'signType': res.data.result.signType,
-            'paySign': res.data.result.paySign,
-            'success': function (res) {
-              // 进行逻辑判断
-              console.log("成功支付")
-              wx.showToast({
-                title: '报名成功',
-                icon: "success",
-                duration: 2000
-              })
-              wx.request({
-                url: app.globalData.hosturl + 'get_member_user_id_pay_status', //仅为示例，并非真实的接口地址
-                data: {
-                  "activity_id": that.data.activity_info.activity_id,
-                  "user_id": app.globalData.login_userInfo["user_id"]
-                },
-                header: {
-                  'content-type': 'application/json' // 默认值
-                },
-                success(res) {
-                  console.log(res.data)
-                },
-                fail(res) {
-                 
-                }
-              });
-              
-            },
-            'fail': function (res) {
-              console.log("取消支付")
-              console.log(res)
-            },
-            'complete': function (res) {
-              //接口调用结束的回调函数（调用成功、失败都会执行）
-              console.log("支付")
-            }
-          })
-        } else if (res.data.code == 1) {
-          wx.showToast({
-            title: '报名成功',
-            icon: "success",
-            duration: 2000
-          })
-          console.log("免费报名")
-          
-        } else {
-          wx.showToast({
-            title: res.data.result,
-            icon: "error",
-            duration: 2000
-          })
-        }
-
-
-      },
-      fail(res) {
-        wx.showToast({
-          title: "服务器异常",
-          icon: "error"
-        })
-      }
-    });
-    /*
-    app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag, "group_tag": this.data.select_group_tag });
-    */
-    this.setData({
-      modalName: ""
-    })
-
-
-  },
   showModal(e) {
     if (this.data.user_info_list.length == 0) {
       wx.showToast({
@@ -1499,6 +1263,13 @@ Page({
 
     wx.navigateTo({
       url: 'pkpage?group_users=' + group_users + '&&group_tag=' + group_tag + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + room + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
+    })
+  },
+  edit_member_team(){
+    let group_users = encodeURIComponent(JSON.stringify(this.data.entire_part_info));
+
+    wx.navigateTo({
+      url: 'member_team?group_users=' + group_users  + '&&activity_id=' + this.data.activity_info.activity_id + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&member_users=' + encodeURIComponent(JSON.stringify(this.data.member_users))
     })
   },
 

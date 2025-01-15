@@ -1,5 +1,6 @@
 // pages/good/gooddetail.js
 const app = getApp()
+const util = require("../../utils/util.js")
 Page({
 
   /**
@@ -111,51 +112,9 @@ Page({
   },
 
   user_login() {
-    //return;
-    var that = this;
-    wx.login({
-      success(res) {
-        console.log("登录授权结果")
-        console.log(res)
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: app.globalData.hosturl + 'getopenid',
-            data: {
-              code: res.code
-            },
-            success: (res) => {
+   
+    util.get_open_id(app,this);
 
-              app.globalData.openid = res.data.openid;
-              app.globalData.checking_flag = res.data.checking_flag;
-              app.globalData.login_userInfo["user_id"] = res.data.openid;
-              app.globalData.login_userInfo["nickName"] = res.data.nickName;
-              app.globalData.login_userInfo["avatarUrl"] = res.data.avatarUrl;
-              app.globalData.login_userInfo["gender"] = res.data.gender;
-              app.globalData.login_userInfo["signature"] = res.data.signature;
-              that.setData({
-                userinfo: res.data,
-                checking_flag: res.data.checking_flag,
-              });
-              try {
-                wx.setStorageSync('openid', res.data.openid);
-                app.globalData.hasUserInfo = true;
-                //wx.setStorageSync('nickName', res.data.nickName);
-              } catch (e) { }
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      },
-      fail(res) {
-        console.log("登录失败")
-      },
-      complete(res) {
-        console.log("登录完成")
-        console.log(res)
-      }
-    });
   },
   switch_listindex() {
     wx.navigateTo({

@@ -52,7 +52,9 @@
     "pages/activityshowinfo/activityshare",
     "pages/activityshowinfo/activitymembergroup",
     "pages/activity/blank",
-    "pages/activityshowinfo/qrcode"
+    "pages/activityshowinfo/qrcode",
+    "pages/activityshowinfo/member_team",
+    "pages/activityshowinfo/activitypkrank"
   ],
   "tabBar": {
     "custom": true,

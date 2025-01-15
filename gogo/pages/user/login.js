@@ -138,13 +138,39 @@ Page({
                 code: res.code
               },
               success: (res) => {
-                console.log("appjs用户openid");
-                console.log(res.data);
-                console.log(res.data.openid);
+                if(res.data.code !=200){
+                  wx.showModal({
+                    title: '用户openid异常',
+                    content: '您的微信可能不兼容！',
+                    complete: (res) => {
+                      if (res.cancel) {
+                        
+                      }
+                  
+                      if (res.confirm) {
+                        
+                      }
+                    }
+                  })
+                  return;
+                }
+                var result = res.data.result;
+                app.globalData.openid = result.openid;
+                app.globalData.checking_flag = result.checking_flag;
+                app.globalData.login_userInfo["user_id"] = result.openid;
+                app.globalData.login_userInfo["nickName"] = result.nickName;
+                app.globalData.login_userInfo["avatarUrl"] = result.avatarUrl;
+                app.globalData.login_userInfo["gender"] = result.gender;
+                app.globalData.login_userInfo["signature"] = result.signature;
                 that.setData({
-                  userInfo:res.data
-                })
-                //that.data.userInfo = res.data;
+                  userinfo: result,
+                  checking_flag: result.checking_flag,
+                });
+                try {
+                  wx.setStorageSync('openid', result.openid);
+                  app.globalData.hasUserInfo = true;
+                  //wx.setStorageSync('nickName', res.data.nickName);
+                } catch (e) { }
               }
             })
           } else {
