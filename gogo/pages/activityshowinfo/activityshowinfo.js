@@ -46,7 +46,7 @@ Page({
     picker_index: 0,
     picker: ["1级", "2级", "3级", "4级", "5级", "6级", "7级", "8级", "9级", "10级"],
     activity_date: "",
-    share_use_id: "",
+    share_user_id: "",
     part_limit: 1,//0不限制参与，1限制参与,
     entire_part_info: [],
     group_name: "",
@@ -90,7 +90,8 @@ Page({
     chat_msgs:[],
     inputMsg:"",
     scrollTop:0,
-    edit_member_num:""
+    edit_member_num:"",
+    share_num:0
   },
 
   /**
@@ -103,10 +104,10 @@ Page({
     console.log(options)
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
     let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
-    if (options.hasOwnProperty("share_use_id")) {
-      let share_use_id = decodeURIComponent(options.share_use_id);
+    if (options.hasOwnProperty("share_user_id")) {
+      let share_user_id = decodeURIComponent(options.share_user_id);
       this.setData({
-        share_use_id: share_use_id
+        share_user_id: share_user_id
       });
     }
 
@@ -310,9 +311,14 @@ Page({
     var part_member_num = "";
     var part_group_tag = "";
     var login_user_part_list = [];
+    var share_num = 0;
     console.log(info);
     //提取分组信息
     info.forEach(item => {
+      //有多少人是通过你分享报名的？
+      if(item["share_user_id"] == app.globalData.login_userInfo["user_id"]){
+        share_num = share_num + 1;
+      }
       if (item["group_tag"] != "" && item["group_tag"] != null) {
         console.log(item["group_tag"]);
         var tag = item["group_tag"];
@@ -426,7 +432,8 @@ Page({
       login_user_part_list: login_user_part_list,
       activity_info: activity_info,
       all_group_tag2_list: all_group_tag2_list,
-      all_group_tag2_dict: all_group_tag2_dict
+      all_group_tag2_dict: all_group_tag2_dict,
+      share_num:share_num
     });
     that.update_part_status();
   },
@@ -761,7 +768,7 @@ Page({
   },
   set_part_limit() {
     var part_limit = 1;//限制参与
-    var share_user_id = this.data.share_use_id;
+    var share_user_id = this.data.share_user_id;
     if (this.data.activity_info["part_limit"] == 1) {//"通过发起人和成员分享可以参与"
       this.data.user_info_list.forEach(item => {
         console.log(item);
@@ -803,9 +810,9 @@ Page({
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareAppMessage");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与
-    var share_use_id = "";
+    var share_user_id = "";
     if (app.globalData.login_userInfo.hasOwnProperty("user_id")) {
-      share_use_id = app.globalData.login_userInfo["user_id"];
+      share_user_id = app.globalData.login_userInfo["user_id"];
     } else {
       console.log("用户未登录，无法获取用户信息");
     }
@@ -813,7 +820,7 @@ Page({
     return {
       title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
+      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_user_id=" + share_user_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
@@ -856,7 +863,7 @@ Page({
       var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
       var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
       wx.navigateTo({
-        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit+'&&share_use_id='+this.data.share_use_id,
+        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit+'&&share_user_id='+this.data.share_user_id,
       })
       return;
     }
@@ -1075,13 +1082,12 @@ Page({
     })
   },
   onShareTimeline() {
-
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
     console.log("小程序分享onShareTimeline");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与
-    var share_use_id = "";
+    var share_user_id = "";
     if (app.globalData.login_userInfo.hasOwnProperty("user_id")) {
-      share_use_id = app.globalData.login_userInfo["user_id"];
+      share_user_id = app.globalData.login_userInfo["user_id"];
     } else {
       console.log("用户未登录，无法获取用户信息");
     }
@@ -1089,7 +1095,7 @@ Page({
     return {
       title: this.data.activity_info["title"],
       //desc: '自定义分享描述',
-      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + share_use_id,
+      path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_user_id=" + share_user_id,
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {

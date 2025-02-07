@@ -36,13 +36,13 @@ Page({
       empty_group_tag_dict = false;
       break
     }
-    let share_use_id = "";
-    if (options.hasOwnProperty("share_use_id")) {
-      share_use_id = decodeURIComponent(options.share_use_id);
+    let share_user_id = "";
+    if (options.hasOwnProperty("share_user_id")) {
+      share_user_id = decodeURIComponent(options.share_user_id);
      
     }
     this.setData({
-      share_use_id:share_use_id,
+      share_user_id:share_user_id,
       partinfo: partinfo,
       activity_info: activity_info,
       empty_group_tag_dict: empty_group_tag_dict,

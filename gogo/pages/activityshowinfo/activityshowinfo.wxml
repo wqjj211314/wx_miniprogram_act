@@ -183,7 +183,7 @@
           <text class="text-gray" style="margin-top: 10rpx;">10种比赛模式</text>
         </view>
       </view>
-     
+
     </view>
 
   </view>
@@ -398,24 +398,26 @@
 
 <!--底部导航栏-->
 <!--未结束wx:if="!is_end"要显示-->
-<view class="flex bg-white" style="width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: space-around;font-size: 30rpx;height: fit-content;padding-bottom:34rpx;padding-top:10rpx;" wx:if="{{(activity_info.activity_status >= 200 && activity_info.activity_status < 800&&((!is_addend && !is_begin)||login_user_part_list.length > 0||admin_flag))&&loading_tip==''&&!is_display}}">
+<view class="flex bg-white" wx:if="{{(activity_info.activity_status >= 200 && activity_info.activity_status < 800&&((!is_addend && !is_begin)||login_user_part_list.length > 0||admin_flag))&&loading_tip==''&&!is_display}}" style="flex-direction: column;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;font-size: 30rpx;height: fit-content;padding-bottom:34rpx;padding-top:10rpx;">
+  <view class="flex text-gray" wx:if="{{share_num > 0}}" style="font-size: 15rpx;align-items: center;width: 100%;justify-content: center;">有{{share_num}}人通过分享参与，奖励{{share_num*2}}元</view>
+  <view class="flex" style="width: 100%;justify-content: space-around;font-size: 30rpx;height: fit-content;">
+    <!--父组件已经判断：未结束-->
+    <!--未截止wx:if="{{!is_addend}}"，要显示-->
+    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="part_activity" wx:if="{{!is_addend && !is_begin && ((login_user_part_list.length > 0 && activity_info.take_flag==1)||(login_user_part_list.length <= 0))}}">
+      <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+      <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">{{login_user_part_list.length > 0?"替人":""}}{{activity_info.pay_price!=0?"付费":""}}报名</button>
+    </view>
+    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="cancel_part" wx:if="{{login_user_part_list.length > 0 && !is_begin && !is_cancelend&&activity_info.take_flag==0}}">
+      <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">取消报名</button>
+    </view>
+    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="refund_some" wx:if="{{(is_begin||is_cancelend)&&admin_flag}}">
+      <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">部分退款</button>
+    </view>
+    <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin&&activity_info.take_flag==1)||(admin_flag)}}">
+      <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+      <view class="cuIcon-more text-gray text-bold round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;"></view>
 
-  <!--父组件已经判断：未结束-->
-  <!--未截止wx:if="{{!is_addend}}"，要显示-->
-  <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="part_activity" wx:if="{{!is_addend && !is_begin && ((login_user_part_list.length > 0 && activity_info.take_flag==1)||(login_user_part_list.length <= 0))}}">
-    <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">{{login_user_part_list.length > 0?"替人":""}}{{activity_info.pay_price!=0?"付费":""}}报名</button>
-  </view>
-  <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="cancel_part" wx:if="{{login_user_part_list.length > 0 && !is_begin && !is_cancelend&&activity_info.take_flag==0}}">
-    <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">取消报名</button>
-  </view>
-  <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="refund_some" wx:if="{{(is_begin||is_cancelend)&&admin_flag}}">
-    <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">部分退款</button>
-  </view>
-  <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin&&activity_info.take_flag==1)||(admin_flag)}}">
-    <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-    <view class="cuIcon-more text-gray text-bold round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;"></view>
-
+    </view>
   </view>
 </view>
 <!--报名更多活动的选项-->
@@ -460,23 +462,48 @@
 </view>
 <!--成员操作选项-->
 <view class="cu-modal {{modalName=='admin_modal'?'show':''}}">
-<view class="cu-dialog">
-  <view class="cu-bar bg-white justify-end">
-    <view class="content">成员「{{member_users[edit_member_num].nickName}}」操作</view>
-    <view class="action" bindtap="hideModal">
-      <text class="cuIcon-close text-red"></text>
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">成员「{{member_users[edit_member_num].nickName}}」操作</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="flex" style="padding:30rpx;flex-wrap: wrap;align-items: center;justify-content: space-between;">
+      <view class="bg-red flex" style="justify-content: center;align-items: center;border-radius: 30rpx;width: 45%;height: 80rpx;margin-right: 20rpx;" bind:tap="delete_member" data-membernum="{{edit_member_num}}">
+        <view style="font-size: 32rpx;height: fit-content;">取消报名</view>
+      </view>
+      <view class="bg-blue flex" style="justify-content: center;align-items: center;border-radius: 30rpx;width: 45%;height: 80rpx;margin-right: 20rpx;" bind:tap="refund_some">
+        <view style="font-size: 32rpx;height: fit-content;">部分退款</view>
+      </view>
+
+
+    </view>
+
+  </view>
+</view>
+
+<!--对阵成员选择-->
+<view class="cu-modal show {{modalName=='share_tip_modal'?'show':''}}">
+
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">报名成功</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="bg-white">
+      <view>分享活动给你的朋友，参与1人补贴奖励2元。</view>
+      <view class="text-gray flex" style="font-size: 25rpx;align-items: center;justify-content: left;">
+        <view>收费活动并报名参与的才有奖励</view>
+        <view>奖励在活动结束后以退款形式发放</view>
+        <view>奖励不影响组织者收益，可以在个人余额中查看</view>
+      </view>
+    </view>
+    <view class="cu-bar bg-green" style="min-height: 0rpx;height: 80rpx;">
+
+      <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">分享有奖励</view>
     </view>
   </view>
-      <view class="flex" style="padding:30rpx;flex-wrap: wrap;align-items: center;justify-content: space-between;">
-          <view class="bg-red flex" style="justify-content: center;align-items: center;border-radius: 30rpx;width: 45%;height: 80rpx;margin-right: 20rpx;" bind:tap="delete_member" data-membernum="{{edit_member_num}}">
-              <view style="font-size: 32rpx;height: fit-content;">取消报名</view>
-          </view>
-          <view class="bg-blue flex" style="justify-content: center;align-items: center;border-radius: 30rpx;width: 45%;height: 80rpx;margin-right: 20rpx;" bind:tap="refund_some">
-              <view style="font-size: 32rpx;height: fit-content;">部分退款</view>
-          </view>
-          
-         
-      </view>
-  
-</view>
 </view>
