@@ -3,44 +3,53 @@
 
   <swiper class="screen-swiper square-dot" indicator-dots="true" interval="5000" duration="500" style="height:1200rpx" wx:if="{{imgs.length > 0}}">
     <swiper-item wx:for="{{imgs}}" class="" wx:key="*this">
-    
+
       <image src="{{item}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
-      
+
       <view class="" style="position: absolute;bottom: 0;width: 100%;" data-url="{{item}}" bind:tap="delete_img">
         <button> 删除图片 </button>
       </view>
     </swiper-item>
   </swiper>
+<view>检查活动影集</view>
+  <swiper class="screen-swiper square-dot" indicator-dots="true" interval="5000" duration="500" style="height:1200rpx;margin-top:30rpx;" wx:if="{{moods.length > 0}}">
+    <swiper-item wx:for="{{moods}}" class="" wx:key="*this">
+      <image src="{{item.img_url}}" mode="aspectFill" style="height: 100%;" lazy-load="true"></image>
+      <view class="bg-green" style="position: absolute;bottom: 0;width: 100%;" data-id="{{item.id}}" bind:tap="pass_img">
+        <button class="bg-green"> 审核通过 </button>
+      </view>
+    </swiper-item>
+  </swiper>
 
   <view class="cu-list grid col-4 card-menu" style="border-radius: 0rpx;border-bottom-right-radius: 20rpx;border-bottom-left-radius: 20rpx;margin:20rpx 0rpx;">
-      <view class="cu-item" bindtap="calculate_close_all_activity">
-        <view class="cuIcon-close text-red">
-        </view>
-        <text>结算所有活动</text>
+    <view class="cu-item" bindtap="calculate_close_all_activity">
+      <view class="cuIcon-close text-red">
       </view>
-
-      <view class="cu-item" bindtap="delete_all_activity_queue_member">
-        <view class="cuIcon-delete text-red">
-        </view>
-        <text>删除排队成员</text>
-      </view>
-      <view class="cu-item" bindtap="calculate_all_share_order">
-        <view class="cuIcon-share text-green">
-        </view>
-        <text>结算分享奖励</text>
-      </view>
-
-      <view class="cu-item" bindtap="">
-        <view class="cuIcon-info text-gray">
-        </view>
-        <text>待定</text>
-      </view>
-      
+      <text>结算所有活动</text>
     </view>
 
+    <view class="cu-item" bindtap="delete_all_activity_queue_member">
+      <view class="cuIcon-delete text-red">
+      </view>
+      <text>删除排队成员</text>
+    </view>
+    <view class="cu-item" bindtap="calculate_all_share_order">
+      <view class="cuIcon-share text-green">
+      </view>
+      <text>结算分享奖励</text>
+    </view>
+
+    <view class="cu-item" bindtap="">
+      <view class="cuIcon-info text-gray">
+      </view>
+      <text>待定</text>
+    </view>
+
+  </view>
+
   <block wx:for="{{expanding_money_record_list}}" wx:key="id">
-  <view class="bg-white padding-sm margin">
-    <view class="flex bg-white margin-sm padding" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
+    <view class="bg-white padding-sm margin">
+      <view class="flex bg-white margin-sm padding" style="justify-content: flex-start;flex-direction: row;align-content: center;align-items: center;">
         <view class="bg-blue padding" style="border-radius: 20rpx;">
           {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}
         </view>
@@ -51,8 +60,9 @@
           <view>账户名:{{item.bank_account_name}}</view>
           <view>账号:{{item.bank_num}}</view>
         </view>
-    </view>
-    <view class="cu-btn bg-green" style="width: 100%;" bind:tap="confirm_expanding_money" data-id="{{item.id}}" data-index="{{index}}">审核通过</view>
+      </view>
+      <view class="cu-btn bg-green" style="width: 100%;" bind:tap="confirm_expanding_money" data-id="{{item.id}}" data-index="{{index}}">审核通过</view>
+      
     </view>
 
   </block>
@@ -69,11 +79,12 @@
               <view class="content" style="padding:0px;">
                 <image src="{{item.bg_img_exist?item.bg_url:'https://www.2week.club:5000/static/defaultbg.jpg'}}" mode="aspectFill" style="width:40%;height:200rpx;" bind:tap="navigateToActivityInfo" data-index="{{index}}"></image>
                 <view class="desc" style="margin-top: 20rpx;margin-bottom: 20rpx;">
-                  <view class="text-content" style="width:90%;color:black;font-size:13px;height:5em;">{{item.activity_status_comment}}</view>
+                  <view class="text-content" style="width:90%;color:black;font-size:13px;height: fit-content;">{{item.activity_status_comment}}{{",优惠"+item.discount+"元"}}</view>
                   <view>
                     <view class="cu-tag bg-red light round" bindtap="update_activity_bg_issue" data-id="{{item.activity_id}}">图片敏感</view>
                     <view class="cu-tag bg-red light round" bindtap="update_activity_pass" data-id="{{item.activity_id}}">审核通过</view>
-                   
+                    <view class="cu-tag bg-green light round margin-top-sm" bindtap="update_activity_discount" data-id="{{item.activity_id}}">修改优惠</view>
+
                   </view>
                 </view>
               </view>
@@ -136,12 +147,12 @@
           </view>
           <view class="flex padding-sm" style="margin-top: 30rpx;justify-content: space-between;">
             <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="del_order" data-index="{{index}}">删除</button>
-            
+
             <button class="cu-btn line-green" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="update_order_deliver_status" data-index="{{index}}">更新物流</button>
             <button class="cu-btn line-blue" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="update_order_price" data-index="{{index}}">改价</button>
 
             <button class="cu-btn line-red" style="flex:1;border-radius: 20rpx;margin:0rpx 10rpx;" bindtap="refund_order" data-index="{{index}}" wx:if="{{item.deliver_status != '已完成'&&item.trade_state=='SUCCESS'}}">退款</button>
-           
+
           </view>
         </view>
       </view>
@@ -155,5 +166,5 @@
   <view class="action">
     <text class="cuIcon-write text-grey"></text>
   </view>
-  <input class="solid-bottom" bindinput="inputMsg" value="{{input_value}}" maxlength="300" cursor-spacing="10" placeholder="更新物流或改价"></input>
+  <input class="solid-bottom" bindinput="inputMsg" value="{{input_value}}" maxlength="300" cursor-spacing="10" placeholder="更新物流或改价或优惠"></input>
 </view>

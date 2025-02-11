@@ -11,7 +11,30 @@ Page({
     imgs: [],
     expanding_money_record_list: [],
     order_list: [],
-    input_value: ""
+    input_value: "",
+    moods:[]
+  },
+  get_all_recent_moods(){
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'get_recent_moods', //仅为示例，并非真实的接口地址
+      data: {
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data);
+        console.log("获取轮播图");
+        
+        that.setData({
+          moods:res.data,
+        })
+      },
+      fail(res) {
+        
+      }
+    });
   },
   get_all_order() {
     var that = this;
@@ -301,6 +324,26 @@ Page({
     this.get_all_img();
     this.get_expanding_money_record();
     this.get_all_order();
+    this.get_all_recent_moods();
+  },
+  pass_img(e){
+    console.log(e.currentTarget.dataset.id);
+    var mood_id = e.currentTarget.dataset.id;
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl + 'update_activity_mood_status', //仅为示例，并非真实的接口地址
+      data: {
+        "mood_id": mood_id
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+
+
+
+      }
+    });
   },
   ViewImagebg(e) {
     console.log(e.currentTarget.dataset.url)
@@ -336,6 +379,30 @@ Page({
     var activity_id = e.currentTarget.dataset.id;
     this.update_activity_status(activity_id, 200, "已审核，正常");
     //this.get_checking_activity_list();
+  },
+  update_activity_discount(e) {
+    wx.showLoading({
+      title: '修改中',
+    })
+    var that = this;
+    var activity_id = e.currentTarget.dataset.id;
+    wx.request({
+      url: app.globalData.hosturl + 'update_activity_discount', //仅为示例，并非真实的接口地址
+      data: {
+        "activity_id": activity_id,
+        "discount":this.data.input_value
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+       
+        that.get_checking_activity_list();
+        setTimeout(function(){
+          wx.hideLoading();
+        },3000)
+      }
+    });
   },
   update_activity_invalid(e) {
     var activity_id = e.currentTarget.dataset.id;

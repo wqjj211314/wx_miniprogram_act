@@ -276,6 +276,20 @@ Page({
     }
 
   },
+  update_share_num(that,allpartinfo){
+    var share_user_list = []
+    allpartinfo.forEach(item=>{
+      //有多少人是通过你分享报名的？
+      //分享人是你，不能是自己参与自己的分享，不能计算重复（挂人的情况）
+      if(item["share_user_id"] == app.globalData.login_userInfo["user_id"]&&item["share_user_id"] != item.user_id&&share_user_list.indexOf(item.user_id)==-1){
+        share_user_list.push(item.user_id)
+      }
+    })
+    console.log(share_user_list);
+    that.setData({
+      share_num:share_user_list.length
+    })
+  },
   update_part_info(that, res) {
     console.log("成员信息" + res.data);
     var result = res.data;
@@ -305,20 +319,19 @@ Page({
 
     //测试用，创建20个参与人员
     var info = result["user_info_part_info_list"];
+    //更新分享参与人数
+    that.update_share_num(that,info);
     var all_group_tag_dict = {};
     var ungroup_partinfo_list = [];
     var member_users = {};
     var part_member_num = "";
     var part_group_tag = "";
     var login_user_part_list = [];
-    var share_num = 0;
+    
     console.log(info);
     //提取分组信息
     info.forEach(item => {
-      //有多少人是通过你分享报名的？
-      if(item["share_user_id"] == app.globalData.login_userInfo["user_id"]){
-        share_num = share_num + 1;
-      }
+      
       if (item["group_tag"] != "" && item["group_tag"] != null) {
         console.log(item["group_tag"]);
         var tag = item["group_tag"];
@@ -433,7 +446,7 @@ Page({
       activity_info: activity_info,
       all_group_tag2_list: all_group_tag2_list,
       all_group_tag2_dict: all_group_tag2_dict,
-      share_num:share_num
+     
     });
     that.update_part_status();
   },
@@ -690,12 +703,18 @@ Page({
       })
       app.globalData.re_group_users = {}
     }
-
+    console.log(app.globalData.modalName)
+    console.log(app.globalData.modalName!="")
     this.setData({
       current_edit_group: current_edit_group,
       hidden_del_tag: true,
-      ungroup_partinfo_list: new_ungroup_partinfo_list
+      ungroup_partinfo_list: new_ungroup_partinfo_list,
+      
     });
+    if(app.globalData.modalName=="share_tip_modal"){
+      this.setData({modalName:"share_tip_modal"})
+    }
+    app.globalData.modalName = "";
     console.log(current_edit_group);
     app.globalData.edit_group_user = [];//app只短暂存储编辑选择的分组成员
     this.update_save_group_button_status();
@@ -711,6 +730,11 @@ Page({
         that.get_recommand_list()
       }, 5000)
     }
+  },
+  free_part(){
+    this.setData({
+      modalName:"free_part_modal"
+    })
   },
   getuserinfo() {
     try {
@@ -942,6 +966,11 @@ Page({
                 icon: "success",
                 duration: 2000
               })
+              console.log(that.data.activity_info.discount)
+              if(that.data.activity_info.discount > 0){
+                that.setData({modalName:"share_tip_modal"})
+              }
+              
               wx.request({
                 url: app.globalData.hosturl + 'get_member_user_id_pay_status', //仅为示例，并非真实的接口地址
                 data: {
@@ -1003,27 +1032,10 @@ Page({
     /*
     app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag, "group_tag": this.data.select_group_tag });
     */
-    this.setData({
-      modalName: ""
-    })
-
-
+   
   },
-  showModal(e) {
-    if (this.data.user_info_list.length == 0) {
-      wx.showToast({
-        title: '来一起参与吧',
-        icon: "none",
-        duration: 2000
-      })
-      return;
-    }
-    this.setData({
-      modalName: e.currentTarget.dataset.target
-    })
-  },
+
   show_info_modal(e) {
-
     this.setData({
       modalName: e.currentTarget.dataset.target
     })
@@ -1205,50 +1217,7 @@ Page({
     })
     app.globalData.edit_group_user = []
   },
-  update_member_admin(e) {
-   
-    var that = this;
-    this.setData({
-      modalName:""
-    })
-    var membernum = e.currentTarget.dataset.membernum;
-    var admin_member = membernum
-    wx.showLoading({
-      title: '',
-    })
-    wx.request({
-      url: app.globalData.hosturl + 'update_member_admin_status', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": that.data.activity_info.activity_id,
-        "admin_member": admin_member
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        wx.hideLoading();
-        if (res.data.code == 200) {
-          wx.showToast({
-            title: res.data.result,
-            icon: "success",
-            duration: 1000
-          })
-        } else {
-          wx.showToast({
-            title: res.data.result,
-            icon: "error",
-            duration: 1000
-          })
-        }
 
-        that.init_activity_all_info(that.data.activity_info);
-        that.show_admin_modal();
-      },
-      fail(res) {
-        wx.hideLoading();
-      }
-    });
-  },
   show_admin_modal() {
     var timestamp = new Date().getTime();
     console.log(timestamp)
@@ -1640,13 +1609,7 @@ Page({
       current: e.currentTarget.dataset.url
     });
   },
-  update_activity_info() {
-    //直接跳转到创建activity的界面
-    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
-    wx.navigateTo({
-      url: '../activity/activity?activity_info=' + activity_info + "&&test=test"
-    })
-  },
+
   /**
  * 页面相关事件处理函数--监听用户下拉动作
  */
@@ -1850,6 +1813,7 @@ Page({
 
   },
   update_activity_info(e) {
+    console.log("这里编辑活动？")
     this.setData({
       modalName: ""
     })
@@ -1913,50 +1877,7 @@ Page({
       edit_member_num:e.currentTarget.dataset.membernum
     })
   },
-  update_member_admin(e) {
-    console.log("移除成员");
-    this.setData({
-      modalName:""
-    })
-    var that = this;
-    var membernum = e.currentTarget.dataset.membernum;
-    var admin_member = membernum
-    wx.showLoading({
-      title: '',
-    })
-    wx.request({
-      url: app.globalData.hosturl + 'update_member_admin_status', //仅为示例，并非真实的接口地址
-      data: {
-        "activity_id": that.data.activity_info.activity_id,
-        "admin_member": admin_member
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        wx.hideLoading();
-        if (res.data.code == 200) {
-          wx.showToast({
-            title: res.data.result,
-            icon: "success",
-            duration: 1000
-          })
-        } else {
-          wx.showToast({
-            title: res.data.result,
-            icon: "error",
-            duration: 1000
-          })
-        }
 
-        that.init_activity_all_info(that.data.activity_info);
-        that.show_admin_modal();
-      },
-      fail(res) {
-        wx.hideLoading();
-      }
-    });
-  },
   go_to_activityshare() {
     var admin_flag = false;
     admin_flag = (this.data.activity_info.activity_status >= 200 && this.data.activity_info.activity_status < 800 && ((!this.data.is_addend && !this.data.is_begin) || this.data.login_user_part_list.length > 0 || this.data.admin_flag)) && this.data.loading_tip == '';

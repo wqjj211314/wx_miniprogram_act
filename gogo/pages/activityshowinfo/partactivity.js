@@ -226,6 +226,7 @@ Page({
               //返回首页的活动页。
               setTimeout(function () {
                 app.globalData.current_activity_id = that.data.activity_info.activity_id;
+                if(that.activity_info.discount>0){app.globalData.modalName = "share_tip_modal";}
                 wx.navigateBack();
               }, 2000)
             },

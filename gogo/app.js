@@ -89,7 +89,8 @@ App({
     contact_tel:"",
     add_activity_flag:false,
     windowInfo:"",
-    safeArea:0
+    safeArea:0,
+    modalName:""
   },
   user_login() {
     //return;
