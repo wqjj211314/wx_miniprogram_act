@@ -16,6 +16,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    var pages = getCurrentPages()
+    var pre_page = pages[pages.length-2]
+    console.log(pre_page)
     var group_limit_list = JSON.parse(decodeURIComponent(options.group_limit_list));
     var group_tag_list = JSON.parse(decodeURIComponent(options.group_tag_list));
     var group_room_list = JSON.parse(decodeURIComponent(options.group_room_list));
@@ -25,7 +28,8 @@ Page({
     this.setData({
       group_limit_list:group_limit_list,
       group_tag_list:group_tag_list,
-      group_room_list:group_room_list
+      group_room_list:group_room_list,
+      pre_page:pre_page
     })
   },
   grouptagInput: function (e) {
@@ -85,9 +89,14 @@ Page({
     console.log("保存分组")
     console.log(group_tag_dict)
     app.globalData.custom_group_tag_dict = group_tag_dict;
-    wx.switchTab({
-      url: 'activity',
-    })
+    if(this.data.pre_page.route == "pages/activity/editactivity"){
+      wx.navigateBack()
+    }else{
+      wx.switchTab({
+        url: 'activity',
+      })
+    }
+    
     console.log(group_tag_dict)
   },
   addgroup(){

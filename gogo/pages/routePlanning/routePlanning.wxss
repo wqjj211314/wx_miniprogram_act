@@ -1,0 +1,22 @@
+.container {
+  padding: 20px;
+}
+
+.input-section {
+  margin-bottom: 20px;
+}
+
+.input-section input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.select-button {
+  margin-left: 10px;
+}
+
+#routeMap {
+  width: 100%;
+  height: 300px;
+}

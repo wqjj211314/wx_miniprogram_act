@@ -1,0 +1,30 @@
+<view class="container">
+    <!-- 选点输入框 -->
+    <view class="input-section">
+        <view>
+            <input placeholder="起点" bindinput="onStartPointInput" value="{{startPoint.address}}"></input>
+            <button class="select-button" bindtap="selectStartPoint">地图选点</button>
+        </view>
+        <view wx:for="{{waypoints}}" wx:key="index">
+            <input placeholder="途径点{{index + 1}}" bindinput="onWaypointInput" data-index="{{index}}" value="{{waypoints[index].address}}"></input>
+            <button class="select-button" bindtap="selectWaypoint" data-index="{{index}}">地图选点</button>
+            <radio-group bindchange="onWaypointTransportChange" data-index="{{index}}">
+                <radio value="walking">步行</radio>
+                <radio value="driving">驾车</radio>
+                <radio value="bicycling">骑行</radio>
+                <radio value="transit">公交</radio>
+            </radio-group>
+        </view>
+        <button bindtap="addWaypoint">添加途径点</button>
+        <view>
+            <input placeholder="终点" bindinput="onEndPointInput" value="{{endPoint.address}}"></input>
+            <button class="select-button" bindtap="selectEndPoint">地图选点</button>
+        </view>
+    </view>
+
+    <!-- 生成路线按钮 -->
+    <button bindtap="generateRoute">生成路线</button>
+
+    <!-- 地图组件 -->
+    <map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale+2}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" style="width: 100%; height: 300px;"></map>
+</view>

@@ -58,6 +58,7 @@ Page({
     all_group_tag_list: [],
     all_group_tag2_dict: {},
     all_group_tag2_list: [],
+    unuse_group_tag_dict:{},
     disable_save_group: true,
     current_swiper_item_index: 0,
     sort_users_score: {},
@@ -429,6 +430,14 @@ Page({
     console.log(all_group_tag_dict);
     console.log(all_group_tag_list);
     var entire_part_info = [];
+    //找出来预定分组但还没有人报名的分组列表
+    var temp_unuse_group_tag_dict = activity_info.group_tag_dict;
+    var unuse_group_tag_list = [];
+    for (var group_tag in temp_unuse_group_tag_dict) {
+      if(!all_group_tag_dict.hasOwnProperty(group_tag)){
+        unuse_group_tag_list.push(temp_unuse_group_tag_dict[group_tag])
+      }
+    }
     //for (var i = 0; i < 20; i++) {
     //entire_part_info.push(JSON.parse(JSON.stringify(info[0])));
     //}
@@ -446,6 +455,7 @@ Page({
       activity_info: activity_info,
       all_group_tag2_list: all_group_tag2_list,
       all_group_tag2_dict: all_group_tag2_dict,
+      unuse_group_tag_list:unuse_group_tag_list
      
     });
     that.update_part_status();
@@ -821,6 +831,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+   
     console.log(this.data.activity_info.activity_status)
     console.log(typeof (this.data.activity_info.activity_status))
     if (this.data.activity_info.activity_status < 200) {
@@ -841,6 +852,25 @@ Page({
       console.log("用户未登录，无法获取用户信息");
     }
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
+    console.log(this.data.modalName)
+    if(this.data.modalName=="free_part_modal"){
+      console.log("分享")
+      return {
+        title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
+        //desc: '自定义分享描述',
+        path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_user_id=" + share_user_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
+        imageUrl:this.data.activity_info.bg_url,
+        success: function (res) {
+          if (res.errMsg == 'shareAppMessage:ok') {
+            console.log("成功", res)
+          }
+        },
+        fail: function (res) {
+          console.log("失败", res)
+        },
+  
+      }
+    }
     return {
       title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
       //desc: '自定义分享描述',

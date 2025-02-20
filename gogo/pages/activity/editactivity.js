@@ -688,7 +688,21 @@ Page({
     }
     var that = this;
     console.log(new Date());
+    var group_tag_dict = activity_info.group_tag_dict;
     
+    var group_tag_list = [];
+    var group_room_list = [];
+    var group_limit_list = [];
+    for(var key in group_tag_dict){
+      group_tag_list.push(group_tag_dict[key]["name"])
+      group_room_list.push(group_tag_dict[key]["room"])
+      group_limit_list.push(group_tag_dict[key]["limit"])
+    }
+    this.setData({
+      group_tag_list:group_tag_list,
+      group_room_list:group_room_list,
+      group_limit_list:group_limit_list
+    })
     this.get_club_list()
     this.get_activity_location_list()
   },
@@ -825,7 +839,7 @@ Page({
       })
     }
     var _this = this;
-    console.log("活动创建页onshow")
+    console.log("活动更新页onshow")
     wx.request({
       url: app.globalData.hosturl + 'get_partinfo_all_options', //仅为示例，并非真实的接口地址
       data: {
@@ -846,15 +860,18 @@ Page({
       }
     });
     var group_tag_dict = app.globalData.custom_group_tag_dict;
-    
+    console.log(group_tag_dict)
     var group_tag_list = [];
     var group_room_list = [];
     var group_limit_list = [];
+    var empty_flag = true;
     for(var key in group_tag_dict){
       group_tag_list.push(group_tag_dict[key]["name"])
       group_room_list.push(group_tag_dict[key]["room"])
       group_limit_list.push(group_tag_dict[key]["limit"])
+      empty_flag = false;
     }
+    if(!empty_flag){
     this.setData({
       group_tag_dict:app.globalData.custom_group_tag_dict,
       group_tag_list:group_tag_list,
@@ -862,6 +879,7 @@ Page({
       group_limit_list:group_limit_list
     })
     app.globalData.custom_group_tag = {}
+  }
   },
   add_partinfo: function () {
     this.setData({

@@ -72,7 +72,7 @@
         <view class="title flex" style="margin-left:20rpx;align-items: center;height: fit-content;flex:1;">
           <radio value="{{index}}" style="zoom:80%;margin-right:20rpx;" />{{index}}({{all_group_tag_dict[index].length == undefined?"0":all_group_tag_dict[index].length}}/{{activity_info.group_tag_dict[index]["limit"]}})
         </view>
-        <view class="title" style="height: fit-content;word-wrap:break-word;word-break:break-all;max-width: 120rpx;">场地:{{activity_info.group_tag_dict[index]["room"]}}</view>
+        <view class="title" style="height: fit-content;word-wrap:break-word;word-break:break-all;max-width: 160rpx;">{{activity_info.group_tag_dict[index]["room"]}}</view>
       </view>
     </block>
   </radio-group>

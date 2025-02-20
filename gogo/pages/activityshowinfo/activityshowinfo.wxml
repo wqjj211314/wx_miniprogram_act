@@ -123,6 +123,16 @@
             </view>
           </block>
         </block>
+        <block wx:for="{{unuse_group_tag_list}}" wx:for-item="unuse_group_item" wx:key="name">
+          <view class="flex" style="justify-content:space-between;padding:10rpx 10rpx;background: linear-gradient( 359deg, white 50%, #468aff25 100%);font-size: 28rpx;margin-top: 20rpx;align-items: center;border-radius: 20rpx;margin-bottom: 60rpx;">
+            <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">
+              <text class="cuIcon-friendfill" style="font-size: 30rpx;margin-right: 10rpx;"></text>
+              {{unuse_group_item.name}}（0/{{unuse_group_item.limit}}）
+            </view>
+            
+            <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{unuse_group_item.room}}</view>
+          </view>
+        </block>
         <view class="flex" style="justify-content:space-between;padding:10rpx 10rpx;background: linear-gradient( 359deg, white 50%, #468aff25 100%);border-radius:20rpx;font-size: 28rpx;margin-top: 20rpx;" wx:if="{{ungroup_partinfo_list.length > 0}}">
           <view style="width: 100%;">
             <view class="flex" style="align-items: center;">
@@ -181,7 +191,7 @@
           <text class="text-gray" style="margin-top: 10rpx;">队伍分组</text>
         </view>
       </view>
-      <view style="flex:1;" bindtap="pk_page">
+      <view style="flex:1;" bindtap="pk_page" wx:if="{{is_pk_hobby}}">
         <view class="flex" style="flex-direction: column;align-items: center;">
           <text class="iconfont icon-vsrili text-red" style="font-size: 40rpx;">
           </text>
@@ -406,7 +416,7 @@
 <view class="flex bg-white" wx:if="{{(activity_info.activity_status >= 200 && activity_info.activity_status < 800&&((!is_addend && !is_begin)||login_user_part_list.length > 0||admin_flag))&&loading_tip==''&&!is_display}}" style="flex-direction: column;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;font-size: 30rpx;height: fit-content;padding-bottom:34rpx;padding-top:10rpx;">
   <view class="flex text-gray" wx:if="{{share_num > 0&&activity_info.discount>0}}" style="font-size: 15rpx;align-items: center;width: 100%;justify-content: center;">有{{share_num}}人通过你的分享参与，奖励约{{share_num*activity_info.discount>activity_info.pay_price?activity_info.pay_price-0.1:share_num*activity_info.discount}}元</view>
   <view class="flex" style="width: 100%;justify-content: space-around;font-size: 30rpx;height: fit-content;">
-    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="free_part" wx:if="{{!is_addend && !is_begin && login_user_part_list.length <= 0&&activity_info.pay_price!=0}}">
+    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bindtap="free_part" wx:if="{{!is_addend && !is_begin && login_user_part_list.length <= 0&&activity_info.pay_price!=0&&activity_info.discount>0}}">
       <!--disable_flag是防止误触重复报名的，报名完就恢复-->
       <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">免费参与</button>
     </view>
