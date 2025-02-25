@@ -1,0 +1,12 @@
+<view style="width:100%;height:500rpx;">
+    <image-cropper id="image-cropper" bindload="cropperload" bindimageload="loadimage" limit_move="{{limit_move}}" disable_rotate="{{false}}" width="{{width}}" height="{{height}}" imgSrc="{{src}}" disable_ratio="{{true}}">
+    </image-cropper>
+</view>
+
+<view class='bottom bg-white flex' style="flex-direction: row;width: 100%; margin-bottom: 0rpx;font-size: 30rpx;height: fit-content;padding-bottom:34rpx;padding-top:10rpx;" wx:if="{{true}}">
+   
+   
+    <button class="cu-btn round" style="flex:1;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;" class="button" catchtouchstart='rotate' catchtouchend='end' data-type="rotate">旋转图片</button>
+    <button class="cu-btn round" style="flex:1;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;" class="button" catchtap='submit'>确认裁剪</button>
+   
+</view>

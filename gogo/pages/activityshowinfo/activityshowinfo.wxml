@@ -551,9 +551,12 @@
     <button class="cu-bar bg-blue margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" bind:tap="part_activity" wx:if="{{!is_addend && !is_begin && ((login_user_part_list.length > 0 && activity_info.take_flag==1)||(login_user_part_list.length <= 0))}}">
     <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">先报名</view>
   </button>
-  <button class="cu-bar bg-green margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" open-type="share">
+  <button class="cu-bar bg-green margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" open-type="share" wx:if="{{false}}">
     <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">分享给朋友</view>
   </button>
   </view>
 </view>
 </view>
+<!-- 分享 
+<canvas id="shareCanvas" type="2d" style="width: 100rpx; height: 100rpx; display: none;"></canvas>
+-->

@@ -55,7 +55,8 @@
     "pages/activityshowinfo/qrcode",
     "pages/activityshowinfo/member_team",
     "pages/activityshowinfo/activitypkrank",
-	"pages/routePlanning/routePlanning"
+    "pages/routePlanning/routePlanning",
+    "pages/activity/cropper"
   ],
   "tabBar": {
     "custom": true,

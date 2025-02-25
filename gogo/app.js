@@ -90,7 +90,8 @@ App({
     add_activity_flag:false,
     windowInfo:"",
     safeArea:0,
-    modalName:""
+    modalName:"",
+    cropimgSrc:""
   },
   user_login() {
     //return;

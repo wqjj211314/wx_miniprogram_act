@@ -92,7 +92,8 @@ Page({
     inputMsg:"",
     scrollTop:0,
     edit_member_num:"",
-    share_num:0
+    share_num:0,
+    shareImageUrl:""
   },
 
   /**
@@ -147,7 +148,7 @@ Page({
       })
     }
     this.init_activity_all_info(activity_info);
-   
+    
   },
   show_all_part() {
     this.setData({
@@ -243,6 +244,7 @@ Page({
     setTimeout(function(){
       wx.hideLoading()
     },1000)
+   
     
   },
 
@@ -745,6 +747,7 @@ Page({
     this.setData({
       modalName:"free_part_modal"
     })
+    //this.generateShareImage();
   },
   getuserinfo() {
     try {
@@ -831,7 +834,6 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-   
     console.log(this.data.activity_info.activity_status)
     console.log(typeof (this.data.activity_info.activity_status))
     if (this.data.activity_info.activity_status < 200) {
@@ -853,11 +855,11 @@ Page({
     }
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     console.log(this.data.modalName)
-    if(this.data.modalName=="free_part_modal"){
+    if(this.data.modalName=="free_part_modal"&&this.data.activity_info.activity_status!=201){
       console.log("分享")
       return {
         title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
-        //desc: '自定义分享描述',
+        desc: '自定义分享描述',
         path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_user_id=" + share_user_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
         imageUrl:this.data.activity_info.bg_url,
         success: function (res) {
@@ -1921,5 +1923,127 @@ Page({
     wx.navigateTo({
       url: 'activitymembergroup?activity_info=' + activity_info + '&&activity_user_info=' + activity_user_info,
     })
-  }
+  },
+  async generateShareImage() {
+    console.log("自行绘制分享图")
+    try {
+        const query = wx.createSelectorQuery();
+        const canvasNode = await new Promise((resolve, reject) => {
+            query.select('#shareCanvas')
+               .fields({ node: true, size: true })
+               .exec((res) => {
+                    if (res[0] && res[0].node) {
+                        resolve(res[0].node);
+                    } else {
+                        reject(new Error('未找到 canvas 节点'));
+                    }
+                });
+                console.log("找到了吗？")
+        });
+
+        const canvas = canvasNode;
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // 处理高清屏
+        const pixelRatio = wx.getSystemInfoSync().pixelRatio;
+        canvas.width = width * pixelRatio;
+        canvas.height = height * pixelRatio;
+        ctx.scale(pixelRatio, pixelRatio);
+        // 绘制基础图片
+        const img = await this.loadImage(canvas, this.data.activity_info.bg_url);
+       // 修改：计算底图宽高比（由原来的高宽比改为宽高比）
+       const imgRatio = img.width / img.height; 
+       // 新增：计算画布的宽高比
+       const canvasRatio = width / height; 
+
+       let drawWidth, drawHeight, drawX, drawY;
+       // 新增：根据图片和画布宽高比判断裁剪和缩放逻辑
+       if (imgRatio > canvasRatio) { 
+           // 图片宽高比大于画布宽高比，高度铺满画布，裁剪左右部分
+           drawHeight = height;
+           drawWidth = drawHeight * imgRatio;
+           drawX = (width - drawWidth) / 2;
+           drawY = 0;
+       } else {
+           // 图片宽高比小于等于画布宽高比，宽度铺满画布，裁剪上下部分
+           drawWidth = width;
+           drawHeight = drawWidth / imgRatio;
+           drawX = 0;
+           drawY = (height - drawHeight) / 2;
+       }
+
+       // 修改：使用新计算的宽高和位置绘制底图
+       ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight); 
+
+         // 定义文字与矩形框的边距
+         const textMargin = 10;
+         // 定义每行文字的高度
+         const lineHeight = 20;
+         // 定义文字行数
+         const lineCount = 3;
+
+         // 定义圆角矩形参数，放置在地图底部且高度自适应
+         const rectX = 2;
+         // 根据文字内容和边距计算矩形框起始 y 坐标
+         const rectY = height - (lineCount * lineHeight + 2 * textMargin);
+         const rectWidth = width - 20;
+         // 根据文字内容和边距计算矩形框高度
+         const rectHeight = lineCount * lineHeight + 2 * textMargin;
+         const borderRadius = 10;
+
+         // 绘制带圆角的半透明矩形背景
+         ctx.beginPath();
+         ctx.moveTo(rectX + borderRadius, rectY);
+         ctx.arcTo(rectX + rectWidth, rectY, rectX + rectWidth, rectY + rectHeight, borderRadius);
+         ctx.arcTo(rectX + rectWidth, rectY + rectHeight, rectX, rectY + rectHeight, borderRadius);
+         ctx.arcTo(rectX, rectY + rectHeight, rectX, rectY, borderRadius);
+         ctx.arcTo(rectX, rectY, rectX + rectWidth, rectY, borderRadius);
+         ctx.closePath();
+         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; // 浅白色，70% 透明度
+         ctx.fill();
+
+        // 绘制活动地点信息
+        ctx.font = '10px sans-serif';
+        ctx.fillStyle = '#333333';
+        ctx.fillText(`活动地点: ${this.data.activity_info.show_activityaddress}`, rectX + textMargin, rectY + textMargin + lineHeight);
+
+        // 绘制参与人数信息
+        ctx.fillText(`参与人数: ${this.data.avatarUrl_list.length} /${this.data.activity_info.max_part_number}人`, rectX + textMargin, rectY + textMargin + 2*lineHeight);
+
+        // 绘制活动时间信息
+        ctx.fillText(`活动时间: ${this.data.activity_info.activity_live}`, rectX + textMargin, rectY + textMargin + 3*lineHeight);
+
+        const tempFilePath = await this.canvasToTempFilePath(canvas);
+        console.log("准备保存分享图")
+        console.log(tempFilePath)
+        this.setData({
+            shareImageUrl: tempFilePath
+        });
+    } catch (error) {
+        console.error('生成图片失败:', error);
+    }
+},
+loadImage(canvas, src) {
+    return new Promise((resolve, reject) => {
+        const img = canvas.createImage();
+        img.src = src;
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+    });
+},
+canvasToTempFilePath(canvas) {
+    return new Promise((resolve, reject) => {
+        wx.canvasToTempFilePath({
+            canvas,
+            success: res => {
+                resolve(res.tempFilePath);
+            },
+            fail: err => {
+                reject(err);
+            }
+        });
+    });
+}
 })

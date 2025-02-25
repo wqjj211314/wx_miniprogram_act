@@ -365,6 +365,12 @@ Page({
       part_limit_index: e.detail.value
     })
   },
+  cropImage(){
+    var img = this.data.imgList[0];
+    wx.navigateTo({
+      url: 'cropper?imgSrc='+img,
+    })
+  },
   ChooseImage() {
     wx.getPrivacySetting({
       success: res => {
@@ -1004,6 +1010,16 @@ Page({
       group_tag_list.push(group_tag_dict[key]["name"])
       group_room_list.push(group_tag_dict[key]["room"])
       group_limit_list.push(group_tag_dict[key]["limit"])
+    }
+    if(app.globalData.cropimgSrc !=""){
+      var cropimgSrc = app.globalData.cropimgSrc;
+      var imglist = this.data.imgList;
+      imglist[0] = cropimgSrc
+     
+      this.setData({
+       imgList:imglist
+      })
+      app.globalData.cropimgSrc = "";
     }
     this.setData({
       group_tag_dict:app.globalData.custom_group_tag_dict,
