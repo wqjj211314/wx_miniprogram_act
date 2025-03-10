@@ -58,7 +58,7 @@ function get_activity_list(that,app,activity_id="") {
       is_cancelend:new Date(first[0]["cancelendtime"]) - new Date() <= 0,
       });
       console.log("初始化第一个activity id = " + first[0].activity_id);
-      _that.socketinit();
+      //_that.socketinit();
       swiper.update_swiper(_that,0,0,0,_that.data.activity_list,_that.data.recyler_list);
       //这里应该将活动信息和用户信息都提取保存起来
       _that.getstore_activity_user_info(first[0].activity_id);

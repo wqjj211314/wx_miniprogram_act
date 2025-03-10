@@ -1,4 +1,5 @@
-const socket = require("../../utils/socket.js");
+//const socket = require("../../utils/socket.js");
+console.log("我在用")
 const util = require("../../utils/util.js");
 const swiper = require("swiper.js");
 const server = require("server.js");
@@ -82,6 +83,7 @@ Page({
       pingTimeout:60000
     })// 连接 socket
     console.log("socket")
+    console.log("还在用？")
     console.log(onSockettest)
     app.globalData.onSockettest = onSockettest
     onSockettest.on('connect', function (res) { // 监听socket 是否连接成功

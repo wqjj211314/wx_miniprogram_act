@@ -1,7 +1,7 @@
 <view class="cu-form-group bg-green" style="height: 200rpx;">
-  <view class="title bg-blue round" style="padding: 30rpx;height: fit-content;">余额 {{userinfo.total_money}}元</view>
+  <view class="title bg-blue" style="padding: 30rpx;height: fit-content;border-radius: 30rpx;">余额：{{userinfo.total_money}}元</view>
 
-  <button class="cu-btn bg-blue round" disabled="{{!can_get || userinfo.total_money == 0}}" bind:tap="getallmoney">全部提现</button>
+  <button class="cu-btn bg-blue" style="border-radius: 20rpx;" disabled="{{!can_get || userinfo.total_money == 0}}" bind:tap="getallmoney">全部提现</button>
 </view>
 
 <view style="margin-top: 30rpx;margin-bottom: 10rpx;" wx:if="{{can_get || userinfo.total_money != 0}}">提现信息(免手续费，24h内到账)</view>
@@ -21,7 +21,7 @@
       <view class="flex bg-white margin-sm padding-sm" style="align-content: center;align-items: center;border-radius: 20rpx;flex-direction: column;">
         <view class="flex" style="justify-content: space-around;align-items: center;width: 100%;">
         <view class="text-orange" style="flex:1;text-align: start;">
-          {{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}元
+          {{item.trade_status == "payment"?"支出":""}} {{item.trade_status == "refund"?"退款收入":""}}{{item.trade_status == "income"?"收入":""}}{{item.trade_status == "expanding"?"提现中":""}}{{item.trade_status == "expanded"?"已提现":""}}{{item.trade_money}}元
         </view>
         <view class="text-red" style="flex:1;text-align: end;">余额：{{item.current_money}}元</view>
         </view>

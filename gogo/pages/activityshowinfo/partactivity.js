@@ -19,7 +19,8 @@ Page({
     select_group_tag: "",//报名所选择的分组
     all_group_tag_dict: {},
     user_info: {},
-    share_user_id:""
+    share_user_id:"",
+        pay_type:""
 
   },
 
@@ -131,7 +132,17 @@ Page({
   onReachBottom() {
 
   },
-
+  hideModal(e) {
+    this.setData({
+      modalName: null
+    })
+  },
+  radioChange: function (e) {
+    console.log('你选择的是：', e.detail.value);
+    this.setData({
+      pay_type:e.detail.value
+    })
+  },
   part_activity() {
     //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
     var that = this;
@@ -167,6 +178,15 @@ Page({
       })
       return;
     }
+     //根据账户余额决定是否弹出余额支付选项
+     if(app.globalData.login_userInfo["total_money"] >= this.data.activity_info.pay_price&&this.data.modalName!="payoptions"&&this.data.activity_info.pay_price>0){
+      //足够个人账户支付
+      this.setData({
+        modalName:"payoptions",
+        pay_type:"balancepayment"
+      })
+      return
+    }
     wx.showLoading({
       title: '报名中...',
     })
@@ -182,7 +202,8 @@ Page({
         "activity_tag": this.data.activity_info.activity_tag,
         "group_tag": this.data.select_group_tag,
         "pay_price": this.data.activity_info.pay_price,
-        "share_user_id":this.data.share_user_id
+        "share_user_id":this.data.share_user_id,
+        "pay_type":this.data.pay_type
       },
       header: {
         'content-type': 'application/json' // 默认值

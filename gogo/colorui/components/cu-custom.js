@@ -64,7 +64,7 @@ Component({
       console.log(this.properties)
       app.globalData.current_activity_id = this.properties.activityid;
       wx.switchTab({
-        url: '/pages/index/index',
+        url: '/pages/index/newindex',
       })
     }
   }

@@ -12,8 +12,8 @@
     </image>
     <view style="position: absolute;font-size: 40rpx;color: rgba(228, 225, 225, 0.4);top:200rpx;left:40%;" wx:if="{{activity_info.activity_status==201}}">审核中...</view>
 
-   
-    
+
+
     <!--弹幕格式-->
     <scroll-view scroll-y class="" scroll-into-view="" scroll-top="{{scrollTop}}" style="position: absolute;top:200rpx;height: 380rpx;">
 
@@ -26,8 +26,8 @@
       </block>
     </scroll-view>
   </view>
-  <view style="position: absolute;right: 30rpx;top: {{CustomBar+10}}px;padding:0rpx;margin:0rpx;background: #4689FF;margin-top:300rpx;">
-    <view class="text-white" style="border-radius: 10rpx;font-size: 30rpx;line-height: 46rpx;font-style: normal;padding:6rpx 14rpx;width: fit-content;margin:0rpx;" bind:tap="show_chat_input" wx:if="{{admin_flag||(login_user_part_list.length > 0 && !is_end_12h)}}">
+  <view style="position: absolute;right: 30rpx;top: {{CustomBar+10}}px;padding:0rpx;margin:0rpx;background: #4689FF;margin-top:300rpx;border-top-left-radius: 10rpx;border-bottom-left-radius: 10rpx;">
+    <view class="text-white" style="border-radius: 10rpx;font-size: 30rpx;line-height: 46rpx;font-style: normal;padding:6rpx 14rpx;width: fit-content;margin:0rpx;border-top-left-radius: 20rpx;border-bottom-left-radius: 20rpx;" bind:tap="show_chat_input" wx:if="{{admin_flag||(login_user_part_list.length > 0 && !is_end_12h)}}">
       <text class="cuIcon-edit"></text><text style="">留言</text>
     </view>
   </view>
@@ -129,7 +129,7 @@
               <text class="cuIcon-friendfill" style="font-size: 30rpx;margin-right: 10rpx;"></text>
               {{unuse_group_item.name}}（0/{{unuse_group_item.limit}}）
             </view>
-            
+
             <view class="overflow:hidden;word-break: break-all;text-align:left;max-width: 400rpx;">{{unuse_group_item.room}}</view>
           </view>
         </block>
@@ -426,7 +426,7 @@
       <!--disable_flag是防止误触重复报名的，报名完就恢复-->
       <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">{{login_user_part_list.length > 0?"替人":""}}{{activity_info.pay_price!=0?"付费":""}}报名</button>
     </view>
-   
+
     <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="cancel_part" wx:if="{{login_user_part_list.length > 0 && !is_begin && !is_cancelend&&activity_info.take_flag==0}}">
       <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">取消报名</button>
     </view>
@@ -436,6 +436,48 @@
     <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin&&activity_info.take_flag==1)||(admin_flag)}}">
       <!--disable_flag是防止误触重复报名的，报名完就恢复-->
       <view class="cuIcon-more text-gray text-bold round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;"></view>
+
+    </view>
+  </view>
+</view>
+<!--支付方式选择-->
+<view class="cu-modal bottom-modal {{modalName=='payoptions'?'show':''}}" style="border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;">
+  <view class="cu-dialog bg-white" style="padding-bottom: 30px;border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;">
+    <view class="cu-bar bg-white justify-start" style="min-height: 0rpx;">
+      <view class="action" bindtap="hideModal" style="min-height: 0rpx;margin-top:25rpx;">
+        <text class="cuIcon-close text-black"></text>
+      </view>
+    </view>
+    <view class="flex padding-lg" style="border: none;flex-direction: column;padding-top: 0rpx;padding-bottom: 0rpx;">
+      <view class="flex" style="justify-content: center;font-size: 32rpx;align-items: baseline;border: none;align-items: baseline;">
+        <text class="iconfont icon-fl-renminbi" style="font-size: 35rpx;margin-right: 5rpx;"></text>
+        <text class="text-bold" style="font-size: 66rpx;">{{activity_info.pay_price}}</text>
+      </view>
+      <radio-group bindchange="radioChange">
+      <view class="flex" style="justify-content: space-between;height: 100rpx;font-size:35rpx;border: none;align-items: center;">
+        <view>
+          <text class="iconfont icon-weixin text-green" style="font-size: 40rpx;margin-right: 5rpx;margin-right: 18rpx;"></text><text>微信支付</text>
+        </view>
+        <view>
+          <radio value="weixinpayment"/>
+        </view>
+      </view>
+      <view class="flex margin-top-sm" style="justify-content: space-between;height: 100rpx;font-size: 35rpx;align-items: center;padding:0rpx;">
+        <view class="flex" style="flex-direction: column;">
+          <view>
+            <text class="cuIcon-moneybagfill text-yellow" style="font-size: 40rpx;margin-right: 5rpx;margin-right: 18rpx;"></text>
+            <text>个人账户支付</text>
+          </view>
+          <text class="text-grey" style="font-size: 25rpx;margin-top:10rpx;">余额：{{login_userInfo["total_money"]}}</text>
+        </view>
+        <view>
+          <radio value="balancepayment" checked/>
+        </view>
+      </view>
+    </radio-group>
+      <view class="flex margin-top" bind:tap="part_activity" style="justify-content: center;height: 100rpx;font-size: 32rpx;">
+        <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">确认支付</button>
+      </view>
 
     </view>
   </view>
@@ -522,9 +564,9 @@
       </view>
     </view>
     <view class="padding-sm bg-white">
-    <button class="cu-bar bg-green" style="min-height: 0rpx;height: 80rpx;" open-type="share">
-      <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">分享给朋友</view>
-    </button>
+      <button class="cu-bar bg-green" style="min-height: 0rpx;height: 80rpx;" open-type="share">
+        <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">分享给朋友</view>
+      </button>
     </view>
   </view>
 </view>
@@ -532,30 +574,30 @@
 <!--分享奖励-->
 <view class="cu-modal {{modalName=='free_part_modal'?'show':''}}">
 
-<view class="cu-dialog">
-  <view class="cu-bar bg-white justify-end">
-    <view class="content">免费参与活动</view>
-    <view class="action" bindtap="hideModal">
-      <text class="cuIcon-close text-red"></text>
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">免费参与活动</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="bg-gray padding">
+      <view>先报名支付，然后分享活动给你的朋友,</view>
+      <view>参与1人补贴奖励约{{activity_info.discount}}元现金。</view>
+      <view class="text-gray margin-top" style="font-size: 20rpx;text-align: left;">
+        <view>奖励在活动结束12h内以退款形式发放，不影响组织者收益</view>
+        <view>最终解释权归行乐GO官方所有</view>
+      </view>
+    </view>
+    <view class="padding-sm bg-white flex" style="">
+      <button class="cu-bar bg-blue margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" bind:tap="part_activity" wx:if="{{!is_addend && !is_begin && ((login_user_part_list.length > 0 && activity_info.take_flag==1)||(login_user_part_list.length <= 0))}}">
+        <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">先报名</view>
+      </button>
+      <button class="cu-bar bg-green margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" open-type="share" wx:if="{{false}}">
+        <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">分享给朋友</view>
+      </button>
     </view>
   </view>
-  <view class="bg-gray padding">
-    <view>先报名支付，然后分享活动给你的朋友,</view>
-    <view>参与1人补贴奖励约{{activity_info.discount}}元现金。</view>
-    <view class="text-gray margin-top" style="font-size: 20rpx;text-align: left;">
-      <view>奖励在活动结束12h内以退款形式发放，不影响组织者收益</view>
-      <view>最终解释权归行乐GO官方所有</view>
-    </view>
-  </view>
-  <view class="padding-sm bg-white flex" style="">
-    <button class="cu-bar bg-blue margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" bind:tap="part_activity" wx:if="{{!is_addend && !is_begin && ((login_user_part_list.length > 0 && activity_info.take_flag==1)||(login_user_part_list.length <= 0))}}">
-    <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">先报名</view>
-  </button>
-  <button class="cu-bar bg-green margin-sm" style="min-height: 0rpx;height: 80rpx;flex:1;" open-type="share" wx:if="{{false}}">
-    <view class="action margin-0 flex-sub solid-left text-white" style="height: 100%;">分享给朋友</view>
-  </button>
-  </view>
-</view>
 </view>
 <!-- 分享 
 <canvas id="shareCanvas" type="2d" style="width: 100rpx; height: 100rpx; display: none;"></canvas>

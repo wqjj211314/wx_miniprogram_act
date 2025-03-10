@@ -32,7 +32,7 @@ Page({
     endtime: "请选择",//year + "-" + month + "-" + day + " 22:00",
     addendtime: "请选择",//year + "-" + month + "-" + day + " 20:00",
     cancelendtime: "请选择",//year + "-" + month + "-" + day + " 20:00",
-    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营","校友会","老乡会"],
+    hobby_tags:["羽毛球", "篮球", "徒步","骑行","爬山","棋牌", "台球", "跑步","麻将","乒乓球","其他"],
     hobby_tag: "",
     max_part_number: 10,
     title: "",

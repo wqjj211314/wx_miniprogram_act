@@ -12,6 +12,7 @@ Page({
     is_login_user:false,
     club_name_club_place_list:[],
     search_word:"",
+    sel_activity_index_list:[]
   },
 
   /**
@@ -309,5 +310,108 @@ Page({
    */
   onReachBottom: function () {
 
+  },
+  generateScheme: function () {
+    wx.showLoading({
+      title: '处理中',
+    })
+    var sel_activity_index_list = this.data.sel_activity_index_list;
+    var sel_activity_list = [];
+    for(var index in sel_activity_index_list){
+      var value = sel_activity_index_list[index];
+      var activity_info = this.data.activity_create_list[value];
+    
+      var simple_activity_info = {};
+      simple_activity_info["activity_id"] = activity_info["activity_id"]
+      simple_activity_info["activity_tag"] = activity_info["activity_tag"]
+    
+      simple_activity_info = encodeURIComponent(JSON.stringify(simple_activity_info));
+      sel_activity_list.push(simple_activity_info)
+    }
+    
+    var that = this;
+    wx.request({
+      url: app.globalData.hosturl+"api_generate_scheme",
+      method: 'POST',
+      data: {
+        "path": "pages/activityshowinfo/activityshowinfo",
+        "sel_activity_list": sel_activity_list,
+        "is_expire":false
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: (res) => {
+        console.log(res.data)
+        if (res.data.code == 200) {
+          var result = res.data.result;
+          var copy_activity_text = "";
+          for(var index in result){
+            var activity_index = sel_activity_index_list[index]
+            var activity_info = that.data.activity_create_list[activity_index]
+            /**
+             * errcode: 0
+errmsg: "ok"
+openlink: "weixin://dl/business/?t=0jeQ3n9Ih7n"
+             */
+            if(result[index]["errcode"] == 0){
+              copy_activity_text = copy_activity_text + "🚩活动主题："+activity_info["title"] + "\n🚘活动地点："+activity_info["show_activityaddress"]+"\n🕓活动时间："+activity_info["activity_live"]+"\n💢报名链接："+result[index]["openlink"]+"\n\n"
+            }
+          }
+          wx.setClipboardData({
+            data: copy_activity_text,
+            success (res) {
+              wx.hideLoading()
+              wx.showToast({
+                title: '复制完成！',
+                icon:'success',
+                duration:3000
+              })
+            },
+            fail(res){
+              console.log(res)
+            }
+          })
+          
+        } else {
+          wx.showToast({
+            title: '生成失败：' + res.data.errmsg,
+            icon: 'none'
+          });
+        }
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '请求失败：' + err.errMsg,
+          icon: 'none'
+        });
+      }
+    });
+  },
+  listenCheckboxChange(e){
+    console.log('当checkbox-group中的checkbox选中或者取消是我被调用');
+      //打印对象包含的详细信息
+      console.log(e.detail.value);
+      var sel_values = e.detail.value;
+      this.setData({
+        sel_activity_index_list:sel_values
+      })
+      
+  },
+  copyFormattedContent: function () {
+    wx.setClipboardData({
+      data: 'data',
+      success (res) {
+        wx.getClipboardData({
+          success (res) {
+            console.log(res.data) // data
+          }
+        })
+      },
+      fail(res){
+        console.log(res)
+      }
+    })
+    
   }
 })

@@ -88,3 +88,45 @@
     <button class="cu-btn round" style="width: 100%;height: 85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">{{activity_info.pay_price!=0?"付费":""}}报名</button>
   </view>
 </view>
+<!--支付方式选择-->
+<view class="cu-modal bottom-modal {{modalName=='payoptions'?'show':''}}" style="border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;">
+  <view class="cu-dialog bg-white" style="padding-bottom: 30px;border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;">
+    <view class="cu-bar bg-white justify-start" style="min-height: 0rpx;">
+      <view class="action" bindtap="hideModal" style="min-height: 0rpx;margin-top:25rpx;">
+        <text class="cuIcon-close text-black"></text>
+      </view>
+    </view>
+    <view class="flex padding-lg" style="border: none;flex-direction: column;padding-top: 0rpx;padding-bottom: 0rpx;">
+      <view class="flex" style="justify-content: center;font-size: 32rpx;align-items: baseline;border: none;align-items: baseline;">
+        <text class="iconfont icon-fl-renminbi" style="font-size: 35rpx;margin-right: 5rpx;"></text>
+        <text class="text-bold" style="font-size: 66rpx;">{{activity_info.pay_price}}</text>
+      </view>
+      <radio-group bindchange="radioChange">
+      <view class="flex" style="justify-content: space-between;height: 100rpx;font-size:35rpx;border: none;align-items: center;">
+        <view>
+          <text class="iconfont icon-weixin text-green" style="font-size: 40rpx;margin-right: 5rpx;margin-right: 18rpx;"></text><text>微信支付</text>
+        </view>
+        <view>
+          <radio value="weixinpayment"/>
+        </view>
+      </view>
+      <view class="flex margin-top-sm" style="justify-content: space-between;height: 100rpx;font-size: 35rpx;align-items: center;padding:0rpx;">
+        <view class="flex" style="flex-direction: column;">
+          <view>
+            <text class="cuIcon-moneybagfill text-yellow" style="font-size: 40rpx;margin-right: 5rpx;margin-right: 18rpx;"></text>
+            <text>个人账户支付</text>
+          </view>
+          <text class="text-grey" style="font-size: 25rpx;margin-top:10rpx;">余额：{{user_info["total_money"]}}</text>
+        </view>
+        <view>
+          <radio value="balancepayment" checked/>
+        </view>
+      </view>
+    </radio-group>
+      <view class="flex margin-top" bind:tap="part_activity" style="justify-content: center;height: 100rpx;font-size: 32rpx;">
+        <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">确认支付</button>
+      </view>
+
+    </view>
+  </view>
+</view>

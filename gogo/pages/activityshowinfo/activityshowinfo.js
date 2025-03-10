@@ -11,34 +11,33 @@ Page({
    */
   data: {
     CustomBar: app.globalData.CustomBar,
-    activity_info: [],
+    activity_info: {},
     room_list: [],
     is_begin: false,
     is_end: true,
     is_end_12h: false,
     is_addend: false,
     is_cancelend: false,
-    activity_user_info: [],
+    activity_user_info: {},
     title_tags: [],
     partinfo: [],
     partinfo_list: [],
     partinfoinput: {},
     memberlist: {},
     ispart: false,
-    part_flag: false,//是否参与
-    part_member_num: "",//当前用户参与的编号
+    part_flag: false, //是否参与
+    part_member_num: "", //当前用户参与的编号
     part_group_tag: "",
     like_flag: false,
     isend: false,
     partbuttonmsg: "我要报名",
     modalName: "",
     avatarUrl_list: [],
-    
     user_info_list: [],
     addendtime: "",
     member: 0,
     hosturl: app.globalData.hosturl,
-    admin_flag: false,//是否是发布者，超级权限：编辑活动，删除成员
+    admin_flag: false, //是否是发布者，超级权限：编辑活动，删除成员
     edit_group_flag: false,
     announcement: "",
     new_announcement: "",
@@ -47,18 +46,18 @@ Page({
     picker: ["1级", "2级", "3级", "4级", "5级", "6级", "7级", "8级", "9级", "10级"],
     activity_date: "",
     share_user_id: "",
-    part_limit: 1,//0不限制参与，1限制参与,
+    part_limit: 1, //0不限制参与，1限制参与,
     entire_part_info: [],
     group_name: "",
     hidden_del_tag: true,
     ungroup_partinfo_list: [],
-    pre_edit_group: [],//老的分组成员
-    current_edit_group: [],//当前分组成员
+    pre_edit_group: [], //老的分组成员
+    current_edit_group: [], //当前分组成员
     all_group_tag_dict: {},
     all_group_tag_list: [],
     all_group_tag2_dict: {},
     all_group_tag2_list: [],
-    unuse_group_tag_dict:{},
+    unuse_group_tag_dict: {},
     disable_save_group: true,
     current_swiper_item_index: 0,
     sort_users_score: {},
@@ -68,96 +67,119 @@ Page({
     cancel_part_members: [],
     confirm_cancel_part: false,
     like_dict: {},
-    group_tag: "",//编辑分组
-    group_room: "",//编辑分组
-    group_limit: "",//编辑分组
-    edit_group_tag_dict: {},//编辑分组
+    group_tag: "", //编辑分组
+    group_room: "", //编辑分组
+    group_limit: "", //编辑分组
+    edit_group_tag_dict: {}, //编辑分组
     triggered: false,
-
-    select_group_tag: "",//报名所选择的分组
+    select_group_tag: "", //报名所选择的分组
     pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑", "棋牌"],
     is_pk_hobby: true,
     show_part_flag: false,
     show_admin_flag: false,
-    empty_group_tag_dict: true,//用来显示报名预分组的
+    empty_group_tag_dict: true, //用来显示报名预分组的
     recommend_list: [],
     barbg_url: "https://www.2week.club:5000/static/barbg/羽毛球.jpg",
     barbg_tags: ["羽毛球", "台球", "篮球", "棋牌", "乒乓球"],
     loading_tip: "加载中",
-    show_detail_flag:false,
-    safeArea:app.globalData.safeArea,
-    is_display:false,
-    is_focus:false,
-    chat_msgs:[],
-    inputMsg:"",
-    scrollTop:0,
-    edit_member_num:"",
-    share_num:0,
-    shareImageUrl:""
+    show_detail_flag: false,
+    safeArea: app.globalData.safeArea,
+    is_display: false,
+    is_focus: false,
+    chat_msgs: [],
+    inputMsg: "",
+    scrollTop: 0,
+    edit_member_num: "",
+    share_num: 0,
+    shareImageUrl: "",
+    login_userInfo:{},
+    pay_type:""
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
     var that = this;
     console.log("加载用户活动详情页");
     console.log(options)
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
-    let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
+    console.log(activity_info)
+    //let activity_user_info = JSON.parse(decodeURIComponent(options.activity_user_info));
     if (options.hasOwnProperty("share_user_id")) {
       let share_user_id = decodeURIComponent(options.share_user_id);
       this.setData({
         share_user_id: share_user_id
       });
     }
+    if (activity_info.hasOwnProperty("addendtime")) {
 
-    console.log(activity_info);
-    console.log(activity_user_info);
-    var addendtime = activity_info["addendtime"];
-    if (new Date("2024-03-22 10:00") - new Date() > 0) {
-      console.log("日期比较大")
+      console.log(activity_info);
+      //console.log(activity_user_info);
+      var addendtime = activity_info["addendtime"];
+      if (new Date("2024-03-22 10:00") - new Date() > 0) {
+        console.log("日期比较大")
+      }
+      this.setData({
+        activity_info: activity_info,
+        room_list: activity_info.room.split(","),
+        is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
+        is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
+        is_end_12h: new Date(activity_info["endtime"]) - new Date() <= -(1000 * 60 * 60 * 12),
+        is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
+        is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
+        new_announcement: activity_info["announcement"],
+        member: activity_info["member"],
+        addendtime: addendtime,
+        activity_user_info: activity_info.createuser, //activity_user_info,
+        partinfo: activity_info.partinfo,
+        title_tags: activity_info.title_tags,
+        share_res_limit: activity_info["part_limit"],
+        is_pk_hobby: this.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
+      });
+      var that = this;
+
+      console.log(new Date(addendtime).getTime());
+      console.log(new Date().getTime());
+
+
+    } else {
+      this.setData({
+        activity_info: activity_info,
+        activity_user_info: activity_info["createuser"]
+      })
     }
-    this.setData({
-      activity_info: activity_info,
-      room_list: activity_info.room.split(","),
-      is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
-      is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
-      is_end_12h: new Date(activity_info["endtime"]) - new Date() <= -(1000 * 60 * 60 * 12),
-      is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
-      is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
-      new_announcement: activity_info["announcement"],
-      member: activity_info["member"],
-      addendtime: addendtime,
-      activity_user_info: activity_user_info,
-      partinfo: activity_info.partinfo,
-      title_tags: activity_info.title_tags,
-      share_res_limit: activity_info["part_limit"],
-      is_pk_hobby: this.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
-    });
-    var that = this;
-
-    console.log(new Date(addendtime).getTime());
-    console.log(new Date().getTime());
-
-
     if (this.data.barbg_tags.includes(activity_info.activity_tag)) {
       this.setData({
         barbg_url: "https://www.2week.club:5000/static/barbg/" + activity_info.activity_tag + ".jpg"
       })
     }
     this.init_activity_all_info(activity_info);
-    
+    this.setData({
+      login_userInfo:app.globalData.login_userInfo
+    })
+    // 绑定分享参数
+    wx.onCopyUrl(() => {
+      console.log("复制链接");
+      var share_user_id = app.globalData.login_userInfo["user_id"];
+      var activity_info2 = {}
+      activity_info2["activity_id"] = activity_info["activity_id"]
+      activity_info2["activity_tag"] = activity_info["activity_tag"]
+      activity_info2["createuser"] ={"user_id":activity_info["createuser"]["user_id"]}
+      activity_info2 = encodeURIComponent(JSON.stringify(activity_info2));
+      return {
+        query: "activity_info=" + activity_info2 + "&&share_user_id=" + share_user_id
+      }
+    })
   },
   show_all_part() {
     this.setData({
       show_part_flag: !this.data.show_part_flag
     })
   },
-  show_detail(){
+  show_detail() {
     this.setData({
-      show_detail_flag:!this.data.show_detail_flag
+      show_detail_flag: !this.data.show_detail_flag
     })
   },
   go_to_place(e) {
@@ -172,7 +194,7 @@ Page({
   show_admin_options(e) {
     this.setData({
       edit_member_num: e.currentTarget.dataset.membernum,
-      modalName:"admin_modal"
+      modalName: "admin_modal"
     })
   },
   init_activity_all_info(activity_info) {
@@ -192,25 +214,33 @@ Page({
       },
       success(res) {
         //更新活动信息
-        if(res.data["code"] == 500){
+        if (res.data["code"] == 500) {
           wx.showToast({
             title: '服务器异常',
-            icon:'error',
-            duration:4000
+            icon: 'error',
+            duration: 4000
           })
-          
+
         }
         var activity_info = that.data.activity_info;
         console.log(res.data["activity_info"])
         var new_activity_info = res.data["activity_info"]
         for (var key in new_activity_info) {
-          if (activity_info.hasOwnProperty(key)) {
-            activity_info[key] = new_activity_info[key]
-          }
+          //if (activity_info.hasOwnProperty(key)) {
+          activity_info[key] = new_activity_info[key]
+          //}
+        }
+        console.log("获取新的activity_info")
+        console.log(new_activity_info)
+        if (app.globalData.login_userInfo["user_id"] == activity_info["createuser"]["user_id"]) {
+          that.setData({
+            admin_flag: true
+          });
         }
         //更新活动的时间限制信息
         that.setData({
           activity_info: activity_info,
+          activity_user_info:activity_info["createuser"],
           room_list: activity_info.room.split(","),
           is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
           is_end: new Date(activity_info["endtime"]) - new Date() <= 0,
@@ -241,11 +271,11 @@ Page({
         })
       }
     });
-    setTimeout(function(){
+    setTimeout(function () {
       wx.hideLoading()
-    },1000)
-   
-    
+    }, 1000)
+
+
   },
 
   show_user_detail(e) {
@@ -257,7 +287,9 @@ Page({
         item["show_flag"] = !(item.show_flag);
       }
     })
-    this.setData({ all_group_tag_list })
+    this.setData({
+      all_group_tag_list
+    })
     //console.log();
 
   },
@@ -279,25 +311,25 @@ Page({
     }
 
   },
-  update_share_num(that,allpartinfo){
+  update_share_num(that, allpartinfo) {
     var share_user_list = []
-    allpartinfo.forEach(item=>{
+    allpartinfo.forEach(item => {
       //有多少人是通过你分享报名的？
       //分享人是你，不能是自己参与自己的分享，不能计算重复（挂人的情况）
-      if(item["share_user_id"] == app.globalData.login_userInfo["user_id"]&&item["share_user_id"] != item.user_id&&share_user_list.indexOf(item.user_id)==-1){
+      if (item["share_user_id"] == app.globalData.login_userInfo["user_id"] && item["share_user_id"] != item.user_id && share_user_list.indexOf(item.user_id) == -1) {
         share_user_list.push(item.user_id)
       }
     })
     console.log(share_user_list);
     that.setData({
-      share_num:share_user_list.length
+      share_num: share_user_list.length
     })
   },
   update_part_info(that, res) {
     console.log("成员信息" + res.data);
     var result = res.data;
     console.log(result["avatarUrl_list"]);
-   
+
     console.log(result["user_info_part_info_list"]);
     var user_info_list = result["user_info_list"];
     console.log(user_info_list.length);
@@ -318,23 +350,23 @@ Page({
     })
 
     var avatarUrl_list = result["avatarUrl_list"];
-   
+
 
     //测试用，创建20个参与人员
     var info = result["user_info_part_info_list"];
     //更新分享参与人数
-    that.update_share_num(that,info);
+    that.update_share_num(that, info);
     var all_group_tag_dict = {};
     var ungroup_partinfo_list = [];
     var member_users = {};
     var part_member_num = "";
     var part_group_tag = "";
     var login_user_part_list = [];
-    
+
     console.log(info);
     //提取分组信息
     info.forEach(item => {
-      
+
       if (item["group_tag"] != "" && item["group_tag"] != null) {
         console.log(item["group_tag"]);
         var tag = item["group_tag"];
@@ -366,10 +398,10 @@ Page({
         part_group_tag = item["group_tag"];
         //var partinfo = that.data.partinfo;
         //有参与编号代表已参与，已参与如果重复报名需要提供姓名，性别
-        if (partinfo.indexOf("姓名") == -1) {//没找到
+        if (partinfo.indexOf("姓名") == -1) { //没找到
           partinfo.push("姓名")
         }
-        if (partinfo.indexOf("性别") == -1) {//没找到
+        if (partinfo.indexOf("性别") == -1) { //没找到
           partinfo.push("性别")
         }
         that.setData({
@@ -409,7 +441,13 @@ Page({
           boy_num = boy_num + 1;
         }
       })
-      all_group_tag_list.push({ "group_tag": group_tag, "group_users": all_group_tag_dict[group_tag], "show_flag": false, "boy_num": boy_num, "girl_num": girl_num });
+      all_group_tag_list.push({
+        "group_tag": group_tag,
+        "group_users": all_group_tag_dict[group_tag],
+        "show_flag": false,
+        "boy_num": boy_num,
+        "girl_num": girl_num
+      });
     }
     //再分组列表
     var all_group_tag2_list = [];
@@ -424,7 +462,13 @@ Page({
           boy_num = boy_num + 1;
         }
       })
-      all_group_tag2_list.push({ "group_tag": group_tag, "group_users": all_group_tag2_dict[group_tag], "show_flag": false, "boy_num": boy_num, "girl_num": girl_num });
+      all_group_tag2_list.push({
+        "group_tag": group_tag,
+        "group_users": all_group_tag2_dict[group_tag],
+        "show_flag": false,
+        "boy_num": boy_num,
+        "girl_num": girl_num
+      });
     }
     console.log("再分组列表")
     console.log(all_group_tag2_list)
@@ -436,7 +480,7 @@ Page({
     var temp_unuse_group_tag_dict = activity_info.group_tag_dict;
     var unuse_group_tag_list = [];
     for (var group_tag in temp_unuse_group_tag_dict) {
-      if(!all_group_tag_dict.hasOwnProperty(group_tag)){
+      if (!all_group_tag_dict.hasOwnProperty(group_tag)) {
         unuse_group_tag_list.push(temp_unuse_group_tag_dict[group_tag])
       }
     }
@@ -457,38 +501,38 @@ Page({
       activity_info: activity_info,
       all_group_tag2_list: all_group_tag2_list,
       all_group_tag2_dict: all_group_tag2_dict,
-      unuse_group_tag_list:unuse_group_tag_list
-     
+      unuse_group_tag_list: unuse_group_tag_list
+
     });
     that.update_part_status();
   },
-  random_gift(){
+  random_gift() {
     var that = this;
     var entire_part_info = this.data.entire_part_info;
     var user_id_list = [];
     var member_num_list = [];
-    entire_part_info.forEach(item=>{
+    entire_part_info.forEach(item => {
       var user_id = item.user_id;
-      if(user_id_list.indexOf(user_id) == -1){
+      if (user_id_list.indexOf(user_id) == -1) {
         user_id_list.push(user_id)
         member_num_list.push(item.member_num)
       }
     })
-    var random_index = Math.floor(Math.random()*user_id_list.length)
+    var random_index = Math.floor(Math.random() * user_id_list.length)
     var gift_member_num = member_num_list[random_index];
     var gift_user_info = this.data.member_users[gift_member_num];
     console.log(that.data.activity_info.activity_id)
     this.setData({
-      modalName:""
+      modalName: ""
     })
     wx.showModal({
       title: '随机抽奖结果',
-      content: '中奖人员是第'+gift_member_num.replace('#','')+'号成员，昵称:'+gift_user_info['nickName'],
+      content: '中奖人员是第' + gift_member_num.replace('#', '') + '号成员，昵称:' + gift_user_info['nickName'],
       complete: (res) => {
         if (res.cancel) {
-          
+
         }
-    
+
         if (res.confirm) {
           wx.showLoading({
             title: '保存中',
@@ -498,8 +542,8 @@ Page({
             data: {
               "activity_id": that.data.activity_info.activity_id,
               "member_num": gift_member_num,
-              "info_key":"gift",
-              "info_value":"已中奖"
+              "info_key": "gift",
+              "info_value": "已中奖"
             },
             header: {
               'content-type': 'application/json' // 默认值
@@ -520,7 +564,7 @@ Page({
                   duration: 1000
                 })
               }
-      
+
             },
             fail(res) {
               wx.hideLoading();
@@ -559,12 +603,12 @@ Page({
     }
 
   },
-  qrcode(){
+  qrcode() {
     this.setData({
-      modalName:""
+      modalName: ""
     })
     wx.navigateTo({
-      url: 'qrcode?activity_id='+this.data.activity_info.activity_id,
+      url: 'qrcode?activity_id=' + this.data.activity_info.activity_id,
     })
   },
   /**
@@ -594,7 +638,7 @@ Page({
   listenCheckboxChange(e) {
     console.log('当checkbox-group中的checkbox选中或者取消是我被调用');
     //打印对象包含的详细信息
-    console.log(e.detail.value);//数组
+    console.log(e.detail.value); //数组
     var cancel_part_members = e.detail.value;
     this.setData({
       cancel_part_members: cancel_part_members
@@ -618,7 +662,7 @@ Page({
       },
       success(res) {
         that.update_part_info(that, res);
-        
+
         wx.hideLoading();
       }
     });
@@ -637,7 +681,9 @@ Page({
     } else {
       var cancel_part_members = this.data.cancel_part_members;
       cancel_part_members.push(this.data.login_user_part_list[0]["member_num"])
-      this.setData({ cancel_part_members });
+      this.setData({
+        cancel_part_members
+      });
       this.confirm_cancel_part()
     }
   },
@@ -646,13 +692,7 @@ Page({
    */
   onShow: function (options) {
     console.log("onshow加载");
-    console.log(app.globalData.login_userInfo["user_id"])//可能会慢
-    console.log(this.data.activity_user_info["user_id"])
-    if (app.globalData.login_userInfo["user_id"] == this.data.activity_user_info["user_id"]) {// || app.globalData.checking_flag
-      this.setData({
-        admin_flag: true
-      });
-    }
+    
     //这是针对选择分组成员之后的数据更新，从partuser界面返回
     var edit_group_user = app.globalData.edit_group_user;
     var current_edit_group = this.data.current_edit_group;
@@ -707,7 +747,13 @@ Page({
           }
         })
 
-        all_group_tag2_list.push({ "group_tag": group_tag2, "group_users": all_group_tag2_dict[group_tag2], "show_flag": false, "boy_num": boy_num, "girl_num": girl_num });
+        all_group_tag2_list.push({
+          "group_tag": group_tag2,
+          "group_users": all_group_tag2_dict[group_tag2],
+          "show_flag": false,
+          "boy_num": boy_num,
+          "girl_num": girl_num
+        });
       }
       this.setData({
         all_group_tag2_dict: all_group_tag2_dict,
@@ -716,19 +762,21 @@ Page({
       app.globalData.re_group_users = {}
     }
     console.log(app.globalData.modalName)
-    console.log(app.globalData.modalName!="")
+    console.log(app.globalData.modalName != "")
     this.setData({
       current_edit_group: current_edit_group,
       hidden_del_tag: true,
       ungroup_partinfo_list: new_ungroup_partinfo_list,
-      
+
     });
-    if(app.globalData.modalName=="share_tip_modal"){
-      this.setData({modalName:"share_tip_modal"})
+    if (app.globalData.modalName == "share_tip_modal") {
+      this.setData({
+        modalName: "share_tip_modal"
+      })
     }
     app.globalData.modalName = "";
     console.log(current_edit_group);
-    app.globalData.edit_group_user = [];//app只短暂存储编辑选择的分组成员
+    app.globalData.edit_group_user = []; //app只短暂存储编辑选择的分组成员
     this.update_save_group_button_status();
     //重新加载见闻的图片记录
     if (app.globalData.reload_activity_share_moods == true) {
@@ -743,9 +791,9 @@ Page({
       }, 5000)
     }
   },
-  free_part(){
+  free_part() {
     this.setData({
-      modalName:"free_part_modal"
+      modalName: "free_part_modal"
     })
     //this.generateShareImage();
   },
@@ -787,7 +835,7 @@ Page({
   },
 
   user_login() {
-    util.get_open_id(app,this);
+    util.get_open_id(app, this);
   },
   /**
    * 生命周期函数--监听页面隐藏
@@ -802,28 +850,29 @@ Page({
   onUnload: function () {
     // 页面卸载时设置插件选点数据为null，防止再次进入页面，geLocation返回的是上次选点结果
     //chooseLocation.setLocation(null);
+    wx.offCopyUrl();
   },
   set_part_limit() {
-    var part_limit = 1;//限制参与
+    var part_limit = 1; //限制参与
     var share_user_id = this.data.share_user_id;
-    if (this.data.activity_info["part_limit"] == 1) {//"通过发起人和成员分享可以参与"
+    if (this.data.activity_info["part_limit"] == 1) { //"通过发起人和成员分享可以参与"
       this.data.user_info_list.forEach(item => {
         console.log(item);
-        if (item["user_id"] == share_user_id) {//成员
-          part_limit = 0;//不限制参与
+        if (item["user_id"] == share_user_id) { //成员
+          part_limit = 0; //不限制参与
           //break;
         }
       });
       if (this.data.activity_user_info["user_id"] == share_user_id) {
-        part_limit = 0;//不限制参与
+        part_limit = 0; //不限制参与
       }
-    } else if (this.data.activity_info["part_limit"] == 2) {//"通过发起人分享可以参与"
+    } else if (this.data.activity_info["part_limit"] == 2) { //"通过发起人分享可以参与"
       if (this.data.activity_user_info["user_id"] == share_user_id) {
-        part_limit = 0;//不限制参与
+        part_limit = 0; //不限制参与
       }
 
-    } else if (this.data.activity_info["part_limit"] == 0) {//"所有人均可参与"
-      part_limit = 0;//不限制参与
+    } else if (this.data.activity_info["part_limit"] == 0) { //"所有人均可参与"
+      part_limit = 0; //不限制参与
     }
     this.setData({
       part_limit: part_limit
@@ -843,8 +892,13 @@ Page({
         path: '/pages/index/newindex',
       }
     }
-
-    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+    var activity_info = {}
+    activity_info["activity_id"] = this.data.activity_info["activity_id"]
+    activity_info["activity_tag"] = this.data.activity_info["activity_tag"]
+    activity_info["createuser"] = {
+      "user_id": this.data.activity_info["createuser"]["user_id"]
+    }
+    activity_info = encodeURIComponent(JSON.stringify(activity_info));
     console.log("小程序分享onShareAppMessage");
     //var share_res_limit = this.get_share_limit();//0不限制参与，1限制参与
     var share_user_id = "";
@@ -855,13 +909,13 @@ Page({
     }
     let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_user_info));
     console.log(this.data.modalName)
-    if(this.data.modalName=="free_part_modal"&&this.data.activity_info.activity_status!=201){
+    if (this.data.modalName == "free_part_modal" && this.data.activity_info.activity_status != 201) {
       console.log("分享")
       return {
         title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
         desc: '自定义分享描述',
         path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_user_id=" + share_user_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
-        imageUrl:this.data.activity_info.bg_url,
+        imageUrl: this.data.activity_info.bg_url,
         success: function (res) {
           if (res.errMsg == 'shareAppMessage:ok') {
             console.log("成功", res)
@@ -870,13 +924,15 @@ Page({
         fail: function (res) {
           console.log("失败", res)
         },
-  
+
       }
     }
     return {
       title: "「" + this.data.activity_info["pay_type"] + "」" + this.data.activity_info["title"],
       //desc: '自定义分享描述',
       path: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_user_id=" + share_user_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
+      //path: '/pages/activityshowinfo/activityshowinfo?' + "activity_info=" + activity_info + "&share_user_id=" + share_user_id + "&current_swiper_item_index=" + this.data.current_swiper_item_index,
+      //path: '/pages/activityshowinfo/activityshowinfo',
       //imageUrl:bgurl,
       success: function (res) {
         if (res.errMsg == 'shareAppMessage:ok') {
@@ -901,7 +957,12 @@ Page({
     });
     console.log(info);
   },
-
+  radioChange: function (e) {
+    console.log('你选择的是：', e.detail.value);
+    this.setData({
+      pay_type:e.detail.value
+    })
+  },
   part_activity() {
     var that = this;
     //提前判断报名限制再跳转
@@ -919,9 +980,18 @@ Page({
       var partinfo = encodeURIComponent(JSON.stringify(this.data.partinfo));
       var all_group_tag_dict = encodeURIComponent(JSON.stringify(this.data.all_group_tag_dict));
       wx.navigateTo({
-        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit+'&&share_user_id='+this.data.share_user_id,
+        url: 'partactivity?activity_info=' + activity_info + '&&partinfo=' + partinfo + '&&all_group_tag_dict=' + all_group_tag_dict + '&&part_limit=' + this.data.part_limit + '&&share_user_id=' + this.data.share_user_id,
       })
       return;
+    }
+    //根据账户余额决定是否弹出余额支付选项
+    if(app.globalData.login_userInfo["total_money"] >= this.data.activity_info.pay_price&&this.data.modalName!="payoptions"&&this.data.activity_info.pay_price>0){
+      //足够个人账户支付
+      this.setData({
+        modalName:"payoptions",
+        pay_type:"balancepayment"
+      })
+      return
     }
 
     //["通过发起人分享可以参与","通过发起人和成员分享可以参与","所有人均可参与"]
@@ -973,7 +1043,8 @@ Page({
         "activity_tag": this.data.activity_info.activity_tag,
         "group_tag": this.data.select_group_tag,
         "pay_price": this.data.activity_info.pay_price,
-        "share_user_id":this.data.share_user_id
+        "share_user_id": this.data.share_user_id,
+        "pay_type":this.data.pay_type
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -999,10 +1070,12 @@ Page({
                 duration: 2000
               })
               console.log(that.data.activity_info.discount)
-              if(that.data.activity_info.discount > 0){
-                that.setData({modalName:"share_tip_modal"})
+              if (that.data.activity_info.discount > 0) {
+                that.setData({
+                  modalName: "share_tip_modal"
+                })
               }
-              
+
               wx.request({
                 url: app.globalData.hosturl + 'get_member_user_id_pay_status', //仅为示例，并非真实的接口地址
                 data: {
@@ -1019,9 +1092,9 @@ Page({
 
                 }
               });
-              setTimeout(function(){
+              setTimeout(function () {
                 that.init_activity_all_info(that.data.activity_info);
-              },1500)
+              }, 1500)
             },
             'fail': function (res) {
               console.log("取消支付")
@@ -1038,10 +1111,10 @@ Page({
             icon: "success",
             duration: 2000
           })
-          setTimeout(function(){
+          setTimeout(function () {
             that.init_activity_all_info(that.data.activity_info);
-          },1500)
-          
+          }, 1500)
+
           console.log("免费报名")
 
         } else {
@@ -1061,10 +1134,10 @@ Page({
         })
       }
     });
-    /*
-    app.globalData.onSockettest.emit('newmember', { activity_id: this.data.activity_info.activity_id, user_id: app.globalData.openid, partinfo: JSON.stringify(this.data.partinfoinput), latitude: this.data.activity_info.latitude, longitude: this.data.activity_info.longitude, "activity_tag": this.data.activity_info.activity_tag, "group_tag": this.data.select_group_tag });
-    */
-   
+    this.setData({
+      modalName:""
+    })
+
   },
 
   show_info_modal(e) {
@@ -1218,7 +1291,7 @@ Page({
   del_group_member(e) {
     console.log(e.currentTarget.dataset.num);
     var member_num = e.currentTarget.dataset.num;
-    console.log(typeof (member_num));//number
+    console.log(typeof (member_num)); //number
     var new_current_edit_group = [];
     var ungroup_partinfo_list = this.data.ungroup_partinfo_list;
     this.data.current_edit_group.forEach(item => {
@@ -1278,7 +1351,7 @@ Page({
     console.log("移除成员");
     var that = this;
     that.setData({
-      modalName:""
+      modalName: ""
     })
     wx.showModal({
       title: '取消报名资格',
@@ -1362,7 +1435,9 @@ Page({
         if (res.data != "") {
           var activity_info = that.data.activity_info;
           activity_info.group_tag_dict = res.data;
-          that.setData({ activity_info: activity_info })
+          that.setData({
+            activity_info: activity_info
+          })
         }
 
       }
@@ -1425,7 +1500,11 @@ Page({
     if (pre_group_users.length > 0) {
       old_group_tag = pre_group_users[0].group_tag;
     }
-    var new_group_tag_dict = { "name": group_tag, "room": this.data.group_room, "limit": this.data.group_limit }
+    var new_group_tag_dict = {
+      "name": group_tag,
+      "room": this.data.group_room,
+      "limit": this.data.group_limit
+    }
     var params = [];
 
     pre_group_users.forEach(item => {
@@ -1490,7 +1569,9 @@ Page({
         if (res.data != "") {
           var activity_info = that.data.activity_info;
           activity_info.group_tag_dict = res.data;
-          that.setData({ activity_info: activity_info })
+          that.setData({
+            activity_info: activity_info
+          })
         }
 
       }
@@ -1597,20 +1678,23 @@ Page({
     var like_member_group = e.currentTarget.dataset.likemembergroup;
     var part_member_num = this.data.part_member_num;
     var that = this;
-    var url = "";//去点赞
+    var url = ""; //去点赞
     var like_dict = this.data.like_dict;
     if (!like_dict.hasOwnProperty(like_member_group)) {
-      like_dict[like_member_group] = { "like_flag": false, "member_nums": [] };
+      like_dict[like_member_group] = {
+        "like_flag": false,
+        "member_nums": []
+      };
     }
     var member_nums = like_dict[like_member_group]["member_nums"];
     if (like_dict[like_member_group]["like_flag"] == true) {
-      url = "del_activity_member_like"//取消点赞
+      url = "del_activity_member_like" //取消点赞
       like_dict[like_member_group]["like_flag"] = false;
-      member_nums.splice(member_nums.indexOf(part_member_num), 1)//删除
+      member_nums.splice(member_nums.indexOf(part_member_num), 1) //删除
     } else {
-      url = "like_activity_member";//去点赞
+      url = "like_activity_member"; //去点赞
       like_dict[like_member_group]["like_flag"] = true;
-      member_nums.push(part_member_num)//新增
+      member_nums.push(part_member_num) //新增
     }
     this.setData({
       like_dict: like_dict
@@ -1643,8 +1727,8 @@ Page({
   },
 
   /**
- * 页面相关事件处理函数--监听用户下拉动作
- */
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
   onScrollRefresh() {
     console.log("下拉刷新" + this.data.triggered)
     var that = this;
@@ -1724,14 +1808,14 @@ Page({
       },
       success(res) {
         if (res.data != "fail") {
-          
-          console.log("聊天消息数量"+res.data.length);
+
+          console.log("聊天消息数量" + res.data.length);
           res.data.forEach(element => {
             console.log(element);
             chat_msgs.unshift(element);
           });
-          
-          
+
+
           that.setData({
             chat_msgs: chat_msgs,
             scrollTop: 0
@@ -1740,12 +1824,12 @@ Page({
       }
     });
   },
-  show_chat_input(){
+  show_chat_input() {
     this.setData({
-      is_display:true
+      is_display: true
     })
   },
-  scroll(e){
+  scroll(e) {
     console.log(e.detail)
     this.setData({
       is_focus: false,
@@ -1767,7 +1851,7 @@ Page({
   sendMsg() {
     console.log(this.data.inputMsg);
     var send = this.data.inputMsg.trim();
-    if(send == ""){
+    if (send == "") {
       this.setData({
         inputMsg: ""
       });
@@ -1775,26 +1859,33 @@ Page({
     }
     var activity_id = this.data.activity_info.activity_id;
     var chat_msgs = this.data.chat_msgs;
-    chat_msgs.push({"activity_id":activity_id,"chatmsg":send,"id":1,"msgtime":new Date().getTime()+"","nickName":app.globalData.login_userInfo["nickName"],"user_id":app.globalData.login_userInfo["user_id"]});
-      var top = chat_msgs.length * 100;
-      this.setData({
-        chat_msgs: chat_msgs,
-        scrollTop: top
-      });
-    
+    chat_msgs.push({
+      "activity_id": activity_id,
+      "chatmsg": send,
+      "id": 1,
+      "msgtime": new Date().getTime() + "",
+      "nickName": app.globalData.login_userInfo["nickName"],
+      "user_id": app.globalData.login_userInfo["user_id"]
+    });
+    var top = chat_msgs.length * 100;
+    this.setData({
+      chat_msgs: chat_msgs,
+      scrollTop: top
+    });
+
     wx.request({
       url: app.globalData.hosturl + 'push_activity_chat_msg', //仅为示例，并非真实的接口地址
       data: {
         "activity_id": activity_id,
-        "nickName":app.globalData.login_userInfo["nickName"],
+        "nickName": app.globalData.login_userInfo["nickName"],
         "user_id": app.globalData.login_userInfo["user_id"],
-        "new_chat_msg":send
+        "new_chat_msg": send
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        
+
       }
     });
 
@@ -1903,10 +1994,10 @@ Page({
       url: '../good/gooddetail?good_info=' + good_info
     })
   },
-  show_admin_options(e){
+  show_admin_options(e) {
     this.setData({
-      modalName:"admin_modal",
-      edit_member_num:e.currentTarget.dataset.membernum
+      modalName: "admin_modal",
+      edit_member_num: e.currentTarget.dataset.membernum
     })
   },
 
@@ -1927,123 +2018,126 @@ Page({
   async generateShareImage() {
     console.log("自行绘制分享图")
     try {
-        const query = wx.createSelectorQuery();
-        const canvasNode = await new Promise((resolve, reject) => {
-            query.select('#shareCanvas')
-               .fields({ node: true, size: true })
-               .exec((res) => {
-                    if (res[0] && res[0].node) {
-                        resolve(res[0].node);
-                    } else {
-                        reject(new Error('未找到 canvas 节点'));
-                    }
-                });
-                console.log("找到了吗？")
-        });
-
-        const canvas = canvasNode;
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-
-        // 处理高清屏
-        const pixelRatio = wx.getSystemInfoSync().pixelRatio;
-        canvas.width = width * pixelRatio;
-        canvas.height = height * pixelRatio;
-        ctx.scale(pixelRatio, pixelRatio);
-        // 绘制基础图片
-        const img = await this.loadImage(canvas, this.data.activity_info.bg_url);
-       // 修改：计算底图宽高比（由原来的高宽比改为宽高比）
-       const imgRatio = img.width / img.height; 
-       // 新增：计算画布的宽高比
-       const canvasRatio = width / height; 
-
-       let drawWidth, drawHeight, drawX, drawY;
-       // 新增：根据图片和画布宽高比判断裁剪和缩放逻辑
-       if (imgRatio > canvasRatio) { 
-           // 图片宽高比大于画布宽高比，高度铺满画布，裁剪左右部分
-           drawHeight = height;
-           drawWidth = drawHeight * imgRatio;
-           drawX = (width - drawWidth) / 2;
-           drawY = 0;
-       } else {
-           // 图片宽高比小于等于画布宽高比，宽度铺满画布，裁剪上下部分
-           drawWidth = width;
-           drawHeight = drawWidth / imgRatio;
-           drawX = 0;
-           drawY = (height - drawHeight) / 2;
-       }
-
-       // 修改：使用新计算的宽高和位置绘制底图
-       ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight); 
-
-         // 定义文字与矩形框的边距
-         const textMargin = 10;
-         // 定义每行文字的高度
-         const lineHeight = 20;
-         // 定义文字行数
-         const lineCount = 3;
-
-         // 定义圆角矩形参数，放置在地图底部且高度自适应
-         const rectX = 2;
-         // 根据文字内容和边距计算矩形框起始 y 坐标
-         const rectY = height - (lineCount * lineHeight + 2 * textMargin);
-         const rectWidth = width - 20;
-         // 根据文字内容和边距计算矩形框高度
-         const rectHeight = lineCount * lineHeight + 2 * textMargin;
-         const borderRadius = 10;
-
-         // 绘制带圆角的半透明矩形背景
-         ctx.beginPath();
-         ctx.moveTo(rectX + borderRadius, rectY);
-         ctx.arcTo(rectX + rectWidth, rectY, rectX + rectWidth, rectY + rectHeight, borderRadius);
-         ctx.arcTo(rectX + rectWidth, rectY + rectHeight, rectX, rectY + rectHeight, borderRadius);
-         ctx.arcTo(rectX, rectY + rectHeight, rectX, rectY, borderRadius);
-         ctx.arcTo(rectX, rectY, rectX + rectWidth, rectY, borderRadius);
-         ctx.closePath();
-         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; // 浅白色，70% 透明度
-         ctx.fill();
-
-        // 绘制活动地点信息
-        ctx.font = '10px sans-serif';
-        ctx.fillStyle = '#333333';
-        ctx.fillText(`活动地点: ${this.data.activity_info.show_activityaddress}`, rectX + textMargin, rectY + textMargin + lineHeight);
-
-        // 绘制参与人数信息
-        ctx.fillText(`参与人数: ${this.data.avatarUrl_list.length} /${this.data.activity_info.max_part_number}人`, rectX + textMargin, rectY + textMargin + 2*lineHeight);
-
-        // 绘制活动时间信息
-        ctx.fillText(`活动时间: ${this.data.activity_info.activity_live}`, rectX + textMargin, rectY + textMargin + 3*lineHeight);
-
-        const tempFilePath = await this.canvasToTempFilePath(canvas);
-        console.log("准备保存分享图")
-        console.log(tempFilePath)
-        this.setData({
-            shareImageUrl: tempFilePath
-        });
-    } catch (error) {
-        console.error('生成图片失败:', error);
-    }
-},
-loadImage(canvas, src) {
-    return new Promise((resolve, reject) => {
-        const img = canvas.createImage();
-        img.src = src;
-        img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
-    });
-},
-canvasToTempFilePath(canvas) {
-    return new Promise((resolve, reject) => {
-        wx.canvasToTempFilePath({
-            canvas,
-            success: res => {
-                resolve(res.tempFilePath);
-            },
-            fail: err => {
-                reject(err);
+      const query = wx.createSelectorQuery();
+      const canvasNode = await new Promise((resolve, reject) => {
+        query.select('#shareCanvas')
+          .fields({
+            node: true,
+            size: true
+          })
+          .exec((res) => {
+            if (res[0] && res[0].node) {
+              resolve(res[0].node);
+            } else {
+              reject(new Error('未找到 canvas 节点'));
             }
-        });
+          });
+        console.log("找到了吗？")
+      });
+
+      const canvas = canvasNode;
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // 处理高清屏
+      const pixelRatio = wx.getSystemInfoSync().pixelRatio;
+      canvas.width = width * pixelRatio;
+      canvas.height = height * pixelRatio;
+      ctx.scale(pixelRatio, pixelRatio);
+      // 绘制基础图片
+      const img = await this.loadImage(canvas, this.data.activity_info.bg_url);
+      // 修改：计算底图宽高比（由原来的高宽比改为宽高比）
+      const imgRatio = img.width / img.height;
+      // 新增：计算画布的宽高比
+      const canvasRatio = width / height;
+
+      let drawWidth, drawHeight, drawX, drawY;
+      // 新增：根据图片和画布宽高比判断裁剪和缩放逻辑
+      if (imgRatio > canvasRatio) {
+        // 图片宽高比大于画布宽高比，高度铺满画布，裁剪左右部分
+        drawHeight = height;
+        drawWidth = drawHeight * imgRatio;
+        drawX = (width - drawWidth) / 2;
+        drawY = 0;
+      } else {
+        // 图片宽高比小于等于画布宽高比，宽度铺满画布，裁剪上下部分
+        drawWidth = width;
+        drawHeight = drawWidth / imgRatio;
+        drawX = 0;
+        drawY = (height - drawHeight) / 2;
+      }
+
+      // 修改：使用新计算的宽高和位置绘制底图
+      ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+
+      // 定义文字与矩形框的边距
+      const textMargin = 10;
+      // 定义每行文字的高度
+      const lineHeight = 20;
+      // 定义文字行数
+      const lineCount = 3;
+
+      // 定义圆角矩形参数，放置在地图底部且高度自适应
+      const rectX = 2;
+      // 根据文字内容和边距计算矩形框起始 y 坐标
+      const rectY = height - (lineCount * lineHeight + 2 * textMargin);
+      const rectWidth = width - 20;
+      // 根据文字内容和边距计算矩形框高度
+      const rectHeight = lineCount * lineHeight + 2 * textMargin;
+      const borderRadius = 10;
+
+      // 绘制带圆角的半透明矩形背景
+      ctx.beginPath();
+      ctx.moveTo(rectX + borderRadius, rectY);
+      ctx.arcTo(rectX + rectWidth, rectY, rectX + rectWidth, rectY + rectHeight, borderRadius);
+      ctx.arcTo(rectX + rectWidth, rectY + rectHeight, rectX, rectY + rectHeight, borderRadius);
+      ctx.arcTo(rectX, rectY + rectHeight, rectX, rectY, borderRadius);
+      ctx.arcTo(rectX, rectY, rectX + rectWidth, rectY, borderRadius);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; // 浅白色，70% 透明度
+      ctx.fill();
+
+      // 绘制活动地点信息
+      ctx.font = '10px sans-serif';
+      ctx.fillStyle = '#333333';
+      ctx.fillText(`活动地点: ${this.data.activity_info.show_activityaddress}`, rectX + textMargin, rectY + textMargin + lineHeight);
+
+      // 绘制参与人数信息
+      ctx.fillText(`参与人数: ${this.data.avatarUrl_list.length} /${this.data.activity_info.max_part_number}人`, rectX + textMargin, rectY + textMargin + 2 * lineHeight);
+
+      // 绘制活动时间信息
+      ctx.fillText(`活动时间: ${this.data.activity_info.activity_live}`, rectX + textMargin, rectY + textMargin + 3 * lineHeight);
+
+      const tempFilePath = await this.canvasToTempFilePath(canvas);
+      console.log("准备保存分享图")
+      console.log(tempFilePath)
+      this.setData({
+        shareImageUrl: tempFilePath
+      });
+    } catch (error) {
+      console.error('生成图片失败:', error);
+    }
+  },
+  loadImage(canvas, src) {
+    return new Promise((resolve, reject) => {
+      const img = canvas.createImage();
+      img.src = src;
+      img.onload = () => resolve(img);
+      img.onerror = (err) => reject(err);
     });
-}
+  },
+  canvasToTempFilePath(canvas) {
+    return new Promise((resolve, reject) => {
+      wx.canvasToTempFilePath({
+        canvas,
+        success: res => {
+          resolve(res.tempFilePath);
+        },
+        fail: err => {
+          reject(err);
+        }
+      });
+    });
+  }
 })

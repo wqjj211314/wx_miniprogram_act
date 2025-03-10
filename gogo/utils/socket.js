@@ -4,7 +4,7 @@ const App = getApp();
 let wsStatus = false;
 let onSocket = null;
 onSocket = io(App.globalData.hosturl)// 连接 socket
-
+console.log("还在用？")
 export const connect = function (cb) { 
 
   if (!onSocket) {

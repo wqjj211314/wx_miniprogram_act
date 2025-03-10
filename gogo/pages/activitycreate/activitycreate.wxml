@@ -1,16 +1,18 @@
+
 <!--pages/activityadd/activityadd.wxml-->
 <view class="bg-white" style="overflow: scroll;padding:15rpx;">
-    <view style="white-space:nowrap;">
-      <block wx:for="{{club_name_club_place_list}}">
-        <button class="cu-btn round {{search_word == club_name_club_place_list[index]?'bg-green':''}}" bindtap="search_club_name_club_place_list" data-search="{{club_name_club_place_list[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;margin-left: 20rpx;">{{item}}</button>
-      </block>
-    </view>
+  <view style="white-space:nowrap;">
+    <block wx:for="{{club_name_club_place_list}}">
+      <button class="cu-btn round {{search_word == club_name_club_place_list[index]?'bg-green':''}}" bindtap="search_club_name_club_place_list" data-search="{{club_name_club_place_list[index]}}" style="padding: 0 20rpx;font-size: 20rpx;height: 40rpx;margin-left: 20rpx;">{{item}}</button>
+    </block>
   </view>
-<scroll-view scroll-y="true" style="height: 100%;">
+</view>
+<!-- 旧版 -->
+<scroll-view scroll-y="true" style="height: 100%;" wx:if="{{false}}">
   <view style="width:100vw;height:100vh;background-color: white;">
     <block wx:for="{{activity_create_list}}" wx:key="activity_id" wx:for-index="index">
       <view class="cu-timeline" style="margin-left:10rpx;margin-right: 10rpx;" wx:if="{{search_word==''||search_word==item.club_name||search_word==item.show_activityaddress}}">
-        <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}--活动开始时间</view>
+        <view class="cu-time" style="width: fit-content;">{{item.begintimeweek}}</view>
         <view class="cu-item text-blue">
           <view class="cu-card article" style="">
             <view class="cu-item shadow" style="margin:0rpx;padding-left:20rpx;padding-right:20rpx;background-color: var(--ghostWhite);color: var(--black);">
@@ -26,7 +28,7 @@
                     <view>
                       <text class="{{item.activity_status >= 200?'cuIcon-roundcheckfill text-green':'cuIcon-roundclosefill text-red'}}"></text>{{item.activity_status_comment}}
                     </view>
-                    <view wx:if="{{is_login_user}}"> 
+                    <view wx:if="{{is_login_user}}">
                       {{item.activity_status >= 200&&item.activity_status < 800&&item.pay_price > 0?"活动结束12h内结算费用":""}}
                     </view>
                     <view>
@@ -45,7 +47,7 @@
                 </view>
               </view>
               <view class="flex" style="margin-top: 30rpx;justify-content: space-around;" hidden="{{item.activity_status >= 800}}" wx:if="{{is_login_user}}">
-                <button class="cu-btn bg-red sm" style="" bindtap="delete_activity"  wx:if="{{item.activity_status < 800}}" data-index="{{index}}">删除</button>
+                <button class="cu-btn bg-red sm" style="" bindtap="delete_activity" wx:if="{{item.activity_status < 800}}" data-index="{{index}}">删除</button>
                 <button class="cu-btn bg-red sm" bindtap="cancel_activity" wx:if="{{item.activity_status < 800 && item.activity_status >= 200}}" data-index="{{index}}">取消</button>
                 <button class="cu-btn bg-red sm" style="" bindtap="refund_all_member" data-index="{{index}}" wx:if="{{item.pay_price != 0 && item.member > 0}}">全部退款</button>
                 <button class="cu-btn bg-green sm" style="" bindtap="update_activity_info" wx:if="{{item.activity_status < 800}}" data-index="{{index}}">编辑</button>
@@ -60,6 +62,79 @@
     <!--pages/activityadd/activityadd.wxml-->
   </view>
 </scroll-view>
+<!-- 新版 -->
+<checkbox-group bindchange="listenCheckboxChange">
+<block wx:for="{{activity_create_list}}" wx:for-item="activity_info">
+  <view class="bg-white margin padding" style="border-radius: 20rpx;margin-top:20rpx;margin-bottom: 0rpx;" bind:tap="navigateToActivityInfo" data-index="{{index}}" wx:if="{{search_word==''||search_word==activity_info.club_name||search_word==activity_info.show_activityaddress}}">
+    
+
+    <view class="flex" style="width: 100%;flex-direction: row;justify-content: space-between;align-items: center;margin-bottom: 10rpx;">
+      <view class="text-bold text-cut" style="flex:1;font-size: 30rpx;">
+        
+      <checkbox value="{{index}}" wx:if="{{is_login_user}}" style="margin-right: 10rpx;transform: scale(0.8); "></checkbox>
+      {{activity_info.title}}
+      </view>
+      <view class="text-bold" style="font-size: 46rpx;color: #FE4A4A;">
+        <text class="iconfont icon-fl-renminbi" style="font-size: 35rpx;font-weight: 400;margin-right: 5rpx;" wx:if="{{activity_info.pay_type=='线上收费'}}"></text>
+        <text style="">{{activity_info.pay_price==0?activity_info.pay_type:activity_info.pay_price}}</text>
+      </view>
+    </view>
+    <view class="flex justify-start" style="overflow: scroll;{{activity_info.title_tags.length>0?'margin-bottom:21rpx;':''}}">
+      <view class="text-center" wx:for="{{activity_info.title_tags}}" style="margin-bottom: 0rpx;margin-right: 15rpx;white-space:nowrap;">
+        <view class="bg-white" style="border-radius: 13rpx;border: 1rpx solid #4689FF;font-weight: 400;font-size: 24rpx;color: #4689FF;line-height: 33rpx;padding:9rpx;height: fit-content;width: fit-content;">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="flex" style="flex-direction: row;width: 100%;">
+      <view style="border-radius: 20rpx;">
+        <image style="height:160rpx;width:160rpx;border-radius: 20rpx;{{activity_info.activity_status==201?'filter: blur(5px);':''}}" mode="aspectFill" src="{{activity_info.bg_img_exist?activity_info.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}">
+        </image>
+      </view>
+      <view style="flex:1;overflow: hidden;margin-left: 20rpx;font-weight: 400;font-size: 24rpx;line-height: 33rpx;color: #999999;padding-top:10rpx;padding-right: 2rpx;">
+        <view class="flex" style="">
+          <view style="margin-right: 10rpx;width: 34rpx;height: 34rpx;">
+            <image src='/image/location.png' mode='heightFix' style="width: 100%;height: 100%;"></image>
+          </view>
+          <view style="">{{activity_info.show_activityaddress}}</view>
+        </view>
+        <view class="flex" style="margin-top:21rpx;">
+          <view style="width:34rpx;height:34rpx;margin-right: 10rpx;">
+            <image src='/image/time.png' mode='heightFix' style="width: 100%;height: 100%;"></image>
+          </view>
+          <view style="">{{activity_info.activity_live}}</view>
+        </view>
+        <view class="flex" style="margin-top:21rpx;">
+          <view style="width:34rpx;height:34rpx;margin-right: 10rpx;margin-left: 6rpx;">
+            <text class="cuIcon-circlefill" style="color: rgb(219, 216, 216);width: 19px;text-align: center;"></text>
+           
+          </view>
+          <view style="">{{activity_info.member}}/{{activity_info.max_part_number}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="margin-top flex" style="margin-top: 30rpx;justify-content: space-around;font-size: 46rpx;" hidden="{{activity_info.activity_status >= 800}}" wx:if="{{is_login_user}}">
+      <button class="cu-btn bg-red" style="flex:1;margin-right: 20rpx;" bindtap="delete_activity" wx:if="{{activity_info.activity_status < 800}}" data-index="{{index}}">删除</button>
+      <button class="cu-btn bg-red" style="flex:1;margin-right: 20rpx;" bindtap="cancel_activity" wx:if="{{activity_info.activity_status < 800 && item.activity_status >= 200}}" data-index="{{index}}">取消</button>
+      <button class="cu-btn bg-red" style="flex:1;margin-right: 20rpx;" bindtap="refund_all_member" data-index="{{index}}" wx:if="{{activity_info.pay_price != 0 && item.member > 0}}">全部退款</button>
+      <button class="cu-btn bg-green" style="flex:1;margin-right: 20rpx;" bindtap="update_activity_info" wx:if="{{activity_info.activity_status < 800}}" data-index="{{index}}">编辑</button>
+      <!--<button class="cu-btn bg-green" style="" bindtap="calculate_close_activity" data-index="{{index}}" hidden="{{item.activity_status >= 800||item.activity_status < 200}}">统计结算</button>
+                -->
+    </view>
+  </view>
+
+</block>
+</checkbox-group>
+
 <!--空白站位，保证以上内容能全部显示-->
 <view style="height: 150rpx;">
+</view>
+
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;" wx:if="{{activity_create_list.length>0&&is_login_user}}">
+
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="generateScheme">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">活动文字分享（已选{{sel_activity_index_list.length}}个）</button>
+    </view>
+  </view>
 </view>

@@ -88,6 +88,7 @@ Page({
       room_id = this.data.friend_user_info["user_id"] + "_" + app.globalData.login_userInfo["user_id"]
     }
     console.log("房间号"+room_id)
+    console.log("还在用？")
     onSockettest.on('connect', function (res) { // 监听socket 是否连接成功
       console.log("监听成功");
       onSockettest.emit('join_friend_room', { user_id_1: app.globalData.login_userInfo["user_id"], user_id_2: that.data.friend_user_info["user_id"] });

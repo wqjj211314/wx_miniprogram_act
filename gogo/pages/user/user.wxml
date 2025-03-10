@@ -127,7 +127,7 @@
       <view class="cu-item arrow" bindtap="navigateToMoney">
         <view class="content">
           <text class="cuIcon-moneybagfill text-yellow"></text>
-          <text class="text-grey">余额提现</text>
+          <text class="text-grey">个人钱包账户</text>
         </view>
       </view>
     </view>

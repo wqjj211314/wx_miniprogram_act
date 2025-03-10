@@ -1,3 +1,5 @@
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
 .container {
   padding: 20px;
 }

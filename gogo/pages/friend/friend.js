@@ -58,7 +58,7 @@ Page({
   },
   navigateToindex() {
     wx.navigateTo({
-      url: '../index/index'
+      url: '../index/newindex'
     })
   },
   navigateTouser() {
