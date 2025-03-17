@@ -247,5 +247,10 @@ Page({
     wx.navigateTo({
       url: '/pages/activitypart/activitypart',
     })
+  },
+  navigateToMoney(){
+    wx.navigateTo({
+      url: '/pages/user/money',
+    })
   }
 })

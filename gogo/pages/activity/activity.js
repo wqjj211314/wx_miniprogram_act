@@ -392,7 +392,6 @@ Page({
             //sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有,原图可以支持gif
             sourceType: ['album'], //从相册选择
             success: (res) => {
-              
               console.log("选择图片成功，选择图片结果");
               console.log(res.tempFiles);
               var temp = res.tempFiles;

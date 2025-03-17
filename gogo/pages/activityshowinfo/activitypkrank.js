@@ -211,5 +211,18 @@ Page({
       title: this.data.activity_info["title"]+"-比赛排名",
       path: '/pages/activityshowinfo/activitypkrank?activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info))
     }
-  }
+  },
+  
+  nagivateActivityInfo() {
+    let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
+
+    let activity_user_info = encodeURIComponent(JSON.stringify(this.data.activity_info["createuser"]));
+    console.log("跳转至活动报名界面")
+    console.log(activity_info);
+    console.log(activity_user_info)
+    wx.navigateTo({
+      url: '/pages/activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info
+    })
+
+  },
 })

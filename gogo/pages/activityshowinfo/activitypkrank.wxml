@@ -44,7 +44,7 @@
                 <view class="cu-avatar radius" style="background-image:url({{member_users[index].avatarUrl}});">
                   <view class="cu-tag badge {{member_users[index].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[index].member_num)}}</view>
                 </view>
-                <view style="font-size: 18rpx;height: fit-content;">{{member_users[index].nickName}}</view>
+                <view style="font-size: 18rpx;height: fit-content;margin-top: 10rpx;">{{member_users[index].nickName}}</view>
               </view>
             </view>
             <view class="flex" style="justify-content: space-between;width: 85%;">
@@ -107,11 +107,11 @@
         <view class="flex" style="flex:2;align-items: center;justify-content: center;">
 
           <block wx:for="{{tools.split_arr(member_num_group)}}" wx:for-item="member_num">
-            <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;margin-right: 10rpx;">
+            <view class="flex" style="flex-direction: column;width: fit-content;height: fit-content;margin-right: 10rpx;align-content:center;align-items: center;">
               <view class="cu-avatar radius" style="background-image:url({{member_users[member_num].avatarUrl}});margin-right: 15rpx;">
                 <view class="cu-tag badge {{member_users[member_num].gender==0?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_users[member_num].member_num)}}</view>
               </view>
-              <view style="font-size: 18rpx;height: fit-content;margin-top: 10rpx;">{{member_users[member_num].nickName}}</view>
+              <view style="font-size: 18rpx;height: fit-content;margin-top: 10rpx;margin-right: 15rpx;">{{member_users[member_num].nickName}}</view>
             </view>
           </block>
 
@@ -203,4 +203,14 @@
 
   </view>
   <view style="height: 200rpx;"></view>
+</view>
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="nagivateActivityInfo">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">活动详情</button>
+    </view>
+   
+    
+    
+  </view>
 </view>

@@ -141,7 +141,7 @@
           <text class="iconfont icon-PK" style="font-size: 30rpx;color: blue;margin-right:5rpx;" wx:if="{{group_index < pk_group.length -3}}" />
         </block>
       </view>
-      <view class="flex" style="align-items: center;" wx:if="{{!show_edit_flag}}">
+      <view class="flex" style="align-items: center;margin-bottom: 10rpx;" wx:if="{{!show_edit_flag}}">
         <view class="flex" style="flex-direction: column;align-items: center;">
           <view class="cu-tag line-blue" style="margin:0rpx 20rpx;min-width: 118rpx;padding:0rpx 10rpx 0rpx 16rpx;" data-index="{{pk_group_index}}" bindtap="{{(admin_flag&&!is_end_12h)?'score_pk_group':''}}">
             {{tools.show_vs_scores(pk_group[pk_group.length - 2])}}
@@ -157,7 +157,7 @@
         <view style="border-right: solid;height: 50rpx;border-color: rgb(209, 208, 208);margin-left: 10rpx;" wx:if="{{(admin_flag||admin_users.length==0)&&!is_end}}"></view>
         -->
       </view>
-      <view class="flex" style="justify-content: center;align-items: center;" wx:if="{{admin_flag&&!is_end_12h}}">
+      <view class="flex" style="justify-content: center;align-items: center;margin-bottom: 10rpx;" wx:if="{{admin_flag&&!is_end_12h}}">
         <view style="width: fit-content;display: flex;flex-direction:column;margin:0 6rpx;justify-content: center;align-items: center;" class="margin-tb-sm text-center" wx:if="{{(admin_flag)&&show_edit_flag}}">
           <view data-index="{{pk_group_index}}" bindtap="new_pk_group" class="cu-btn line-blue round" style="margin:0px;margin-left:15rpx;padding:15rpx;height: fit-content;width: fit-content;border-radius:2rpx;width: fit-content;font-size: 26rpx;" wx:if="{{admin_flag}}">
             再来一局

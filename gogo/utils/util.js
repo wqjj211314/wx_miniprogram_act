@@ -67,7 +67,29 @@ function GetDistance( lat1,  lng1,  lat2,  lng2){
   s = s *6378.137 ;// EARTH_RADIUS;
   s = Math.round(s * 10000) / 10000;
   //return "< "+Number(s.toFixed(1));//km
+ 
   return "< "+Math.ceil(s);//km
+}
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  // 地球半径，单位：千米
+  const R = 6370.98; 
+
+  // 将角度转换为弧度
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+
+  // 将纬度转换为弧度
+  const radLat1 = lat1 * (Math.PI / 180);
+  const radLat2 = lat2 * (Math.PI / 180);
+
+  // 应用 Haversine 公式
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(radLat1) * Math.cos(radLat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  // 计算距离
+  const distance = R * c;
+  return distance.toFixed(2);
 }
 /*获取当前页url*/
 function getCurrentPageUrl(){
@@ -148,6 +170,7 @@ exports.convert_date = convert_date;
 exports.toweek = toweek;
 exports.toweek2 = toweek2;
 exports.GetDistance = GetDistance;
+exports.calculateDistance = calculateDistance;
 exports.getCurrentPageUrl = getCurrentPageUrl;
 exports.check_login = check_login;
 exports.get_open_id = get_open_id

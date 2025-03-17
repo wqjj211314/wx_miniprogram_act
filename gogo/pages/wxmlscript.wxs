@@ -76,7 +76,20 @@ var show_vs_scores = function(scores){
     return scores.join(" : ");
   }
 }
-
+// 方法定义 lat,lng 
+var GetDistance = function( lat1,  lng1,  lat2,  lng2){
+  var radLat1 = lat1*Math.PI / 180.0;
+  var radLat2 = lat2*Math.PI / 180.0;
+  var a = radLat1 - radLat2;
+  var  b = lng1*Math.PI / 180.0 - lng2*Math.PI / 180.0;
+  var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+  Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+  s = s *6378.137 ;// EARTH_RADIUS;
+  s = Math.round(s * 10000) / 10000;
+  return Number(s.toFixed(1));//km
+ 
+  //return "< "+Math.ceil(s);//km,进一法
+}
 
 
 module.exports = {
@@ -89,7 +102,8 @@ module.exports = {
   indexOf:indexOf,
   hobby_point_per:hobby_point_per,
   data_per:data_per,
-  split_arr:split_arr
+  split_arr:split_arr,
+  GetDistance:GetDistance
 
 };
 module.exports.msg = "some msg";
