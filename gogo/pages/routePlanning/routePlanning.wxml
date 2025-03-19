@@ -1,5 +1,10 @@
+
 <view class="bg-white margin padding" style="border-radius: 30rpx;">
-  <view class="flex" style="justify-content: space-between;" bindtap="selectStartPoint">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle" style="">路线名称</view>
+    <input placeholder="给路线起个名吧" bindinput='route_title' style="color:black;text-align: right;" value="{{route_title}}" maxlength="100"></input>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;" bindtap="selectStartPoint">
     <view class="mytitle" style="">起点</view>
     <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
       {{startPoint.name}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
@@ -11,10 +16,6 @@
       {{endPoint.name}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
     </view>
   </view>
-</view>
-<view class="flex margin-bottom" style="justify-content: space-around;">
-  <view class="cu-btn bg-blue" style="border-radius: 30rpx;" bind:tap="addWaypoint">添加途径点</view>
-  <view class="cu-btn bg-green" style="border-radius: 30rpx;" bind:tap="generateRoute">预览路线</view>
 </view>
 
 <view class="bg-white margin padding" style="border-radius: 30rpx;" wx:if="{{waypoints.length>0}}">
@@ -29,8 +30,7 @@
 </view>
 
 <!-- 地图组件 -->
-<map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100%; height: 300px;border:solid 1rpx;"></map>
-
+<map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100%; height: 300px;"></map>
 
 <view class="container" wx:if="{{false}}">
   <!-- 选点输入框 -->
@@ -61,4 +61,19 @@
 
   <!-- 地图组件 -->
   <map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale+2}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" style="width: 100%; height: 300px;"></map>
+</view>
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="addWaypoint">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">添加途径点</button>
+    </view>
+
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="generateRoute">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">预览路线</button>
+    </view>
+    <view class="" style="flex:1;" bindtap="save_route">
+      <button class="cu-btn round bg-red" style="width: 100%;height: 80rpx;font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">保存路线</button>
+    </view>
+  </view>
 </view>

@@ -1,5 +1,6 @@
 // 引入腾讯地图 SDK
 const QQMapWX = require('qqmap-wx-jssdk.js');
+const app = getApp();
 
 // 实例化 API 核心类，替换为你自己的 key
 const qqmapsdk = new QQMapWX({
@@ -35,9 +36,122 @@ name: "利宾饭店(龙王塘路店)"
     polyline: [],
     scale: 13,
     routeInfos: [],
-    newScale: 0
+    newScale: 0,
+    route_title:""
   },
+  onLoad() {
+    const query = wx.createSelectorQuery();
+    query.select('#routeMap').boundingClientRect((rect) => {
+        if (rect) {
+            this.setData({
+                mapWidth: rect.width,
+                mapHeight: rect.height
+            });
+        }
+    }).exec();
+},
+calculateCenterAndScale() {
+  const {
+    startPoint,
+    waypoints,
+    waypointTransportModes,
+    endPoint
+  } = this.data;
+  const markers = [startPoint, ...waypoints, endPoint];
+    
+    let totalLng = 0;
+    let totalLat = 0;
 
+    // 计算中心点经纬度
+    for (let i = 0; i < markers.length; i++) {
+        const marker = markers[i];
+        totalLng += marker.longitude;
+        totalLat += marker.latitude;
+    }
+    const centerLng = totalLng / markers.length;
+    const centerLat = totalLat / markers.length;
+
+    // 找出距离中心点最远的点
+    let maxDistance = 0;
+    let farthestMarker = null;
+    for (let i = 0; i < markers.length; i++) {
+        const marker = markers[i];
+        const distance = this.calculateDistance(centerLng, centerLat, marker.longitude, marker.latitude);
+        if (distance > maxDistance) {
+            maxDistance = distance;
+            farthestMarker = marker;
+        }
+    }
+
+    // 计算经纬度跨度
+    const lngDelta = Math.abs(farthestMarker.longitude - centerLng);
+    const latDelta = Math.abs(farthestMarker.latitude - centerLat);
+
+    // 根据经纬度跨度和地图宽高确定缩放比例
+    const scale = this.getScale(lngDelta, latDelta, this.data.mapWidth, this.data.mapHeight);
+
+   
+
+    // 创建中心点的 marker
+    const centerMarker = {
+        id: markers.length + 1,
+        longitude: centerLng,
+        latitude: centerLat,
+        iconPath: '/images/center_marker.png',
+        width: 30,
+        height: 30
+    };
+    
+
+    this.setData({
+        longitude: centerLng,
+        latitude: centerLat,
+        scale: scale,
+        
+    });
+},
+calculateDistance(lng1, lat1, lng2, lat2) {
+    // 简单的距离计算，实际应用中可使用更精确的算法
+    return Math.sqrt(Math.pow(lng2 - lng1, 2) + Math.pow(lat2 - lat1, 2));
+},
+getScale(lngDelta, latDelta, mapWidth, mapHeight) {
+    // 经纬度一度对应的像素值（近似值）
+    const lngDegreeToPixel = mapWidth / 360;
+    const latDegreeToPixel = mapHeight / 180;
+
+    // 计算经纬度跨度对应的像素跨度
+    const lngPixelSpan = lngDelta * 2 * lngDegreeToPixel;
+    const latPixelSpan = latDelta * 2 * latDegreeToPixel;
+
+    // 根据像素跨度确定缩放比例
+    let scale;
+    
+    scale = this.calculateZoomLevel(mapWidth,mapHeight,lngDelta,latDelta)
+    console.log("ds给的缩放")
+    console.log(scale)
+    return scale;
+},
+
+calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
+  if (maxΔlng === 0 && maxΔlat === 0) return 20; // 所有点重合时使用最大缩放
+
+  let z1 = Infinity, z2 = Infinity;
+  if (maxΔlng > 0) {
+    const ratio = (width * 1.40625) / (2 * maxΔlng);
+    z1 = Math.log2(ratio);
+  }
+  if (maxΔlat > 0) {
+    const ratio = (height * 1.40625) / (2 * maxΔlat);
+    z2 = Math.log2(ratio);
+  }
+  const z = Math.min(z1, z2);
+  return Math.min(20, Math.max(3, z)); // 限制缩放级别在3-20之间
+},
+  route_title(e){
+    this.setData({
+      route_title: e.detail.value.trim()
+    });
+  },
   // 起点输入事件处理
   onStartPointInput(e) {
     const startPoint = {
@@ -169,6 +283,8 @@ name: "利宾饭店(龙王塘路店)"
       });
       return;
     }
+    //计算中心点和缩放比例
+    this.calculateCenterAndScale();
 
     const allPoints = [startPoint, ...waypoints, endPoint];
     const allRoutes = [];
@@ -265,18 +381,18 @@ name: "利宾饭店(龙王塘路店)"
         }
 
         // 计算路线范围和中心点
-        const {
-          centerLatitude,
-          centerLongitude,
-          scale
-        } = this.calculateMapBounds(allPointsArray);
+        //const {
+          //centerLatitude,
+          //centerLongitude,
+          //scale
+        //} = this.calculateMapBounds(allPointsArray);
 
         this.setData({
-          longitude: centerLongitude,
-          latitude: centerLatitude,
+          //longitude: centerLongitude,
+          //latitude: centerLatitude,
           markers: markers,
           polyline: polyline,
-          scale: scale,
+          //scale: scale,
           routeInfos: routeInfos
         });
         return;
@@ -332,83 +448,8 @@ name: "利宾饭店(龙王塘路店)"
 
   // 计算地图范围和缩放级别
   calculateMapBounds(points) {
-    if (points.length === 0) {
-      return {
-        centerLatitude: 0,
-        centerLongitude: 0,
-        scale: 13
-      };
-    }
-
-    let minLat = Infinity;
-    let maxLat = -Infinity;
-    let minLng = Infinity;
-    let maxLng = -Infinity;
-
-    points.forEach((point) => {
-      if (point.latitude < minLat) {
-        minLat = point.latitude;
-      }
-      if (point.latitude > maxLat) {
-        maxLat = point.latitude;
-      }
-      if (point.longitude < minLng) {
-        minLng = point.longitude;
-      }
-      if (point.longitude > maxLng) {
-        maxLng = point.longitude;
-      }
-    });
-
-    const centerLatitude = (minLat + maxLat) / 2;
-    const centerLongitude = (minLng + maxLng) / 2;
-
-    // 计算经纬度范围
-    const latRange = maxLat - minLat;
-    const lngRange = maxLng - minLng;
-
-    // 根据范围动态调整缩放级别
-    let scale;
-    if (lngRange > latRange) {
-      if (lngRange > 1) {
-        scale = 8;
-      } else if (lngRange > 0.5) {
-        scale = 9;
-      } else if (lngRange > 0.1) {
-        scale = 10;
-      } else if (lngRange > 0.05) {
-        scale = 11;
-      } else if (lngRange > 0.01) {
-        scale = 12;
-      } else if (lngRange > 0.005) {
-        scale = 13;
-      } else if (lngRange > 0.001) {
-        scale = 14;
-      } else {
-        scale = 15;
-      }
-    } else {
-      if (latRange > 1) {
-        scale = 8;
-      } else if (latRange > 0.5) {
-        scale = 9;
-      } else if (latRange > 0.1) {
-        scale = 10;
-      } else if (latRange > 0.05) {
-        scale = 11;
-      } else if (latRange > 0.01) {
-        scale = 12;
-      } else if (latRange > 0.005) {
-        scale = 13;
-      } else if (latRange > 0.001) {
-        scale = 14;
-      } else {
-        scale = 15;
-      }
-    }
-    if(this.data.newScale!=0){
-      scale = this.data.newScale;//
-    }
+    const allPoints = [startPoint, ...waypoints, endPoint];
+    
     
     return {
       centerLatitude,
@@ -433,7 +474,6 @@ name: "利宾饭店(龙王塘路店)"
   // 监听地图缩放事件
   onMapScale(e) {
     console.log(e)
-
     if (e.type === 'end' && e.causedBy === 'scale') {
       const newScale = e.detail.scale;
       this.setData({
@@ -441,5 +481,39 @@ name: "利宾饭店(龙王塘路店)"
       })
 
     }
+  },
+  save_route(){
+    const {
+      startPoint,
+      waypoints,
+      waypointTransportModes,
+      endPoint,
+      route_title
+    } = this.data;
+    if(route_title == ""){
+      wx.showToast({
+        title: '请输入路线名称',
+        icon: 'error'
+      });
+      return;
+    }
+    if (!startPoint.address || !endPoint.address) {
+      wx.showToast({
+        title: '请输入起点终点',
+        icon: 'error'
+      });
+      return;
+    }
+
+    const allPoints = [startPoint, ...waypoints, endPoint];
+    var route = {};
+    route["scale"] = this.data.scale;
+    route["route_name"] = this.data.route_title;
+    route["markers"] = allPoints
+    app.globalData.route = route;
+
+    wx.switchTab({
+      url: '/pages/activity/activity',
+    })
   }
 });

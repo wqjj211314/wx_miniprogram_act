@@ -73,7 +73,8 @@ Page({
     add_club_flag:false,
     sel_club_flag:false,
     club_name_list:[],
-    location_list:[]
+    location_list:[],
+    route:{}
   },
   takechange(e){
     var value = e.detail.value;
@@ -542,6 +543,11 @@ Page({
       }
     })
   },
+  choose_route(){
+    wx.navigateTo({
+      url: '/pages/routePlanning/routePlanning',
+    })
+  },
   choose_partinfo(event) {
     var partinfovalue = event.target.dataset.partinfo;
     var partinfo = this.data.partinfo;
@@ -673,7 +679,8 @@ Page({
         "pay_price":this.data.pay_type=='线上收费'?this.data.pay_price:0,
         "bg_url":bg_url,
         "take_flag":this.data.take_flag==false?0:1,
-        "club_name":this.data.club_name
+        "club_name":this.data.club_name,
+        "route":this.data.route.toString()
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -1027,6 +1034,12 @@ Page({
       group_limit_list:group_limit_list
     })
     app.globalData.custom_group_tag = {}
+    if(app.globalData.route!=""){
+      this.setData({
+        route:app.globalData.route
+      })
+      app.globalData.route = "";
+    }
   },
   add_partinfo: function () {
     this.setData({

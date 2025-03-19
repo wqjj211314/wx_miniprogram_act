@@ -91,7 +91,8 @@ App({
     windowInfo:"",
     safeArea:0,
     modalName:"",
-    cropimgSrc:""
+    cropimgSrc:"",
+    route:""
   },
   user_login() {
     //return;

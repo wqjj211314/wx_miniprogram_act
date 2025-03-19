@@ -171,6 +171,12 @@
     <view wx:for="{{room_items}}" class="flex round" bindtap="chooseroom" data-room="{{index+1}}" style="font-weight: 400;font-size: 28rpx;line-height: 40rpx;width: 50rpx;height: 50rpx;align-items: center;justify-content: center;{{tools.iscontain(roomlist,index+1)?'background: #4689FF;color: #FFFFFF;':'background: #EEEEEE;font-weight: 400;font-size: 28rpx;color: #666666;'}}">{{index+1}}
     </view>
   </view>
+  <view class="flex margin-top" style="justify-content: space-between;" bindtap="choose_route">
+    <view class="mytitle" style="">路线<text class="text-gray">（可选）</text></view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
+      {{route["route_name"]==undefined?'去规划路线':route["route_name"]}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+  </view>
 </view>
 
 <view class="bg-white margin padding" style="border-radius: 30rpx;">
@@ -183,18 +189,18 @@
      class="{{tools.iscontain(partinfo,partinfo_all_options[index])?'sel_btn':'graybtn'}}" bindtap="choose_partinfo" data-partinfo="{{partinfo_all_options[index]}}">{{item}}
     </view>
   </view>
-
-  <view class="flex margin-top-sm" style="justify-content: space-between;">
-    <view class="mytitle">挂人报名</view>
-    <switch bindchange="takechange" color="#4689FF" checked class="myblue"></switch>
-  </view>
   <view class="flex margin-top-sm" style="justify-content: space-between;" bindtap="custom_group_tag">
-    <view class="mytitle" style="">预分组</view>
+    <view class="mytitle" style="">分组配置</view>
     <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
       自定义<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
     </view>
     
   </view>
+  <view class="flex margin-top-sm" style="justify-content: space-between;">
+    <view class="mytitle">挂人报名</view>
+    <switch bindchange="takechange" color="#4689FF" checked class="myblue"></switch>
+  </view>
+
   <block wx:for="{{group_tag_dict}}">
     <view class="flex margin-top-sm margin-left-sm" style="justify-content: space-between;">
       <view class="mytitle" style="color: #999999;">{{index}}</view>
