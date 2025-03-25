@@ -545,7 +545,7 @@ Page({
   },
   choose_route(){
     wx.navigateTo({
-      url: '/pages/routePlanning/routePlanning',
+      url: '/pages/routePlanning/routePlanning?route='+encodeURIComponent(JSON.stringify(this.data.route)),
     })
   },
   choose_partinfo(event) {
@@ -653,12 +653,13 @@ Page({
         detail_imgs = detail_imgs + "," + item;
       }
     })
-    
+   
     wx.request({
       url: app.globalData.hosturl + 'createactivity', //仅为示例，并非真实的接口地址
+      method: "POST",
       data: {
         "activity_id":this.data.activity_id,
-        "openid": app.globalData.openid,
+        "openid": app.globalData.login_userInfo.user_id,
         "nickName": nickname,
         "avatarUrl": url,
         "gender": gender,
@@ -680,7 +681,7 @@ Page({
         "bg_url":bg_url,
         "take_flag":this.data.take_flag==false?0:1,
         "club_name":this.data.club_name,
-        "route":this.data.route.toString()
+        "route":JSON.stringify(this.data.route)
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -1035,6 +1036,8 @@ Page({
     })
     app.globalData.custom_group_tag = {}
     if(app.globalData.route!=""){
+      console.log(JSON.stringify(app.globalData.route))
+    
       this.setData({
         route:app.globalData.route
       })

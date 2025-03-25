@@ -1,0 +1,33 @@
+<map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{all_markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100vw; height: 100vh;"></map>
+
+<!--弹幕格式-->
+<scroll-view scroll-y enable-flex class="fixed-height flex-test" scroll-into-view="" scroll-top="{{scrollTop}}" style="pointer-events: none;position: fixed;top:20px;">
+  <block wx:for="{{chat_msgs}}" wx:key="id">
+    <view>
+      <view class="customer-msg-cu-btn bg-touming">
+        <text class="text-white text-bold" style="white-space: nowrap;">{{item.nickName}}：</text>{{item.chatmsg}}
+      </view>
+    </view>
+  </block>
+</scroll-view>
+
+<view class="flex round" style="position:fixed;top:60vh;right:40rpx;flex-direction:column;justify-content:center;align-items:center;height: 90rpx;width: 90rpx;background-color: rgba(51,51,51,0.3);" wx:if="{{part_member_num!=''}}" bind:tap="top_my_marker">
+  <view class="flex" style="flex-direction: column;align-items: center;">
+    <text class="iconfont icon-jushou text-blue" style="font-size: 68rpx;">
+    </text>
+    <text wx:if="{{false}}" style="font-size:21rpx;margin-top:0rpx;color: white;">举手</text>
+  </view>
+</view>
+
+<view class="bottomPos" style="padding-bottom: 34rpx;" wx:if="{{part_member_num!=''}}">
+  <!--底部导航-->
+  <view class="round margin padding-xs flex solid-bottom justify-between" style="background-color: rgba(51,51,51,0.3);align-items: center;">
+    <input class="" style="height:96rpx;font-size:35rpx;border-style: solid;border-width: 1px;background-color: none;flex:1;border:none;margin-left: 20rpx;color: white;" focus="{{isFocus}}" value="{{inputMsg}}" maxlength="300" cursor-spacing="0" bindblur="onblurkey" bindinput="inputMsg" placeholder="友善发言 说点什么..."></input>
+
+
+    <view class="cu-btn bg-green" style="font-size: 30rpx;height: 80rpx;border-radius: 20rpx;margin-right: 20rpx;" bindtap="new_msg" wx:if="{{inputMsg!=''}}">
+      发送
+    </view>
+
+  </view>
+</view>

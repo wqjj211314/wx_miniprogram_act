@@ -3,6 +3,7 @@
     "cu-custom": "colorui/components/cu-custom"
   },
   "pages": [
+
     "pages/index/newindex",
     "pages/index/index",
     "pages/activity/activity",
@@ -57,7 +58,9 @@
     "pages/activityshowinfo/member_team",
     "pages/activityshowinfo/activitypkrank",
     "pages/activity/cropper",
-    "pages/routePlanning/routelive"
+    "pages/routePlanning/routelive",
+    "pages/index/mapindex",
+    "pages/routePlanning/routechat"
   ],
   "tabBar": {
     "custom": true,

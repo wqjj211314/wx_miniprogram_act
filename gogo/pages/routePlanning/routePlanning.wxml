@@ -1,4 +1,3 @@
-
 <view class="bg-white margin padding" style="border-radius: 30rpx;">
   <view class="flex" style="justify-content: space-between;">
     <view class="mytitle" style="">路线名称</view>
@@ -18,20 +17,36 @@
   </view>
 </view>
 
+
+
 <view class="bg-white margin padding" style="border-radius: 30rpx;" wx:if="{{waypoints.length>0}}">
-  <block wx:for="{{waypoints}}">
-    <view class="flex {{index>0?'margin-top':''}}" style="justify-content: space-between;" bindtap="selectWaypoint" data-index="{{index}}">
+  <view wx:for="{{waypoints}}" style="display: flex;justify-content: center;align-items: center;">
+    <view class="flex {{index>0?'margin-top':''}}" style="justify-content: space-between;flex:1;align-items: center;" data-index="{{index}}" bindtap="selectWaypoint">
       <view class="mytitle" style="">途径点{{index+1}}</view>
       <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
-        {{item.name}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+        <text class="text-blue">{{item.name}}</text>
+        <text class="cuIcon-right margin-left-sm text-bold text-black" style="" wx:if="{{item.name==''}}"></text>
+        
       </view>
     </view>
-  </block>
+    <view class="flex margin-left-sm {{index>0?'margin-top':''}}" style="width: fit-content;" wx:if="{{item.name!=''}}">
+          <view style="margin-right: 20rpx;" bind:tap="insertWaypoint" data-index="{{index}}">
+            <text class="iconfont icon-charuhang text-green" style="font-size: 45rpx;"></text>
+          </view>
+          <view bind:tap="delWaypoint" data-index="{{index}}">
+            <text class="iconfont icon-shanchuhang4" style="font-size: 40rpx;color:red;"></text>
+          </view>
+        </view>
+  </view>
 </view>
 
-<!-- 地图组件 -->
-<map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100%; height: 300px;"></map>
 
+
+<!-- 地图组件 -->
+<view style="padding:0rpx;">
+  <map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100%; height: 300px;"></map>
+</view>
+<view style="height: 200rpx;"></view>
 <view class="container" wx:if="{{false}}">
   <!-- 选点输入框 -->
   <view class="input-section">
@@ -64,16 +79,14 @@
 </view>
 <view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;">
   <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
-
     <view class="" style="flex:1;margin-right:10rpx;" bindtap="addWaypoint">
-      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">添加途径点</button>
-    </view>
-
+    <button class="cu-btn round bg-green" style="width: 100%;height: 80rpx;font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">添加途径点</button>
+  </view>
     <view class="" style="flex:1;margin-right:10rpx;" bindtap="generateRoute">
       <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">预览路线</button>
     </view>
     <view class="" style="flex:1;" bindtap="save_route">
-      <button class="cu-btn round bg-red" style="width: 100%;height: 80rpx;font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">保存路线</button>
+      <button class="cu-btn round bg-blue" style="width: 100%;height: 80rpx;font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">保存路线</button>
     </view>
   </view>
 </view>

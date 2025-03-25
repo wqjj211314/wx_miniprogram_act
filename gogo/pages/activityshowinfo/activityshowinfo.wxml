@@ -10,12 +10,9 @@
   <view class="" style="padding-top:10px;margin:0rpx 30rpx;height: fit-content;padding-bottom: 0rpx;position: relative;" bind:tap="ViewImagebg" data-url="{{activity_info.activity_status!=201?activity_info.bg_url:''}}">
     <image class='' src="{{activity_info.bg_url}}" mode="aspectFill" style="width: 100%;height: 400rpx;border-radius: 30rpx;margin:0rpx;padding:0rpx;display:block;{{activity_info.activity_status==201?'filter: blur(12px);':''}}">
     </image>
-    <view style="position: absolute;font-size: 40rpx;color: rgba(228, 225, 225, 0.4);top:200rpx;left:40%;" wx:if="{{activity_info.activity_status==201}}">审核中...</view>
-
-
-
+    <view style="position: absolute;font-size: 40rpx;color: rgba(228, 225, 225, 0.2);top:200rpx;left:35%;" wx:if="{{activity_info.activity_status==201}}">图片审核中</view>
     <!--弹幕格式-->
-    <scroll-view scroll-y class="" scroll-into-view="" scroll-top="{{scrollTop}}" style="position: absolute;top:200rpx;height: 380rpx;">
+    <scroll-view scroll-y class="" scroll-into-view="" scroll-top="{{scrollTop}}" style="position: absolute;top:0rpx;height: 380rpx;">
 
       <block wx:for="{{chat_msgs}}" wx:key="id">
         <view>
@@ -430,9 +427,15 @@
     <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="cancel_part" wx:if="{{login_user_part_list.length > 0 && !is_begin && !is_cancelend&&activity_info.take_flag==0}}">
       <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">取消报名</button>
     </view>
-    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="refund_some" wx:if="{{(is_begin||is_cancelend)&&admin_flag}}">
+    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="refund_some" wx:if="{{(is_begin||is_cancelend)&&admin_flag&&activity_info.pay_price != 0}}">
       <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">部分退款</button>
     </view>
+    <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;"  bindtap="route_chat" wx:if="{{activity_info.route.route_name!=undefined}}">
+      <!--disable_flag是防止误触重复报名的，报名完就恢复-->
+      <view class="round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;background-image: url('/image/map.png');background-repeat: no-repeat;background-size: cover, auto;background-position: center, right top;"></view>
+
+    </view>
+   
     <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin&&activity_info.take_flag==1)||(admin_flag)}}">
       <!--disable_flag是防止误触重复报名的，报名完就恢复-->
       <view class="cuIcon-more text-gray text-bold round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;"></view>

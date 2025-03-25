@@ -216,9 +216,7 @@ Page({
         })
       }
     });
-    //score.get_pk_groups_list(app.globalData.hosturl, that, activity_info.activity_id, activity_info.activity_tag)
-    //score.get_like_list(app.globalData.hosturl, that, activity_info.activity_id)
-   
+    
     this.get_request_partner_list()
   },
   activity_pk_rank(){

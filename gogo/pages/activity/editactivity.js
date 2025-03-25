@@ -1,9 +1,11 @@
 // pages/activity.js
 const util = require("../../utils/util.js");
+
 function formatdate(datestr) {
   var datestr = datestr.toString();
-  return datestr.length == 1 ? "0" + datestr : datestr;//1位变2位，2->02
+  return datestr.length == 1 ? "0" + datestr : datestr; //1位变2位，2->02
 }
+
 function getDateString() {
   var dateTime = new Date();
   //dateTime = dateTime.setDate(dateTime.getDate());
@@ -12,11 +14,15 @@ function getDateString() {
   //dateTime = new Date(dateTime);
   return {
     year: dateTime.getFullYear(),
-    month: formatdate(dateTime.getMonth()+1),
+    month: formatdate(dateTime.getMonth() + 1),
     day: formatdate(dateTime.getDate())
   }
 }
-const { year, month, day } = getDateString();
+const {
+  year,
+  month,
+  day
+} = getDateString();
 //const chooseLocation = requirePlugin('chooseLocation');
 //在page页面引入app，同时声明变量，获得所需要的全局变量
 const app = getApp();
@@ -26,25 +32,25 @@ Page({
    * 页面的初始数据
    */
   data: {
-    showPrivacy:false,
-    activity_id:"",
+    showPrivacy: false,
+    activity_id: "",
     begintime: year + "-" + month + "-" + day + " 20:00",
-    endtime: "请选择",//year + "-" + month + "-" + day + " 22:00",
-    addendtime: "请选择",//year + "-" + month + "-" + day + " 20:00",
-    cancelendtime: "请选择",//year + "-" + month + "-" + day + " 20:00",
-    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行","棋牌","露营","校友会","老乡会"],
+    endtime: "请选择", //year + "-" + month + "-" + day + " 22:00",
+    addendtime: "请选择", //year + "-" + month + "-" + day + " 20:00",
+    cancelendtime: "请选择", //year + "-" + month + "-" + day + " 20:00",
+    hobby_tags: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "棋牌", "露营", "校友会", "老乡会"],
     hobby_tag: "",
     max_part_number: 10,
     title: "",
-    title_tags:[],
-    sample_title_tags:["免费停车","包球","娱乐局"],
+    title_tags: [],
+    sample_title_tags: ["免费停车", "包球", "娱乐局"],
     detail: "",
     imgList: [],
     latitude: "",
     longitude: "",
     activityaddress: "请选择活动地点",
     partinfo: [],
-    partinfo_all_options: ["姓名", "性别","自评等级", "籍贯", "公司", "职业", "学校"],
+    partinfo_all_options: ["姓名", "性别", "自评等级", "籍贯", "公司", "职业", "学校"],
     sel_index: -1,
     part_limit_picker: ["所有人均可参与", "通过发起人和成员分享可以参与", "通过发起人分享可以参与"],
     part_limit_index: 0,
@@ -58,27 +64,28 @@ Page({
     add_new_partinfo: "",
     roomlist: [],
     room_items: new Array(9),
-    edit_activity_flag:false,
-    group_tag_list:new Array(1),
-    group_room_list:[],
-    group_limit_list:[],
-    group_tag_dict:{},
-    pay_type:"免费",
-    pay_price:"0.00",
-    custom_part:false,
-    scroll_flag:true,
-    take_flag:true,
-    club_name:"",
-    add_club_flag:false,
-    sel_club_flag:false,
-    club_name_list:[],
-    location_list:[]
+    edit_activity_flag: false,
+    group_tag_list: new Array(1),
+    group_room_list: [],
+    group_limit_list: [],
+    group_tag_dict: {},
+    pay_type: "免费",
+    pay_price: "0.00",
+    custom_part: false,
+    scroll_flag: true,
+    take_flag: true,
+    club_name: "",
+    add_club_flag: false,
+    sel_club_flag: false,
+    club_name_list: [],
+    location_list: [],
+    route: ""
   },
-  takechange(e){
+  takechange(e) {
     var value = e.detail.value;
     console.log(value)
     this.setData({
-      take_flag:value
+      take_flag: value
     })
   },
   choosetag(event) {
@@ -88,47 +95,47 @@ Page({
     })
     this.get_activity_info(hobbytagvalue);
   },
-  choose_title_tag(e){
+  choose_title_tag(e) {
     var title_tag = e.target.dataset.titletag;
     var title_tags = this.data.title_tags;
-    if(title_tags.indexOf(title_tag)==-1){
+    if (title_tags.indexOf(title_tag) == -1) {
       title_tags.push(title_tag);
       this.setData({
         title_tags: title_tags
       })
-    }else{
+    } else {
       title_tags.splice(title_tags.indexOf(title_tag), 1);
       this.setData({
         title_tags: title_tags
       })
     }
-    
+
   },
-  choose_cache_location(event){
+  choose_cache_location(event) {
     var index = event.target.dataset.index;
     var location = this.data.location_list[index]
 
     this.setData({
       latitude: location.latitude,
-      longitude:location.longitude,
-      activityaddress:location.activityaddress,
-      sel_cache_location:location.short_activityaddress,
+      longitude: location.longitude,
+      activityaddress: location.activityaddress,
+      sel_cache_location: location.short_activityaddress,
     })
   },
   choose_club_name(event) {
     var clubname = event.target.dataset.clubname;
-    if(clubname == this.data.club_name){
+    if (clubname == this.data.club_name) {
       this.setData({
         club_name: ""
       })
-    }else{
+    } else {
       this.setData({
         club_name: clubname
       })
     }
-   
+
   },
-  tagInput(e){
+  tagInput(e) {
     this.setData({
       hobby_tag: e.detail.value
     })
@@ -139,7 +146,7 @@ Page({
       url: app.globalData.hosturl + 'get_activity_info', //仅为示例，并非真实的接口地址
       data: {
         "user_id": app.globalData.login_userInfo["user_id"],
-        "activity_tag":hobbytagvalue
+        "activity_tag": hobbytagvalue
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -149,13 +156,13 @@ Page({
         if (res.data.hasOwnProperty("detail")) {
           that.setData({
             detail: res.data["detail"],
-            max_part_number:res.data["max_part_number"],
-            modalName:res.data["bg_img_exist"]?"bgurl_modal":"",
-            bg_url:res.data["bg_img_exist"]?res.data["bg_url"]:"",
-            club_name:that.data.club_name==""?res.data["club_name"]:that.data.club_name
+            max_part_number: res.data["max_part_number"],
+            modalName: res.data["bg_img_exist"] ? "bgurl_modal" : "",
+            bg_url: res.data["bg_img_exist"] ? res.data["bg_url"] : "",
+            club_name: that.data.club_name == "" ? res.data["club_name"] : that.data.club_name
           });
         }
-       
+
       }
     });
   },
@@ -171,12 +178,12 @@ Page({
       },
       success(res) {
         console.log(res.data)
-        if(Array.isArray(res.data)){
+        if (Array.isArray(res.data)) {
           that.setData({
-            club_name_list:res.data
+            club_name_list: res.data
           })
         }
-       
+
       }
     });
   },
@@ -186,26 +193,26 @@ Page({
       url: app.globalData.hosturl + 'get_activity_location_list', //仅为示例，并非真实的接口地址
       data: {
         "user_id": app.globalData.login_userInfo["user_id"],
-        
+
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
         console.log(res.data)
-        if(Array.isArray(res.data)){
+        if (Array.isArray(res.data)) {
           that.setData({
-            location_list:res.data
+            location_list: res.data
           })
         }
-       
+
       }
     });
   },
-  use_exited_bg_url(){
+  use_exited_bg_url() {
     this.setData({
-      "imgList[0]":this.data.bg_url,
-      modalName:""
+      "imgList[0]": this.data.bg_url,
+      modalName: ""
     })
   },
   choose_pay_type(event) {
@@ -230,34 +237,34 @@ Page({
     })
   },
   priceInput(e) {
-    console.log(typeof(e.detail.value))
+    console.log(typeof (e.detail.value))
     //var price = parseFloat(e.detail.value).toFixed(2);
     this.setData({
       pay_price: e.detail.value
     })
   },
-  priceInputBlur(){
+  priceInputBlur() {
     var price = Math.abs(parseFloat(this.data.pay_price)).toFixed(2);
     //price = parseFloat(this.data.pay_price).toFixed(2);
-    console.log(typeof(price))
+    console.log(typeof (price))
     console.log(price)
-    if(price == "NaN"){
+    if (price == "NaN") {
       wx.showToast({
         title: '金额有误',
-        icon:"error",
-        duration:3000
+        icon: "error",
+        duration: 3000
       })
       this.setData({
-        pay_price:"0.00"
+        pay_price: "0.00"
       })
-    }else{
+    } else {
       wx.showToast({
-        title: '收费金额： '+price+"元",
-        icon:"none",
-        duration:3000
+        title: '收费金额： ' + price + "元",
+        icon: "none",
+        duration: 3000
       })
       this.setData({
-        pay_price:price
+        pay_price: price
       })
     }
   },
@@ -270,22 +277,21 @@ Page({
     var roomvalue = e.currentTarget.dataset.room;
     var roomlist = this.data.roomlist;
     console.log(roomlist)
-    console.log(typeof(roomlist))
-    if(!Array.isArray(roomlist)){
-      if(roomlist == ""){
+    console.log(typeof (roomlist))
+    if (!Array.isArray(roomlist)) {
+      if (roomlist == "") {
         roomlist = []
-      }else{
+      } else {
         roomlist = roomlist.split(",")
       }
-      
+
     }
     console.log(roomlist)
     if (roomlist.indexOf(roomvalue) != -1) {
       roomlist.splice(roomlist.indexOf(roomvalue), 1)
-    } else if(roomlist.indexOf(roomvalue+"") != -1){
-      roomlist.splice(roomlist.indexOf(roomvalue+""), 1)
-    }
-     else {
+    } else if (roomlist.indexOf(roomvalue + "") != -1) {
+      roomlist.splice(roomlist.indexOf(roomvalue + ""), 1)
+    } else {
       roomlist.push(roomvalue);
     }
     this.setData({
@@ -296,23 +302,23 @@ Page({
     this.setData({
       begintime: e.detail.value
     })
-    var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
-    var begindate = new Date(this.data.begintime.replaceAll("-","/"))
+    var enddate = new Date(e.detail.value.replaceAll("-", "/")) //IOS时间兼容格式
+    var begindate = new Date(this.data.begintime.replaceAll("-", "/"))
     console.log(enddate)
     console.log(begindate)
-    
+
   },
   TimeChange_endtime(e) {
-    var enddate = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
-    var begindate = new Date(this.data.begintime.replaceAll("-","/"))
+    var enddate = new Date(e.detail.value.replaceAll("-", "/")) //IOS时间兼容格式
+    var begindate = new Date(this.data.begintime.replaceAll("-", "/"))
     console.log(enddate)
     console.log(begindate)
-    if(begindate - enddate >= 0){
+    if (begindate - enddate >= 0) {
       console.log("不合理的日期")
       wx.showToast({
         title: '不合理的日期',
-        icon:"error",
-        duration:3000
+        icon: "error",
+        duration: 3000
       })
       return;
     }
@@ -324,27 +330,27 @@ Page({
     this.setData({
       addendtime: e.detail.value
     })
-    var cancelendtime = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
-    var addendtime = new Date(this.data.addendtime.replaceAll("-","/"))
+    var cancelendtime = new Date(e.detail.value.replaceAll("-", "/")) //IOS时间兼容格式
+    var addendtime = new Date(this.data.addendtime.replaceAll("-", "/"))
     console.log(cancelendtime)
     console.log(addendtime)
-    if(cancelendtime - addendtime > 0){
+    if (cancelendtime - addendtime > 0) {
       this.setData({
         cancelendtime: e.detail.value
       })
     }
   },
   TimeChange_cancelendtime(e) {
-    var cancelendtime = new Date(e.detail.value.replaceAll("-","/"))//IOS时间兼容格式
-    var addendtime = new Date(this.data.addendtime.replaceAll("-","/"))
+    var cancelendtime = new Date(e.detail.value.replaceAll("-", "/")) //IOS时间兼容格式
+    var addendtime = new Date(this.data.addendtime.replaceAll("-", "/"))
     console.log(cancelendtime)
     console.log(addendtime)
-    if(cancelendtime - addendtime > 0){
+    if (cancelendtime - addendtime > 0) {
       console.log("不合理的日期")
       wx.showToast({
         title: '不合理的日期',
-        icon:"error",
-        duration:3000
+        icon: "error",
+        duration: 3000
       })
       return;
     }
@@ -384,18 +390,18 @@ Page({
             //sizeType: ['compressed'], //可以指定是原图还是压缩图，默认二者都有,原图可以支持gif
             sourceType: ['album'], //从相册选择
             success: (res) => {
-              
+
               console.log("选择图片成功，选择图片结果");
               console.log(res.tempFiles);
               var temp = res.tempFiles;
               var path = temp[0].tempFilePath;
               var size = temp[0].size;
-              
-              if(size > 1024 * 1024 * 10){
+
+              if (size > 1024 * 1024 * 10) {
                 wx.showToast({
                   title: '图片过大,需要小于10M',
-                  icon:"none",
-                  duration:3000
+                  icon: "none",
+                  duration: 3000
                 })
                 return;
               }
@@ -405,13 +411,13 @@ Page({
               this.setData({
                 imgList: imgpaths
               })
-      
+
             },
-            fail(res){
+            fail(res) {
               console.log("选择图片失败")
               console.log(res)
             },
-            complete(res){
+            complete(res) {
               console.log("选择图片完成")
               console.log(res)
             }
@@ -421,7 +427,7 @@ Page({
       fail: () => {},
       complete: () => {}
     })
-    
+
   },
   ViewImage(e) {
     wx.previewImage({
@@ -500,7 +506,7 @@ Page({
     this.setData({
       disabled_flag: true
     });
-    
+
     if (this.data.title == "") {
       wx.showToast({
         title: "请填写活动标题",
@@ -508,32 +514,29 @@ Page({
         duration: 3000
       });
       return;
-    }
-    else if (this.data.hobby_tag == "") {
+    } else if (this.data.hobby_tag == "") {
       wx.showToast({
         title: "请指定活动类型",
         icon: "none",
         duration: 3000
       });
       return;
-    }else if(this.data.pay_type == "线上报名收费"&& (this.data.pay_price == NaN || this.data.pay_price == "0.00")){
+    } else if (this.data.pay_type == "线上报名收费" && (this.data.pay_price == NaN || this.data.pay_price == "0.00")) {
       wx.showToast({
         title: "收费金额有误",
         icon: "none",
         duration: 3000
       });
-      
+
       return;
-    }
-    else if (this.data.activityaddress == "请选择活动地点") {
+    } else if (this.data.activityaddress == "请选择活动地点") {
       wx.showToast({
         title: "请选择位置",
         icon: "none",
         duration: 3000
       });
       return;
-    }
-    else if (this.data.imgList.length == 0 && this.data.edit_activity_flag == false) {
+    } else if (this.data.imgList.length == 0 && this.data.edit_activity_flag == false) {
       wx.showToast({
         title: "请选择图片",
         icon: "none",
@@ -563,74 +566,76 @@ Page({
       cancelendtime: this.data.cancelendtime
     });
     var that = this;
-    console.log(typeof(that.data.edit_activity_flag))
+    console.log(typeof (that.data.edit_activity_flag))
     wx.request({
       url: app.globalData.hosturl + 'createactivity', //仅为示例，并非真实的接口地址
+      method: 'POST',
       data: {
-        "activity_id":this.data.activity_id,
+        "activity_id": this.data.activity_id,
         "openid": app.globalData.openid,
         "nickName": nickname,
         "avatarUrl": url,
         "gender": gender,
         "title": this.data.title,
-        "title_tags":this.data.title_tags.toString(),
+        "title_tags": this.data.title_tags.toString(),
         "activity_tag": this.data.hobby_tag,
         "detail": this.data.detail,
         "location": location,
         "room": this.data.roomlist.toString(),
-        "group_tag_dict":this.data.group_tag_dict,
+        "group_tag_dict": this.data.group_tag_dict,
         "time": time,
         "max_part_number": this.data.max_part_number,
         "partinfo": this.data.partinfo.toString(),
         "part_limit": this.data.part_limit_index,
-        "edit_activity_flag":this.data.edit_activity_flag,
-        "pay_type":this.data.pay_type,
-        "pay_price":this.data.pay_type=='线上收费'?this.data.pay_price:0,
-        "take_flag":this.data.take_flag==false?0:1,
-        "club_name":this.data.club_name
+        "edit_activity_flag": this.data.edit_activity_flag,
+        "pay_type": this.data.pay_type,
+        "pay_price": this.data.pay_type == '线上收费' ? this.data.pay_price : 0,
+        "take_flag": this.data.take_flag == false ? 0 : 1,
+        "club_name": this.data.club_name,
+        "route": JSON.stringify(this.data.route)
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        setTimeout(function(){
+        setTimeout(function () {
           wx.hideLoading({
             success: (res) => {},
           });
-        },3000)
-        console.log("成功创建活动：" + res.data["activity_id"] );
+        }, 3000)
+        console.log("成功创建活动：" + res.data["activity_id"]);
         let result = res.data;
         if (result["activity_id"] == "") {
-          
+
           wx.showToast({
             title: result["result"],
             icon: "none",
             duration: 4000
           });
-        }else{
+        } else {
           wx.showToast({
             title: '更新成功',
-            icon:'success',
-            duration:3000
+            icon: 'success',
+            duration: 3000
           })
         }
         if (result["activity_id"] == "") {
           console.log("创建失败");
           return;
         }
-      
+
         //后台上传背景图片，创建活动成功后直接跳转至用户页
-        setTimeout(function(){
+        setTimeout(function () {
           wx.navigateBack()
-        },1000)
-        
+        }, 1000)
+
       },
       fail: function (error) {
-        setTimeout(function(){
+        setTimeout(function () {
           wx.hideLoading({
             success: (res) => {},
           });
-        },3000)
+        }, 3000)
         wx.showToast({
           title: '更新失败',
           icon: 'error',
@@ -648,6 +653,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+
     console.log("年月日" + year + month + day);
     var activity_info = {};
     console.log("是否编辑更新活动信息")
@@ -659,11 +665,12 @@ Page({
       })
       activity_info = JSON.parse(decodeURIComponent(options.activity_info));
       console.log(activity_info);
-      
+
       this.setData({
-        "activity_id":activity_info.activity_id,
+
+        "activity_id": activity_info.activity_id,
         "title": activity_info.title,
-        "title_tags":activity_info.title_tags,
+        "title_tags": activity_info.title_tags,
         "hobby_tag": activity_info.activity_tag,
         "detail": activity_info.detail,
         "begintime": activity_info.begintime,
@@ -672,42 +679,48 @@ Page({
         "cancelendtime": activity_info.cancelendtime,
         "latitude": activity_info.latitude,
         "longitude": activity_info.longitude,
-        "activityaddress":activity_info.show_activityaddress + "--" +activity_info.activityaddress,
+        "activityaddress": activity_info.show_activityaddress + "--" + activity_info.activityaddress,
         "roomlist": activity_info.room,
         "max_part_number": activity_info.max_part_number,
         "partinfo": activity_info.partinfo,
         "part_limit_index": activity_info.part_limit,
-        "edit_activity_flag":true,
-        "group_tag_dict":activity_info.group_tag_dict,
-        "pay_price":activity_info.pay_price,
-        "pay_type":activity_info.pay_type,
-        "activity_info":activity_info,
-        "take_flag":activity_info.take_flag,
-        "club_name":activity_info.club_name
+        "edit_activity_flag": true,
+        "group_tag_dict": activity_info.group_tag_dict,
+        "pay_price": activity_info.pay_price,
+        "pay_type": activity_info.pay_type,
+        "activity_info": activity_info,
+        "take_flag": activity_info.take_flag,
+        "club_name": activity_info.club_name,
+        "route": activity_info.route
       })
     }
     var that = this;
     console.log(new Date());
     var group_tag_dict = activity_info.group_tag_dict;
-    
+
     var group_tag_list = [];
     var group_room_list = [];
     var group_limit_list = [];
-    for(var key in group_tag_dict){
+    for (var key in group_tag_dict) {
       group_tag_list.push(group_tag_dict[key]["name"])
       group_room_list.push(group_tag_dict[key]["room"])
       group_limit_list.push(group_tag_dict[key]["limit"])
     }
     this.setData({
-      group_tag_list:group_tag_list,
-      group_room_list:group_room_list,
-      group_limit_list:group_limit_list
+      group_tag_list: group_tag_list,
+      group_room_list: group_room_list,
+      group_limit_list: group_limit_list
     })
     this.get_club_list()
     this.get_activity_location_list()
   },
+  choose_route() {
+    wx.navigateTo({
+      url: '/pages/routePlanning/routePlanning?route=' + encodeURIComponent(JSON.stringify(this.data.route)),
+    })
+  },
   getUserProfile: function (res) {
-    if(!util.check_login(app)){
+    if (!util.check_login(app)) {
       return;
     }
     var that = this;
@@ -730,7 +743,7 @@ Page({
     if (app.globalData.hasUserInfo) {
       try {
         var openid = wx.getStorageSync('openid');
-        console.log("缓存openid"+openid)
+        console.log("缓存openid" + openid)
         if (openid == "" || openid == undefined) {
           app.globalData.hasUserInfo = false;
           return false;
@@ -772,7 +785,7 @@ Page({
       success: (res) => {
         console.log("位置信息" + res)
         console.log(res.authSetting['scope.userLocation'])
-        if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) {//非初始化进入该页面,且未授权
+        if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) { //非初始化进入该页面,且未授权
           wx.showModal({
             title: '是否授权当前位置',
             content: '需要获取您的地理位置，请确认授权，否则无法获取您所需数据',
@@ -786,7 +799,7 @@ Page({
                 })
                 //最后就是返回上一个页面。
                 wx.navigateBack({
-                  delta: 1  // 返回上一级页面。
+                  delta: 1 // 返回上一级页面。
                 })
               } else if (res.confirm) {
                 wx.openSetting({
@@ -808,7 +821,7 @@ Page({
                       })
                       //最后就是返回上一个页面。
                       wx.navigateBack({
-                        delta: 1  // 返回上一级页面。
+                        delta: 1 // 返回上一级页面。
                       })
                     }
                   }
@@ -816,11 +829,10 @@ Page({
               }
             }
           })
-        } else if (res.authSetting['scope.userLocation'] == undefined) {//初始化进入
+        } else if (res.authSetting['scope.userLocation'] == undefined) { //初始化进入
           that.getLocation(that);
 
-        }
-        else { //授权后默认加载
+        } else { //授权后默认加载
           that.getLocation(that);
         }
       }
@@ -831,19 +843,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (typeof this.getTabBar === 'function' ) {
-      this.getTabBar((tabBar) => {
-        tabBar.setData({
-          selected: 1
-        })
-      })
-    }
+
     var _this = this;
     console.log("活动更新页onshow")
     wx.request({
       url: app.globalData.hosturl + 'get_partinfo_all_options', //仅为示例，并非真实的接口地址
-      data: {
-      },
+      data: {},
       header: {
         'content-type': 'application/json' // 默认值
       },
@@ -865,21 +870,29 @@ Page({
     var group_room_list = [];
     var group_limit_list = [];
     var empty_flag = true;
-    for(var key in group_tag_dict){
+    for (var key in group_tag_dict) {
       group_tag_list.push(group_tag_dict[key]["name"])
       group_room_list.push(group_tag_dict[key]["room"])
       group_limit_list.push(group_tag_dict[key]["limit"])
       empty_flag = false;
     }
-    if(!empty_flag){
-    this.setData({
-      group_tag_dict:app.globalData.custom_group_tag_dict,
-      group_tag_list:group_tag_list,
-      group_room_list:group_room_list,
-      group_limit_list:group_limit_list
-    })
-    app.globalData.custom_group_tag = {}
-  }
+    if (!empty_flag) {
+      this.setData({
+        group_tag_dict: app.globalData.custom_group_tag_dict,
+        group_tag_list: group_tag_list,
+        group_room_list: group_room_list,
+        group_limit_list: group_limit_list
+      })
+      app.globalData.custom_group_tag = {}
+
+    }
+    if (app.globalData.route != "") {
+      console.log(JSON.stringify(app.globalData.route))
+      this.setData({
+        route: app.globalData.route
+      })
+      app.globalData.route = "";
+    }
   },
   add_partinfo: function () {
     this.setData({
@@ -893,13 +906,13 @@ Page({
       //modalName:"partinfo_modal"
     });
   },
-  onbindblur(){
+  onbindblur() {
     this.setData({
       //scroll_flag:true
       //modalName:"partinfo_modal"
     });
   },
-  onbindfocus(){
+  onbindfocus() {
     this.setData({
       //scroll_flag:false
       //modalName:"partinfo_modal"
@@ -919,12 +932,12 @@ Page({
     console.log("add_part_tag:" + this.data.add_new_partinfo);
     var partinfo_all_options = this.data.partinfo_all_options;
     partinfo_all_options.push(new_tag);
-    
+
     this.setData({
       partinfo_all_options,
       modalName: "",
       add_new_partinfo: "",
-      custom_part:false
+      custom_part: false
     });
   },
   inputMsg: function (e) {
@@ -932,29 +945,29 @@ Page({
       add_new_partinfo: e.detail.value
     });
   },
-  add_club(){
+  add_club() {
     this.setData({
-      add_club_flag:!this.data.add_club_flag
+      add_club_flag: !this.data.add_club_flag
     })
   },
-  sel_club_flag(){
+  sel_club_flag() {
     this.setData({
-      sel_club_flag:true
+      sel_club_flag: true
     })
   },
   input_club_name: function (e) {
     var customer_club_name = e.detail.value;
     this.setData({
-      club_name:customer_club_name
+      club_name: customer_club_name
     });
   },
-  add_club_name(){
+  add_club_name() {
     var club_name_list = this.data.club_name_list;
     club_name_list.unshift(this.data.customer_club_name)
     this.setData({
-      club_name_list:club_name_list,
-      add_club_flag:false,
-      club_name:this.data.customer_club_name
+      club_name_list: club_name_list,
+      add_club_flag: false,
+      club_name: this.data.customer_club_name
     });
   },
   input_title_tag: function (e) {
@@ -962,7 +975,7 @@ Page({
     //new_title_tag = new_title_tag.replace(",|，","")
     //new_title_tag = new_title_tag.replace(" ","")
     this.setData({
-      new_title_tag:new_title_tag
+      new_title_tag: new_title_tag
     });
   },
   add_title_tag: function () {
@@ -970,7 +983,7 @@ Page({
     var new_tag = this.data.new_title_tag.replace(" ", "");
     new_tag = new_tag.replace(",", "");
     new_tag = new_tag.replace("，", "");
-    if (new_tag == ""||this.data.title_tags.length > 10) {
+    if (new_tag == "" || this.data.title_tags.length > 10) {
       wx.showToast({
         title: '添加失败',
       })
@@ -979,22 +992,22 @@ Page({
     console.log("add_title_tag:" + this.data.title_tags);
     var title_tags = this.data.title_tags;
     title_tags.push(new_tag);
-    
+
     this.setData({
       title_tags,
       new_title_tag: "",
-      modalName:""
+      modalName: ""
     });
   },
 
-  custom_group_tag(){
+  custom_group_tag() {
     wx.navigateTo({
-      url: 'customgroup?group_tag_list='+encodeURIComponent(JSON.stringify(this.data.group_tag_list))+'&&group_room_list='+encodeURIComponent(JSON.stringify(this.data.group_room_list))+'&&group_limit_list='+encodeURIComponent(JSON.stringify(this.data.group_limit_list)),
+      url: 'customgroup?group_tag_list=' + encodeURIComponent(JSON.stringify(this.data.group_tag_list)) + '&&group_room_list=' + encodeURIComponent(JSON.stringify(this.data.group_room_list)) + '&&group_limit_list=' + encodeURIComponent(JSON.stringify(this.data.group_limit_list)),
     })
   },
-  show_custom_title_tag(){
+  show_custom_title_tag() {
     this.setData({
-      modalName:"title_tag_modal"
+      modalName: "title_tag_modal"
     })
   },
   /**
@@ -1026,9 +1039,9 @@ Page({
 
   },
   onTabItemTap(item) {
-    console.log(item.index)//0
-    console.log(item.pagePath)//pages/index/index
-    console.log(item.text)//首页
+    console.log(item.index) //0
+    console.log(item.pagePath) //pages/index/index
+    console.log(item.text) //首页
     wx.switchTab({
       url: '/pages/index/newindex',
     })

@@ -31,7 +31,7 @@
     <view><input class="mytitlecontent" placeholder="请输入活动标题" bindinput='titleInput' style="" value="{{title}}" maxlength="30"></input></view>
   </view>
   <view class="flex margin-top" style="justify-content: space-between;">
-    <view class="mytitle">所属俱乐部</view>
+    <view class="mytitle">俱乐部<text class="text-gray">（可选）</text></view>
     <view><input class="mytitlecontent" placeholder="选择或输入" bindinput='input_club_name' style="" value="{{club_name}}" maxlength="50"></input></view>
   </view>
   <view class="flex justify-start margin-top" style="overflow: scroll;">
@@ -164,14 +164,14 @@
   </view>
 
   <view class="flex margin-top" style="justify-content: space-between;">
-    <view class="mytitle" style="">场地</view>
+    <view class="mytitle" style="">场地<text class="text-gray">（可选）</text></view>
     <input placeholder="选择或输入" bindinput='roomInput' style="color:black;text-align: right;" value="{{roomlist}}" maxlength="100"></input>
   </view>
   <view class="margin-top flex" style="justify-content: space-around;flex-direction: row;">
     <view wx:for="{{room_items}}" class="flex round" bindtap="chooseroom" data-room="{{index+1}}" style="font-weight: 400;font-size: 28rpx;line-height: 40rpx;width: 50rpx;height: 50rpx;align-items: center;justify-content: center;{{tools.iscontain(roomlist,index+1)?'background: #4689FF;color: #FFFFFF;':'background: #EEEEEE;font-weight: 400;font-size: 28rpx;color: #666666;'}}">{{index+1}}
     </view>
   </view>
-  <view class="flex margin-top" style="justify-content: space-between;" bindtap="choose_route">
+  <view class="flex margin-top" style="justify-content: space-between;" bindtap="choose_route" wx:if="{{true}}">
     <view class="mytitle" style="">路线<text class="text-gray">（可选）</text></view>
     <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
       {{route["route_name"]==undefined?'去规划路线':route["route_name"]}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>

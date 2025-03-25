@@ -379,11 +379,14 @@ Page({
         girl_list.push(this.data.sel_pk_group_user_list[index])
       }
     }
+    /** 
+     * 需要考虑要不要删除
     if (girl_num == 2 && boy_num == 4) {
       console.log(girl_list.concat(boy_list))
       this.data.sel_pk_group_user_list = girl_list.concat(boy_list)
       sample = [[[0, 2], [1, 3]], [[0, 4], [1, 5]], [[4, 5], [2, 3]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[3, 4], [2, 5]]]
     }
+    */
     var pk_groups = this.getvs(sample);
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
     this.setData({

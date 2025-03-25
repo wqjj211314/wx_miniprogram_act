@@ -30,163 +30,52 @@ name: "利宾饭店(龙王塘路店)"
       latitude: 0,
       longitude: 0
     },
-    longitude: 0,
-    latitude: 0,
+    longitude: 120.121431,
+    latitude: 30.221378, //默认杭州西湖
     markers: [],
     polyline: [],
-    scale: 13,
+    scale: 17,
     routeInfos: [],
     newScale: 0,
-    route_title:""
+    route_title: "",
+    pre_page:""
   },
-  onLoad() {
+  onLoad(options) {
+    var pages = getCurrentPages()
+    var pre_page = pages[pages.length-2]
+    console.log(pre_page)
+    this.setData({
+      pre_page:pre_page
+    })
+    if (options.hasOwnProperty("route")) {
+      const route = JSON.parse(decodeURIComponent(options.route));
+      if (route.hasOwnProperty("scale")) {
+        this.setData({
+          scale: route.scale,
+          startPoint: route.markers[0],
+          endPoint: route.markers[route.markers.length - 1],
+          waypoints: route.markers.slice(1, -1),
+          route_title: route.route_name,
+          latitude: route.markers[0].latitude,
+          longitude: route.markers[0].longitude
+        })
+      }
+    }
     const query = wx.createSelectorQuery();
     query.select('#routeMap').boundingClientRect((rect) => {
-        if (rect) {
-            this.setData({
-                mapWidth: rect.width,
-                mapHeight: rect.height
-            });
-        }
+      if (rect) {
+        this.setData({
+          mapWidth: rect.width,
+          mapHeight: rect.height
+        });
+      }
     }).exec();
-},
-calculateCenterAndScale() {
-  const {
-    startPoint,
-    waypoints,
-    waypointTransportModes,
-    endPoint
-  } = this.data;
-  const markers = [startPoint, ...waypoints, endPoint];
-    
-    let totalLng = 0;
-    let totalLat = 0;
-
-    // 计算中心点经纬度
-    for (let i = 0; i < markers.length; i++) {
-        const marker = markers[i];
-        totalLng += marker.longitude;
-        totalLat += marker.latitude;
-    }
-    const centerLng = totalLng / markers.length;
-    const centerLat = totalLat / markers.length;
-
-    // 找出距离中心点最远的点
-    let maxDistance = 0;
-    let farthestMarker = null;
-    for (let i = 0; i < markers.length; i++) {
-        const marker = markers[i];
-        const distance = this.calculateDistance(centerLng, centerLat, marker.longitude, marker.latitude);
-        if (distance > maxDistance) {
-            maxDistance = distance;
-            farthestMarker = marker;
-        }
-    }
-
-    // 计算经纬度跨度
-    const lngDelta = Math.abs(farthestMarker.longitude - centerLng);
-    const latDelta = Math.abs(farthestMarker.latitude - centerLat);
-
-    // 根据经纬度跨度和地图宽高确定缩放比例
-    const scale = this.getScale(lngDelta, latDelta, this.data.mapWidth, this.data.mapHeight);
-
-   
-
-    // 创建中心点的 marker
-    const centerMarker = {
-        id: markers.length + 1,
-        longitude: centerLng,
-        latitude: centerLat,
-        iconPath: '/images/center_marker.png',
-        width: 30,
-        height: 30
-    };
-    
-
-    this.setData({
-        longitude: centerLng,
-        latitude: centerLat,
-        scale: scale,
-        
-    });
-},
-calculateDistance(lng1, lat1, lng2, lat2) {
-    // 简单的距离计算，实际应用中可使用更精确的算法
-    return Math.sqrt(Math.pow(lng2 - lng1, 2) + Math.pow(lat2 - lat1, 2));
-},
-getScale(lngDelta, latDelta, mapWidth, mapHeight) {
-    // 经纬度一度对应的像素值（近似值）
-    const lngDegreeToPixel = mapWidth / 360;
-    const latDegreeToPixel = mapHeight / 180;
-
-    // 计算经纬度跨度对应的像素跨度
-    const lngPixelSpan = lngDelta * 2 * lngDegreeToPixel;
-    const latPixelSpan = latDelta * 2 * latDegreeToPixel;
-
-    // 根据像素跨度确定缩放比例
-    let scale;
-    
-    scale = this.calculateZoomLevel(mapWidth,mapHeight,lngDelta,latDelta)
-    console.log("ds给的缩放")
-    console.log(scale)
-    return scale;
-},
-
-calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
-  if (maxΔlng === 0 && maxΔlat === 0) return 20; // 所有点重合时使用最大缩放
-
-  let z1 = Infinity, z2 = Infinity;
-  if (maxΔlng > 0) {
-    const ratio = (width * 1.40625) / (2 * maxΔlng);
-    z1 = Math.log2(ratio);
-  }
-  if (maxΔlat > 0) {
-    const ratio = (height * 1.40625) / (2 * maxΔlat);
-    z2 = Math.log2(ratio);
-  }
-  const z = Math.min(z1, z2);
-  return Math.min(20, Math.max(3, z)); // 限制缩放级别在3-20之间
-},
-  route_title(e){
+  },
+  route_title(e) {
     this.setData({
       route_title: e.detail.value.trim()
     });
   },
-  // 起点输入事件处理
-  onStartPointInput(e) {
-    const startPoint = {
-      ...this.data.startPoint,
-      address: e.detail.value
-    };
-    this.setData({
-      startPoint
-    });
-  },
-
-  // 途径点输入事件处理
-  onWaypointInput(e) {
-    const index = e.currentTarget.dataset.index;
-    const waypoints = this.data.waypoints;
-    waypoints[index] = {
-      ...waypoints[index],
-      address: e.detail.value
-    };
-    this.setData({
-      waypoints
-    });
-  },
-
-  // 终点输入事件处理
-  onEndPointInput(e) {
-    const endPoint = {
-      ...this.data.endPoint,
-      address: e.detail.value
-    };
-    this.setData({
-      endPoint
-    });
-  },
-
   // 添加途径点
   addWaypoint() {
     const waypoints = this.data.waypoints;
@@ -200,7 +89,35 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
     waypointTransportModes.push('walking');
     this.setData({
       waypoints,
-      waypointTransportModes
+      waypointTransportModes,
+
+    });
+  },
+  // 添加途径点
+  insertWaypoint(e) {
+    const index = e.currentTarget.dataset.index;
+    const waypoints = this.data.waypoints;
+    const waypointTransportModes = this.data.waypointTransportModes;
+    waypoints.splice(index + 1, 0, {
+      address: '',
+      name: '',
+      latitude: 0,
+      longitude: 0
+    });
+    waypointTransportModes.push('walking');
+    this.setData({
+      waypoints,
+      waypointTransportModes,
+
+    });
+  },
+  // 添加途径点
+  delWaypoint(e) {
+    const index = e.currentTarget.dataset.index;
+    const waypoints = this.data.waypoints;
+    waypoints.splice(index, 1);
+    this.setData({
+      waypoints,
     });
   },
 
@@ -218,7 +135,9 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
   selectStartPoint() {
     this.selectLocation((location) => {
       this.setData({
-        startPoint: location
+        startPoint: location,
+        longitude: location.longitude,
+        latitude: location.latitude
       });
     });
   },
@@ -230,7 +149,9 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
       const waypoints = this.data.waypoints;
       waypoints[index] = location;
       this.setData({
-        waypoints
+        waypoints,
+        longitude: location.longitude,
+        latitude: location.latitude
       });
     });
   },
@@ -239,7 +160,9 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
   selectEndPoint() {
     this.selectLocation((location) => {
       this.setData({
-        endPoint: location
+        endPoint: location,
+        longitude: location.longitude,
+        latitude: location.latitude
       });
     });
   },
@@ -266,6 +189,106 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
       }
     });
   },
+  calculateCenterAndScale() {
+    const {
+      startPoint,
+      waypoints,
+      waypointTransportModes,
+      endPoint
+    } = this.data;
+    const markers = [startPoint, ...waypoints, endPoint];
+
+    let totalLng = 0;
+    let totalLat = 0;
+
+    // 计算中心点经纬度
+    for (let i = 0; i < markers.length; i++) {
+      const marker = markers[i];
+      totalLng += marker.longitude;
+      totalLat += marker.latitude;
+    }
+    const centerLng = totalLng / markers.length;
+    const centerLat = totalLat / markers.length;
+
+    // 找出距离中心点最远的点
+    let maxDistance = 0;
+    let farthestMarker = null;
+    for (let i = 0; i < markers.length; i++) {
+      const marker = markers[i];
+      const distance = this.calculateDistance(centerLng, centerLat, marker.longitude, marker.latitude);
+      console.log(distance)
+      if (distance >= maxDistance) {
+        maxDistance = distance;
+        farthestMarker = marker;
+      }
+    }
+
+    // 计算经纬度跨度
+    const lngDelta = Math.abs(farthestMarker.longitude - centerLng);
+    const latDelta = Math.abs(farthestMarker.latitude - centerLat);
+
+    // 根据经纬度跨度和地图宽高确定缩放比例
+    const scale = this.getScale(lngDelta, latDelta, this.data.mapWidth, this.data.mapHeight);
+
+
+
+    // 创建中心点的 marker
+    const centerMarker = {
+      id: markers.length + 1,
+      longitude: centerLng,
+      latitude: centerLat,
+      iconPath: '/images/center_marker.png',
+      width: 30,
+      height: 30
+    };
+
+
+    this.setData({
+      longitude: centerLng,
+      latitude: centerLat,
+      scale: scale,
+
+    });
+  },
+  calculateDistance(lng1, lat1, lng2, lat2) {
+    // 简单的距离计算，实际应用中可使用更精确的算法
+    return Math.sqrt(Math.pow(lng2 - lng1, 2) + Math.pow(lat2 - lat1, 2));
+  },
+  getScale(lngDelta, latDelta, mapWidth, mapHeight) {
+    // 经纬度一度对应的像素值（近似值）
+    const lngDegreeToPixel = mapWidth / 360;
+    const latDegreeToPixel = mapHeight / 180;
+
+    // 计算经纬度跨度对应的像素跨度
+    const lngPixelSpan = lngDelta * 2 * lngDegreeToPixel;
+    const latPixelSpan = latDelta * 2 * latDegreeToPixel;
+
+    // 根据像素跨度确定缩放比例
+    let scale;
+
+    scale = this.calculateZoomLevel(mapWidth, mapHeight, lngDelta, latDelta)
+    console.log("ds给的缩放")
+    console.log(scale)
+    return scale;
+  },
+
+  calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
+    if (maxΔlng === 0 && maxΔlat === 0) return 20; // 所有点重合时使用最大缩放
+
+    let z1 = Infinity,
+      z2 = Infinity;
+    if (maxΔlng > 0) {
+      const ratio = (width * 1.40625) / (2 * maxΔlng);
+      z1 = Math.log2(ratio);
+    }
+    if (maxΔlat > 0) {
+      const ratio = (height * 1.40625) / (2 * maxΔlat);
+      z2 = Math.log2(ratio);
+    }
+    const z = Math.min(z1, z2);
+    return Math.min(20, Math.max(3, z)); // 限制缩放级别在3-20之间
+  },
+
 
   // 生成路线
   generateRoute() {
@@ -283,6 +306,37 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
       });
       return;
     }
+    const new_waypoints = [];
+    var is_valid_point = 0;
+    for (var index in waypoints) {
+      if (waypoints[index].address == '' || waypoints[index].name == '' || waypoints[index].latitude == 0 || waypoints[index].longitude == 0) {
+        is_valid_point = 1;
+        continue;
+      } else {
+        new_waypoints.push(waypoints[index])
+      }
+    }
+    if (is_valid_point) {
+
+      wx.showModal({
+        title: '存在空的途径点',
+        content: '确定删除空的途径点吗？',
+        complete: (res) => {
+          if (res.cancel) {
+
+          }
+
+          if (res.confirm) {
+            this.setData({
+              waypoints: new_waypoints
+            })
+          }
+        }
+      })
+      return;
+    }
+
+
     //计算中心点和缩放比例
     this.calculateCenterAndScale();
 
@@ -302,12 +356,12 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
           title: `起点: ${allPoints[0].name}`,
           width: 30,
           height: 30,
-          iconPath: 'start.png',
-          customField: {
+          iconPath: 'icon_start.png',
+          /** customField: {
             fullAddress: allPoints[0].address,
             name: allPoints[0].name
           },
-          /** 默认显示地图点名称
+          默认显示地图点名称
           label: {
               content: allPoints[0].name,
               color: '#000000',
@@ -325,14 +379,14 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
               longitude: allPoints[i].longitude,
               latitude: allPoints[i].latitude,
               title: `途径点${i}: ${allPoints[i].name}`,
-              width: 30,
-              height: 30,
-              iconPath: 'center.png',
-              customField: {
+              width: 20,
+              height: 20,
+              iconPath: 'https://www.2week.club:5000/static/mapicon/icon'+ i +'.png',
+              /**customField: {
                 fullAddress: allPoints[i].address,
                 name: allPoints[i].name
               },
-              /** 
+               
               label: {
                 content: allPoints[i].name,
                 color: '#000000',
@@ -353,7 +407,7 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
           title: `终点: ${allPoints[allPoints.length - 1].name}`,
           width: 30,
           height: 30,
-          iconPath: 'end.png',
+          iconPath: 'icon_end.png',
           customField: {
             fullAddress: allPoints[allPoints.length - 1].address,
             name: allPoints[allPoints.length - 1].name
@@ -382,9 +436,9 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
 
         // 计算路线范围和中心点
         //const {
-          //centerLatitude,
-          //centerLongitude,
-          //scale
+        //centerLatitude,
+        //centerLongitude,
+        //scale
         //} = this.calculateMapBounds(allPointsArray);
 
         this.setData({
@@ -436,7 +490,7 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
         fail: (err) => {
           console.error(`第 ${index + 1} 段请求失败`, err);
           wx.showToast({
-            title: `第 ${index + 1} 段请求失败`,
+            title: err.message,
             icon: 'none'
           });
         }
@@ -446,17 +500,6 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
     fetchRoute(0);
   },
 
-  // 计算地图范围和缩放级别
-  calculateMapBounds(points) {
-    const allPoints = [startPoint, ...waypoints, endPoint];
-    
-    
-    return {
-      centerLatitude,
-      centerLongitude,
-      scale
-    };
-  },
 
   // marker 点击事件处理函数
   onMarkerTap(e) {
@@ -482,7 +525,7 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
 
     }
   },
-  save_route(){
+  save_route() {
     const {
       startPoint,
       waypoints,
@@ -490,7 +533,7 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
       endPoint,
       route_title
     } = this.data;
-    if(route_title == ""){
+    if (route_title == "") {
       wx.showToast({
         title: '请输入路线名称',
         icon: 'error'
@@ -504,16 +547,30 @@ calculateZoomLevel(width, height, maxΔlng, maxΔlat) {
       });
       return;
     }
+    const new_waypoints = [];
 
-    const allPoints = [startPoint, ...waypoints, endPoint];
+    for (var index in waypoints) {
+      if (waypoints[index].address == '' || waypoints[index].name == '' || waypoints[index].latitude == 0 || waypoints[index].longitude == 0) {
+        continue;
+      } else {
+        new_waypoints.push(waypoints[index])
+      }
+    }
+
+    const allPoints = [startPoint, ...new_waypoints, endPoint];
     var route = {};
     route["scale"] = this.data.scale;
     route["route_name"] = this.data.route_title;
     route["markers"] = allPoints
     app.globalData.route = route;
 
-    wx.switchTab({
-      url: '/pages/activity/activity',
-    })
+    if(this.data.pre_page.route == "pages/activity/editactivity"){
+      wx.navigateBack()
+    }else{
+      wx.switchTab({
+        url: '/pages/activity/activity',
+      })
+    }
+    
   }
 });

@@ -1,0 +1,23 @@
+
+<map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100vw; height: 100vh;"></map>
+
+<view class="bottomPos" style="padding-bottom: 34rpx;">
+  <!--隐藏的输入框{{isFocus}} hidden="{{isdisplay}}"-->
+  <view class="cu-bar input" wx:if="{{!isdisplay}}" style="margin-bottom: 0rpx;">
+    <view class="action">
+      <text class="cuIcon-write text-grey"></text>
+    </view>
+    <!--focus改成auto?!-->
+    <input class="solid-bottom" focus="{{isFocus}}" value="{{inputMsg}}" maxlength="300" cursor-spacing="0" bindblur="onblurkey" bindinput="inputMsg" style="margin-bottom: 15rpx;"></input>
+    <button class="cu-btn bg-green shadow-blur" bindtap="sendMsg" disabled="{{inputMsg.length <= 0}}">搜索</button>
+  </view>
+
+  <!--底部导航-->
+  <view class="padding-left-xs padding-right-xs flex solid-bottom justify-between" wx:if="{{isdisplay}}" style="padding-bottom: 5rpx;">
+    <button class="bg-touming chatbutton cu-btn round" bindtap="openKey" style="height:96rpx;font-size:30rpx;border-style: solid;border-width: 1px;">
+      搜索附近活动
+    </button>
+    
+   
+  </view>
+</view>

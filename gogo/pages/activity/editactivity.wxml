@@ -161,6 +161,12 @@
     <view wx:for="{{room_items}}" class="flex round" bindtap="chooseroom" data-room="{{index+1}}" style="font-weight: 400;font-size: 28rpx;line-height: 40rpx;width: 50rpx;height: 50rpx;align-items: center;justify-content: center;{{tools.iscontain(roomlist,index+1)?'background: #4689FF;color: #FFFFFF;':'background: #EEEEEE;font-weight: 400;font-size: 28rpx;color: #666666;'}}">{{index+1}}
     </view>
   </view>
+  <view class="flex margin-top" style="justify-content: space-between;" bindtap="choose_route" wx:if="{{true}}">
+    <view class="mytitle" style="">路线<text class="text-gray">（可选）</text></view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
+      {{route["route_name"]==undefined?'去规划路线':route["route_name"]}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+  </view>
 </view>
 
 <view class="bg-white margin padding" style="border-radius: 30rpx;">

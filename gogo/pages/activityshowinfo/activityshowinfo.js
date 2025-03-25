@@ -2139,5 +2139,10 @@ Page({
         }
       });
     });
+  },
+  route_chat(){
+    wx.navigateTo({
+      url: '/pages/routePlanning/routechat?activity_info='+encodeURIComponent(JSON.stringify(this.data.activity_info)),
+    })
   }
 })

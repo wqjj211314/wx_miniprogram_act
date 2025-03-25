@@ -1,0 +1,166 @@
+/**index.wxss**/
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+
+.usermotto {
+  margin-top: 200px;
+}
+
+/* 给盒子添加绝对定位，让图片占满全屏幕 */
+.bg {
+  width:100%;
+  height:100%;
+  position:absolute;
+  z-index:-99999;
+  }
+.bg image {
+    width: 100%;
+    height: 100%;
+  }
+
+.bottomPos {
+  position: fixed;
+  bottom:0px;
+  width: 100%;
+}
+.titlebg{
+  background-color: rgba(51,51,51,0.3);color:white;font-weight: normal;display:inline-flex;align-items:left;justify-content:left;box-sizing:border-box;padding:15rpx 20rpx;font-size:30rpx;line-height:160%;text-decoration:none;overflow:visible;border-radius:25rpx;overflow:hidden;flex-direction: column;
+}
+
+.chatbutton{
+  width:85%;
+}
+
+.icon-big{
+  font-size: 200%;
+}
+.customer-padding-left{
+  padding: 0;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.flex-test{
+  display: flex;
+  flex-direction: column;
+}
+.fixed-height{
+  margin-top: 10vh;
+  height: 65vh;
+  margin-left: 15rpx;
+}
+.flext-item{
+  align-self:baseline;
+}
+
+.customer-msg-cu-btn {
+  display: inline-flex;
+  align-items: left;
+  justify-content: left;
+  box-sizing: border-box;
+  padding: 15rpx 20rpx;
+  font-size: 30rpx;
+  line-height: 160%;
+  text-decoration: none;
+  overflow: visible;
+  border-radius: 25rpx;
+  margin:10px 10px;
+  max-width: 70%;
+  min-width: 0rpx;
+  overflow: hidden;
+}
+.customer-msg-cu-btn2 {
+  display: inline-flex;
+  box-sizing: border-box;
+  font-size: 30rpx;
+  line-height: 150%;
+  text-decoration: none;
+  overflow: visible;
+  align-self:center;
+  color:black;
+  padding:15rpx;
+  margin: 10rpx;
+  border-radius: 10rpx;
+  background-color: white;
+  max-width:70%;
+  max-height: 5em;
+  width: 100%;
+  text-align:left;
+  
+  
+}
+
+.bg-touming{
+  background-color: rgba(51,51,51,0.3);
+  color:white;
+  font-weight: normal;
+
+}
+
+.customer-title-cu-btn{
+    position: relative;
+    border-style:none;
+    border: 0rpx;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0rpx 5rpx 0rpx 0rpx;
+    font-size: 1em;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    overflow: visible;
+    margin-left: initial;
+    transform: translate(0rpx, 0rpx);
+    margin-right: initial;
+    border-top-left-radius:5000rpx;
+    border-top-right-radius:3000rpx;
+    border-bottom-right-radius:3000rpx;
+    border-bottom-left-radius:5000rpx;
+}
+
+
+
+.pagecenter{
+  position: fixed;
+  top:50%;
+  width: 100%;
+}
+.background {
+  width: 100%;
+  height: 100%;
+  position:fixed; 
+  background-size:100% 100%;
+  z-index: -1;
+  background-color:black;
+}
+.background2 {
+  width: 100%;
+  height: 100%;
+  position:fixed; 
+  z-index: -1;
+  background-color:rgba(0, 0, 0, 0);
+}
+
+.bgcolor {
+  background-color: rgba(144, 167, 179, 0.8);
+}
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+@import "/colorui/iconfont.wxss"

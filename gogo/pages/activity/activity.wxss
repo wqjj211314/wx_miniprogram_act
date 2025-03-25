@@ -64,7 +64,7 @@ page {
   line-height: 40rpx;
   text-align: left;
   font-style: normal;
-  width: 200rpx;
+  width: 220rpx;
 }
 
 .mytitlecontent {
