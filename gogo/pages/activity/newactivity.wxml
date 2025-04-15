@@ -1,0 +1,344 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<!--<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">-->
+<view class="margin bg-white" style="height: 30vh; border-radius: 30rpx;">
+  <view class="bg-white" wx:for="{{imgList}}" wx:key="index" data-url="{{imgList[index]}}" style="width: 100%;height: 100%;border-radius: 30rpx;">
+    <image src='{{imgList[index]}}' mode='aspectFill' style="width: 100%;height: 100%;border-radius: 30rpx;"></image>
+  </view>
+  <view class="text-blue flex" style="width: 100%;position: absolute;left: 0;top: 13vh;flex-direction: row;justify-content: center;align-items: center;">
+  <view class="flex" style="flex-direction: column;justify-content: center;align-items: center;" bindtap="ChooseImage">
+    <image src='/image/pic.png' mode='aspectFill' style="width: 100rpx;height: 100rpx;"></image>
+    <text style="font-weight: bold;font-size: 28rpx;color:black;line-height: 40rpx;">更换背景</text>
+  </view>
+  <view class="flex" style="flex-direction: column;justify-content: center;align-items: center;margin-left: 40rpx" bindtap="cropImage" wx:if="{{imgList.length>0&&imgList[0]!='https://www.2week.club:5000/static/userbg.jpg'}}">
+      <image src='/image/cropper.png' mode='widthFix' style="width: 180rpx;height: 120rpx;"></image>
+    
+    </view>
+  </view>
+  
+</view>
+
+<view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="mytitle"> 活动类型</view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;">
+    <view class="text-center" wx:for="{{hobby_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;white-space:nowrap;">
+      <button class="cu-btn" bindtap="choosetag" data-hobbytag="{{hobby_tags[index]}}" style="border-radius: 30rpx;padding: 6rpx 15rpx;font-size: 26rpx;height: 50rpx;line-height: 37rpx;{{hobby_tag == hobby_tags[index]?'background: #4689FF;color:white;':'background: #EEEEEE;color: #666666;'}}">{{item}}</button>
+    </view>
+  </view>
+</view>
+<view class="bg-white margin padding" style="border-radius: 30rpx;padding-bottom: 18rpx;">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle">活动标题</view>
+    <view><input class="mytitlecontent" placeholder="请输入活动标题" bindinput='titleInput' style="" value="{{title}}" maxlength="30"></input></view>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;">
+    <view class="mytitle">俱乐部<text class="text-gray">（可选）</text></view>
+    <view><input class="mytitlecontent" placeholder="选择或输入" bindinput='input_club_name' style="" value="{{club_name}}" maxlength="50"></input></view>
+  </view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;">
+    <view class="text-center" wx:for="{{club_name_list}}" style="margin-bottom: 10rpx;margin-right: 10rpx;white-space: nowrap;" wx:for-item="clubname" wx:key="*this">
+      <button class="cu-btn" bindtap="choose_club_name" data-clubname="{{clubname}}" style="border-radius: 30rpx;padding: 6rpx 15rpx;font-size: 26rpx;height: 50rpx;line-height: 37rpx;{{club_name == club_name_list[index]?'background: #4689FF;color:white;':'background: #EEEEEE;color: #666666;'}}">{{clubname}}</button>
+    </view>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;">
+    <view class="mytitle">限制人数</view>
+    <view><input class="mytitlecontent" placeholder="" bindinput='numberInput' type="number" style="" value="{{max_part_number}}"></input></view>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;" wx:if="{{false}}">
+    <view class="mytitle">参与限制</view>
+    <view class="flex" style="flex-direction: row;align-items: center;">
+      <view>
+        <picker mode="selector" bindchange="part_limit_change" value="{{part_limit_index}}" range="{{part_limit_picker}}">
+          <view class="mytitlecontent">
+            {{part_limit_picker[part_limit_index]}}
+          </view>
+        </picker>
+
+      </view>
+      <view><text class="cuIcon-right margin-left-sm text-bold" style=""></text></view>
+    </view>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;">
+    <view class="mytitle" style="font-weight: bold;width: 250rpx;" bind:tap="show_custom_title_tag">活动标签<text class="text-gray" style="font-weight: normal;">（可选）</text></view>
+    <view class="flex" style="flex-flow: wrap;justify-content:flex-end;flex:1;">
+      <view class="bg-white" wx:for="{{sample_title_tags}}" style="margin-left:20rpx;padding:6rpx 9rpx;font-size: 24rpx;border-radius: 8rpx;height: fit-content;font-weight: 400;font-size: 24rpx;line-height: 33rpx;margin-bottom: 20rpx;{{tools.iscontain(title_tags,item)?'color: #FFFFFF;background: #4689FF;':'color: #999999;border: 1rpx solid #999999;'}}" bind:tap="choose_title_tag" data-titletag="{{item}}">
+        {{item}}
+      </view>
+      <view class="bg-white" wx:for="{{title_tags}}" style="margin-left:20rpx;padding:6rpx 9rpx;font-size: 24rpx;border-radius: 8rpx;border: 1rpx solid #999999;height: fit-content;font-weight: 400;font-size: 24rpx;line-height: 33rpx;margin-bottom: 20rpx;{{tools.iscontain(title_tags,item)?'color: #FFFFFF;background: #4689FF;border: 1rpx solid #999999;':'color: #999999;'}}" bind:tap="choose_title_tag" data-titletag="{{item}}" wx:if="{{!tools.iscontain(sample_title_tags,item)}}">
+        {{item}}
+      </view>
+     
+      <view class="bg-white" style="margin-left:20rpx;padding:6rpx 9rpx;font-size: 24rpx;border-radius: 8rpx;border: 1rpx solid #999999;height: fit-content;font-weight: 400;font-size: 24rpx;color: #999999;line-height: 33rpx;margin-bottom: 20rpx;" bind:tap="show_custom_title_tag"><text class="cuIcon-add" style=""></text>添加标签
+      </view>
+    </view>
+  </view>
+</view>
+<view class="bg-white margin padding" style="border-radius: 40rpx;" wx:if="{{activity_type!='pk'}}">
+  <view class="flex" style="justify-content: space-between;" >
+    <view class="mytitle">收费类型</view>
+    <view class="flex justify-start" style="align-items: center;font-family: PingFangSC, PingFang SC;">
+      <view class="{{pay_type == '免费'?'sel_btn':'graybtn'}}" bindtap="choose_pay_type" data-paytype="免费" style="">免费
+      </view>
+      <view class="{{pay_type == '线下收费'?'sel_btn':'graybtn'}}" bindtap="choose_pay_type" data-paytype="线下收费" style="margin-left:20rpx;">线下收费
+      </view>
+
+      <view  class="{{pay_type == '线上收费'?'sel_btn':'graybtn'}}" bindtap="choose_pay_type" data-paytype="线上收费" style="margin-left:20rpx;">线上收费
+      </view>
+
+    </view>
+  </view>
+  <view class="flex margin-top" style="background: #F5F5F5;border-radius: 10rpx;justify-content: space-between;padding:20rpx 30rpx;" wx:if="{{pay_type=='线上收费'}}">
+    <view class="mytitle" style="color: #999999;">收费金额</view>
+    <view class="flex" style="align-items: center;justify-content: center;">
+    <input placeholder="请输入收费金额" bindinput='priceInput' type="digit" style="text-align: right;font-weight: 400;font-size: 28rpx;color: #333333;line-height: 40rpx;" bindblur="priceInputBlur" value="{{pay_price}}"></input>
+    元</view>
+  </view>
+  
+</view>
+
+<view class="bg-white margin" style="border-radius: 30rpx;padding:32rpx 30rpx 40rpx;" wx:if="{{activity_type!='pk'}}">
+  <view class="text-bold flex" style="height: fit-content;text-align: left;justify-content: space-between;">
+  <view>活动时间</view> 
+  <view><text class="text-blue" style="font-weight: normal;">{{choose_day}} {{choose_duration}}</text></view>
+  </view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;gap: 15rpx;">
+    <view class="text-center" wx:for="{{nextSevenDays}}" style="white-space:nowrap;">
+      <button class="cu-btn" bindtap="choose_day" data-day="{{index}}" style="border-radius: 30rpx;padding: 6rpx 15rpx;font-size: 26rpx;height: 50rpx;line-height: 37rpx;{{choose_day == index?'background: #4689FF;color:white;':'background: #EEEEEE;color: #666666;'}}">{{item}}</button>
+    </view>
+  </view>
+  <view class="flex justify-start" style="overflow: scroll;margin-top: 20rpx;gap: 15rpx;">
+    <view class="text-center" wx:for="{{activity_time_duration}}" style="white-space:nowrap;">
+      <button class="cu-btn" bindtap="choose_duration" data-duration="{{activity_time_duration[index]}}" style="border-radius: 30rpx;padding: 6rpx 15rpx;font-size: 26rpx;height: 50rpx;line-height: 37rpx;{{choose_duration == activity_time_duration[index]?'background: #4689FF;color:white;':'background: #EEEEEE;color: #666666;'}}">{{item}}</button>
+    </view>
+  </view>
+  <view class="flex" style="justify-content: space-between;margin-top:37rpx;" wx:if="{{show_time_flag}}">
+    <view class="mytitle" style="">活动开始时间</view>
+    <view class="flex mytitlecontent" style="flex-direction: row;align-items: center;">
+      <view>
+        <DatetimePicker mode="dateminute" value="{{begintime}}" bindchange="TimeChange_begintime">
+          <view class="picker">
+            {{begintime}}
+          </view>
+        </DatetimePicker>
+      </view>
+      <text class="cuIcon-right margin-left-sm text-bold text-black"></text>
+    </view>
+  </view>
+  <view class="flex" style="justify-content: space-between;margin-top:37rpx;"wx:if="{{show_time_flag}}">
+    <view class="mytitle">活动结束时间</view>
+    <view class="flex mytitlecontent" style="flex-direction: row;align-items: center;">
+      <view>
+        <DatetimePicker mode="dateminute" value="{{endtime}}" bindchange="TimeChange_endtime">
+          <view class="picker">
+            {{endtime}}
+          </view>
+        </DatetimePicker>
+      </view>
+      <text class="cuIcon-right margin-left-sm text-bold text-black"></text>
+    </view>
+  </view>
+  <view class="flex" style="justify-content: space-between;margin-top:37rpx;"wx:if="{{show_time_flag}}">
+    <view class="mytitle">报名截止时间</view>
+    <view class="flex mytitlecontent" style="flex-direction: row;align-items: center;">
+      <view>
+        <DatetimePicker mode="dateminute" value="{{addendtime}}" bindchange="TimeChange_addendtime">
+          <view class="picker">
+            {{addendtime}}
+          </view>
+        </DatetimePicker>
+      </view>
+      <text class="cuIcon-right margin-left-sm text-bold text-black"></text>
+    </view>
+  </view>
+  <view class="flex" style="justify-content: space-between;margin-top:37rpx;"wx:if="{{show_time_flag}}">
+    <view class="mytitle">取消截止时间</view>
+    <view class="flex mytitlecontent" style="flex-direction: row;align-items: center;">
+      <view>
+        <DatetimePicker mode="dateminute" value="{{cancelendtime}}" bindchange="TimeChange_cancelendtime">
+          <view class="picker">
+            {{cancelendtime}}
+          </view>
+        </DatetimePicker>
+      </view>
+      <text class="cuIcon-right margin-left-sm text-bold text-black"></text>
+    </view>
+  </view>
+  <view class="" style="height: fit-content;text-align: center;margin-top:20rpx;font-size: 30rpx;" bind:tap="show_time">
+ <text class="iconfont {{show_time_flag?'icon-zhedie2':'icon-zhankai'}}" style="{{show_time_flag?'font-size:30rpx;':'font-size:25rpx;'}}"></text>
+  </view>
+</view>
+
+
+<view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;" bindtap="chooseposition">
+    <view class="mytitle" style="">位置</view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
+      {{activityaddress}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+  </view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;">
+    <view wx:for="{{location_list}}" wx:for-item="location" class="{{sel_cache_location == location_list[index]['short_activityaddress']?'sel_btn':'graybtn'}}" style="white-space:nowrap;margin-right: 20rpx;" bindtap="choose_cache_location" data-index="{{index}}" wx:if="{{location['short_activityaddress']!=''}}">{{location["short_activityaddress"]}}
+    </view>
+  </view>
+
+  <view class="flex margin-top" style="justify-content: space-between;">
+    <view class="mytitle" style="">场地<text class="text-gray">（可选）</text></view>
+    <input placeholder="选择或输入" bindinput='roomInput' style="color:black;text-align: right;" value="{{roomlist}}" maxlength="100"></input>
+  </view>
+  <view class="margin-top flex" style="justify-content: space-around;flex-direction: row;">
+    <view wx:for="{{room_items}}" class="flex round" bindtap="chooseroom" data-room="{{index+1}}" style="font-weight: 400;font-size: 28rpx;line-height: 40rpx;width: 50rpx;height: 50rpx;align-items: center;justify-content: center;{{tools.iscontain(roomlist,index+1)?'background: #4689FF;color: #FFFFFF;':'background: #EEEEEE;font-weight: 400;font-size: 28rpx;color: #666666;'}}">{{index+1}}
+    </view>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;" bindtap="choose_route" wx:if="{{false}}">
+    <view class="mytitle" style="">路线<text class="text-gray">（可选）</text></view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
+      {{route["route_name"]==undefined?'去规划路线':route["route_name"]}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+  </view>
+</view>
+
+<view class="bg-white margin padding" style="border-radius: 30rpx;" wx:if="{{false}}">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle" style="width: 250rpx;">报名信息<text class="text-gray">（可选）</text></view>
+    <input class="mytitlecontent" placeholder="选择或输入" bindinput='roomInput' style="color:black;text-align: right;" value="{{partinfo}}" maxlength="100"></input>
+  </view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;">
+    <view style="margin-right: 10rpx;margin-bottom: 10rpx;white-space: nowrap;" wx:for="{{partinfo_all_options}}"
+     class="{{tools.iscontain(partinfo,partinfo_all_options[index])?'sel_btn':'graybtn'}}" bindtap="choose_partinfo" data-partinfo="{{partinfo_all_options[index]}}">{{item}}
+    </view>
+  </view>
+  <view class="flex margin-top-sm" style="justify-content: space-between;" bindtap="custom_group_tag" wx:if="{{false}}">
+    <view class="mytitle" style="">分组配置</view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
+      自定义<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+    
+  </view>
+  <view class="flex margin-top-sm" style="justify-content: space-between;" wx:if="{{false}}">
+    <view class="mytitle">挂人报名</view>
+    <switch bindchange="takechange" color="#4689FF" checked class="myblue"></switch>
+  </view>
+
+  <block wx:for="{{group_tag_dict}}" wx:if="{{false}}">
+    <view class="flex margin-top-sm margin-left-sm" style="justify-content: space-between;">
+      <view class="mytitle" style="color: #999999;">{{index}}</view>
+      <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">人数:{{group_tag_dict[index].limit}}场地:{{group_tag_dict[index].room}}</view>
+    </view>
+  </block>
+</view>
+<view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;" >
+    <view class="mytitle" style="">更多设置</view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;" bindtap="more_setting">
+      路线、分组、报名等配置<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+  </view>
+</view>
+
+
+<view class="bg-white margin padding" style="height: fit-content;border-radius: 30rpx;">
+  <view class="text-bold" style="height: fit-content;text-align: left;">活动详情</view>
+  <view class="flex margin-top" style="flex-direction: column;height: fit-content;align-items: center;justify-content: flex-start;">
+
+    <textarea placeholder="活动详情：如活动详细介绍，组织者联系方式等信息，也可在创建活动后发布公告" bindinput='detailInput' auto-height="true" maxlength="3000" style="min-height: 80rpx;line-height: unset;height: fit-content;width: 100%;" value="{{detail}}"></textarea>
+    
+    <view class="" style="width: 100%;">
+  <view class="radius bg-white margin-top">
+    <view class='pagecenter1' style="padding-top:20rpx;">
+      <view class="bg-white text-bold">
+        <view class="title">详情图</view>
+      </view>
+      <view class="cu-form-group margin-top-sm" style="padding:0rpx;">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList_fordetail}}" wx:key="index" bindtap="ViewImage_fordetail" data-url="{{imgList_fordetail[index]}}" style="border-radius: 20rpx;">
+            <image src='{{imgList_fordetail[index]}}' mode='aspectFill' style="border-radius: 20rpx;"></image>
+            <view class="cu-tag bg-red" catchtap="DelImg_fordetail" data-index="{{index}}" style="">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage_fordetail" style="" wx:if="{{imgList_fordetail.length < 4}}" style="border-radius: 20rpx;">
+            <text class="cuIcon-cameraadd" style=""></text>
+          </view>
+
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+  </view>
+</view>
+
+
+
+<!--空白站位，保证以上内容能全部显示-->
+<view style="height: 150rpx;">
+</view>
+<!--</scroll-view>-->
+
+
+<view class="cu-modal {{modalName=='modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">活动信息</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{modalcontent}}
+    </view>
+  </view>
+</view>
+<view class="cu-modal {{modalName=='title_tag_modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">自定义标签</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="">
+      <view class="cu-form-group " style="border-top: 1rpx solid #eee;border-bottom: 1rpx solid #eee;">
+        
+        <input placeholder="自定义标签，如可通宵、去夜宵、免费饮料" class="text-left" maxlength="10" bindinput="input_title_tag" value="{{new_title_tag}}"></input>
+
+      </view>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-gray text-green" bindtap="hideModal">取消</button>
+        <button class="cu-btn margin-left text-white" bindtap="add_title_tag" style="background: #4689FF;">确定</button>
+
+      </view>
+    </view>
+  </view>
+</view>
+<view class="cu-modal {{modalName=='bgurl_modal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">是否复用历史背景图</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+
+    <view class="" style="width: 100%;height:400rpx;">
+      <image src='{{bg_url}}' mode='aspectFill' style="width: 100%;height: 100%;"></image>
+    </view>
+
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-green text-green" bindtap="hideModal">取消</button>
+        <button class="cu-btn margin-left" style="background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;" bindtap="use_exited_bg_url">确定</button>
+      </view>
+    </view>
+  </view>
+</view>
+<view style="height: 200rpx;"></view>
+
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="getUserProfile">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">立即发布</button>
+    </view>
+  </view>
+</view>

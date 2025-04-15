@@ -16,10 +16,47 @@ Page({
     activity_id: "",
     group_tag: "",
     modalName: "",
-    sample_group: [[[0, 1], [2, 3]], [[0, 1], [4, 5]], [[2, 3], [4, 5]], [[0, 2], [1, 3]], [[0, 4], [1, 5]], [[2, 4], [3, 5]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[2, 5], [3, 4]]],
-    group_users: [],//这是当前分组的成员，数组形式
+    sample_group: [
+      [
+        [0, 1],
+        [2, 3]
+      ],
+      [
+        [0, 1],
+        [4, 5]
+      ],
+      [
+        [2, 3],
+        [4, 5]
+      ],
+      [
+        [0, 2],
+        [1, 3]
+      ],
+      [
+        [0, 4],
+        [1, 5]
+      ],
+      [
+        [2, 4],
+        [3, 5]
+      ],
+      [
+        [0, 3],
+        [1, 2]
+      ],
+      [
+        [0, 5],
+        [1, 4]
+      ],
+      [
+        [2, 5],
+        [3, 4]
+      ]
+    ],
+    group_users: [], //这是当前分组的成员，数组形式
     sel_pk_group_member_list: [],
-    sel_pk_group_user_list: [],//选择的对阵成员列表，默认是所有成员
+    sel_pk_group_user_list: [], //选择的对阵成员列表，默认是所有成员
     admin_users: [],
     admin_flag: false,
     part_member_num: "",
@@ -28,12 +65,15 @@ Page({
     boy_member_num_list: [],
     girl_num: 0,
     girl_member_num_list: [],
-    member_users: {},//当前分组成员的字典形式，“#1”是key，成员信息是value
-    all_pk_info: {},//获取到的当前group_tag的Activitymemberpk信息
+    member_users: {}, //当前分组成员的字典形式，“#1”是key，成员信息是value
+    all_pk_info: {}, //获取到的当前group_tag的Activitymemberpk信息
     pk_groups: [],
     custom_pk_group: [],
     edit_pk_group_index: 0,
-    score_pk_group: [[0, 1], [2, 3]],
+    score_pk_group: [
+      [0, 1],
+      [2, 3]
+    ],
     pk_group_score: [],
     temp_edit_pk_group_score: [],
     pk_group_score_tags: [],
@@ -46,7 +86,7 @@ Page({
     hidden_score_list: false,
     triggered: false,
     submit_flag: false,
-    method: "",//对阵选项的方法调用
+    method: "", //对阵选项的方法调用
     method_tip: "",
     show_edit_flag: false,
     pk_hobby_list: ["羽毛球", "篮球", "乒乓球", "台球", "跑步", "骑行", "网球", "击剑", "棋牌"],
@@ -61,6 +101,7 @@ Page({
   onLoad(options) {
     console.log("onLoad加载");
     var activity_info = JSON.parse(decodeURIComponent(options.activity_info));
+    console.log(activity_info)
     var activity_tag = activity_info.activity_tag;
     var activity_id = activity_info.activity_id;
     if (options.hasOwnProperty("member_users")) {
@@ -71,6 +112,8 @@ Page({
       this.get_member_list(activity_info.activity_id, activity_info.activity_tag)
     }
     let group_users = JSON.parse(decodeURIComponent(options.group_users));
+    console.log(group_users)
+    
     let group_tag = options.group_tag;
     var boy_num = 0;
     var boy_member_num_list = [];
@@ -136,7 +179,7 @@ Page({
       activity_info: activity_info,
       admin_users: admin_users,
       is_begin: new Date(activity_info["begintime"]) - new Date() <= 0,
-      is_end: new Date(activity_info["endtime"]) - new Date() <= 0,//毫秒
+      is_end: new Date(activity_info["endtime"]) - new Date() <= 0, //毫秒
       is_end_12h: new Date(activity_info["endtime"]) - new Date() <= -(1000 * 60 * 60 * 24),
       is_addend: new Date(activity_info["addendtime"]) - new Date() <= 0,
       is_cancelend: new Date(activity_info["cancelendtime"]) - new Date() <= 0,
@@ -235,7 +278,7 @@ Page({
 
         setTimeout(function () {
           wx.hideLoading({
-            success: (res) => { },
+            success: (res) => {},
           });
         }, 3000)
       },
@@ -276,10 +319,13 @@ Page({
     })
   },
   hideModal(e) {
+    
     this.setData({
       modalName: ""
     })
+    
   },
+
   nagivateActivityInfo() {
     let activity_info = encodeURIComponent(JSON.stringify(this.data.activity_info));
 
@@ -299,10 +345,10 @@ Page({
     var pk_groups = [];
     var that = this;
     sample.forEach((item) => {
-      var pk_num = item.length;//几方对阵？对阵方数量
+      var pk_num = item.length; //几方对阵？对阵方数量
       var pk_group = [];
       item.forEach((each_group_sample) => {
-        var group_user_num = each_group_sample.length;//一方出战多少人，每个对阵方几个人
+        var group_user_num = each_group_sample.length; //一方出战多少人，每个对阵方几个人
         var each_group = [];
         console.log(each_group_sample);
         each_group_sample.forEach((num_index) => {
@@ -321,25 +367,200 @@ Page({
     return pk_groups;
   },
   get2v2() {
-    var sample4 = [[[0, 1], [2, 3]], [[0, 2], [1, 3]], [[0, 3], [1, 2]]];
-    var sample5 = [[[0, 1], [2, 3]], [[0, 2], [1, 4]], [[0, 3], [2, 4]], [[0, 4], [1, 3]], [[1, 2], [3, 4]]];
-    var sample6 = [
-      [[0, 1],[2, 3]], 
-      [[0, 2],[4, 5]],
-      [[1, 4],[3, 5]], 
-      [[0, 3],[1, 2]], 
-      [[0, 4],[2, 5]],
-      [[1, 5],[3, 4]],
-      [[0, 5],[1, 3]],
-      [[0, 4],[2, 3]],
-      [[1, 4],[2, 5]], 
-      [[1, 5],[3, 0]],
-      [[0, 2],[4, 3]],
-      [[1, 2],[4, 5]],
-      [[0, 5],[1, 3]]
+    var sample4 = [
+      [
+        [0, 1],
+        [2, 3]
+      ],
+      [
+        [0, 2],
+        [1, 3]
+      ],
+      [
+        [0, 3],
+        [1, 2]
       ]
-    var sample7 = [[[0, 1], [2, 3]], [[0, 4], [5, 6]], [[1, 5], [4, 6]], [[0, 2], [1, 3]], [[2, 4], [3, 5]], [[0, 6], [4, 5]], [[1, 2], [3, 6]], [[0, 3], [1, 4]], [[0, 5], [2, 6]], [[1, 6], [2, 5]], [[0, 1], [3, 4]]]
-    var sample8 = [[[0, 1], [2, 3]], [[4, 5], [6, 7]], [[4, 6], [5, 7]], [[0, 2], [1, 3]], [[0, 3], [1, 2]], [[4, 7], [5, 6]], [[0, 4], [1, 5]], [[2, 6], [3, 7]], [[2, 7], [3, 6]], [[0, 5], [1, 4]], [[0, 6], [1, 7]], [[2, 4], [3, 5]], [[2, 5], [3, 4]], [[0, 7], [1, 6]]]
+    ];
+    var sample5 = [
+      [
+        [0, 1],
+        [2, 3]
+      ],
+      [
+        [0, 2],
+        [1, 4]
+      ],
+      [
+        [0, 3],
+        [2, 4]
+      ],
+      [
+        [0, 4],
+        [1, 3]
+      ],
+      [
+        [1, 2],
+        [3, 4]
+      ]
+    ];
+    var sample6 =  [
+      [
+        [0, 1],
+        [2, 3]
+      ],
+      [
+        [0, 2],
+        [4, 5]
+      ],
+      [
+        [1, 4],
+        [3, 5]
+      ],
+      [
+        [0, 3],
+        [1, 2]
+      ],
+      [
+        [0, 4],
+        [2, 5]
+      ],
+      [
+        [1, 4],
+        [3, 5]
+      ],
+      [
+        [0, 5],
+        [1, 3]
+      ],
+      [
+        [0, 4],
+        [2, 3]
+      ],
+      [
+        [1, 5],
+        [2, 4]
+      ],
+      [
+        [3, 0],
+        [1, 5]
+      ],
+      [
+        [0, 2],
+        [4, 3]
+      ],
+      [
+        [1, 2],
+        [4, 5]
+      ],
+      [
+        [0, 5],
+        [1, 3]
+      ]
+    ]
+    var sample7 = [
+      [
+        [0, 1],
+        [2, 3]
+      ],
+      [
+        [0, 4],
+        [5, 6]
+      ],
+      [
+        [1, 5],
+        [4, 6]
+      ],
+      [
+        [0, 2],
+        [1, 3]
+      ],
+      [
+        [2, 4],
+        [3, 5]
+      ],
+      [
+        [0, 6],
+        [4, 5]
+      ],
+      [
+        [1, 2],
+        [3, 6]
+      ],
+      [
+        [0, 3],
+        [1, 4]
+      ],
+      [
+        [0, 5],
+        [2, 6]
+      ],
+      [
+        [1, 6],
+        [2, 5]
+      ],
+      [
+        [0, 1],
+        [3, 4]
+      ]
+    ]
+    var sample8 = [
+      [
+        [0, 1],
+        [2, 3]
+      ],
+      [
+        [4, 5],
+        [6, 7]
+      ],
+      [
+        [4, 6],
+        [5, 7]
+      ],
+      [
+        [0, 2],
+        [1, 3]
+      ],
+      [
+        [0, 3],
+        [1, 2]
+      ],
+      [
+        [4, 7],
+        [5, 6]
+      ],
+      [
+        [0, 4],
+        [1, 5]
+      ],
+      [
+        [2, 6],
+        [3, 7]
+      ],
+      [
+        [2, 7],
+        [3, 6]
+      ],
+      [
+        [0, 5],
+        [1, 4]
+      ],
+      [
+        [0, 6],
+        [1, 7]
+      ],
+      [
+        [2, 4],
+        [3, 5]
+      ],
+      [
+        [2, 5],
+        [3, 4]
+      ],
+      [
+        [0, 7],
+        [1, 6]
+      ]
+    ]
     var sample = sample6;
     if (this.data.sel_pk_group_user_list.length < 4) {
       wx.showToast({
@@ -379,14 +600,38 @@ Page({
         girl_list.push(this.data.sel_pk_group_user_list[index])
       }
     }
-    /** 
-     * 需要考虑要不要删除
+
     if (girl_num == 2 && boy_num == 4) {
       console.log(girl_list.concat(boy_list))
       this.data.sel_pk_group_user_list = girl_list.concat(boy_list)
-      sample = [[[0, 2], [1, 3]], [[0, 4], [1, 5]], [[4, 5], [2, 3]], [[0, 3], [1, 2]], [[0, 5], [1, 4]], [[3, 4], [2, 5]]]
+      sample = [
+        [
+          [0, 2],
+          [1, 3]
+        ],
+        [
+          [0, 4],
+          [1, 5]
+        ],
+        [
+          [4, 5],
+          [2, 3]
+        ],
+        [
+          [0, 3],
+          [1, 2]
+        ],
+        [
+          [0, 5],
+          [1, 4]
+        ],
+        [
+          [3, 4],
+          [2, 5]
+        ]
+      ]
     }
-    */
+
     var pk_groups = this.getvs(sample);
     var new_pk_groups = this.data.pk_groups.concat(pk_groups);
     this.setData({
@@ -396,11 +641,164 @@ Page({
     })
   },
   get1v1() {
-    var sample2 = [[[0], [1]], [[0], [1]], [[0], [1]]];
-    var sample3 = [[[0], [1]], [[0], [2]], [[1], [2]]];
-    var sample4 = [[[0], [1]], [[2], [3]], [[1], [3]], [[0], [2]], [[1], [2]], [[0], [3]]];
-    var sample5 = [[[0], [1]], [[2], [3]], [[2], [4]], [[0], [4]], [[1], [3]], [[1], [2]], [[0], [3]], [[3], [4]], [[1], [4]], [[0], [2]]]
-    var sample6 = [[[0], [1]], [[2], [3]], [[4], [5]], [[0], [4]], [[1], [2]], [[3], [5]], [[0], [3]], [[1], [4]], [[2], [5]], [[0], [2]], [[3], [4]], [[1], [5]], [[0], [5]], [[2], [4]], [[1], [3]]]
+    var sample2 = [
+      [
+        [0],
+        [1]
+      ],
+      [
+        [0],
+        [1]
+      ],
+      [
+        [0],
+        [1]
+      ]
+    ];
+    var sample3 = [
+      [
+        [0],
+        [1]
+      ],
+      [
+        [0],
+        [2]
+      ],
+      [
+        [1],
+        [2]
+      ]
+    ];
+    var sample4 = [
+      [
+        [0],
+        [1]
+      ],
+      [
+        [2],
+        [3]
+      ],
+      [
+        [1],
+        [3]
+      ],
+      [
+        [0],
+        [2]
+      ],
+      [
+        [1],
+        [2]
+      ],
+      [
+        [0],
+        [3]
+      ]
+    ];
+    var sample5 = [
+      [
+        [0],
+        [1]
+      ],
+      [
+        [2],
+        [3]
+      ],
+      [
+        [2],
+        [4]
+      ],
+      [
+        [0],
+        [4]
+      ],
+      [
+        [1],
+        [3]
+      ],
+      [
+        [1],
+        [2]
+      ],
+      [
+        [0],
+        [3]
+      ],
+      [
+        [3],
+        [4]
+      ],
+      [
+        [1],
+        [4]
+      ],
+      [
+        [0],
+        [2]
+      ]
+    ]
+    var sample6 = [
+      [
+        [0],
+        [1]
+      ],
+      [
+        [2],
+        [3]
+      ],
+      [
+        [4],
+        [5]
+      ],
+      [
+        [0],
+        [4]
+      ],
+      [
+        [1],
+        [2]
+      ],
+      [
+        [3],
+        [5]
+      ],
+      [
+        [0],
+        [3]
+      ],
+      [
+        [1],
+        [4]
+      ],
+      [
+        [2],
+        [5]
+      ],
+      [
+        [0],
+        [2]
+      ],
+      [
+        [3],
+        [4]
+      ],
+      [
+        [1],
+        [5]
+      ],
+      [
+        [0],
+        [5]
+      ],
+      [
+        [2],
+        [4]
+      ],
+      [
+        [1],
+        [3]
+      ]
+    ]
     var sample = sample4;
     if (this.data.sel_pk_group_user_list.length < 2) {
       wx.showToast({
@@ -419,8 +817,7 @@ Page({
     }
     if (this.data.sel_pk_group_user_list.length == 2) {
       sample = sample2;
-    }
-    else if (this.data.sel_pk_group_user_list.length == 3) {
+    } else if (this.data.sel_pk_group_user_list.length == 3) {
       sample = sample3;
     } else if (this.data.sel_pk_group_user_list.length == 4) {
       sample = sample4;
@@ -490,7 +887,11 @@ Page({
                 new_pk_groups.push(pk_groups_res[i]);
               }
               //new_pk_groups.push(res.data.pk_groups);
-              that.setData({ pk_groups: new_pk_groups, modalName: "", submit_flag: true });
+              that.setData({
+                pk_groups: new_pk_groups,
+                modalName: "",
+                submit_flag: true
+              });
             }
           }
         });
@@ -520,7 +921,11 @@ Page({
 
           var new_pk_groups = this.data.pk_groups;
           new_pk_groups.splice(index, 1);
-          this.setData({ pk_groups: new_pk_groups, submit_flag: true, show_edit_flag: false });
+          this.setData({
+            pk_groups: new_pk_groups,
+            submit_flag: true,
+            show_edit_flag: false
+          });
           this.update_pk_group();
         }
       }
@@ -532,23 +937,27 @@ Page({
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;
     var new_pk_groups = this.data.pk_groups;
-    var newobj = JSON.parse(JSON.stringify(new_pk_groups[index]));//深度拷贝
+    var newobj = JSON.parse(JSON.stringify(new_pk_groups[index])); //深度拷贝
     //比分要清零
     newobj[newobj.length - 2] = new Array(newobj.length - 2).fill(0)
-    newobj[newobj.length - 1][0] = "";//标签也清楚
+    newobj[newobj.length - 1][0] = ""; //标签也清楚
     new_pk_groups.push(newobj);
-    this.setData({ pk_groups: new_pk_groups, submit_flag: true, show_edit_flag: false });
+    this.setData({
+      pk_groups: new_pk_groups,
+      submit_flag: true,
+      show_edit_flag: false
+    });
     this.update_pk_group()
   },
   score_pk_group(e) {
     console.log(e.currentTarget.dataset.index);
     var index = e.currentTarget.dataset.index;
     var score_pk_group = this.data.pk_groups[index];
-    console.log(score_pk_group);//[[1,2],[3,4]]//不是[[[1,2],[3,4]]]
+    console.log(score_pk_group); //[[1,2],[3,4]]//不是[[[1,2],[3,4]]]
     var pk_group_score = new Array(score_pk_group.length - 2).fill(0);
     var score = score_pk_group[score_pk_group.length - 2];
     score.forEach(item => {
-      if (item != 0) {//默认的比分是0
+      if (item != 0) { //默认的比分是0
         pk_group_score = score;
         return;
       }
@@ -604,7 +1013,7 @@ Page({
   },
   input_score(e) {
     var score = e.detail.value;
-    console.log(typeof -1)
+    console.log(typeof - 1)
     console.log(Number("-10"))
     console.log(typeof Number("-10"))
     var score_index = e.currentTarget.dataset.index;
@@ -652,7 +1061,7 @@ Page({
     this.setData({
       pk_groups: pk_groups,
       modalName: "",
-      pk_group_score: [],//清空比分记录
+      pk_group_score: [], //清空比分记录
       temp_edit_pk_group_score_tags: [],
       temp_edit_pk_group_score: [],
       pk_group_score_tags: [],
@@ -719,12 +1128,16 @@ Page({
     });
     setTimeout(function () {
       wx.hideLoading({
-        success: (res) => { },
+        success: (res) => {},
       });
     }, 3000)
   },
   clear_pk_group() {
-    this.setData({ pk_groups: [], submit_flag: true, modalName: "" })
+    this.setData({
+      pk_groups: [],
+      submit_flag: true,
+      modalName: ""
+    })
   },
   clear_pk_group2() {
     //新增，更新
@@ -763,14 +1176,22 @@ Page({
       url: 'partuser?ungroup_partinfo_list=' + group_users,
     })
   },
+  clear_custom_pk_group(){
+    if(this.data.modalName=="customerPKModal"){
+      this.setData({
+        modalName: "",
+        custom_pk_group: [],
+      })
+    }
+  },
   save_custom_pk_group() {
     var pk_groups = this.data.pk_groups;
     var custom_pk_group = this.data.custom_pk_group;
     console.log(custom_pk_group)
     var len = custom_pk_group.length;
     var score = new Array(len).fill(0);
-    custom_pk_group.push(score);//比分
-    custom_pk_group.push([]);//标签
+    custom_pk_group.push(score); //比分
+    custom_pk_group.push([]); //标签
     pk_groups.push(this.data.custom_pk_group);
     app.globalData.edit_group_user = [];
     app.globalData.edit_index = 0;
@@ -897,4 +1318,12 @@ Page({
       path: '/pages/activityshowinfo/pkpage?group_users=' + group_users + '&&group_tag=' + this.data.group_tag + '&&activity_info=' + encodeURIComponent(JSON.stringify(this.data.activity_info)) + '&&room=' + this.data.room
     }
   },
+  show_game_type() {
+    wx.navigateTo({
+      url: '/pages/activity/gametype',
+    })
+    this.setData({
+      modalName: ""
+    })
+  }
 })

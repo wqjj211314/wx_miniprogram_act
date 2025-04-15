@@ -166,5 +166,5 @@
   <view class="action">
     <text class="cuIcon-write text-grey"></text>
   </view>
-  <input class="solid-bottom" bindinput="inputMsg" value="{{input_value}}" maxlength="300" cursor-spacing="10" placeholder="更新物流或改价或优惠"></input>
+  <input class="solid-bottom" bindinput="inputMsg" value="{{input_value}}" maxlength="300" cursor-spacing="10" placeholder="更新物流（完成状态:已完成）、改价、优惠"></input>
 </view>

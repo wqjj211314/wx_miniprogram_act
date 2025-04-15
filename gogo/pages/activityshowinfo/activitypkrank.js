@@ -225,4 +225,9 @@ Page({
     })
 
   },
+  show_point_desc(){
+    wx.navigateTo({
+      url: '/pages/activityshowinfo/pointdesc',
+    })
+  }
 })

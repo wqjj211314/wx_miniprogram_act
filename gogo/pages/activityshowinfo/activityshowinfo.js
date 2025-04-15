@@ -138,11 +138,8 @@ Page({
         is_pk_hobby: this.data.pk_hobby_list.indexOf(activity_info.activity_tag) != -1
       });
       var that = this;
-
       console.log(new Date(addendtime).getTime());
       console.log(new Date().getTime());
-
-
     } else {
       this.setData({
         activity_info: activity_info,

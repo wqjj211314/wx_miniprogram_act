@@ -16,7 +16,7 @@
                   <view class="text-content" style="width:100%;color:black;font-size:13px;height: fit-content;">
                     
                     <view>
-                      <text class="cuIcon-locationfill text-green"></text>{{item.show_activityaddress}}
+                      <text class="cuIcon-locationfill text-green"></text>{{item.show_activityaddress==''?'待定':item.show_activityaddress}}
                     </view>
                     <view>
                       <text class="cuIcon-circlefill text-green"></text>

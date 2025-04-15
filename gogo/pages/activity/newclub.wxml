@@ -1,0 +1,53 @@
+<view class="bg-white margin padding" style="border-radius: 30rpx;padding-bottom: 18rpx;">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle">活动标题</view>
+    <view><input class="mytitlecontent" placeholder="请输入活动标题" bindinput='onInputClubName' style="" value="{{club_name}}" maxlength="30"></input></view>
+  </view>
+  <view class="flex margin-top" style="justify-content: space-between;">
+    <view class="mytitle">活动类型</view>
+    <view><input class="mytitlecontent" placeholder="选择或输入" bindinput='onInputClubType' style="" value="{{club_type}}" maxlength="50"></input></view>
+  </view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;">
+    <view class="text-center" wx:for="{{hobby_tags}}" style="margin-bottom: 10rpx;margin-right: 10rpx;white-space: nowrap;" wx:for-item="clubtype" wx:key="*this">
+      <button class="cu-btn" bindtap="choose_club_type" data-clubtype="{{clubtype}}" style="border-radius: 30rpx;padding: 6rpx 15rpx;font-size: 26rpx;height: 50rpx;line-height: 37rpx;{{club_type == hobby_tags[index]?'background: #4689FF;color:white;':'background: #EEEEEE;color: #666666;'}}">{{clubtype}}</button>
+    </view>
+  </view>
+</view>
+<view class="bg-white margin padding" style="height: fit-content;border-radius: 30rpx;">
+  <view class="text-bold" style="height: fit-content;text-align: left;">俱乐部详情</view>
+  <view class="flex margin-top" style="flex-direction: column;height: fit-content;align-items: center;justify-content: flex-start;">
+
+    <textarea placeholder="如活动详细介绍，组织者联系方式等信息" bindinput='detailInput' auto-height="true" maxlength="3000" style="min-height: 200rpx;line-height: unset;height: fit-content;width: 100%;" value="{{detail}}"></textarea>
+    
+    <view class="" style="width: 100%;">
+  <view class="radius bg-white margin-top">
+    <view class='pagecenter1' style="padding-top:20rpx;">
+      <view class="bg-white text-bold">
+        <view class="title">详情图<text class="text-gray" style="font-weight: normal;">(限5个)</text></view>
+      </view>
+      <view class="cu-form-group margin-top-sm" style="padding:0rpx;">
+        <view class="grid col-4 grid-square flex-sub">
+          <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}" style="border-radius: 20rpx;" wx:if="{{index <= 4}}">
+            <image src='{{imgList[index]}}' mode='aspectFill' style="border-radius: 20rpx;"></image>
+            <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}" style="">
+              <text class="cuIcon-close"></text>
+            </view>
+          </view>
+          <view class="solids" bindtap="ChooseImage" style="" wx:if="{{imgList.length < 4}}" style="border-radius: 20rpx;">
+            <text class="cuIcon-cameraadd" style=""></text>
+          </view>
+
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+  </view>
+</view>
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;z-index: 100;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="new_club">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">立即提交</button>
+    </view>
+  </view>
+</view>

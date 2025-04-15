@@ -7,8 +7,8 @@
   </view>
   <view style="width: 297rpx;height: 297rpx;background: linear-gradient( 230deg, rgba(70,137,255,0) 0%, #69CCFF 100%);opacity: 0.33;right:78rpx;border-radius: 100%;top:-163rpx;position: fixed;z-index: -1;">
   </view>
-  <view class="" style="padding-top:10px;margin:0rpx 30rpx;height: fit-content;padding-bottom: 0rpx;position: relative;" bind:tap="ViewImagebg" data-url="{{activity_info.activity_status!=201?activity_info.bg_url:''}}">
-    <image class='' src="{{activity_info.bg_url}}" mode="aspectFill" style="width: 100%;height: 400rpx;border-radius: 30rpx;margin:0rpx;padding:0rpx;display:block;{{activity_info.activity_status==201?'filter: blur(12px);':''}}">
+  <view class="" style="padding-top:10px;margin:0rpx 30rpx;height: fit-content;padding-bottom: 0rpx;position: relative;" bind:tap="ViewImagebg" data-url="{{activity_info.activity_status!=201&&activity_info.bg_img_exist?activity_info.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}">
+    <image class='' src="{{activity_info.bg_img_exist?activity_info.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}" mode="aspectFill" style="width: 100%;height: 400rpx;border-radius: 30rpx;margin:0rpx;padding:0rpx;display:block;{{activity_info.activity_status==201?'filter: blur(12px);':''}}">
     </image>
     <view style="position: absolute;font-size: 40rpx;color: rgba(228, 225, 225, 0.2);top:200rpx;left:35%;" wx:if="{{activity_info.activity_status==201}}">图片审核中</view>
     <!--弹幕格式-->
@@ -188,18 +188,18 @@
           <text class="text-gray" style="margin-top: 10rpx;">队伍分组</text>
         </view>
       </view>
-      <view style="flex:1;" bindtap="pk_page" wx:if="{{is_pk_hobby}}">
+      <view style="flex:1;" bindtap="pk_page" wx:if="{{is_pk_hobby||activity_info.activity_type=='score'}}">
         <view class="flex" style="flex-direction: column;align-items: center;">
           <text class="iconfont icon-vsrili text-red" style="font-size: 40rpx;">
           </text>
-          <text class="text-gray" style="margin-top: 10rpx;">10种比赛模式</text>
+          <text class="text-gray" style="margin-top: 10rpx;">计分比赛模式</text>
         </view>
       </view>
 
     </view>
 
   </view>
-  <view class="bg-white margin padding" style="border-radius: 30rpx;font-size: 28rpx;line-height: 40rpx;">
+  <view class="bg-white margin padding" style="border-radius: 30rpx;font-size: 28rpx;line-height: 40rpx;" wx:if="{{activity_info.activity_type!='score'}}">
     <view class="flex" style="justify-content: left;">
       <view style="color: #999999;width: fit-content;">活动时间</view>
       <view style="margin-left:40rpx;color: #333333;flex:1;">{{activity_info.activity_live}}</view>
@@ -228,7 +228,7 @@
     </view>
   </view>
 
-  <view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="bg-white margin padding" style="border-radius: 30rpx;" wx:if="{{activity_info.activity_type!='score'}}">
     <view class="flex" style="justify-content: left;">
       <view style="color: #999999;">报名限制</view>
       <view style="margin-left:40rpx;">{{activity_info.part_limit_dec}}{{activity_info.take_flag==1?"":"「无法替人报名」"}}</view>
@@ -430,13 +430,19 @@
     <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="refund_some" wx:if="{{(is_begin||is_cancelend)&&admin_flag&&activity_info.pay_price != 0}}">
       <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">部分退款</button>
     </view>
-    <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;"  bindtap="route_chat" wx:if="{{activity_info.route.route_name!=undefined}}">
-      <!--disable_flag是防止误触重复报名的，报名完就恢复-->
-      <view class="round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;background-image: url('/image/map.png');background-repeat: no-repeat;background-size: cover, auto;background-position: center, right top;"></view>
+    <view class="" style="flex:1;padding:9rpx 10rpx 0rpx;" bind:tap="update_activity_info" wx:if="{{(is_begin||is_cancelend)&&admin_flag&&activity_info.pay_price == 0}}">
+      <button class="cu-btn round" style="width: 100%;height:85rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 45rpx;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">编辑活动</button>
+    </view>
+    <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;"  bindtap="route_chat" wx:if="{{activity_info.route.route_name!=undefined&&!is_end}}">
+      
+      <view class="round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;background-color: rgba(138, 220, 125, 0.548);">
+        <text class="iconfont icon-collide" style="font-size: 65rpx;color: rgb(56, 122, 240);"></text>
+      </view>
+      
 
     </view>
    
-    <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin&&activity_info.take_flag==1)||(admin_flag)}}">
+    <view class="flex" style="padding:9rpx 10rpx 0rpx;flex-direction: column;align-items: center;font-size: 30rpx;" bindtap="show_more_options_modal" data-target="DialogModal-moreoptions" wx:if="{{(login_user_part_list.length > 0 && !is_cancelend && !is_begin&&activity_info.take_flag==1)||(admin_flag&&!is_end)}}">
       <!--disable_flag是防止误触重复报名的，报名完就恢复-->
       <view class="cuIcon-more text-gray text-bold round cu-btn" style="font-size: 46rpx;height: 85rpx;width: 85rpx;"></view>
 
@@ -444,7 +450,7 @@
   </view>
 </view>
 <!--支付方式选择-->
-<view class="cu-modal bottom-modal {{modalName=='payoptions'?'show':''}}" style="border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;">
+<view class="cu-modal bottom-modal {{modalName=='payoptions'?'show':''}}" style="border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;" bind:tap="hideModal">
   <view class="cu-dialog bg-white" style="padding-bottom: 30px;border-top-left-radius: 30rpx;border-top-right-radius: 30rpx;">
     <view class="cu-bar bg-white justify-start" style="min-height: 0rpx;">
       <view class="action" bindtap="hideModal" style="min-height: 0rpx;margin-top:25rpx;">
@@ -486,7 +492,7 @@
   </view>
 </view>
 <!--报名更多活动的选项-->
-<view class="cu-modal bottom-modal {{modalName=='DialogModal-moreoptions'?'show':''}}" style="">
+<view class="cu-modal bottom-modal {{modalName=='DialogModal-moreoptions'?'show':''}}" style="" bind:tap="hideModal">
   <view class="cu-dialog bg-white" style="padding-bottom: 30px;">
     <view class="cu-list menu" style="">
       <view class="cu-item" bind:tap="cancel_part" style="justify-content: center;height: 100rpx;font-size: 32rpx;" wx:if="{{login_user_part_list.length > 0 && !is_begin && !is_cancelend}}">

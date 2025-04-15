@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "DatetimePicker": "../components/datetimepicker"
+
+  },
+ 
+  "navigationBarTitleText": "发布活动"
+}

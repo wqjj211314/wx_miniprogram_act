@@ -38,3 +38,34 @@
 .stepper .disabled{  
   color: #ccc;  
 }  
+.grid_item {
+  padding: 10px;
+  text-align: center;
+}
+page {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.item {
+  box-sizing: border-box;
+  width: 50%;
+  padding:15rpx;
+  height: max-content;
+  text-align: center;
+}
+
+/* 选择最后一个元素 */
+.item:last-child:nth-child(odd) {
+  margin-left: 25%;
+}    

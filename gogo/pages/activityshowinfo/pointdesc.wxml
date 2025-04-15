@@ -2,7 +2,7 @@
 <view style="font-size: 30rpx;padding:10rpx;">
 <view style="background-color: white;padding:20rpx;">对阵、积分等说明</view>
 <view style="background-color: white;padding:20rpx;">
-  一、兴趣等级分等信息可以在「我的--兴趣列表」中查看修改相关信息;
+  一、等级分等信息可以在「我的--我的活动数据」中查看相关信息;
 </view>
 <view style="background-color: white;padding:20rpx;">
   二、羽毛球、篮球、乒乓球、台球、棋牌麻将、跑步、骑行、网球、击剑等类型活动，可以分组进行对阵，对阵选项包括：1V1对阵、2V2对阵、4-6人混双对阵、固定搭档对阵、自定义。

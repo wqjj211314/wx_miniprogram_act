@@ -92,7 +92,8 @@ App({
     safeArea:0,
     modalName:"",
     cropimgSrc:"",
-    route:""
+    route:"",
+    activity_more_setting:{}
   },
   user_login() {
     //return;

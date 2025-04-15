@@ -1,0 +1,29 @@
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+@import "/colorui/iconfont.wxss";
+
+.graybtn {
+  padding: 6rpx 15rpx;
+  font-size: 20rpx;
+  background: #EEEEEE;
+  border-radius: 30rpx;
+  font-weight: 400;
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 37rpx;
+  height: fit-content;
+  width: fit-content;
+}
+
+.sel_btn {
+  padding: 6rpx 15rpx;
+  font-size: 20rpx;
+  background: #4689FF;
+  border-radius: 30rpx;
+  font-weight: 400;
+  font-size: 26rpx;
+  color: #FFFFFF;
+  line-height: 37rpx;
+  height: fit-content;
+  width: fit-content;
+}

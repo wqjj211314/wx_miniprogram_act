@@ -1,0 +1,101 @@
+<view class="bg-white" style="height: 200rpx;">
+2025年杭州常住人口12624000人,适龄青年4328556人,
+有多少能成为你的单身朋友？
+</view>
+<view class="bg-white flex justify-start" style="overflow: scroll;padding:15rpx;">
+  <view style="white-space:nowrap;" wx:for="{{self_conditon}}">
+    <view class="sel_btn" bindtap="search_clubplace_list" data-search="{{self_conditon[index]}}" style="margin-right: 15rpx;">{{item}}</view>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    年龄
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{[25,26,27,28,29,30,31,32,33,34,35,36,37,38]}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    学历
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['高中','大专','本科','硕士']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    身高(cm)
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['170+','175+','180+']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    体重
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['偏瘦','正常','偏重']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    年薪(万元）
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['8w+','10w+','15w+','20w+','30w+','40w+','50w+','60w+','70w+','80w+','90w+','100w+']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    行业
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['偏瘦','正常','偏重']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    户籍
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['偏瘦','正常','偏重']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+<view class="flex margin bg-white" style="flex-direction: row;border-radius: 30rpx;align-items: center;justify-content: center;">
+  <view class="" style="flex:1;text-align: center;">
+    体重
+  </view>
+  <view class="flex padding" style="flex:2;flex-wrap:wrap;justify-content: space-around;align-items: center;gap:20rpx;row-gap: 20rpx;">
+    <block wx:for="{{['偏瘦','正常','偏重']}}">
+      <view class="graybtn" bindtap="search_clubplace_list" style="">{{item}}</view>
+    </block>
+  </view>
+</view>
+
+

@@ -8,8 +8,8 @@
       <view class="flex margin-right" style="flex-direction: column;width: fit-content;height: fit-content;align-content:center;align-items: center;">
         <!--最后一组是比分-->
         <view class="cu-avatar radius" style="background-image:url({{member_users[member_num].avatarUrl}});">
-          <view class="cu-tag badge" style="right:-10rpx;left:auto;padding:0rpx;border-radius:0rpx;height:24rpx;width: 28rpx;" bindtap="del_group_member" data-num="{{member_num}}" data-index="{{index1}}">
-            <text class="cuIcon-move text-bold" style="font-size: 25rpx;"></text>
+          <view class="cu-tag badge bg-white" style="right:-10rpx;left:auto;padding:0rpx;border-radius:0rpx;height:24rpx;width: 28rpx;border-radius: 8rpx;" bindtap="del_group_member" data-num="{{member_num}}" data-index="{{index1}}">
+            <text class="iconfont icon-shanchu text-bold text-red" style="font-size: 30rpx;"></text>
           </view>
           <view class="cu-tag badge {{member_users[member_num].gender=='0'?'bg-pink':'bg-blue'}}" style="top:40rpx;bottom: 0rpx;">{{tools.show_member_num(member_num)}}</view>
         </view>

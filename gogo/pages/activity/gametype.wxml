@@ -1,0 +1,82 @@
+<view class="bg-white padding margin-sm" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">1V1对阵</view>
+    
+  </view>
+  <view class="margin-top text-grey">
+  支持羽毛球、篮球、台球、乒乓球等运动的两人单打轮转，保证每人合理对阵</view>
+  <view class="margin-top text-gray">支持2~6人的两人单打轮转，自动生成3~15局对局列表，成员或管理员录入比分和对局标签，也可再次新增对局</view>
+</view>
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">2V2对阵</view>
+    <view class="text-blue" bind:tap="sample2v2" style="font-size: 30rpx;">羽毛球计分示例</view>
+  </view>
+  <view class="margin-top text-grey">
+  支持羽毛球、篮球、台球、乒乓球等运动的双打轮转，保证每人合理搭配</view>
+  <view class="margin-top text-gray">支持4~8人的两人双打轮转，自动生成3~13局对局列表，成员或管理员录入比分和对局标签，也可再次新增对局</view>
+</view>
+
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">4-8人混双</view>
+    
+  </view>
+  <view class="margin-top text-grey">
+  支持羽毛球、篮球、台球、乒乓球等运动的双打轮转，保证每局混双合理搭配</view>
+  <view class="margin-top text-gray">支持4~8人的两人双打轮转，自动生成至少3局对局列表，成员或管理员录入比分和对局标签，也可再次新增对局</view>
+</view>
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">固定搭档</view>
+    <view class="text-blue" bind:tap="fixpartner" style="font-size: 30rpx;">羽毛球计分示例</view>
+  </view>
+  <view class="margin-top text-grey">
+  支持羽毛球、篮球、台球、乒乓球等运动的固定双打轮转，保证每局合理对阵</view>
+  <view class="margin-top text-gray">支持3~8人的两人固定双打轮转，自动生成3-6局对局列表，成员或管理员录入比分和对局标签，也可再次新增对局</view>
+</view>
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">自定义</view>
+    <view class="text-blue" style="font-size: 30rpx;" bind:tap="customer">麻将计分示例</view>
+  </view>
+  <view class="margin-top text-grey">
+  支持棋牌如麻将和体育运动如羽毛球的自定义1v1,2v2,3v3,4v4，1v1v1v1,2v2v2v2等对阵选项</view>
+  <view class="margin-top text-gray">支持1-4组队原同场对阵，成员或管理员录入比分和对局标签，也可再次新增对局</view>
+</view>
+
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold ">个人记录</view>
+  </view>
+  <view class="margin-top text-grey">
+ 支持个人数据的记录，包括分数、时间、里程等任意自定义数据</view>
+</view>
+
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">比赛排名</view>
+    <view class="text-blue" style="font-size: 30rpx;" bind:tap="nagivateActivityPKRank">羽毛球示例</view>
+  </view>
+  <view class="margin-top text-grey">
+  支持当前活动对局的个人排名、组合排名、队伍排名</view>
+  <view class="margin-top text-gray">统计个人、组合、队伍的胜负局数、胜率、净胜分进行排名，按照胜场数、胜率、净胜分、总得分的顺序优先级进行排序，并提供等级分累计加权</view>
+</view>
+
+<view class="bg-white padding margin-sm margin-top" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;align-items: center;font-size: 35rpx;">
+    <view class="text-bold">成员排名</view>
+    <view class="text-blue" style="font-size: 30rpx;" bind:tap="nagivateAllMemberPKRank">羽毛球示例</view>
+  </view>
+  <view class="margin-top text-grey">
+  支持个人或俱乐部的所有历史参与成员的对局数据排名</view>
+  <view class="margin-top text-gray">统计个人或俱乐部成员所有历史对局，按照混双、男单、男双、女双进行数据统计，按照胜场数、胜率、净胜分、总得分的顺序优先级进行排序，默认显示前20位</view>
+</view>
+
+<view style="height: 200rpx;"></view>

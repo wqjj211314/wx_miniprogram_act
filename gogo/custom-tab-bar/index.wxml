@@ -1,9 +1,93 @@
 <!--miniprogram/custom-tab-bar/index.wxml-->
 <view class="tab-bar">
-  <view wx:for="{{list}}" wx:key="index" class="tab-bar-item" data-path="{{item.pagePath}}" data-index="{{index}}"  style="padding:9rpx 102rpx 20rpx;" bindtap="switchTab">
- 
+
+  <view wx:for="{{list}}" wx:key="index" class="tab-bar-item" data-path="{{item.pagePath}}" data-index="{{index}}" style="padding:9rpx 102rpx 20rpx;" bindtap="switchTab" wx:if="{{index==0}}">
     <image src="{{selected == index ? item.selectedIconPath : item.iconPath}}" style="{{index==1?'width:80rpx;height:80rpx;':''}}"></image>
-    
     <view style="color: {{selected == index ? selectedColor : color}}">{{item.text}}</view>
+  </view>
+
+  <view class="tab-bar-item" style="padding:9rpx 102rpx 20rpx;" bindtap="showAddOptionModal">
+    <image src="/image/add_sel.png" style="width:80rpx;height:80rpx;"></image>
+    <view style=""></view>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="index" class="tab-bar-item" data-path="{{item.pagePath}}" data-index="{{index}}" style="padding:9rpx 102rpx 20rpx;" bindtap="switchTab" wx:if="{{index==2}}">
+    <image src="{{selected == index ? item.selectedIconPath : item.iconPath}}" style="{{index==1?'width:80rpx;height:80rpx;':''}}"></image>
+    <view style="color: {{selected == index ? selectedColor : color}}">{{item.text}}</view>
+  </view>
+
+</view>
+<!--对阵选项弹框-->
+<view class="cu-modal bottom-modal {{modalName=='bottomModal'?'':''}}">
+  <view class="cu-dialog bg-white" style="padding-bottom: 34rpx;">
+    <view class="cu-list grid col-2" style="">
+      <view class="cu-item" bind:tap="showpkmodal" data-method="get1v1" data-methodtip="1V1对阵">
+        <view class="iconfont icon-1v1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>1V1对阵</text>
+      </view>
+      <view class="cu-item" bind:tap="showpkmodal" data-method="get2v2" data-methodtip="2V2对阵">
+        <view class="iconfont icon-kuanyi20changyongpaiduiguanli text-orange" style="margin-top: 0rpx;width: 100%;font-size: 65rpx;"></view>
+        <text>2V2对阵</text>
+      </view>
+      <view class="cu-item" bind:tap="showpkmodal" data-method="get_boygirl_pk" data-methodtip="混双对阵">
+        <view class="iconfont icon-nannvhunhe1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>4-8人混双对阵</text>
+      </view>
+      <view class="cu-item" bindtap="get_fixed_partner_pk">
+        <view class="iconfont icon-hezuowoshouhezi text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>固定搭档对阵</text>
+      </view>
+      <view class="cu-item" bind:tap="showpkmodal" data-method="sigle_recored" data-methodtip="个人记录">
+        <view class="iconfont icon-wode3 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>个人记录</text>
+      </view>
+      <view class="cu-item" bindtap="show_modal" data-target="customerPKModal">
+        <view class="cuIcon-post text-orange"></view>
+        <text>自定义</text>
+      </view>
+      <view class="cu-item" bind:tap="clear_pk_group">
+        <view class="cuIcon-deletefill text-black"></view>
+        <text>清空对阵</text>
+      </view>
+    </view>
+    <view class="cu-bar bg-white" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 20rpx;" bindtap="hideModal">
+      取消
+    </view>
+  </view>
+</view>
+<!-- pages/custom-modal/custom-modal.wxml -->
+<view class="tab-bar modal-mask bg-white" wx:if="{{isModalShow}}" bindtap="closeModal">
+  <view class="modal-content bg-white padding-lg" catchtap="stopPropagation" style="padding-bottom: 30px;">
+    <view class="flex-container" style="row-gap:40rpx;">
+      <view class="flex-item" style="flex-direction: column;align-items: center;" bind:tap="toScoreActivity">
+        <view class="cu-btn round bg-white" style="width: 100rpx;height: 100rpx;">
+          <text class="iconfont icon-bifen" style="font-size: 60rpx;color: #0081ff;">
+          </text>
+        </view>
+        <text class="margin-top-sm">简单计分活动</text>
+      </view>
+      <view class="flex-item" style="flex-direction: column;align-items: center;" bind:tap="toActivity">
+        <view class="cu-btn round bg-white" style="width: 100rpx;height: 100rpx;">
+          <text class="iconfont icon-jihedian" style="font-size: 60rpx;color: #0081ff;">
+          </text>
+        </view>
+        <text class="margin-top-sm">娱乐 & 比赛 活动</text>
+      </view>
+      <view class="flex-item" style="flex-direction: column;align-items: center;" bind:tap="toActivity" wx:if="{{false}}">
+        <view class="cu-btn round bg-white" style="width: 100rpx;height: 100rpx;">
+          <text class="iconfont icon-jihedian" style="font-size: 60rpx;color: #0081ff;">
+          </text>
+        </view>
+        <text class="margin-top-sm">比赛活动</text>
+      </view>
+      <view class="flex-item" style="flex-direction: column;align-items: center;" bind:tap="toNewClub" wx:if="{{false}}">
+        <view class="cu-btn round bg-white" style="width: 100rpx;height: 100rpx;">
+          <text class="iconfont icon-nannvhunhe" style="font-size: 60rpx;color: #0081ff;">
+          </text>
+        </view>
+        <text class="margin-top-sm">新增俱乐部</text>
+      </view>
+    </view>
+    <view class="" style="color: #0081ff;font-size: 25rpx;text-align: center;margin-top:30px;" bind:tap="show_game_type">计分比赛模式说明<text class="cuIcon-right"></text></view>
   </view>
 </view>

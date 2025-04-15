@@ -137,9 +137,7 @@ console.log(screenWidthRpx)
   submit() {
     this.cropper.getImg((obj) => {
       app.globalData.cropimgSrc = obj.url;
-      wx.switchTab({
-        url: '/pages/activity/activity',
-      })
+      wx.navigateBack();
     });
   },
   rotate() {

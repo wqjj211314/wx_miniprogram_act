@@ -8,10 +8,11 @@
   </view>
   <view style="width: 100%;height: 700rpx;background: linear-gradient( 359deg, #F5F5F5 0%, #75E3FF 47%, #4689FF 100%);position: absolute;top:0rpx;z-index: -2;">
   </view>
-  <view class="" style="margin:0rpx 30rpx;margin-top:20rpx;margin-bottom: 0rpx;height: 320rpx;">
+  <view class="" style="margin:0rpx 30rpx;margin-top:20rpx;margin-bottom: 0rpx;height: 320rpx;border-radius: 30px;overflow: hidden;">
     <image class='' src="{{index_bar_bg}}" mode="aspectFill" style="width: 100%;height: 100%;border-radius: 30rpx;"></image>
+    <map id="routeMap" longitude="{{longitude}}" latitude="{{latitude}}" scale="8" markers="{{markers}}" polyline="{{polyline}}" bindmarkertap="onMarkerTap" bindregionchange="onMapScale" style="width: 100%; height: 100%;"  wx:if="{{false}}"></map>
   </view>
-  <view class="flex margin bg-white" style="flex-direction: row;justify-content: space-around;border-radius: 30rpx;padding:40rpx 25rpx 50rpx;margin-top:20rpx;margin-bottom: 0rpx;" wx:if="{{false}}">
+  <view class="flex margin bg-white" style="flex-direction: row;justify-content: space-around;border-radius: 30rpx;padding:40rpx 25rpx 50rpx;margin-top:20rpx;margin-bottom: 0rpx;">
     <view style="flex:1;" bindtap="navigateToActivitypart">
       <view class="flex" style="flex-direction: column;align-items: center;">
         <view class="cu-btn round bg-blue" style="width: 100rpx;height: 100rpx;">
@@ -85,7 +86,7 @@
               <image src='/image/location.png' mode='heightFix' style="width: 100%;height: 100%;"></image>
             </view>
             <view>
-              {{activity_info.show_activityaddress}}
+              {{activity_info.show_activityaddress==''?'待定':activity_info.show_activityaddress}}
               <text style="font-size: 20rpx;color: #bbb9b9;" wx:if="{{false}}">|{{activity_info.activityaddress}}
               </text>
               {{tools.GetDistance(activity_info.latitude,activity_info.longitude,latitude,longitude) == "< NaN"?"":" | "+tools.GetDistance(activity_info.latitude,activity_info.longitude,latitude,longitude)+'km'}}

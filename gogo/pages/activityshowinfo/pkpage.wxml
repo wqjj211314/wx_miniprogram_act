@@ -247,42 +247,82 @@
 </view>
 <!--对阵选项弹框-->
 <view class="cu-modal bottom-modal {{modalName=='bottomModal'?'show':''}}">
-  <view class="cu-dialog bg-white" style="padding-bottom: 34rpx;">
-    <view class="cu-list grid col-2" style="">
-      <view class="cu-item" bind:tap="showpkmodal" data-method="get1v1" data-methodtip="1V1对阵">
-        <view class="iconfont icon-1v1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
-        <text>1V1对阵</text>
+  <view class="cu-dialog bg-white" style="padding-bottom: 34px;">
+    <view class="" style="color: #0081ff;font-size: 25rpx;text-align: center;margin-top:20px;" bind:tap="show_game_type">计分对阵模式说明<text class="cuIcon-right"></text></view>
+    <view class="container padding" style="font-size: 25rpx;">
+      <view class="item" style="" bind:tap="showpkmodal" data-method="get1v1" data-methodtip="1V1对阵">
+        <view class="iconfont icon-1v1 text-orange" style="width: 100%;font-size: 48rpx;"></view>
+        <view style="margin-top: 10rpx;">1V1对阵</view>
       </view>
-      <view class="cu-item" bind:tap="showpkmodal" data-method="get2v2" data-methodtip="2V2对阵">
+      <view class="item" bind:tap="showpkmodal" data-method="get2v2" data-methodtip="2V2对阵">
         <view class="iconfont icon-kuanyi20changyongpaiduiguanli text-orange" style="margin-top: 0rpx;width: 100%;font-size: 65rpx;"></view>
-        <text>2V2对阵</text>
+        <view style="margin-top: 0rpx;">2V2对阵</view>
       </view>
-      <view class="cu-item" bind:tap="showpkmodal" data-method="get_boygirl_pk" data-methodtip="混双对阵">
-        <view class="iconfont icon-nannvhunhe1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
-        <text>4-8人混双对阵</text>
+      <view class="item" bind:tap="showpkmodal" data-method="get_boygirl_pk" data-methodtip="混双对阵">
+        <view class="iconfont icon-nannvhunhe1 text-orange" style="width: 100%;font-size: 48rpx;"></view>
+        <view style="margin-top: 10rpx;">4-8人混双对阵</view>
       </view>
-      <view class="cu-item" bindtap="get_fixed_partner_pk">
-        <view class="iconfont icon-hezuowoshouhezi text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
-        <text>固定搭档对阵</text>
+      <view class="item" bindtap="get_fixed_partner_pk">
+        <view class="iconfont icon-hezuowoshouhezi text-orange" style="width: 100%;font-size: 50rpx;"></view>
+        <view style="margin-top: 10rpx;">固定搭档对阵</view>
       </view>
-      <view class="cu-item" bind:tap="showpkmodal" data-method="sigle_recored" data-methodtip="个人记录">
-        <view class="iconfont icon-wode3 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
-        <text>个人记录</text>
+      <view class="item" bind:tap="showpkmodal" data-method="sigle_recored" data-methodtip="个人记录">
+        <view class="iconfont icon-wode3 text-orange" style="width: 100%;font-size: 45rpx;"></view>
+        <view style="margin-top: 10rpx;">个人记录</view>
       </view>
-      <view class="cu-item" bindtap="show_modal" data-target="customerPKModal">
-        <view class="cuIcon-post text-orange"></view>
-        <text>自定义</text>
+      <view class="item" bindtap="show_modal" data-target="customerPKModal">
+        <view class="cuIcon-post text-orange" style="font-size: 40rpx;"></view>
+        <view style="margin-top: 10rpx;">自定义</view>
       </view>
-      <view class="cu-item" bind:tap="clear_pk_group">
-        <view class="cuIcon-deletefill text-black"></view>
-        <text>清空对阵</text>
+      <view class="item" bind:tap="clear_pk_group">
+        <view class="cuIcon-delete text-black" style="font-size: 40rpx;"></view>
+        <view style="margin-top: 10rpx;">清空对阵</view>
+      </view>
+      <view class="item flex" bind:tap="hideModal" style="align-items: center;justify-content: center;">
+        <view class="iconfont icon-shanchu text-black" style="font-size: 70rpx;"></view>
+        
       </view>
     </view>
-    <view class="cu-bar bg-white" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 20rpx;" bindtap="hideModal">
+    <view class="cu-bar bg-white" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 20rpx;" bindtap="hideModal" wx:if="{{false}}">
       取消
     </view>
   </view>
 </view>
+
+<!--对阵选项弹框-->
+<view class="cu-modal bottom-modal">
+  <view class="cu-dialog bg-white" style="padding-bottom: 34rpx;">
+  <view class="container padding" style="display: flex;flex-direction: row;align-items: center;width: 100%;flex-wrap: wrap;">
+      <view class="item" style="" bind:tap="showpkmodal" data-method="get1v1" data-methodtip="1V1对阵">
+        <view class="iconfont icon-1v1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>1V1对阵</text>
+      </view>
+      <view class="item" style="" bind:tap="showpkmodal" data-method="get2v2" data-methodtip="2V2对阵">
+        <view class="iconfont icon-kuanyi20changyongpaiduiguanli text-orange" style="margin-top: 0rpx;width: 100%;font-size: 65rpx;"></view>
+        <text>2V2对阵</text>
+      </view>
+      <view class="item" style="" bind:tap="showpkmodal" data-method="get_boygirl_pk" data-methodtip="混双对阵">
+        <view class="iconfont icon-nannvhunhe1 text-orange" style="margin-top: 20rpx;width: 100%;font-size: 48rpx;"></view>
+        <text>4-8人混双对阵</text>
+      </view>
+   
+  </view>
+    
+    <view class="cu-bar bg-white" style="justify-content:center;font-size: 40rpx;height: 70rpx;min-height: fit-content;margin-bottom: 20rpx;" bindtap="hideModal" wx:if="{{false}}">
+      取消
+    </view>
+    <view class="container" style="flex-direction: row;">
+
+    <view class="item">元素 1</view>
+    <view class="item">元素 2</view>
+  
+ 
+    <view class="item">元素 3</view>
+ 
+</view>  
+  </view>
+</view>
+
 <!--对阵成员选择-->
 <view class="cu-modal {{modalName=='selpkusersModal'?'show':''}}">
 
@@ -405,7 +445,7 @@
       </view>
     </view>
     <view class="cu-bar bg-white">
-      <view class="action margin-0 flex-sub text-green solid-left" bindtap="hideModal">取消</view>
+      <view class="action margin-0 flex-sub text-green solid-left" bindtap="clear_custom_pk_group">取消</view>
       <view class="action margin-0 flex-sub  solid-left" bindtap="save_custom_pk_group">确定</view>
     </view>
   </view>

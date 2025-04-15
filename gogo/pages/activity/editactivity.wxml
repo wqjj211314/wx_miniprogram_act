@@ -149,7 +149,7 @@
     </view>
   </view>
   <view class="flex justify-start margin-top" style="overflow: scroll;">
-    <view wx:for="{{location_list}}" wx:for-item="location" class="{{sel_cache_location == location_list[index]['short_activityaddress']?'sel_btn':'graybtn'}}" style="white-space:nowrap;margin-right: 20rpx;" bindtap="choose_cache_location" data-index="{{index}}">{{location["short_activityaddress"]}}
+    <view wx:for="{{location_list}}" wx:for-item="location" class="{{sel_cache_location == location_list[index]['short_activityaddress']?'sel_btn':'graybtn'}}" style="white-space:nowrap;margin-right: 20rpx;" bindtap="choose_cache_location" data-index="{{index}}" wx:if="{{location_list[index]['short_activityaddress']!=''}}">{{location["short_activityaddress"]}}
     </view>
   </view>
 
@@ -276,8 +276,12 @@
 </view>
 <view style="height: 200rpx;"></view>
 
-<view class="flex" style="position: fixed;bottom: 30px;right:10rpx;z-index: 10;justify-content: center;align-items:center;margin-bottom: 20rpx;" bindtap="getUserProfile">
 
-<view class="flex" style="justify-content: center;align-items:center;font-size: 30rpx;width: 200rpx;height: 200rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);border-radius: 100%;font-weight: bold;font-size: 32rpx;color: #FFFFFF;line-height: 45rpx;">更新发布</view>
-  
+
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;z-index: 100;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="getUserProfile">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">更新发布</button>
+    </view>
+  </view>
 </view>

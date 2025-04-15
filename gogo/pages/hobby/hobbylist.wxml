@@ -9,7 +9,7 @@
 <view style="width: 100%;height: 700rpx;background: linear-gradient( 359deg, #F5F5F5 0%, #d6e9bd 47%, #beee64b7 100%);position: absolute;top:0rpx;z-index: -2;">
 </view>
   <block wx:for-index="idx" wx:for='{{hobby_list}}' wx:key="hobby_tag">
-    <view class="bg-white margin padding" style="border-radius: 30rpx;">
+    <view class="bg-white margin padding" style="border-radius: 30rpx;" wx:if="{{item.hobby_tag!=''}}">
       <view class="bg-gray" style="text-align: center;padding:20rpx;border-radius: 30rpx;font-size: 32rpx;">{{item.hobby_tag}}</view>
       <view class="flex">
         <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;">
@@ -17,20 +17,20 @@
           <view>参与活动</view>
         </view>
         <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;">
-          <circle draw='hobbyinfo2{{idx}}' per='{{tools.data_per(item.all_win+item.all_fail+item.all_peace,1080)}}' r='150' content="{{item.all_win+item.all_fail+item.all_peace > 0?(item.all_win+item.all_fail+item.all_peace)+'局':''}}" linecolor="{{['rgba(121, 4, 85, 0.63)']}}" />
-          <view>对局次数</view>
-        </view>
-      </view>
-      <view class="flex">
-        <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;">
-          <circle draw='hobbyinfo3{{idx}}' per="{{tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)==0?'0':tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)}}" r='150' content="{{tools.win_rate(item.all_win,item.all_peace,item.all_fail)==0?'0':tools.win_rate(item.all_win,item.all_peace,item.all_fail)}}" linecolor="{{['rgba(255, 195, 113, 1)','rgba(255, 95, 109, 1)']}}" />
-          <view>胜率{{tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)==0?'0':tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)}}%</view>
-        </view>
-        <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;">
           <circle draw='hobbyinfo4{{idx}}' per='{{tools.hobby_point_per(item.hobby_point)}}' r='150' content="{{item.hobby_point}}" linecolor="{{['rgba(255, 117, 140, 1)','rgba(255, 126, 179, 1)']}}" />
           <view>等级积分</view>
         </view>
-
+        
+      </view>
+      <view class="flex" wx:if="{{item.is_pk_hobby}}">
+        <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;" wx:if="{{item.is_pk_hobby}}">
+          <circle draw='hobbyinfo2{{idx}}' per='{{tools.data_per(item.all_win+item.all_fail+item.all_peace,1080)}}' r='150' content="{{item.all_win+item.all_fail+item.all_peace > 0?(item.all_win+item.all_fail+item.all_peace)+'局':'0局'}}" linecolor="{{['rgba(121, 4, 85, 0.63)']}}" />
+          <view>对局次数</view>
+        </view>
+        <view class="flex" style="flex:1;align-items:center;justify-content: center;flex-direction: column;" wx:if="{{item.is_pk_hobby}}">
+          <circle draw='hobbyinfo3{{idx}}' per="{{tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)==0?'0':tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)}}" r='150' content="{{tools.win_rate(item.all_win,item.all_peace,item.all_fail)==0?'0':tools.win_rate(item.all_win,item.all_peace,item.all_fail)}}" linecolor="{{['rgba(255, 195, 113, 1)','rgba(255, 95, 109, 1)']}}" />
+          <view>胜率{{tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)==0?'0':tools.win_rate_per(item.all_win,item.all_peace,item.all_fail)}}%</view>
+        </view>
       </view>
     </view>
   </block>

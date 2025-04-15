@@ -1,0 +1,104 @@
+/* pages/activity.wxss */
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+
+page {
+  height: 100%;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-size: 100% 100%;
+  z-index: -1;
+}
+
+.rightarrow {
+  position: fixed;
+  right: 0px;
+}
+
+.locationflex {
+  display: flex;
+}
+
+.te::after {
+  font-family: "cuIcon";
+  display: block;
+  content: "\e6a3";
+  position: absolute;
+  font-size: 34rpx;
+  color: var(--grey);
+  line-height: 100rpx;
+  width: 60rpx;
+  text-align: center;
+  top: 0;
+  bottom: 0;
+  right: 26rpx;
+  margin: auto;
+
+}
+
+.locationstyle {
+  line-height: 40rpx;
+  font-size: 28rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 90%;
+  margin-right: 30px;
+}
+
+.green {
+  background-color: red;
+}
+
+.mytitle {
+  display: flex;
+  align-items: center;
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 40rpx;
+  text-align: left;
+  font-style: normal;
+  width: 220rpx;
+}
+
+.mytitlecontent {
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 400;
+  font-size: 28rpx;
+  color: #999999;
+  line-height: 40rpx;
+  text-align: right;
+  font-style: normal;
+}
+
+.graybtn {
+  padding: 6rpx 15rpx;
+  font-size: 20rpx;
+  background: #EEEEEE;
+  border-radius: 30rpx;
+  font-weight: 400;
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 37rpx;
+  height: fit-content;
+  width: fit-content;
+}
+
+.sel_btn {
+  padding: 6rpx 15rpx;
+  font-size: 20rpx;
+  background: #4689FF;
+  border-radius: 30rpx;
+  font-weight: 400;
+  font-size: 26rpx;
+  color: #FFFFFF;
+  line-height: 37rpx;
+  height: fit-content;
+  width: fit-content;
+}

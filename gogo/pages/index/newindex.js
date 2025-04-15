@@ -8,21 +8,21 @@ Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    activity_list:[],
-    search_tip:"搜索相关活动",
-    hosturl:app.globalData.hosturl,
-    share_use_id:"",
-    search_word:"",
-    current_swiper_item_index:1,
-    good_list:[],
-    admin_flag:false,
-    triggered:false,
-    index_bar_bg:"",
-    recommend_good_list:[],
+    activity_list: [],
+    search_tip: "搜索相关活动",
+    hosturl: app.globalData.hosturl,
+    share_use_id: "",
+    search_word: "",
+    current_swiper_item_index: 1,
+    good_list: [],
+    admin_flag: false,
+    triggered: false,
+    index_bar_bg: "",
+    recommend_good_list: [],
     latitude: "",
-              longitude: ""
+    longitude: ""
   },
- 
+
   onShareAppMessage: function () {},
   /**
    * 生命周期函数--监听页面加载
@@ -31,14 +31,14 @@ Page({
     this.get_activity_list();
     this.get_index_bar_bg();
     this.get_recommend_good_list();
-    if(app.globalData.login_userInfo["checking_flag"]){
+    if (app.globalData.login_userInfo["checking_flag"]) {
       this.setData({
-        admin_flag:true
+        admin_flag: true
       })
     }
     this.again_getLocation();
-    
-    
+
+
   },
   navigateTogoodinfo(e) {
     var index = e.currentTarget.dataset.index;
@@ -50,7 +50,7 @@ Page({
       url: '../good/gooddetail?good_info=' + good_info
     })
   },
-  navigateToGood(){
+  navigateToGood() {
     wx.navigateTo({
       url: '/pages/good/goodindex',
     })
@@ -83,7 +83,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    if (typeof this.getTabBar === 'function' ) {
+    if (typeof this.getTabBar === 'function') {
       this.getTabBar((tabBar) => {
         tabBar.setData({
           selected: 0
@@ -113,35 +113,65 @@ Page({
   onReachBottom() {
 
   },
-  navigateToplace(){
+  navigateToplace() {
     wx.navigateTo({
       url: 'place',
     })
   },
-  navigateToGoodindex(){
+  navigateToGoodindex() {
     wx.navigateTo({
       url: '/pages/good/goodindex',
     })
   },
   navigateToActivitypart() {
     wx.navigateTo({
-      url: '/pages/activitypart/activitypart?user_id='+app.globalData.login_userInfo.user_id
+      url: '/pages/activitypart/activitypart?user_id=' + app.globalData.login_userInfo.user_id
     })
   },
-  navigateToFollowUser(){
+  navigateToFollowUser() {
     wx.navigateTo({
       url: '/pages/user/followuser'
     })
   },
-  get_activity_list(){
-    var _that = this;
+  get_activity_list() {
+    var that = this;
+    wx.authorize({
+      scope: 'scope.userLocation',
+      success() {
+        console.log("授权位置")
+        wx.getLocation({
+          type: 'wgs84',
+          success(res) {
+            const latitude = res.latitude
+            const longitude = res.longitude
+            console.log("获取位置")
+            console.log(res)
+            console.log(typeof latitude)
+            that.setData({
+              latitude,longitude
+            })
+            that.get_activity_list_from_lat_lon(longitude,latitude)
+          }
+        })
+
+      },
+      fail(){
+        console.log("未授权位置，直接获取")
+        this.get_activity_list_from_lat_lon(0,0)
+      }
+    });
     wx.showLoading({
       title: '加载中',
     })
+  },
+  get_activity_list_from_lat_lon(longitude,latitude){
+    var that = this;
     wx.request({
-      url: app.globalData.hosturl + 'get_activity_list', //仅为示例，并非真实的接口地址
+      url: app.globalData.hosturl + 'get_activity_list_from_lat_lon', //仅为示例，并非真实的接口地址
       data: {
-        "user_id":app.globalData.login_userInfo["user_id"],
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "longitude":longitude,
+        "latitude":latitude
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -155,30 +185,29 @@ Page({
           console.log(element.activity_id)
           list.push(element);
         });
-        _that.setData({
+        that.setData({
           activity_list: list,
         })
-        
-        setTimeout(function(){
+
+        setTimeout(function () {
           wx.hideLoading({
             success: (res) => {},
           });
-        },3000)
+        }, 3000)
       },
-      fail(res){
+      fail(res) {
         wx.hideLoading({
           success: (res) => {},
         });
         wx.showToast({
           title: '网络可能异常...',
-          icon:"error",
-          duration:4000
+          icon: "error",
+          duration: 4000
         })
-  
+
       }
     });
   },
-
   navigateToactivityinfo(e) {
     var index = e.currentTarget.dataset.index;
     console.log(index)
@@ -188,11 +217,11 @@ Page({
     console.log(actinfo.createuser)
     let activity_user_info = encodeURIComponent(JSON.stringify(actinfo.createuser));
     wx.navigateTo({
-      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info+"&share_use_id="+this.data.share_use_id
+      url: '../activityshowinfo/activityshowinfo?activity_user_info=' + activity_user_info + "&activity_info=" + activity_info + "&share_use_id=" + this.data.share_use_id
     })
   },
 
-  navigateTomini(e){
+  navigateTomini(e) {
     var url = e.currentTarget.dataset.url;
     console.log(url)
     wx.navigateToMiniProgram({
@@ -212,21 +241,21 @@ Page({
       },
     })
   },
-  searchword(e){
+  searchword(e) {
     console.log(e.detail.value.trim())
     this.setData({
       search_word: e.detail.value.trim()
     });
   },
-  search_main(){
+  search_main() {
     this.search_activity_list()
   },
- 
-  search_activity_list(){
-    if(this.data.search_word == ""){
+
+  search_activity_list() {
+    if (this.data.search_word == "") {
       wx.showToast({
         title: '请输入搜索词',
-        icon:"error"
+        icon: "error"
       })
       return;
     }
@@ -237,8 +266,8 @@ Page({
     wx.request({
       url: app.globalData.hosturl + 'search_activity_list', //仅为示例，并非真实的接口地址
       data: {
-        "user_id":app.globalData.login_userInfo["user_id"],
-        "search_word":this.data.search_word,
+        "user_id": app.globalData.login_userInfo["user_id"],
+        "search_word": this.data.search_word,
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -252,70 +281,61 @@ Page({
           console.log(element.activity_id)
           list.push(element);
         });
-        if(list.length == 0){
+        if (list.length == 0) {
           wx.showToast({
             title: '搜索为空',
-            icon:"error",
-            duration:3000
+            icon: "error",
+            duration: 3000
           })
-        }else{
+        } else {
           _that.setData({
             activity_list: list,
           })
         }
-        setTimeout(function(){
+        setTimeout(function () {
           wx.hideLoading({
             success: (res) => {},
           });
-        },3000)
+        }, 3000)
       },
-      fail(res){
+      fail(res) {
         wx.hideLoading({
           success: (res) => {},
         });
         wx.showToast({
           title: '网络可能异常...',
-          icon:"error",
-          duration:4000
+          icon: "error",
+          duration: 4000
         })
-  
+
       }
     });
   },
-  get_index_bar_bg(){
+  get_index_bar_bg() {
     var that = this;
     wx.request({
       url: app.globalData.hosturl + 'get_index_bar_bg', //仅为示例，并非真实的接口地址
       data: {
-        
+
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
-        if(res.data != ""){
+        if (res.data != "") {
           that.setData({
-            index_bar_bg:res.data
+            index_bar_bg: res.data
           })
         }
       },
-      fail(res){
-       
-  
+      fail(res) {
+
+
       }
     });
   },
-  onTabItemTap(item) {
-    console.log(item.index)//0
-    console.log(item.pagePath)//pages/index/index
-    console.log(item.text)//首页
-    if(item.pagePath == app.globalData.tab_page_path){
-      this.get_activity_list();
-      this.get_goods()
-    }
-    app.globalData.tab_page_path = item.pagePath;
-  },
-  onScrollRefresh(){
+  
+  onScrollRefresh() {
     console.log("下拉刷新" + this.data.triggered)
     var that = this;
     setTimeout(function () {
@@ -332,18 +352,18 @@ Page({
       success() {
         wx.getLocation({
           type: 'wgs84',
-          success (res) {
+          success(res) {
             const latitude = res.latitude
             const longitude = res.longitude
-           
+
             that.setData({
               latitude: latitude,
               longitude: longitude
-            }) 
-           
+            })
+
           }
-         })
-         
+        })
+
       }
     });
 
@@ -355,7 +375,7 @@ Page({
       success: (res) => {
         console.log("位置信息" + res)
         console.log(res.authSetting['scope.userLocation'])
-        if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) {//非初始化进入该页面,且未授权
+        if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) { //非初始化进入该页面,且未授权
           wx.showModal({
             title: '是否授权当前位置',
             content: '需要获取您的地理位置，请确认授权，否则无法获取您所需数据',
@@ -367,7 +387,7 @@ Page({
                   icon: 'success',
                   duration: 1000
                 })
-                
+
               } else if (res.confirm) {
                 wx.openSetting({
                   success: function (dataAu) {
@@ -386,18 +406,16 @@ Page({
                         icon: 'success',
                         duration: 1000
                       })
-                     
+
                     }
                   }
                 })
               }
             }
           })
-        } else if (res.authSetting['scope.userLocation'] == undefined) {//初始化进入
+        } else if (res.authSetting['scope.userLocation'] == undefined) { //初始化进入
           that.getLocation();
-
-        }
-        else { //授权后默认加载
+        } else { //授权后默认加载
           that.getLocation();
         }
       }

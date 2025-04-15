@@ -3,7 +3,6 @@
     "cu-custom": "colorui/components/cu-custom"
   },
   "pages": [
-
     "pages/index/newindex",
     "pages/index/index",
     "pages/activity/activity",
@@ -53,14 +52,18 @@
     "pages/good/goodindex",
     "pages/activityshowinfo/activityshare",
     "pages/activityshowinfo/activitymembergroup",
-    "pages/activity/blank",
+    "pages/activity/newactivity",
+    "pages/activity/activitymore",
     "pages/activityshowinfo/qrcode",
     "pages/activityshowinfo/member_team",
     "pages/activityshowinfo/activitypkrank",
     "pages/activity/cropper",
     "pages/routePlanning/routelive",
     "pages/index/mapindex",
-    "pages/routePlanning/routechat"
+    "pages/routePlanning/routechat",
+    "pages/activity/scoreactivity",
+    "pages/activity/newclub",
+    "pages/activity/gametype"
   ],
   "tabBar": {
     "custom": true,

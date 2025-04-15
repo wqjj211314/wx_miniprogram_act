@@ -65,12 +65,9 @@
 <!-- 新版 -->
 <checkbox-group bindchange="listenCheckboxChange">
 <block wx:for="{{activity_create_list}}" wx:for-item="activity_info">
-  <view class="bg-white margin padding" style="border-radius: 20rpx;margin-top:20rpx;margin-bottom: 0rpx;" bind:tap="navigateToActivityInfo" data-index="{{index}}" wx:if="{{search_word==''||search_word==activity_info.club_name||search_word==activity_info.show_activityaddress}}">
-    
-
+  <view class="bg-white margin padding" style="border-radius: 20rpx;margin-top:20rpx;margin-bottom: 0rpx;" wx:if="{{search_word==''||search_word==activity_info.club_name||search_word==activity_info.show_activityaddress}}">
     <view class="flex" style="width: 100%;flex-direction: row;justify-content: space-between;align-items: center;margin-bottom: 10rpx;">
       <view class="text-bold text-cut" style="flex:1;font-size: 30rpx;">
-        
       <checkbox value="{{index}}" wx:if="{{is_login_user}}" style="margin-right: 10rpx;transform: scale(0.8); "></checkbox>
       {{activity_info.title}}
       </view>
@@ -85,7 +82,7 @@
       </view>
     </view>
 
-    <view class="flex" style="flex-direction: row;width: 100%;">
+    <view class="flex" style="flex-direction: row;width: 100%;" bind:tap="navigateToActivityInfo" data-index="{{index}}">
       <view style="border-radius: 20rpx;">
         <image style="height:160rpx;width:160rpx;border-radius: 20rpx;{{activity_info.activity_status==201?'filter: blur(5px);':''}}" mode="aspectFill" src="{{activity_info.bg_img_exist?activity_info.bg_url:'https://www.2week.club:5000/static/defaultbg2.jpg'}}">
         </image>
@@ -95,7 +92,7 @@
           <view style="margin-right: 10rpx;width: 34rpx;height: 34rpx;">
             <image src='/image/location.png' mode='heightFix' style="width: 100%;height: 100%;"></image>
           </view>
-          <view style="">{{activity_info.show_activityaddress}}</view>
+          <view style="">{{activity_info.show_activityaddress==''?'待定':activity_info.show_activityaddress}}</view>
         </view>
         <view class="flex" style="margin-top:21rpx;">
           <view style="width:34rpx;height:34rpx;margin-right: 10rpx;">

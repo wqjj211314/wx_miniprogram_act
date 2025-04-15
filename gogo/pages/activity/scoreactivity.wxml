@@ -1,0 +1,61 @@
+<!--<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">-->
+<view class="margin bg-white" style="height: 30vh; border-radius: 30rpx;">
+  <view class="bg-white" wx:for="{{imgList}}" wx:key="index" data-url="{{imgList[index]}}" style="width: 100%;height: 100%;border-radius: 30rpx;">
+    <image src='{{imgList[index]}}' mode='aspectFill' style="width: 100%;height: 100%;border-radius: 30rpx;"></image>
+  </view>
+  <view class="text-blue flex" style="width: 100%;position: absolute;left: 0;top: 13vh;flex-direction: row;justify-content: center;align-items: center;">
+    <view class="flex" style="flex-direction: column;justify-content: center;align-items: center;" bindtap="ChooseImage">
+      <image src='/image/pic.png' mode='aspectFill' style="width: 100rpx;height: 100rpx;"></image>
+      <text style="font-weight: bold;font-size: 28rpx;color:black;line-height: 40rpx;">更换背景</text>
+    </view>
+    <view class="flex" style="flex-direction: column;justify-content: center;align-items: center;margin-left: 40rpx" bindtap="cropImage" wx:if="{{imgList.length>0&&imgList[0]!='https://www.2week.club:5000/static/userbg.jpg'}}">
+      <image src='/image/cropper.png' mode='widthFix' style="width: 180rpx;height: 120rpx;"></image>
+
+    </view>
+  </view>
+
+</view>
+<view class="bg-white margin padding" style="border-radius: 30rpx;padding-bottom: 18rpx;">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle">活动标题</view>
+    <view><input class="mytitlecontent" placeholder="请输入活动标题" bindinput='titleInput' style="" value="{{title}}" maxlength="30"></input></view>
+  </view>
+
+  <view class="flex margin-top" style="justify-content: space-between;">
+    <view class="mytitle">参与人数</view>
+    <view><input class="mytitlecontent" placeholder="" bindinput='numberInput' type="number" style="" value="{{max_part_number}}"></input></view>
+  </view>
+
+</view>
+
+<view class="bg-white margin padding" style="border-radius: 30rpx;padding-bottom: 18rpx;">
+  <view class="text-bold" style="height: fit-content;text-align: center;">填写参与人员信息<text class="text-gray" style="font-weight: normal;">（可选）</text></view>
+  <block wx:for="{{part_member_list}}">
+    <view class="flex margin-top" style="justify-content: space-between;">
+
+      <input class="mytitlecontent" placeholder="参与人员姓名" bindinput='nameInput' style="text-align: left;flex:1;" data-index="{{index}}" maxlength="30"></input>
+      <view class="" style="text-align: right;justify-content: end;flex:1;">
+        <view class="cu-tag round {{part_member_list[index][1]=='1'?'bg-blue':''}}" style="width: 80rpx;height:50rpx;" bind:tap="chooseSex" data-sex="1" data-index="{{index}}">男
+          <text class="cuIcon-male">
+          </text>
+        </view>
+        <view class="cu-tag round {{part_member_list[index][1]=='0'?'bg-pink':''}}" style="width: 80rpx;height:50rpx" bind:tap="chooseSex" data-sex="0" data-index="{{index}}">女
+          <text class="cuIcon-female">
+          </text>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view class="margin-top text-gray" style="height: fit-content;text-align: center;font-size: 25rpx;">建议先发布活动，再个人单独报名</view>
+</view>
+<view style="height: 200rpx;"></view>
+
+
+
+<view class="cu-bar tabbar bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;z-index: 100;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="getUserProfile">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;">立即发布</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,85 @@
+<wxs src="/pages/wxmlscript.wxs" module="tools" />
+<!--<scroll-view scroll-y="{{scroll_flag}}" style="height: 100%;">-->
+<view class="bg-white margin padding" style="border-radius: 30rpx;padding-bottom: 18rpx;">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle">参与限制</view>
+    <view class="flex" style="flex-direction: row;align-items: center;">
+      <view>
+        <picker mode="selector" bindchange="part_limit_change" value="{{part_limit_index}}" range="{{part_limit_picker}}">
+          <view class="mytitlecontent">
+            {{part_limit_picker[part_limit_index]}}
+          </view>
+        </picker>
+
+      </view>
+      <view><text class="cuIcon-right margin-left-sm text-bold" style=""></text></view>
+    </view>
+  </view>
+</view>
+<view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;" bindtap="choose_route">
+    <view class="mytitle" style="">路线<text class="text-gray">（可选）</text></view>
+    <view class="flex mytitlecontent" style="white-space:normal;align-items: center;justify-content: center;">
+      {{route["route_name"]==undefined?'去规划路线':route["route_name"]}}<text class="cuIcon-right margin-left-sm text-bold text-black" style=""></text>
+    </view>
+  </view>
+</view>
+
+<view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle" style="width: 250rpx;">报名信息<text class="text-gray">（可选）</text></view>
+    <input class="mytitlecontent" placeholder="选择或输入" bindinput='partinfoInput' style="color:black;text-align: right;" value="{{partinfo}}" maxlength="100"></input>
+  </view>
+  <view class="flex justify-start margin-top" style="overflow: scroll;">
+    <view style="margin-right: 10rpx;margin-bottom: 10rpx;white-space: nowrap;" wx:for="{{partinfo_all_options}}" class="{{tools.iscontain(partinfo,partinfo_all_options[index])?'sel_btn':'graybtn'}}" bindtap="choose_partinfo" data-partinfo="{{partinfo_all_options[index]}}">{{item}}
+    </view>
+  </view>
+
+  <view class="flex margin-top-sm" style="justify-content: space-between;">
+    <view class="mytitle">挂人报名</view>
+    <switch bindchange="takechange" color="#4689FF" checked class="myblue"></switch>
+  </view>
+
+</view>
+<view class="bg-white margin padding" style="border-radius: 30rpx;">
+  <view class="flex" style="justify-content: space-between;">
+    <view class="mytitle">预分组配置
+    
+    </view>
+  </view>
+  <view class="flex text-gray" style="align-content: flex-start;font-size: 20rpx;">
+      分组名称要唯一，创建完活动之后仍然可以修改新增分组
+    </view>
+  <view class="margin-top" style="width: 100%;height: fit-content;" wx:if="{{group_tag_list.length>0}}">
+      <block wx:for="{{group_tag_list}}">
+        <view class="flex" style="align-items: center;background-color: gainsboro;border-radius: 10rpx;padding: 10rpx 20rpx;margin-bottom: 10rpx;">
+          <view style="margin-right:20rpx;min-width: 85rpx;">分组{{index+1}}</view>
+          <view class="cu-form-group text-left flex" style="flex-direction: column;height:200rpx;background-color: gainsboro;flex:1;padding:0;">
+            <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;justify-content: space-between;">
+              <input placeholder="分组名称" bindinput='grouptagInput' style="color:black;" value="{{group_tag_list[index]}}" data-index="{{index}}" maxlength="20"></input>
+            </view>
+            <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+              <input placeholder="场地" bindinput='grouproomInput' style="color:black;" value="{{group_room_list[index]}}" data-index="{{index}}" maxlength="20"></input>
+            </view>
+            <view style="background-color: white;height: 60rpx;padding: 10rpx;text-align: left;width: 100%;align-items: center;">
+              <input placeholder="限制人数" bindinput='grouplimitInput' style="color:black;" value="{{group_limit_list[index]}}" data-index="{{index}}" type="number" maxlength="5"></input>
+            </view>
+          </view>
+        </view>
+      </block>
+      <view style="height: 10rpx;"></view>
+  </view>
+  <view class="cu-btn bg-green margin-top" style="border-radius: 30rpx;width: 100%;height: 80rpx;font-size: 35rpx;text-align: center;" bindtap="addgroup">
+    添加分组
+  </view>
+</view>
+<view style="height: 200rpx;"></view>
+
+
+<view class="bg-white" style="padding:0rpx;width: 100%; margin-bottom: 0rpx;position: fixed;bottom: 0rpx;justify-content: center;font-size: 30rpx;flex-direction:column;height: fit-content;padding-bottom: 34rpx;z-index: 100;">
+  <view class="" style="display:flex;justify-content: space-between;width: 100%;padding:10rpx 20rpx;padding-bottom: 0rpx;">
+    <view class="" style="flex:1;margin-right:10rpx;" bindtap="save_setting">
+      <button class="cu-btn round" style="width: 100%;height: 80rpx;font-weight: bold;font-size: 30rpx;color: #FFFFFF;line-height: 45rpx;padding:0rpx;background: linear-gradient( 90deg, #75E3FF 0%, #4689FF 100%);">保存并返回</button>
+    </view>
+  </view>
+</view>

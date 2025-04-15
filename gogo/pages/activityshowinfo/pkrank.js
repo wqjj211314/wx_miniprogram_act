@@ -18,6 +18,7 @@ Page({
    */
   onLoad(options) {
     let activity_info = JSON.parse(decodeURIComponent(options.activity_info));
+    
     this.setData({
       activity_info:activity_info,
       modify_time:activity_info.begintimeweek
